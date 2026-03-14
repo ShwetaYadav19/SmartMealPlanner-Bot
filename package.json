@@ -1,0 +1,36 @@
+{
+  "name": "smart-meal-planner-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp Meal Planner Bot with delivery-channel-agnostic core",
+  "main": "dist/handlers/webhookHandler.js",
+  "scripts": {
+    "build": "esbuild src/handlers/*.ts --bundle --platform=node --target=node18 --outdir=dist/handlers --external:@aws-sdk",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "chat": "npx tsx scripts/chat.ts",
+    "deploy:beta": "STAGE=beta node scripts/deploy.js",
+    "deploy:dev": "STAGE=dev node scripts/deploy.js",
+    "deploy:prod": "STAGE=prod node scripts/deploy.js"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-sdk/client-api-gateway": "^3.600.0",
+    "@aws-sdk/client-eventbridge": "^3.600.0",
+    "@aws-sdk/client-iam": "^3.600.0",
+    "@aws-sdk/client-lambda": "^3.600.0",
+    "@aws-sdk/client-sts": "^3.600.0",
+    "@types/node": "^20.0.0",
+    "archiver": "^7.0.0",
+    "esbuild": "^0.21.0",
+    "fast-check": "^3.19.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.4.0",
+    "vitest": "^2.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.600.0",
+    "@aws-sdk/lib-dynamodb": "^3.600.0",
+    "twilio": "^5.0.0"
+  }
+}
