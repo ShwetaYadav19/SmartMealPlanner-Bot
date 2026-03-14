@@ -77,7 +77,7 @@ export async function webhookHandler(
     const intent = mapWhatsAppToIntent(buttonPayload, body, conversationState);
 
     // 9. Process intent through BotEngine
-    const result = await processIntent(intent, userState, mealRepo);
+    const result = await processIntent(intent, userState, mealRepo, phoneNumber);
 
     // 10. Format structured response for WhatsApp
     const formatted = formatBotResponse(result.response);

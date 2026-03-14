@@ -416,11 +416,12 @@ async function handleMainMenu(
 export async function processIntent(
   intent: UserIntent,
   userState: UserState | null,
-  mealRepository: MealRepository
+  mealRepository: MealRepository,
+  phoneNumber?: string,
 ): Promise<BotResult> {
   // New user — no state exists
   if (!userState) {
-    return handleNewUser('unknown');
+    return handleNewUser(phoneNumber ?? 'unknown');
   }
 
   // Route by conversation state
