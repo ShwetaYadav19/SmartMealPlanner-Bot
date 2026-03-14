@@ -7,7 +7,7 @@ export class JsonMealRepository implements MealRepository {
   private meals: Meal[];
 
   constructor(mealsFilePath?: string) {
-    const filePath = mealsFilePath ?? path.resolve(__dirname, '../../data/meals.json');
+    const filePath = mealsFilePath ?? path.resolve(process.env.LAMBDA_TASK_ROOT || path.join(__dirname, '../..'), 'data/meals.json');
     const raw = fs.readFileSync(filePath, 'utf-8');
     this.meals = JSON.parse(raw) as Meal[];
   }
