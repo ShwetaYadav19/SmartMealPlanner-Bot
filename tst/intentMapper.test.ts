@@ -112,8 +112,12 @@ describe('mapWhatsAppToIntent', () => {
       expect(mapWhatsAppToIntent(undefined, 'veg please', 'awaiting_diet')).toEqual({ intent: Intent.UNKNOWN });
     });
 
-    it('returns UNKNOWN for free text in awaiting_meal_style', () => {
-      expect(mapWhatsAppToIntent(undefined, 'health', 'awaiting_meal_style')).toEqual({ intent: Intent.UNKNOWN });
+    it('returns UNKNOWN for unrecognized free text in awaiting_meal_style', () => {
+      expect(mapWhatsAppToIntent(undefined, 'something random', 'awaiting_meal_style')).toEqual({ intent: Intent.UNKNOWN });
+    });
+
+    it('maps "health" text to SELECT_MEAL_STYLE in awaiting_meal_style', () => {
+      expect(mapWhatsAppToIntent(undefined, 'health', 'awaiting_meal_style')).toEqual({ intent: Intent.SELECT_MEAL_STYLE, payload: 'health' });
     });
 
     it('returns UNKNOWN for free text in main_menu', () => {
