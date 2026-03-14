@@ -45,12 +45,16 @@ export class TwilioMessagingProvider implements MessagingProvider {
     if (templatePurpose && this.templateSidResolver) {
       const contentSid = this.templateSidResolver(templatePurpose);
       if (contentSid) {
-        await this.client.messages.create({
-          from,
-          to: toWhatsApp,
-          contentSid,
-        });
-        return;
+        try {
+          await this.client.messages.create({
+            from,
+            to: toWhatsApp,
+            contentSid,
+          });
+          return;
+        } catch {
+          // Template failed (e.g., 63027 locale mismatch) — fall through to inline buttons
+        }
       }
     }
 
