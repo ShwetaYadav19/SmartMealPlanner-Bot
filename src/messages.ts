@@ -25,7 +25,7 @@ export const TOMORROW_GROCERY_HEADER = `Here's what you need for tomorrow 🛒\n
 export const COOK_NUMBER_PROMPT = `Please enter your cook's WhatsApp number with country code (e.g., +91XXXXXXXXXX) 📱`;
 export const COOK_NUMBER_SAVED = `Cook's number saved successfully ✅`;
 export const COOK_MESSAGE_SENT = `Tomorrow's menu has been sent to your cook 👨‍🍳`;
-export const NO_COOK_PROMPT = `Please save your cook's number first 📱`;
+export const NO_COOK_PROMPT = `Please save your cook's number first 📱\nType 7 or "Save Cook's Number" to add it.`;
 
 // --- Swap ---
 export const SWAP_CONFIRMATION = (oldMeal: string, newMeal: string) =>

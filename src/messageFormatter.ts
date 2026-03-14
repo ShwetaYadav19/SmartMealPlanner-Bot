@@ -44,6 +44,14 @@ const MAIN_MENU_BUTTONS: ButtonOption[] = [
   { id: 'tomorrow_plan', title: "Tomorrow's Plan" },
 ];
 
+const FULL_MENU_BUTTONS: ButtonOption[] = [
+  ...MAIN_MENU_BUTTONS,
+  { id: 'tomorrow_grocery', title: "Tomorrow's Grocery" },
+  { id: 'send_to_cook', title: 'Send Menu to Cook' },
+  { id: 'swap_lunch', title: 'Swap Lunch' },
+  { id: 'save_cook', title: "Save Cook's Number" },
+];
+
 const MENU_MORE_BUTTONS: ButtonOption[] = [
   { id: 'tomorrow_grocery', title: "Tomorrow's Grocery" },
   { id: 'send_to_cook', title: 'Send Menu to Cook' },
@@ -152,14 +160,14 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.ONBOARDING_COMPLETE:
       return {
         text: ONBOARDING_COMPLETE,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
 
     case ResponseType.MAIN_MENU:
       return {
         text: MAIN_MENU_HEADER,
-        buttons: suggestedButtons ?? MAIN_MENU_BUTTONS,
+        buttons: suggestedButtons ?? FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
 
@@ -167,7 +175,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       const planText = data?.weeklyPlan ? formatWeeklyPlan(data.weeklyPlan) : WEEKLY_PLAN_HEADER;
       return {
         text: planText,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
     }
@@ -178,7 +186,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         : WEEKLY_GROCERY_HEADER;
       return {
         text: groceryText,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
     }
@@ -187,7 +195,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       const dayText = data?.dayPlan ? formatDayPlan(data.dayPlan) : DAY_PLAN_HEADER('');
       return {
         text: dayText,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
     }
@@ -198,7 +206,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         : TOMORROW_GROCERY_HEADER;
       return {
         text: tomorrowGroceryText,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
     }
@@ -209,14 +217,14 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.COOK_NUMBER_SAVED:
       return {
         text: COOK_NUMBER_SAVED,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
 
     case ResponseType.COOK_MESSAGE_SENT:
       return {
         text: COOK_MESSAGE_SENT,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
 
@@ -227,7 +235,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
           : SWAP_CONFIRMATION('', '');
       return {
         text: swapText,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
     }
@@ -235,7 +243,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.SWAP_NO_ALTERNATIVE:
       return {
         text: SWAP_NO_ALTERNATIVE,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
 
@@ -248,7 +256,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.NO_COOK_ERROR:
       return {
         text: NO_COOK_PROMPT,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: FULL_MENU_BUTTONS,
         templatePurpose: 'main_menu',
       };
 
