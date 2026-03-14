@@ -263,7 +263,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.INVALID_INPUT:
       return {
         text: INVALID_INPUT,
-        buttons: suggestedButtons,
+        buttons: suggestedButtons ?? FULL_MENU_BUTTONS,
       };
 
     case ResponseType.INVALID_PHONE:

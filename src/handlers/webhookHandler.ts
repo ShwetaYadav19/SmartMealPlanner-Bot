@@ -83,7 +83,7 @@ export async function webhookHandler(
     const formatted = formatBotResponse(result.response);
 
     // 11. Send message via MessagingProvider
-    if (formatted.buttons && formatted.templatePurpose) {
+    if (formatted.buttons && formatted.buttons.length > 0) {
       await messagingProvider.sendButtonMessage(
         phoneNumber,
         formatted.text,
