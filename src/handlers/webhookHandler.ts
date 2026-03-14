@@ -1,7 +1,6 @@
 // WebhookHandler — thin wiring layer (no business logic)
 // Connects the WhatsApp/Twilio delivery channel to the core BotEngine
 
-import * as path from 'path';
 import * as querystring from 'querystring';
 import { DynamoDBUserStateRepository } from '../adapters/dynamodbUserStateRepository';
 import { JsonMealRepository } from '../adapters/jsonMealRepository';
@@ -55,9 +54,7 @@ export async function webhookHandler(
     // 5. Load config and instantiate adapters
     const config = loadConfig();
     const userStateRepo = new DynamoDBUserStateRepository(config.dynamodbTable);
-    const mealRepo = new JsonMealRepository(
-      path.join(__dirname, '../../data/meals.json'),
-    );
+    const mealRepo = new JsonMealRepository();
     const messagingProvider = new TwilioMessagingProvider(
       config.twilioAccountSid,
       config.twilioAuthToken,
