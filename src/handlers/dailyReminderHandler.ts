@@ -24,11 +24,15 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
   const config = loadConfig();
 
   const userStateRepo = new DynamoDBUserStateRepository(config.dynamodbTable);
+  const isSandbox = config.twilioSenderNumber === '+14155238886';
+  const templateResolver = isSandbox
+    ? undefined
+    : (purpose: string) => getTemplateSid(purpose as Parameters<typeof getTemplateSid>[0]);
   const messagingProvider = new TwilioMessagingProvider(
     config.twilioAccountSid,
     config.twilioAuthToken,
     config.twilioSenderNumber,
-    (purpose: string) => getTemplateSid(purpose as Parameters<typeof getTemplateSid>[0]),
+    templateResolver,
   );
 
   // Scan all users with onboardingComplete: true

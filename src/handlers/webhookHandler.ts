@@ -55,11 +55,16 @@ export async function webhookHandler(
     const config = loadConfig();
     const userStateRepo = new DynamoDBUserStateRepository(config.dynamodbTable);
     const mealRepo = new JsonMealRepository();
+    // Skip Twilio content templates for sandbox numbers (they don't support templates)
+    const isSandbox = config.twilioSenderNumber === '+14155238886';
+    const templateResolver = isSandbox
+      ? undefined
+      : (purpose: string) => getTemplateSid(purpose as Parameters<typeof getTemplateSid>[0]);
     const messagingProvider = new TwilioMessagingProvider(
       config.twilioAccountSid,
       config.twilioAuthToken,
       config.twilioSenderNumber,
-      (purpose: string) => getTemplateSid(purpose as Parameters<typeof getTemplateSid>[0]),
+      templateResolver,
     );
 
     // 6. Load user state
