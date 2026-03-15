@@ -200,22 +200,32 @@ async function handleMainMenu(
         diet: state.dietPreference,
         style: state.mealStyle,
       });
-      const weeklyPlan = generateWeeklyPlan(meals, preferences);
-      const weeklyPlanStartDate = getCurrentWeekMondayISO();
-      const updatedState: UserState = {
-        ...state,
-        weeklyPlan,
-        weeklyPlanStartDate,
-        conversationState: 'main_menu',
-      };
-      return {
-        response: {
-          type: ResponseType.WEEKLY_PLAN,
-          data: { weeklyPlan },
-          suggestedActions: MAIN_MENU_OPTIONS,
-        },
-        updatedState,
-      };
+      try {
+        const weeklyPlan = generateWeeklyPlan(meals, preferences);
+        const weeklyPlanStartDate = getCurrentWeekMondayISO();
+        const updatedState: UserState = {
+          ...state,
+          weeklyPlan,
+          weeklyPlanStartDate,
+          conversationState: 'main_menu',
+        };
+        return {
+          response: {
+            type: ResponseType.WEEKLY_PLAN,
+            data: { weeklyPlan },
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState,
+        };
+      } catch {
+        return {
+          response: {
+            type: ResponseType.ERROR,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: state,
+        };
+      }
     }
 
     case Intent.VIEW_WEEKLY_GROCERY: {

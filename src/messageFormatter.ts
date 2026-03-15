@@ -297,7 +297,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       };
 
     case ResponseType.ERROR:
-      return { text: GENERIC_ERROR };
+      return { text: GENERIC_ERROR, buttons: FULL_MENU_BUTTONS };
 
     default:
       return { text: GENERIC_ERROR };
