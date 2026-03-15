@@ -403,7 +403,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_PLAN', () => {
     expect(result.response.type).toBe(ResponseType.NO_PLAN_ERROR);
   });
 
-  it('returns NO_PLAN_ERROR when plan is expired (old start date)', async () => {
+  it('returns EXPIRED_PLAN_PROMPT when plan is expired (old start date)', async () => {
     const state = makeStateWithPlan({ weeklyPlanStartDate: '2020-01-06' });
     const result = await processIntent(
       { intent: Intent.VIEW_TOMORROW_PLAN },
@@ -412,7 +412,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_PLAN', () => {
       mockMealComponentRepo,
     );
 
-    expect(result.response.type).toBe(ResponseType.NO_PLAN_ERROR);
+    expect(result.response.type).toBe(ResponseType.EXPIRED_PLAN_PROMPT);
   });
 });
 
@@ -452,7 +452,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_GROCERY', () => {
     expect(result.response.type).toBe(ResponseType.NO_PLAN_ERROR);
   });
 
-  it('returns NO_PLAN_ERROR when plan is expired', async () => {
+  it('returns EXPIRED_PLAN_PROMPT when plan is expired', async () => {
     const state = makeStateWithPlan({ weeklyPlanStartDate: '2020-01-06' });
     const result = await processIntent(
       { intent: Intent.VIEW_TOMORROW_GROCERY },
@@ -461,7 +461,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_GROCERY', () => {
       mockMealComponentRepo,
     );
 
-    expect(result.response.type).toBe(ResponseType.NO_PLAN_ERROR);
+    expect(result.response.type).toBe(ResponseType.EXPIRED_PLAN_PROMPT);
   });
 });
 
@@ -513,7 +513,7 @@ describe('BotEngine — main menu: SEND_MENU_TO_COOK', () => {
     expect(result.response.type).toBe(ResponseType.NO_COOK_ERROR);
   });
 
-  it('returns NO_PLAN_ERROR when plan is expired', async () => {
+  it('returns EXPIRED_PLAN_PROMPT when plan is expired', async () => {
     const state = makeStateWithPlan({
       cookPhoneNumber: '+911234567890',
       weeklyPlanStartDate: '2020-01-06',
@@ -525,7 +525,7 @@ describe('BotEngine — main menu: SEND_MENU_TO_COOK', () => {
       mockMealComponentRepo,
     );
 
-    expect(result.response.type).toBe(ResponseType.NO_PLAN_ERROR);
+    expect(result.response.type).toBe(ResponseType.EXPIRED_PLAN_PROMPT);
   });
 });
 

@@ -1,14 +1,14 @@
 {
   "enabled": true,
-  "name": "Play Sound on Agent Stop",
-  "description": "Plays a loud system sound when Kiro finishes and is waiting for user input",
+  "name": "Play Sound on Wait",
+  "description": "Plays the macOS system sound when the agent stops and is waiting for user input, so you can hear it from across the room.",
   "version": "1",
   "when": {
     "type": "agentStop"
   },
   "then": {
     "type": "runCommand",
-    "command": "afplay /System/Library/Sounds/Glass.aiff -v 10",
+    "command": "afplay /System/Library/Sounds/Glass.aiff",
     "timeout": 5
   },
   "workspaceFolderName": "HOBBY_WORKSPACE",

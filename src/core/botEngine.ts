@@ -305,7 +305,7 @@ async function handleMainMenu(
       if (!dayPlan) {
         return {
           response: {
-            type: ResponseType.NO_PLAN_ERROR,
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
             suggestedActions: MAIN_MENU_OPTIONS,
           },
           updatedState: state,
@@ -344,7 +344,7 @@ async function handleMainMenu(
       if (!tomorrowPlan) {
         return {
           response: {
-            type: ResponseType.NO_PLAN_ERROR,
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
             suggestedActions: MAIN_MENU_OPTIONS,
           },
           updatedState: state,
@@ -394,7 +394,7 @@ async function handleMainMenu(
       if (!cookDayPlan) {
         return {
           response: {
-            type: ResponseType.NO_PLAN_ERROR,
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
             suggestedActions: MAIN_MENU_OPTIONS,
           },
           updatedState: state,
