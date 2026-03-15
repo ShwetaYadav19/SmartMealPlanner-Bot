@@ -32,6 +32,13 @@ vi.mock('../../src/adapters/jsonMealRepository', () => ({
   })),
 }));
 
+// Mock JsonMealComponentRepository
+vi.mock('../../src/adapters/jsonMealComponentRepository', () => ({
+  JsonMealComponentRepository: vi.fn().mockImplementation(() => ({
+    getComponents: vi.fn().mockResolvedValue([]),
+  })),
+}));
+
 // Mock TwilioMessagingProvider
 const mockSendTextMessage = vi.fn().mockResolvedValue(undefined);
 const mockSendButtonMessage = vi.fn().mockResolvedValue(undefined);

@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Play Sound on Agent Stop",
+  "description": "Plays a loud system sound when Kiro finishes and is waiting for user input",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "afplay /System/Library/Sounds/Glass.aiff -v 10",
+    "timeout": 5
+  },
+  "workspaceFolderName": "HOBBY_WORKSPACE",
+  "shortName": "play-sound-on-wait"
+}

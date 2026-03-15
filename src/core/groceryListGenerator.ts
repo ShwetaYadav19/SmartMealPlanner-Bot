@@ -1,5 +1,5 @@
 // Grocery list generation — zero imports from adapters, WhatsApp, or AWS modules
-import type { Meal, GroceryItem } from './types';
+import type { Meal, ComposedMeal, GroceryItem } from './types';
 
 /**
  * Aggregate all ingredients from the given meals into a deduplicated,
@@ -9,7 +9,7 @@ import type { Meal, GroceryItem } from './types';
  * - When duplicates are found, combines quantities (comma-separated)
  * - Groups output by category, sorted alphabetically
  */
-export function generateGroceryList(meals: Meal[]): GroceryItem[] {
+export function generateGroceryList(meals: (Meal | ComposedMeal)[]): GroceryItem[] {
   // Map keyed by lowercase ingredient name → { category, name, quantities[] }
   const itemMap = new Map<string, { name: string; category: string; quantities: string[] }>();
 

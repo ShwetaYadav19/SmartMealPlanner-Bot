@@ -23,11 +23,38 @@ export interface MealFilter {
   slot?: 'breakfast' | 'lunch' | 'dinner';
 }
 
+export type ComponentCategory = 'base' | 'gravy' | 'dry_veggie' | 'side';
+
+export interface MealComponent {
+  id: string;
+  name: string;
+  category: ComponentCategory;
+  cuisine: 'north_indian' | 'south_indian';
+  diet: 'veg' | 'non_veg';
+  style: 'health' | 'regular';
+  slots: ('lunch' | 'dinner')[];
+  ingredients: Ingredient[];
+}
+
+export interface ComposedMeal {
+  components: MealComponent[];
+  name: string;        // comma-separated component names
+  ingredients: Ingredient[];  // aggregated from all components
+}
+
+export interface MealComponentFilter {
+  cuisine?: 'north_indian' | 'south_indian' | 'both';
+  diet?: 'veg' | 'non_veg' | 'both';
+  style?: 'health' | 'regular';
+  slot?: 'lunch' | 'dinner';
+  category?: ComponentCategory;
+}
+
 export interface DayPlan {
   day: string;
   breakfast: Meal;
-  lunch: Meal;
-  dinner: Meal;
+  lunch: ComposedMeal;
+  dinner: ComposedMeal;
 }
 
 export type WeeklyPlan = DayPlan[];

@@ -1,7 +1,7 @@
 // BotEngine — intent-based conversation engine
 // Zero imports from adapters, WhatsApp, Twilio, or AWS modules
 
-import type { MealRepository } from './ports';
+import type { MealRepository, MealComponentRepository } from './ports';
 import {
   Intent,
   ResponseType,
@@ -11,6 +11,7 @@ import {
   type BotResponse,
   type SuggestedAction,
   type Meal,
+  type ComposedMeal,
 } from './types';
 import { generateWeeklyPlan, extractTomorrowPlan, swapTomorrowLunch } from './planGenerator';
 import { generateGroceryList } from './groceryListGenerator';
@@ -171,6 +172,18 @@ function getCurrentWeekMondayISO(): string {
 }
 
 /**
+ * Detect whether a stored weekly plan is in legacy single-dish format.
+ * Legacy plans have lunch/dinner as plain Meal objects (no `components` array).
+ * Returns true if any day's lunch or dinner lacks a `components` array.
+ */
+function isLegacyPlan(weeklyPlan: DayPlan[]): boolean {
+  return weeklyPlan.some(
+    day => !('components' in day.lunch) || !('components' in day.dinner),
+  );
+}
+
+
+/**
  * Compute the day index (0=Monday..6=Sunday) for tomorrow relative to a plan start date.
  */
 function getTomorrowIndex(weeklyPlanStartDate: string): number {
@@ -187,6 +200,7 @@ async function handleMainMenu(
   intent: UserIntent,
   state: UserState,
   mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
 ): Promise<BotResult> {
   const preferences = {
     cuisine: state.cuisinePreference ?? 'both',
@@ -201,8 +215,13 @@ async function handleMainMenu(
         diet: state.dietPreference,
         style: state.mealStyle,
       });
+      const components = await mealComponentRepository.getComponents({
+        cuisine: state.cuisinePreference,
+        diet: state.dietPreference,
+        style: state.mealStyle,
+      });
       try {
-        const weeklyPlan = generateWeeklyPlan(meals, preferences);
+        const weeklyPlan = generateWeeklyPlan(meals, components, preferences);
         const weeklyPlanStartDate = getCurrentWeekMondayISO();
         const updatedState: UserState = {
           ...state,
@@ -239,7 +258,16 @@ async function handleMainMenu(
           updatedState: state,
         };
       }
-      const allMeals: Meal[] = [];
+      if (isLegacyPlan(state.weeklyPlan)) {
+        return {
+          response: {
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: state,
+        };
+      }
+      const allMeals: (Meal | ComposedMeal)[] = [];
       for (const day of state.weeklyPlan) {
         allMeals.push(day.breakfast, day.lunch, day.dinner);
       }
@@ -259,6 +287,15 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: state,
+        };
+      }
+      if (isLegacyPlan(state.weeklyPlan)) {
+        return {
+          response: {
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
             suggestedActions: MAIN_MENU_OPTIONS,
           },
           updatedState: state,
@@ -294,6 +331,15 @@ async function handleMainMenu(
           updatedState: state,
         };
       }
+      if (isLegacyPlan(state.weeklyPlan)) {
+        return {
+          response: {
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: state,
+        };
+      }
       const tomorrowPlan = extractTomorrowPlan(state.weeklyPlan, state.weeklyPlanStartDate);
       if (!tomorrowPlan) {
         return {
@@ -304,7 +350,7 @@ async function handleMainMenu(
           updatedState: state,
         };
       }
-      const tomorrowMeals = [tomorrowPlan.breakfast, tomorrowPlan.lunch, tomorrowPlan.dinner];
+      const tomorrowMeals: (Meal | ComposedMeal)[] = [tomorrowPlan.breakfast, tomorrowPlan.lunch, tomorrowPlan.dinner];
       const groceryList = generateGroceryList(tomorrowMeals);
       return {
         response: {
@@ -321,6 +367,15 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: state,
+        };
+      }
+      if (isLegacyPlan(state.weeklyPlan)) {
+        return {
+          response: {
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
             suggestedActions: MAIN_MENU_OPTIONS,
           },
           updatedState: state,
@@ -365,13 +420,22 @@ async function handleMainMenu(
           updatedState: state,
         };
       }
+      if (isLegacyPlan(state.weeklyPlan)) {
+        return {
+          response: {
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: state,
+        };
+      }
       const tomorrowIdx = getTomorrowIndex(state.weeklyPlanStartDate);
-      const meals = await mealRepository.getMeals({
+      const components = await mealComponentRepository.getComponents({
         cuisine: state.cuisinePreference,
         diet: state.dietPreference,
         style: state.mealStyle,
       });
-      const swapResult = swapTomorrowLunch(state.weeklyPlan, tomorrowIdx, meals, preferences);
+      const swapResult = swapTomorrowLunch(state.weeklyPlan, tomorrowIdx, components, preferences);
       if (!swapResult) {
         return {
           response: {
@@ -428,6 +492,7 @@ export async function processIntent(
   intent: UserIntent,
   userState: UserState | null,
   mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
   phoneNumber?: string,
 ): Promise<BotResult> {
   // New user — no state exists
@@ -447,7 +512,7 @@ export async function processIntent(
       return handleAwaitingMealStyle(intent, userState);
 
     case 'main_menu':
-      return handleMainMenu(intent, userState, mealRepository);
+      return handleMainMenu(intent, userState, mealRepository, mealComponentRepository);
 
     case 'awaiting_cook_number': {
       if (intent.intent === Intent.PROVIDE_COOK_NUMBER && intent.payload) {
@@ -508,4 +573,5 @@ export {
   getComingMondayISO,
   getCurrentWeekMondayISO,
   getTomorrowIndex,
+  isLegacyPlan,
 };

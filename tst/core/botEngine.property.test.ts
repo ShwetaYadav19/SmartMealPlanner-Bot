@@ -15,11 +15,13 @@ import {
   type UserState,
   type UserIntent,
   type Meal,
+  type MealComponent,
+  type ComposedMeal,
   type ConversationState,
 } from '../../src/core/types';
-import type { MealRepository } from '../../src/core/ports';
+import type { MealRepository, MealComponentRepository } from '../../src/core/ports';
 
-// --- Test meal fixtures (same pattern as unit tests) ---
+// --- Test meal fixtures ---
 
 function makeMeal(overrides: Partial<Meal> & { id: string; name: string; slots: Meal['slots'] }): Meal {
   return {
@@ -35,22 +37,77 @@ const TEST_MEALS: Meal[] = [
   ...Array.from({ length: 8 }, (_, i) =>
     makeMeal({ id: `b-${i}`, name: `Breakfast ${i}`, slots: ['breakfast'] })
   ),
-  ...Array.from({ length: 8 }, (_, i) =>
-    makeMeal({ id: `l-${i}`, name: `Lunch ${i}`, slots: ['lunch'] })
-  ),
-  ...Array.from({ length: 8 }, (_, i) =>
-    makeMeal({ id: `d-${i}`, name: `Dinner ${i}`, slots: ['dinner'] })
-  ),
 ];
+
+const TEST_COMPONENTS: MealComponent[] = (() => {
+  const categories = ['base', 'gravy', 'dry_veggie', 'side'] as const;
+  const components: MealComponent[] = [];
+  for (const cat of categories) {
+    for (let i = 0; i < 10; i++) {
+      components.push({
+        id: `ni-${cat}-${String(i).padStart(3, '0')}`,
+        name: `NI ${cat} ${i}`,
+        category: cat,
+        cuisine: 'north_indian',
+        diet: 'veg',
+        style: 'health',
+        slots: ['lunch', 'dinner'],
+        ingredients: [{ name: `Ingredient ${cat} ${i}`, quantity: '100g', category: 'vegetables' }],
+      });
+    }
+  }
+  return components;
+})();
+
+function makeComposedMeal(prefix: string, gravyId: string): ComposedMeal {
+  const base: MealComponent = {
+    id: `${prefix}-base`, name: `${prefix} Base`, category: 'base',
+    cuisine: 'north_indian', diet: 'veg', style: 'health',
+    slots: ['lunch', 'dinner'],
+    ingredients: [{ name: 'Rice', quantity: '200g', category: 'grains' }],
+  };
+  const gravy: MealComponent = {
+    id: gravyId, name: `${prefix} Gravy`, category: 'gravy',
+    cuisine: 'north_indian', diet: 'veg', style: 'health',
+    slots: ['lunch', 'dinner'],
+    ingredients: [{ name: 'Dal', quantity: '100g', category: 'lentils' }],
+  };
+  const dry: MealComponent = {
+    id: `${prefix}-dry`, name: `${prefix} Dry`, category: 'dry_veggie',
+    cuisine: 'north_indian', diet: 'veg', style: 'health',
+    slots: ['lunch', 'dinner'],
+    ingredients: [{ name: 'Beans', quantity: '100g', category: 'vegetables' }],
+  };
+  const side: MealComponent = {
+    id: `${prefix}-side`, name: `${prefix} Side`, category: 'side',
+    cuisine: 'north_indian', diet: 'veg', style: 'health',
+    slots: ['lunch', 'dinner'],
+    ingredients: [{ name: 'Curd', quantity: '100ml', category: 'dairy' }],
+  };
+  const components = [base, gravy, dry, side];
+  return {
+    components,
+    name: components.map(c => c.name).join(', '),
+    ingredients: components.flatMap(c => c.ingredients),
+  };
+}
 
 const mockMealRepo: MealRepository = {
   getMeals: async () => TEST_MEALS,
   getMealById: async (id) => TEST_MEALS.find((m) => m.id === id) ?? null,
 };
 
+const mockMealComponentRepo: MealComponentRepository = {
+  getComponents: async () => TEST_COMPONENTS,
+};
+
 const stubMealRepo: MealRepository = {
   getMeals: async () => [],
   getMealById: async () => null,
+};
+
+const stubMealComponentRepo: MealComponentRepository = {
+  getComponents: async () => [],
 };
 
 // --- Arbitraries ---
@@ -71,8 +128,8 @@ function makeStateWithPlan(overrides: Partial<UserState> = {}): UserState {
   const weeklyPlan = days.map((day, i) => ({
     day,
     breakfast: TEST_MEALS[i % 8],
-    lunch: TEST_MEALS[8 + (i % 8)],
-    dinner: TEST_MEALS[16 + (i % 8)],
+    lunch: makeComposedMeal(`l-${i}`, `lunch-gravy-${i}`),
+    dinner: makeComposedMeal(`d-${i}`, `dinner-gravy-${i}`),
   }));
 
   return {
@@ -95,34 +152,22 @@ describe('Property 1: Onboarding preference persistence round-trip', () => {
   it('selections stored correctly in user state after full onboarding', async () => {
     await fc.assert(
       fc.asyncProperty(cuisineArb, dietArb, styleArb, async (cuisine, diet, style) => {
-        // Step 1: New user
-        const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, stubMealRepo);
-
-        // Step 2: Select cuisine
+        const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, stubMealRepo, stubMealComponentRepo);
         const r2 = await processIntent(
           { intent: Intent.SELECT_CUISINE, payload: cuisine },
-          r1.updatedState,
-          stubMealRepo,
+          r1.updatedState, stubMealRepo, stubMealComponentRepo,
         );
         expect(r2.updatedState.cuisinePreference).toBe(cuisine);
-
-        // Step 3: Select diet
         const r3 = await processIntent(
           { intent: Intent.SELECT_DIET, payload: diet },
-          r2.updatedState,
-          stubMealRepo,
+          r2.updatedState, stubMealRepo, stubMealComponentRepo,
         );
         expect(r3.updatedState.dietPreference).toBe(diet);
-
-        // Step 4: Select meal style
         const r4 = await processIntent(
           { intent: Intent.SELECT_MEAL_STYLE, payload: style },
-          r3.updatedState,
-          stubMealRepo,
+          r3.updatedState, stubMealRepo, stubMealComponentRepo,
         );
         expect(r4.updatedState.mealStyle).toBe(style);
-
-        // All three preferences persisted in final state
         expect(r4.updatedState.cuisinePreference).toBe(cuisine);
         expect(r4.updatedState.dietPreference).toBe(diet);
         expect(r4.updatedState.mealStyle).toBe(style);
@@ -143,13 +188,10 @@ describe('Property 2: Invalid input rejection during button-expected states', ()
           onboardingComplete: false,
           conversationState: convState,
         };
-
-        const result = await processIntent({ intent: Intent.UNKNOWN }, state, stubMealRepo);
-
+        const result = await processIntent({ intent: Intent.UNKNOWN }, state, stubMealRepo, stubMealComponentRepo);
         expect(result.response.type).toBe(ResponseType.INVALID_INPUT);
         expect(result.response.suggestedActions).toBeDefined();
         expect(result.response.suggestedActions!.length).toBeGreaterThan(0);
-        // State should not change
         expect(result.updatedState.conversationState).toBe(convState);
       }),
     );
@@ -163,23 +205,19 @@ describe('Property 3: Onboarding flow completeness', () => {
   it('after all 3 intents, onboardingComplete=true and state=main_menu', async () => {
     await fc.assert(
       fc.asyncProperty(cuisineArb, dietArb, styleArb, async (cuisine, diet, style) => {
-        const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, stubMealRepo);
+        const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, stubMealRepo, stubMealComponentRepo);
         const r2 = await processIntent(
           { intent: Intent.SELECT_CUISINE, payload: cuisine },
-          r1.updatedState,
-          stubMealRepo,
+          r1.updatedState, stubMealRepo, stubMealComponentRepo,
         );
         const r3 = await processIntent(
           { intent: Intent.SELECT_DIET, payload: diet },
-          r2.updatedState,
-          stubMealRepo,
+          r2.updatedState, stubMealRepo, stubMealComponentRepo,
         );
         const r4 = await processIntent(
           { intent: Intent.SELECT_MEAL_STYLE, payload: style },
-          r3.updatedState,
-          stubMealRepo,
+          r3.updatedState, stubMealRepo, stubMealComponentRepo,
         );
-
         expect(r4.updatedState.onboardingComplete).toBe(true);
         expect(r4.updatedState.conversationState).toBe('main_menu');
         expect(r4.response.type).toBe(ResponseType.MAIN_MENU);
@@ -208,10 +246,10 @@ describe('Property 11: Action completion returns to main menu', () => {
           { intent: intentType },
           state,
           mockMealRepo,
+          mockMealComponentRepo,
         );
 
         if (intentType === Intent.SAVE_COOK_NUMBER) {
-          // SAVE_COOK_NUMBER transitions to awaiting_cook_number
           expect(result.updatedState.conversationState).toBe('awaiting_cook_number');
         } else {
           expect(result.updatedState.conversationState).toBe('main_menu');
@@ -236,15 +274,10 @@ describe('Property 12: Returning user skips onboarding', () => {
           dietPreference: diet,
           mealStyle: style,
         };
-
-        const result = await processIntent({ intent: Intent.UNKNOWN }, state, mockMealRepo);
-
-        // Should NOT get any onboarding prompt
+        const result = await processIntent({ intent: Intent.UNKNOWN }, state, mockMealRepo, mockMealComponentRepo);
         expect(result.response.type).not.toBe(ResponseType.ONBOARDING_CUISINE_PROMPT);
         expect(result.response.type).not.toBe(ResponseType.ONBOARDING_DIET_PROMPT);
         expect(result.response.type).not.toBe(ResponseType.ONBOARDING_STYLE_PROMPT);
-
-        // Should get INVALID_INPUT with main menu options
         expect(result.response.type).toBe(ResponseType.INVALID_INPUT);
         expect(result.updatedState.conversationState).toBe('main_menu');
         expect(result.updatedState.onboardingComplete).toBe(true);
@@ -260,34 +293,27 @@ describe('Property 17: Suggested actions for all selection points', () => {
   it('all onboarding step responses have non-empty suggestedActions', async () => {
     await fc.assert(
       fc.asyncProperty(cuisineArb, dietArb, styleArb, async (cuisine, diet, style) => {
-        // New user → cuisine prompt
-        const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, stubMealRepo);
+        const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, stubMealRepo, stubMealComponentRepo);
         expect(r1.response.suggestedActions).toBeDefined();
         expect(r1.response.suggestedActions!.length).toBeGreaterThan(0);
 
-        // Cuisine selected → diet prompt
         const r2 = await processIntent(
           { intent: Intent.SELECT_CUISINE, payload: cuisine },
-          r1.updatedState,
-          stubMealRepo,
+          r1.updatedState, stubMealRepo, stubMealComponentRepo,
         );
         expect(r2.response.suggestedActions).toBeDefined();
         expect(r2.response.suggestedActions!.length).toBeGreaterThan(0);
 
-        // Diet selected → style prompt
         const r3 = await processIntent(
           { intent: Intent.SELECT_DIET, payload: diet },
-          r2.updatedState,
-          stubMealRepo,
+          r2.updatedState, stubMealRepo, stubMealComponentRepo,
         );
         expect(r3.response.suggestedActions).toBeDefined();
         expect(r3.response.suggestedActions!.length).toBeGreaterThan(0);
 
-        // Style selected → main menu
         const r4 = await processIntent(
           { intent: Intent.SELECT_MEAL_STYLE, payload: style },
-          r3.updatedState,
-          stubMealRepo,
+          r3.updatedState, stubMealRepo, stubMealComponentRepo,
         );
         expect(r4.response.suggestedActions).toBeDefined();
         expect(r4.response.suggestedActions!.length).toBeGreaterThan(0);
@@ -297,14 +323,14 @@ describe('Property 17: Suggested actions for all selection points', () => {
 
   it('main menu GENERATE_PLAN response has non-empty suggestedActions', async () => {
     const state = makeStateWithPlan();
-    const result = await processIntent({ intent: Intent.GENERATE_PLAN }, state, mockMealRepo);
+    const result = await processIntent({ intent: Intent.GENERATE_PLAN }, state, mockMealRepo, mockMealComponentRepo);
     expect(result.response.suggestedActions).toBeDefined();
     expect(result.response.suggestedActions!.length).toBeGreaterThan(0);
   });
 
   it('main menu INVALID_INPUT response has non-empty suggestedActions', async () => {
     const state = makeStateWithPlan();
-    const result = await processIntent({ intent: Intent.UNKNOWN }, state, mockMealRepo);
+    const result = await processIntent({ intent: Intent.UNKNOWN }, state, mockMealRepo, mockMealComponentRepo);
     expect(result.response.suggestedActions).toBeDefined();
     expect(result.response.suggestedActions!.length).toBeGreaterThan(0);
   });

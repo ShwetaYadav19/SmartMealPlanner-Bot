@@ -1,5 +1,5 @@
 // Port interfaces — zero imports from adapters, WhatsApp, Twilio, or AWS modules
-import type { Meal, MealFilter, UserState } from './types';
+import type { Meal, MealFilter, MealComponent, MealComponentFilter, UserState } from './types';
 
 export interface ButtonOption {
   id: string;
@@ -19,6 +19,10 @@ export interface MessagingProvider {
 export interface MealRepository {
   getMeals(filter: MealFilter): Promise<Meal[]>;
   getMealById(id: string): Promise<Meal | null>;
+}
+
+export interface MealComponentRepository {
+  getComponents(filter: MealComponentFilter): Promise<MealComponent[]>;
 }
 
 export interface UserStateRepository {

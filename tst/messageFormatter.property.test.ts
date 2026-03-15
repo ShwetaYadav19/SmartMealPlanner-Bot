@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
 import { formatWeeklyPlan, formatDayPlan, formatGroceryList, formatCookMessage } from '../src/messageFormatter';
-import type { Meal, Ingredient, DayPlan, WeeklyPlan, GroceryItem } from '../src/core/types';
+import type { Meal, MealComponent, ComposedMeal, Ingredient, DayPlan, WeeklyPlan, GroceryItem } from '../src/core/types';
 
 // --- Arbitraries ---
 
@@ -32,14 +32,50 @@ function mealArb(idPrefix: string): fc.Arbitrary<Meal> {
   });
 }
 
+const componentNameArb = fc
+  .stringMatching(/^[A-Za-z][A-Za-z0-9 ]{0,18}[A-Za-z0-9]$/)
+  .filter((s) => s.length >= 2);
+
+function componentArb(
+  idPrefix: string,
+  category: 'base' | 'gravy' | 'dry_veggie' | 'side',
+): fc.Arbitrary<MealComponent> {
+  return fc.record({
+    id: fc.constant(`${idPrefix}-${category}`),
+    name: componentNameArb,
+    category: fc.constant(category),
+    cuisine: cuisineArb,
+    diet: dietArb,
+    style: styleArb,
+    slots: fc.constant(['lunch', 'dinner'] as ('lunch' | 'dinner')[]),
+    ingredients: fc.array(ingredientArb, { minLength: 1, maxLength: 3 }),
+  });
+}
+
+function composedMealArb(idPrefix: string): fc.Arbitrary<ComposedMeal> {
+  return fc.tuple(
+    componentArb(idPrefix, 'base'),
+    componentArb(idPrefix, 'gravy'),
+    componentArb(idPrefix, 'dry_veggie'),
+    componentArb(idPrefix, 'side'),
+  ).map(([base, gravy, dry, side]) => {
+    const components = [base, gravy, dry, side];
+    return {
+      components,
+      name: components.map(c => c.name).join(', '),
+      ingredients: components.flatMap(c => c.ingredients),
+    };
+  });
+}
+
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 function dayPlanArb(day: string, index: number): fc.Arbitrary<DayPlan> {
   return fc.record({
     day: fc.constant(day),
     breakfast: mealArb(`bp-${index}-b`),
-    lunch: mealArb(`bp-${index}-l`),
-    dinner: mealArb(`bp-${index}-d`),
+    lunch: composedMealArb(`bp-${index}-l`),
+    dinner: composedMealArb(`bp-${index}-d`),
   });
 }
 

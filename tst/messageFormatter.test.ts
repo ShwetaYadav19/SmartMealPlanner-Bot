@@ -6,7 +6,7 @@ import {
   formatCookMessage,
   formatBotResponse,
 } from '../src/messageFormatter';
-import type { DayPlan, WeeklyPlan, GroceryItem, Meal, BotResponse } from '../src/core/types';
+import type { DayPlan, WeeklyPlan, GroceryItem, Meal, ComposedMeal, MealComponent, BotResponse } from '../src/core/types';
 import { ResponseType } from '../src/core/types';
 import {
   WEEKLY_PLAN_HEADER,
@@ -46,12 +46,45 @@ function makeMeal(name: string, slot: 'breakfast' | 'lunch' | 'dinner' = 'lunch'
   };
 }
 
+function makeComposedMeal(name: string): ComposedMeal {
+  const base: MealComponent = {
+    id: `base-${name}`, name: `${name} Base`, category: 'base',
+    cuisine: 'north_indian', diet: 'veg', style: 'health',
+    slots: ['lunch', 'dinner'],
+    ingredients: [{ name: 'Rice', quantity: '200g', category: 'grains' }],
+  };
+  const gravy: MealComponent = {
+    id: `gravy-${name}`, name: `${name} Gravy`, category: 'gravy',
+    cuisine: 'north_indian', diet: 'veg', style: 'health',
+    slots: ['lunch', 'dinner'],
+    ingredients: [{ name: 'Onion', quantity: '1', category: 'vegetables' }],
+  };
+  const dry: MealComponent = {
+    id: `dry-${name}`, name: `${name} Dry`, category: 'dry_veggie',
+    cuisine: 'north_indian', diet: 'veg', style: 'health',
+    slots: ['lunch', 'dinner'],
+    ingredients: [{ name: 'Beans', quantity: '100g', category: 'vegetables' }],
+  };
+  const side: MealComponent = {
+    id: `side-${name}`, name: `${name} Side`, category: 'side',
+    cuisine: 'north_indian', diet: 'veg', style: 'health',
+    slots: ['lunch', 'dinner'],
+    ingredients: [{ name: 'Curd', quantity: '100ml', category: 'dairy' }],
+  };
+  const components = [base, gravy, dry, side];
+  return {
+    components,
+    name: components.map(c => c.name).join(', '),
+    ingredients: components.flatMap(c => c.ingredients),
+  };
+}
+
 function makeDayPlan(day: string): DayPlan {
   return {
     day,
     breakfast: makeMeal(`${day}-Breakfast`, 'breakfast'),
-    lunch: makeMeal(`${day}-Lunch`, 'lunch'),
-    dinner: makeMeal(`${day}-Dinner`, 'dinner'),
+    lunch: makeComposedMeal(`${day}-Lunch`),
+    dinner: makeComposedMeal(`${day}-Dinner`),
   };
 }
 
