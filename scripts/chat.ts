@@ -106,13 +106,26 @@ async function handleInput(input: string): Promise<void> {
   console.log('🤖 Bot:');
   console.log(formatted.text);
 
+  let numberOffset = 0;
+  if (formatted.listItems && formatted.listItems.length > 0) {
+    console.log(`\n📋 [${formatted.listButtonLabel ?? 'Select'}]:`);
+    for (let i = 0; i < formatted.listItems.length; i++) {
+      const li = formatted.listItems[i];
+      console.log(`  ${i + 1}. [${li.id}] ${li.item}`);
+    }
+    numberOffset = formatted.listItems.length;
+  }
+
   if (formatted.buttons && formatted.buttons.length > 0) {
     console.log('\n📱 Buttons:');
     for (let i = 0; i < formatted.buttons.length; i++) {
       const btn = formatted.buttons[i];
-      console.log(`  ${i + 1}. [${btn.id}] ${btn.title}`);
+      console.log(`  ${numberOffset + i + 1}. [${btn.id}] ${btn.title}`);
     }
-    console.log('\n💡 Type a number (e.g. "1") or the button ID to select.');
+  }
+
+  if ((formatted.listItems && formatted.listItems.length > 0) || (formatted.buttons && formatted.buttons.length > 0)) {
+    console.log('\n💡 Type a number or the button/item ID to select.');
   }
 
   // 5. If cook message was sent, show what the cook would receive
@@ -129,11 +142,14 @@ async function handleInput(input: string): Promise<void> {
 
   // 6. Update state and store button IDs for numbered input resolution
   userState = result.updatedState;
-  if (formatted.buttons && formatted.buttons.length > 0) {
-    userState.lastButtonIds = formatted.buttons.map(b => b.id);
-  } else {
-    userState.lastButtonIds = undefined;
+  const allIds: string[] = [];
+  if (formatted.listItems && formatted.listItems.length > 0) {
+    allIds.push(...formatted.listItems.map(li => li.id));
   }
+  if (formatted.buttons && formatted.buttons.length > 0) {
+    allIds.push(...formatted.buttons.map(b => b.id));
+  }
+  userState.lastButtonIds = allIds.length > 0 ? allIds : undefined;
 }
 
 // --- REPL ---

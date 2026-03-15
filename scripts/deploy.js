@@ -400,7 +400,7 @@ async function ensureApiGateway() {
 
 // --- Step 6: EventBridge rules ---
 async function configureEventBridgeRules() {
-  const ruleState = stage === 'prod' ? 'ENABLED' : 'DISABLED';
+  const ruleState = (stage === 'prod' || stage === 'beta') ? 'ENABLED' : 'DISABLED';
   log(`Configuring EventBridge rules (${ruleState})...`);
 
   // Daily reminder: 8 PM IST = 2:30 PM UTC = cron(30 14 * * ? *)

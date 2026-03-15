@@ -106,14 +106,34 @@ export async function webhookHandler(
     const formatted = formatBotResponse(result.response);
 
     // 10b. Store button IDs on state so numbered text input can be resolved next turn
-    if (formatted.buttons && formatted.buttons.length > 0) {
-      result.updatedState.lastButtonIds = formatted.buttons.map(b => b.id);
-    } else {
-      result.updatedState.lastButtonIds = undefined;
+    //      Include both list item IDs and button IDs for numbered input resolution
+    const allIds: string[] = [];
+    if (formatted.listItems && formatted.listItems.length > 0) {
+      allIds.push(...formatted.listItems.map(li => li.id));
     }
+    if (formatted.buttons && formatted.buttons.length > 0) {
+      allIds.push(...formatted.buttons.map(b => b.id));
+    }
+    result.updatedState.lastButtonIds = allIds.length > 0 ? allIds : undefined;
 
     // 11. Send message via MessagingProvider
-    if (formatted.buttons && formatted.buttons.length > 0) {
+    if (formatted.listItems && formatted.listItems.length > 0 && formatted.listButtonLabel) {
+      // Send list-picker for item selection (e.g. dish removal)
+      await messagingProvider.sendListMessage(
+        phoneNumber,
+        formatted.text,
+        formatted.listButtonLabel,
+        formatted.listItems,
+      );
+      // Send follow-up quick-reply buttons (e.g. Next / Confirm) as a separate message
+      if (formatted.buttons && formatted.buttons.length > 0) {
+        await messagingProvider.sendButtonMessage(
+          phoneNumber,
+          'Tap an item above to remove it, or:',
+          formatted.buttons,
+        );
+      }
+    } else if (formatted.buttons && formatted.buttons.length > 0) {
       await messagingProvider.sendButtonMessage(
         phoneNumber,
         formatted.text,

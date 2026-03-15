@@ -1,5 +1,5 @@
 import Twilio from 'twilio';
-import type { MessagingProvider, ButtonOption } from '../core/ports';
+import type { MessagingProvider, ButtonOption, ListItem } from '../core/ports';
 
 /**
  * TwilioMessagingProvider — sends WhatsApp messages via Twilio.
@@ -94,6 +94,48 @@ export class TwilioMessagingProvider implements MessagingProvider {
   }
 
   /**
+   * Sends a WhatsApp list-picker message via the Content API.
+   * Supports up to 10 tappable items in a dropdown menu.
+   * Falls back to numbered text if the Content API call fails.
+   */
+  async sendListMessage(
+    to: string,
+    body: string,
+    buttonLabel: string,
+    items: ListItem[],
+  ): Promise<void> {
+    const from = `whatsapp:${this.senderNumber}`;
+    const toWhatsApp = `whatsapp:${to}`;
+
+    try {
+      const sid = await this.createListPickerTemplate(body, buttonLabel, items);
+      await this.client.messages.create({
+        from,
+        to: toWhatsApp,
+        contentSid: sid,
+      });
+      return;
+    } catch (error: unknown) {
+      const errMsg = error instanceof Error ? error.message : String(error);
+      console.warn(
+        `List-picker template failed for to="${toWhatsApp}" items=${items.length}: ${errMsg}. Falling back to text.`,
+      );
+    }
+
+    // Fallback: numbered text
+    const itemText = items
+      .map((it, i) => `${i + 1}. ${it.item}`)
+      .join('\n');
+    const fullBody = `${body}\n\n${itemText}`;
+
+    await this.client.messages.create({
+      from,
+      to: toWhatsApp,
+      body: fullBody,
+    });
+  }
+
+  /**
    * Creates a twilio/quick-reply Content Template on-the-fly.
    * These don't need WhatsApp approval for in-session messages.
    */
@@ -117,6 +159,38 @@ export class TwilioMessagingProvider implements MessagingProvider {
         'twilio/quick-reply': {
           body,
           actions,
+        },
+      },
+    } as any);
+
+    return template.sid;
+  }
+
+  /**
+   * Creates a twilio/list-picker Content Template on-the-fly.
+   * Supports up to 10 items in a tappable dropdown menu.
+   */
+  private async createListPickerTemplate(
+    body: string,
+    buttonLabel: string,
+    items: ListItem[],
+  ): Promise<string> {
+    const listItems = items.map((it) => ({
+      item: it.item.slice(0, 24), // WhatsApp limit: 24 chars
+      id: it.id,
+      description: it.description?.slice(0, 72) ?? '',
+    }));
+
+    const friendlyName = `lp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+    const template = await this.client.content.v1.contents.create({
+      friendlyName,
+      language: 'en',
+      types: {
+        'twilio/list-picker': {
+          body,
+          button: buttonLabel.slice(0, 20),
+          items: listItems,
         },
       },
     } as any);

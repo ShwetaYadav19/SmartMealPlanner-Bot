@@ -29,10 +29,12 @@ vi.mock('../../src/adapters/dynamodbUserStateRepository', () => ({
 // Mock TwilioMessagingProvider
 const mockSendTextMessage = vi.fn().mockResolvedValue(undefined);
 const mockSendButtonMessage = vi.fn().mockResolvedValue(undefined);
+const mockSendListMessage = vi.fn().mockResolvedValue(undefined);
 vi.mock('../../src/adapters/twilioMessagingProvider', () => ({
   TwilioMessagingProvider: vi.fn().mockImplementation(() => ({
     sendTextMessage: mockSendTextMessage,
     sendButtonMessage: mockSendButtonMessage,
+    sendListMessage: mockSendListMessage,
   })),
 }));
 

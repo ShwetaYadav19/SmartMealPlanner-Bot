@@ -6,6 +6,12 @@ export interface ButtonOption {
   title: string;
 }
 
+export interface ListItem {
+  id: string;
+  item: string;
+  description?: string;
+}
+
 export interface MessagingProvider {
   sendTextMessage(to: string, body: string): Promise<void>;
   sendButtonMessage(
@@ -13,6 +19,12 @@ export interface MessagingProvider {
     body: string,
     buttons: ButtonOption[],
     contentSid?: string,
+  ): Promise<void>;
+  sendListMessage(
+    to: string,
+    body: string,
+    buttonLabel: string,
+    items: ListItem[],
   ): Promise<void>;
 }
 

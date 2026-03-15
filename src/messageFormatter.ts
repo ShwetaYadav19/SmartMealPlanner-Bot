@@ -4,7 +4,7 @@
 
 import type { BotResponse, CandidateDishes, ComponentsByCategory, DayPlan, GroceryItem, PreviewStep, WeeklyPlan } from './core/types';
 import { ResponseType } from './core/types';
-import type { ButtonOption } from './core/ports';
+import type { ButtonOption, ListItem } from './core/ports';
 import {
   ONBOARDING_WELCOME,
   ONBOARDING_CUISINE_PROMPT,
@@ -44,6 +44,8 @@ import {
 export interface FormattedMessage {
   text: string;
   buttons?: ButtonOption[];
+  listItems?: ListItem[];
+  listButtonLabel?: string;
 }
 
 const MAIN_MENU_BUTTONS: ButtonOption[] = [
@@ -129,36 +131,54 @@ export function formatCookMessage(day: DayPlan): string {
   return text;
 }
 
-function generateStepButtons(candidates: CandidateDishes, step: PreviewStep): ButtonOption[] {
-  const buttons: ButtonOption[] = [];
+function generateStepListItems(candidates: CandidateDishes, step: PreviewStep): ListItem[] {
+  const items: ListItem[] = [];
 
   switch (step) {
     case 'breakfast':
       for (const b of candidates.breakfasts) {
-        buttons.push({ id: `remove_dish_${b.id}`, title: `❌ ${b.name}`.slice(0, 20) });
+        items.push({ id: `remove_dish_${b.id}`, item: b.name.slice(0, 24), description: 'Tap to remove' });
       }
-      buttons.push({ id: 'next_category', title: 'Next ➡️' });
       break;
 
     case 'base':
     case 'gravy':
     case 'dry_veggie':
     case 'side': {
-      for (const slot of [candidates.lunchComponents, candidates.dinnerComponents]) {
-        for (const comp of slot[step]) {
-          buttons.push({ id: `remove_dish_${comp.id}`, title: `❌ ${comp.name}`.slice(0, 20) });
+      const lunchItems = candidates.lunchComponents[step];
+      const dinnerItems = candidates.dinnerComponents[step];
+      const seen = new Set<string>();
+      for (const comp of [...lunchItems, ...dinnerItems]) {
+        if (!seen.has(comp.id)) {
+          seen.add(comp.id);
+          items.push({ id: `remove_dish_${comp.id}`, item: comp.name.slice(0, 24), description: 'Tap to remove' });
         }
       }
-      buttons.push({ id: 'next_category', title: 'Next ➡️' });
       break;
     }
 
-    case 'confirm':
-      buttons.push({ id: 'confirm_dishes', title: '✅ Confirm Dishes' });
+    default:
       break;
   }
 
-  return buttons;
+  return items;
+}
+
+function generateStepButtons(candidates: CandidateDishes, step: PreviewStep): ButtonOption[] {
+  switch (step) {
+    case 'breakfast':
+    case 'base':
+    case 'gravy':
+    case 'dry_veggie':
+    case 'side':
+      return [{ id: 'next_category', title: 'Next ➡️' }];
+
+    case 'confirm':
+      return [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }];
+
+    default:
+      return [];
+  }
 }
 
 function formatStepText(candidates: CandidateDishes, step: PreviewStep): string {
@@ -344,9 +364,11 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       if (!candidates) {
         return { text: 'No dishes available', buttons: [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }] };
       }
+      const listItems = generateStepListItems(candidates, step);
       return {
         text: formatStepText(candidates, step),
         buttons: generateStepButtons(candidates, step),
+        ...(listItems.length > 0 ? { listItems, listButtonLabel: '🗑️ Remove items' } : {}),
       };
     }
 
@@ -365,9 +387,11 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         return { text: confirmationText, buttons: [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }] };
       }
       const updatedPreviewText = formatStepText(updatedCandidates, removedStep);
+      const removedListItems = generateStepListItems(updatedCandidates, removedStep);
       return {
         text: `${confirmationText}\n\n${updatedPreviewText}`,
         buttons: generateStepButtons(updatedCandidates, removedStep),
+        ...(removedListItems.length > 0 ? { listItems: removedListItems, listButtonLabel: '🗑️ Remove items' } : {}),
       };
     }
 
@@ -378,9 +402,11 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         return { text: DISH_PREVIEW_EMPTY_ERROR, buttons: [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }] };
       }
       const originalPreviewText = formatStepText(originalCandidates, errorStep);
+      const errorListItems = generateStepListItems(originalCandidates, errorStep);
       return {
         text: `${DISH_PREVIEW_EMPTY_ERROR}\n\n${originalPreviewText}`,
         buttons: generateStepButtons(originalCandidates, errorStep),
+        ...(errorListItems.length > 0 ? { listItems: errorListItems, listButtonLabel: '🗑️ Remove items' } : {}),
       };
     }
 
