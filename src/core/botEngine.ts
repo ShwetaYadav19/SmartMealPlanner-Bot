@@ -156,15 +156,33 @@ function handleAwaitingMealStyle(intent: UserIntent, state: UserState): BotResul
  * The weekly plan covers Mon–Sun, so anchoring to the current week's Monday
  * ensures "tomorrow" always falls within the plan range (index 0–6).
  */
+/**
+ * Return the Monday that anchors the weekly plan as an ISO date string (YYYY-MM-DD).
+ *
+ * The plan covers Mon–Sun (indices 0–6). We pick the Monday such that
+ * *tomorrow* always falls within the plan:
+ *  - Mon–Sat → current week's Monday (tomorrow is Tue–Sun, index 1–6)
+ *  - Sunday  → next Monday (tomorrow is Monday, index 0)
+ */
 function getCurrentWeekMondayISO(): string {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon, ...
-  // How many days back to reach Monday: Sun(0)→6, Mon(1)→0, Tue(2)→1, ...
-  const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+  if (dayOfWeek === 0) {
+    // Sunday — anchor to tomorrow (next Monday)
+    const nextMonday = new Date(today);
+    nextMonday.setDate(today.getDate() + 1);
+    const yyyy = nextMonday.getFullYear();
+    const mm = String(nextMonday.getMonth() + 1).padStart(2, '0');
+    const dd = String(nextMonday.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  // Mon–Sat — anchor to this week's Monday
+  const daysSinceMonday = dayOfWeek - 1; // Mon=0, Tue=1, ...
   const monday = new Date(today);
   monday.setDate(today.getDate() - daysSinceMonday);
-  // Format as YYYY-MM-DD using local date parts to avoid timezone shift
   const yyyy = monday.getFullYear();
   const mm = String(monday.getMonth() + 1).padStart(2, '0');
   const dd = String(monday.getDate()).padStart(2, '0');
