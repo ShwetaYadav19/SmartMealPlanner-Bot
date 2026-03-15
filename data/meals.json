@@ -1378,5 +1378,155 @@
       { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
       { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
     ]
+  },
+  {
+    "id": "si-b-012",
+    "name": "Adai (Millet Lentil Crepe)",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Mixed Millets", "quantity": "100g", "category": "grains" },
+      { "name": "Toor Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Chana Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Red Chilli", "quantity": "3-4", "category": "spices" },
+      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-b-013",
+    "name": "Kerala Puttu with Kadala Curry",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
+      { "name": "Coconut", "quantity": "1/2 cup grated", "category": "nuts" },
+      { "name": "Black Chickpeas (Kadala)", "quantity": "150g", "category": "lentils" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Coconut Milk", "quantity": "100ml", "category": "dairy" }
+    ]
+  },
+  {
+    "id": "si-b-014",
+    "name": "Khara Bhath (Rava Bhath)",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Semolina (Rava)", "quantity": "200g", "category": "grains" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Cashews", "quantity": "10-12", "category": "nuts" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-b-015",
+    "name": "Masala Paniyaram",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Dosa Batter", "quantity": "250g", "category": "grains" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Carrot", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
+      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-b-016",
+    "name": "Lemon Sevai (Lemon Idiyappam)",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
+      { "name": "Lemon", "quantity": "2", "category": "fruits" },
+      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" }
+    ]
+  },
+  {
+    "id": "si-b-017",
+    "name": "Aval Upma (South Indian Poha)",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Flattened Rice (Aval)", "quantity": "200g", "category": "grains" },
+      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" },
+      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-b-018",
+    "name": "Upma Kozhukattai",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Broken Rice", "quantity": "200g", "category": "grains" },
+      { "name": "Moong Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-b-019",
+    "name": "Egg Kothu Parotta",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Parotta", "quantity": "3", "category": "grains" },
+      { "name": "Eggs", "quantity": "2", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-b-020",
+    "name": "Oats Mor Kali (Buttermilk Porridge)",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Oats", "quantity": "100g", "category": "grains" },
+      { "name": "Buttermilk", "quantity": "300ml", "category": "dairy" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
+      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" }
+    ]
+  },
+  {
+    "id": "si-b-021",
+    "name": "Coconut Sevai (Thengai Idiyappam)",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
+      { "name": "Coconut", "quantity": "1/2 cup grated", "category": "nuts" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
+      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+    ]
   }
 ]
