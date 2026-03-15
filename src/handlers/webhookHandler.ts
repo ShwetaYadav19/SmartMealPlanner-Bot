@@ -29,6 +29,9 @@ interface APIGatewayProxyResult {
  * If the user typed a number (e.g. "1", "2") and we have stored button IDs
  * from the previous response, resolve the number to the corresponding button
  * payload. This handles the Twilio numbered-text fallback for >3 buttons.
+ *
+ * Also supports multi-select: "1,3" or "1 3" resolves to multiple IDs
+ * joined by commas.
  */
 function resolveNumberedInput(
   buttonPayload: string | undefined,
@@ -42,9 +45,30 @@ function resolveNumberedInput(
   if (!lastButtonIds || lastButtonIds.length === 0) return undefined;
 
   const trimmed = body.trim();
-  const num = parseInt(trimmed, 10);
-  if (!isNaN(num) && num >= 1 && num <= lastButtonIds.length && String(num) === trimmed) {
-    return lastButtonIds[num - 1];
+
+  // Try single number first
+  const singleNum = parseInt(trimmed, 10);
+  if (!isNaN(singleNum) && singleNum >= 1 && singleNum <= lastButtonIds.length && String(singleNum) === trimmed) {
+    return lastButtonIds[singleNum - 1];
+  }
+
+  // Try multi-select: split by comma, space, or both
+  const parts = trimmed.split(/[\s,]+/).filter(p => p.length > 0);
+  if (parts.length > 1) {
+    const resolvedIds: string[] = [];
+    for (const part of parts) {
+      const num = parseInt(part, 10);
+      if (isNaN(num) || num < 1 || num > lastButtonIds.length || String(num) !== part) {
+        return undefined; // Invalid number in the list — bail out
+      }
+      resolvedIds.push(lastButtonIds[num - 1]);
+    }
+    // Deduplicate while preserving order
+    const unique = [...new Set(resolvedIds)];
+    if (unique.length > 1) {
+      return unique.join(',');
+    }
+    return unique[0];
   }
 
   return undefined;

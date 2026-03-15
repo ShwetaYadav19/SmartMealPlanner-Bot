@@ -48,6 +48,18 @@ export function mapWhatsAppToIntent(
 
     // Dish preview actions
     if (conversationState === 'dish_preview') {
+      // Multi-select: comma-separated remove_dish_ payloads (e.g. "remove_dish_a,remove_dish_b")
+      if (buttonPayload.includes(',') && buttonPayload.startsWith('remove_dish_')) {
+        const ids = buttonPayload.split(',')
+          .filter(p => p.startsWith('remove_dish_'))
+          .map(p => p.slice('remove_dish_'.length));
+        if (ids.length > 1) {
+          return { intent: Intent.REMOVE_DISHES, payload: ids.join(',') };
+        }
+        if (ids.length === 1) {
+          return { intent: Intent.REMOVE_DISH, payload: ids[0] };
+        }
+      }
       if (buttonPayload.startsWith('remove_dish_')) {
         const dishId = buttonPayload.slice('remove_dish_'.length);
         return { intent: Intent.REMOVE_DISH, payload: dishId };

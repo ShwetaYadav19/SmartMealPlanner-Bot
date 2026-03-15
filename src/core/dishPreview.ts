@@ -258,46 +258,47 @@ export function removeComponent(
   const slots = ['lunchComponents', 'dinnerComponents'] as const;
   const categories: ComponentCategory[] = ['base', 'gravy', 'dry_veggie', 'side'];
 
-  // First pass: find the component and check the empty-category guard in every slot
+  // First pass: find the component and determine which slots it can be safely removed from
   let removedName: string | undefined;
   let removedCategory: ComponentCategory | undefined;
+  let canRemoveFromAny = false;
+
+  // Track which slot+category pairs are safe to remove from
+  const removable: Array<{ slot: typeof slots[number]; category: ComponentCategory }> = [];
 
   for (const slot of slots) {
     for (const category of categories) {
       const components = candidates[slot][category];
       const idx = components.findIndex(c => c.id === componentId);
       if (idx !== -1) {
-        // Guard: removing the last component in a category is not allowed
-        if (components.length <= 1) {
-          return null;
-        }
         if (!removedName) {
           removedName = components[idx].name;
           removedCategory = category;
         }
+        // Only remove from this slot if it won't leave the category empty
+        if (components.length > 1) {
+          removable.push({ slot, category });
+          canRemoveFromAny = true;
+        }
       }
     }
   }
 
-  if (!removedName || !removedCategory) {
+  if (!removedName || !removedCategory || !canRemoveFromAny) {
     return null;
   }
 
-  // Second pass: remove from all slots where it appears
+  // Second pass: remove only from slots where it's safe
   let updated = { ...candidates };
-  for (const slot of slots) {
-    for (const category of categories) {
-      const components = updated[slot][category];
-      if (components.some(c => c.id === componentId)) {
-        updated = {
-          ...updated,
-          [slot]: {
-            ...updated[slot],
-            [category]: components.filter(c => c.id !== componentId),
-          },
-        };
-      }
-    }
+  for (const { slot, category } of removable) {
+    const components = updated[slot][category];
+    updated = {
+      ...updated,
+      [slot]: {
+        ...updated[slot],
+        [category]: components.filter(c => c.id !== componentId),
+      },
+    };
   }
 
   return {

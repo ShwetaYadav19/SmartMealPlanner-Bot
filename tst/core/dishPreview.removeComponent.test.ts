@@ -61,7 +61,7 @@ describe('removeComponent', () => {
     expect(result!.candidates.dinnerComponents.gravy).toHaveLength(2);
   });
 
-  it('returns null when removing would leave a category empty in any slot', () => {
+  it('returns null when removing would leave a category empty in all slots', () => {
     const candidates = makeCandidates({
       lunchComponents: makeComponentsByCategory({ base: 1 }),
       dinnerComponents: makeComponentsByCategory({ base: 1 }),
@@ -69,6 +69,21 @@ describe('removeComponent', () => {
 
     const result = removeComponent(candidates, 'base-0');
     expect(result).toBeNull();
+  });
+
+  it('removes from slot with enough items but skips slot where it would empty the category', () => {
+    const lunch = makeComponentsByCategory({ base: 2 });
+    const dinner = makeComponentsByCategory({ base: 1 });
+    const candidates = makeCandidates({ lunchComponents: lunch, dinnerComponents: dinner });
+
+    const result = removeComponent(candidates, 'base-0');
+
+    expect(result).not.toBeNull();
+    expect(result!.removedComponentName).toBe('base 0');
+    expect(result!.removedComponentCategory).toBe('base');
+    // Removed from lunch (had 2), kept in dinner (had 1)
+    expect(result!.candidates.lunchComponents.base).toHaveLength(1);
+    expect(result!.candidates.dinnerComponents.base).toHaveLength(1);
   });
 
   it('returns null when component ID is not found', () => {

@@ -107,8 +107,11 @@ export class TwilioMessagingProvider implements MessagingProvider {
     const from = `whatsapp:${this.senderNumber}`;
     const toWhatsApp = `whatsapp:${to}`;
 
+    // WhatsApp list-picker supports max 10 items
+    const cappedItems = items.slice(0, 10);
+
     try {
-      const sid = await this.createListPickerTemplate(body, buttonLabel, items);
+      const sid = await this.createListPickerTemplate(body, buttonLabel, cappedItems);
       await this.client.messages.create({
         from,
         to: toWhatsApp,
@@ -118,12 +121,12 @@ export class TwilioMessagingProvider implements MessagingProvider {
     } catch (error: unknown) {
       const errMsg = error instanceof Error ? error.message : String(error);
       console.warn(
-        `List-picker template failed for to="${toWhatsApp}" items=${items.length}: ${errMsg}. Falling back to text.`,
+        `List-picker template failed for to="${toWhatsApp}" items=${cappedItems.length}: ${errMsg}. Falling back to text.`,
       );
     }
 
     // Fallback: numbered text
-    const itemText = items
+    const itemText = cappedItems
       .map((it, i) => `${i + 1}. ${it.item}`)
       .join('\n');
     const fullBody = `${body}\n\n${itemText}`;

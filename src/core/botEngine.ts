@@ -383,6 +383,68 @@ async function handleDishPreview(
     };
   }
 
+  // Handle REMOVE_DISHES — batch removal of multiple items
+  if (intent.intent === Intent.REMOVE_DISHES && intent.payload) {
+    const dishIds = intent.payload.split(',');
+    let currentCandidates = state.candidateDishes;
+    let currentExcluded = state.excludedDishIds ?? [];
+    const removedNames: string[] = [];
+
+    for (const dishId of dishIds) {
+      const isBreakfast = currentCandidates.breakfasts.some(m => m.id === dishId);
+
+      if (isBreakfast) {
+        const result = await removeBreakfast(
+          currentCandidates,
+          dishId,
+          deps,
+          preferences,
+          currentExcluded,
+        );
+        if (result) {
+          currentCandidates = result.updated;
+          currentExcluded = [...currentExcluded, dishId];
+          removedNames.push(result.removedName);
+        }
+      } else {
+        const componentResult = removeComponent(currentCandidates, dishId);
+        if (componentResult) {
+          currentCandidates = componentResult.candidates;
+          currentExcluded = [...currentExcluded, dishId];
+          removedNames.push(componentResult.removedComponentName);
+        }
+      }
+    }
+
+    if (removedNames.length === 0) {
+      return {
+        response: {
+          type: ResponseType.DISH_PREVIEW_EMPTY_ERROR,
+          data: { candidateDishes: state.candidateDishes, previewStep: currentStep },
+        },
+        updatedState: state,
+      };
+    }
+
+    const updatedState: UserState = {
+      ...state,
+      candidateDishes: currentCandidates,
+      excludedDishIds: currentExcluded,
+    };
+    return {
+      response: {
+        type: ResponseType.DISH_REMOVED,
+        data: {
+          candidateDishes: currentCandidates,
+          removedComponentName: removedNames.join(', '),
+          removedComponentCategory: 'items',
+          previewStep: currentStep,
+        },
+      },
+      updatedState,
+    };
+  }
+
   if (intent.intent === Intent.CONFIRM_DISHES) {
     const weeklyPlan = buildPlanFromComponents(state.candidateDishes, {
       cuisine: state.cuisinePreference ?? 'both',

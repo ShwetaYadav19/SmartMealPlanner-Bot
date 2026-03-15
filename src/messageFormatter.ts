@@ -133,10 +133,12 @@ export function formatCookMessage(day: DayPlan): string {
 
 function generateStepListItems(candidates: CandidateDishes, step: PreviewStep): ListItem[] {
   const items: ListItem[] = [];
+  const MAX_LIST_ITEMS = 10; // WhatsApp list-picker limit
 
   switch (step) {
     case 'breakfast':
       for (const b of candidates.breakfasts) {
+        if (items.length >= MAX_LIST_ITEMS) break;
         items.push({ id: `remove_dish_${b.id}`, item: b.name.slice(0, 24), description: 'Tap to remove' });
       }
       break;
@@ -149,6 +151,7 @@ function generateStepListItems(candidates: CandidateDishes, step: PreviewStep): 
       const dinnerItems = candidates.dinnerComponents[step];
       const seen = new Set<string>();
       for (const comp of [...lunchItems, ...dinnerItems]) {
+        if (items.length >= MAX_LIST_ITEMS) break;
         if (!seen.has(comp.id)) {
           seen.add(comp.id);
           items.push({ id: `remove_dish_${comp.id}`, item: comp.name.slice(0, 24), description: 'Tap to remove' });
