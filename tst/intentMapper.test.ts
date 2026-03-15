@@ -37,6 +37,11 @@ describe('mapWhatsAppToIntent', () => {
       const result = mapWhatsAppToIntent('non_veg', '', state);
       expect(result).toEqual({ intent: Intent.SELECT_DIET, payload: 'non_veg' });
     });
+
+    it('maps "both" button to SELECT_DIET', () => {
+      const result = mapWhatsAppToIntent('both', '', state);
+      expect(result).toEqual({ intent: Intent.SELECT_DIET, payload: 'both' });
+    });
   });
 
   // --- Meal style selection (awaiting_meal_style) ---
@@ -110,6 +115,14 @@ describe('mapWhatsAppToIntent', () => {
 
     it('returns UNKNOWN for free text in awaiting_diet', () => {
       expect(mapWhatsAppToIntent(undefined, 'veg please', 'awaiting_diet')).toEqual({ intent: Intent.UNKNOWN });
+    });
+
+    it('maps "both" text to SELECT_DIET in awaiting_diet', () => {
+      expect(mapWhatsAppToIntent(undefined, 'both', 'awaiting_diet')).toEqual({ intent: Intent.SELECT_DIET, payload: 'both' });
+    });
+
+    it('maps "3" text to SELECT_DIET both in awaiting_diet', () => {
+      expect(mapWhatsAppToIntent(undefined, '3', 'awaiting_diet')).toEqual({ intent: Intent.SELECT_DIET, payload: 'both' });
     });
 
     it('returns UNKNOWN for unrecognized free text in awaiting_meal_style', () => {

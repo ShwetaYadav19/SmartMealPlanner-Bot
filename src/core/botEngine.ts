@@ -27,6 +27,7 @@ const CUISINE_OPTIONS: SuggestedAction[] = [
 const DIET_OPTIONS: SuggestedAction[] = [
   { id: 'veg', label: 'Veg' },
   { id: 'non_veg', label: 'Non-Veg' },
+  { id: 'both', label: 'Both' },
 ];
 
 const STYLE_OPTIONS: SuggestedAction[] = [

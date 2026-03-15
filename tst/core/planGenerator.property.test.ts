@@ -6,7 +6,7 @@ import type { Meal, Ingredient } from '../../src/core/types';
 // --- Arbitraries ---
 
 const cuisineArb = fc.constantFrom('north_indian' as const, 'south_indian' as const);
-const dietArb = fc.constantFrom('veg' as const, 'non_veg' as const);
+const dietArb = fc.constantFrom('veg' as const, 'non_veg' as const, 'both' as const);
 const styleArb = fc.constantFrom('health' as const, 'regular' as const);
 const slotArb = fc.constantFrom('breakfast' as const, 'lunch' as const, 'dinner' as const);
 
@@ -91,14 +91,14 @@ function bothCuisineMealPoolArb(
 // --- Preference arbitrary for single-cuisine tests ---
 const singleCuisinePrefsArb = fc.record({
   cuisine: cuisineArb,
-  diet: dietArb,
+  diet: fc.constantFrom('veg' as const, 'non_veg' as const),
   style: styleArb,
 });
 
 // --- Preference arbitrary for "both" cuisine tests ---
 const bothCuisinePrefsArb = fc.record({
   cuisine: fc.constant('both' as const),
-  diet: dietArb,
+  diet: fc.constantFrom('veg' as const, 'non_veg' as const),
   style: styleArb,
 });
 
@@ -172,9 +172,14 @@ describe('Property 5: Plan meals match user preferences', () => {
    * Every meal in the generated plan matches the user's diet, style,
    * and cuisine preferences.
    */
-  it('every meal matches diet, style, and cuisine preferences', () => {
+  it('every meal matches diet, style, and cuisine preferences (single diet)', () => {
+    const singleDietPrefsArb = fc.record({
+      cuisine: cuisineArb,
+      diet: fc.constantFrom('veg' as const, 'non_veg' as const),
+      style: styleArb,
+    });
     fc.assert(
-      fc.property(singleCuisinePrefsArb, (prefs) => {
+      fc.property(singleDietPrefsArb, (prefs) => {
         const meals = buildMealPool(prefs.cuisine, prefs.diet, prefs.style);
         const plan = generateWeeklyPlan(meals, prefs);
 
@@ -214,6 +219,48 @@ describe('Property 6: "Both" cuisine distribution', () => {
 
         expect(cuisines.has('north_indian')).toBe(true);
         expect(cuisines.has('south_indian')).toBe(true);
+      }),
+      { numRuns: 50 },
+    );
+  });
+});
+
+// ============================================================
+// Property 7: "Both" diet distribution
+// Validates: diet='both' produces mix of veg and non-veg
+// ============================================================
+
+describe('Property 7: "Both" diet distribution', () => {
+  /**
+   * When diet preference is "both", the plan contains at least one
+   * veg meal and at least one non-veg meal, with at most one non-veg
+   * slot per day.
+   */
+  it('plan contains both veg and non-veg meals with max 1 non-veg per day', () => {
+    const bothDietPrefsArb = fc.record({
+      cuisine: fc.constantFrom('north_indian' as const, 'south_indian' as const),
+      diet: fc.constant('both' as const),
+      style: styleArb,
+    });
+
+    fc.assert(
+      fc.property(bothDietPrefsArb, (prefs) => {
+        const meals = buildBothDietMealPool(prefs.cuisine, prefs.style);
+        const plan = generateWeeklyPlan(meals, prefs);
+
+        const allMeals = plan.flatMap((d) => [d.breakfast, d.lunch, d.dinner]);
+        const diets = new Set(allMeals.map((m) => m.diet));
+
+        // Should have both veg and non-veg
+        expect(diets.has('veg')).toBe(true);
+        expect(diets.has('non_veg')).toBe(true);
+
+        // At most 1 non-veg meal per day
+        for (const day of plan) {
+          const nonVegCount = [day.breakfast, day.lunch, day.dinner]
+            .filter(m => m.diet === 'non_veg').length;
+          expect(nonVegCount).toBeLessThanOrEqual(1);
+        }
       }),
       { numRuns: 50 },
     );
@@ -268,6 +315,34 @@ function buildBothCuisineMealPool(
           style,
           slots: [slot],
           ingredients: [{ name: `Ingredient ${cuisine} ${i}`, quantity: '100g', category: 'vegetables' }],
+        });
+      }
+    }
+  }
+
+  return meals;
+}
+
+function buildBothDietMealPool(
+  cuisine: 'north_indian' | 'south_indian',
+  style: 'health' | 'regular',
+): Meal[] {
+  const slots = ['breakfast', 'lunch', 'dinner'] as const;
+  const diets = ['veg', 'non_veg'] as const;
+  const perSlotPerDiet = 5;
+  const meals: Meal[] = [];
+
+  for (const diet of diets) {
+    for (const slot of slots) {
+      for (let i = 0; i < perSlotPerDiet; i++) {
+        meals.push({
+          id: `${diet.slice(0, 1)}-${slot[0]}-${String(i).padStart(3, '0')}`,
+          name: `${diet} ${cuisine} ${slot} ${i}`,
+          cuisine,
+          diet,
+          style,
+          slots: [slot],
+          ingredients: [{ name: `Ingredient ${diet} ${i}`, quantity: '100g', category: 'vegetables' }],
         });
       }
     }

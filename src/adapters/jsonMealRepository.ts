@@ -22,7 +22,7 @@ export class JsonMealRepository implements MealRepository {
         if (meal.cuisine !== filter.cuisine) return false;
       }
 
-      if (filter.diet) {
+      if (filter.diet && filter.diet !== 'both') {
         if (meal.diet !== filter.diet) return false;
       }
 

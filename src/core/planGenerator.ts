@@ -181,27 +181,35 @@ export function generateWeeklyPlan(
   meals: Meal[],
   preferences: { cuisine: string; diet: string; style: string },
 ): WeeklyPlan {
-  const isBoth = preferences.cuisine === 'both';
+  const isBothCuisine = preferences.cuisine === 'both';
+  const isBothDiet = preferences.diet === 'both';
+
+  // When diet is 'both', split meals into veg and non-veg pools per slot
+  // and assign one non-veg slot per day (rotating through slots)
+  const vegMeals = isBothDiet ? meals.filter(m => m.diet === 'veg') : meals;
+  const nonVegMeals = isBothDiet ? meals.filter(m => m.diet === 'non_veg') : [];
 
   // Group meals by slot and shuffle each pool
   const pools: Record<SlotName, Meal[]> = {
-    breakfast: fisherYatesShuffle(mealsForSlot(meals, 'breakfast')),
-    lunch: fisherYatesShuffle(mealsForSlot(meals, 'lunch')),
-    dinner: fisherYatesShuffle(mealsForSlot(meals, 'dinner')),
+    breakfast: fisherYatesShuffle(mealsForSlot(isBothDiet ? vegMeals : meals, 'breakfast')),
+    lunch: fisherYatesShuffle(mealsForSlot(isBothDiet ? vegMeals : meals, 'lunch')),
+    dinner: fisherYatesShuffle(mealsForSlot(isBothDiet ? vegMeals : meals, 'dinner')),
+  };
+
+  // Non-veg pools (only used when diet is 'both')
+  const nonVegPools: Record<SlotName, Meal[]> = {
+    breakfast: fisherYatesShuffle(mealsForSlot(nonVegMeals, 'breakfast')),
+    lunch: fisherYatesShuffle(mealsForSlot(nonVegMeals, 'lunch')),
+    dinner: fisherYatesShuffle(mealsForSlot(nonVegMeals, 'dinner')),
   };
 
   // Track a rotating cursor per slot so we consume through the shuffled pool
-  // instead of always scanning from index 0
-  const cursor: Record<SlotName, number> = {
-    breakfast: 0,
-    lunch: 0,
-    dinner: 0,
-  };
+  const cursor: Record<SlotName, number> = { breakfast: 0, lunch: 0, dinner: 0 };
+  const nonVegCursor: Record<SlotName, number> = { breakfast: 0, lunch: 0, dinner: 0 };
 
-  const cuisineSchedule = isBoth ? buildCuisineSchedule() : null;
+  const cuisineSchedule = isBothCuisine ? buildCuisineSchedule() : null;
 
   // Track recent meal ids per slot using a sliding 3-day window
-  // Each slot keeps the ids used in the last 3 days to avoid repetition
   const recentSlotHistory: Record<SlotName, string[]> = {
     breakfast: [],
     lunch: [],
@@ -216,16 +224,20 @@ export function generateWeeklyPlan(
     const usedKeyIngredients = new Set<string>();
     const dayMeals: Record<SlotName, Meal> = {} as Record<SlotName, Meal>;
 
+    // When diet is 'both', assign one non-veg slot per day (rotating)
+    const nonVegSlot: SlotName | null = isBothDiet ? SLOTS[d % 3] : null;
+
     for (const slot of SLOTS) {
       const preferredCuisine = cuisineSchedule ? cuisineSchedule[d][slot] : null;
-      const pool = pools[slot];
+      const isNonVegSlot = slot === nonVegSlot;
+      const pool = isNonVegSlot ? nonVegPools[slot] : pools[slot];
+      const cursorMap = isNonVegSlot ? nonVegCursor : cursor;
 
-      // Build the set of recent meal ids for this slot (last 3 days)
       const recentSlotMealIds = new Set<string>(recentSlotHistory[slot]);
 
       const meal = pickMealFromCursor(
         pool,
-        cursor,
+        cursorMap,
         slot,
         usedToday,
         recentSlotMealIds,
@@ -234,6 +246,26 @@ export function generateWeeklyPlan(
       );
 
       if (!meal) {
+        // If non-veg pool is empty for this slot, fall back to veg
+        if (isNonVegSlot) {
+          const fallback = pickMealFromCursor(
+            pools[slot],
+            cursor,
+            slot,
+            usedToday,
+            recentSlotMealIds,
+            preferredCuisine,
+            usedKeyIngredients,
+          );
+          if (fallback) {
+            dayMeals[slot] = fallback;
+            usedToday.add(fallback.id);
+            for (const key of getKeyIngredients(fallback)) {
+              usedKeyIngredients.add(key);
+            }
+            continue;
+          }
+        }
         throw new Error(
           `Not enough meals available for ${slot} on ${DAYS[d]}. ` +
           `Need at least enough unique meals per slot to fill 7 days.`,
@@ -243,7 +275,6 @@ export function generateWeeklyPlan(
       dayMeals[slot] = meal;
       usedToday.add(meal.id);
 
-      // Track key ingredients so the next slot in the same day avoids them
       for (const key of getKeyIngredients(meal)) {
         usedKeyIngredients.add(key);
       }

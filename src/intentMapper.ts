@@ -28,7 +28,7 @@ export function mapWhatsAppToIntent(
     // Diet selection during onboarding
     if (
       conversationState === 'awaiting_diet' &&
-      (buttonPayload === 'veg' || buttonPayload === 'non_veg')
+      (buttonPayload === 'veg' || buttonPayload === 'non_veg' || buttonPayload === 'both')
     ) {
       return { intent: Intent.SELECT_DIET, payload: buttonPayload };
     }
@@ -73,6 +73,7 @@ export function mapWhatsAppToIntent(
   if (conversationState === 'awaiting_diet') {
     if (text === '1' || text === 'veg') return { intent: Intent.SELECT_DIET, payload: 'veg' };
     if (text === '2' || text === 'non-veg' || text === 'non veg' || text === 'nonveg') return { intent: Intent.SELECT_DIET, payload: 'non_veg' };
+    if (text === '3' || text === 'both') return { intent: Intent.SELECT_DIET, payload: 'both' };
   }
 
   // Meal style selection via text

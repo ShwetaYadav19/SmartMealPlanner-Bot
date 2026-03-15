@@ -56,7 +56,7 @@ const stubMealRepo: MealRepository = {
 // --- Arbitraries ---
 
 const cuisineArb = fc.constantFrom('north_indian' as const, 'south_indian' as const, 'both' as const);
-const dietArb = fc.constantFrom('veg' as const, 'non_veg' as const);
+const dietArb = fc.constantFrom('veg' as const, 'non_veg' as const, 'both' as const);
 const styleArb = fc.constantFrom('health' as const, 'regular' as const);
 
 const onboardingStateArb = fc.constantFrom(

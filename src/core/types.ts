@@ -18,7 +18,7 @@ export interface Meal {
 
 export interface MealFilter {
   cuisine?: 'north_indian' | 'south_indian' | 'both';
-  diet?: 'veg' | 'non_veg';
+  diet?: 'veg' | 'non_veg' | 'both';
   style?: 'health' | 'regular';
   slot?: 'breakfast' | 'lunch' | 'dinner';
 }
@@ -50,7 +50,7 @@ export interface UserState {
   onboardingComplete: boolean;
   conversationState: ConversationState;
   cuisinePreference?: 'north_indian' | 'south_indian' | 'both';
-  dietPreference?: 'veg' | 'non_veg';
+  dietPreference?: 'veg' | 'non_veg' | 'both';
   mealStyle?: 'health' | 'regular';
   weeklyPlan?: WeeklyPlan;
   weeklyPlanStartDate?: string;

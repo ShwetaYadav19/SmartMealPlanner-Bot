@@ -115,6 +115,18 @@ describe('BotEngine — onboarding flow', () => {
     expect(result.updatedState.conversationState).toBe('awaiting_meal_style');
   });
 
+  it('stores "both" diet preference correctly', async () => {
+    const state = makeState({
+      conversationState: 'awaiting_diet',
+      cuisinePreference: 'north_indian',
+    });
+    const intent: UserIntent = { intent: Intent.SELECT_DIET, payload: 'both' };
+    const result = await processIntent(intent, state, stubMealRepo);
+
+    expect(result.updatedState.dietPreference).toBe('both');
+    expect(result.updatedState.conversationState).toBe('awaiting_meal_style');
+  });
+
   it('stores meal style, marks onboarding complete, and returns MAIN_MENU', async () => {
     const state = makeState({
       conversationState: 'awaiting_meal_style',
