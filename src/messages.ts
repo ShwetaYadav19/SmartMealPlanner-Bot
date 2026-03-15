@@ -139,15 +139,20 @@ export function formatConfirmStepMessage(candidates: {
   lunchComponents: { base: { name: string }[]; gravy: { name: string }[]; dry_veggie: { name: string }[]; side: { name: string }[] };
   dinnerComponents: { base: { name: string }[]; gravy: { name: string }[]; dry_veggie: { name: string }[]; side: { name: string }[] };
 }): string {
+  const lunchCount = candidates.lunchComponents.base.length
+    + candidates.lunchComponents.gravy.length
+    + candidates.lunchComponents.dry_veggie.length
+    + candidates.lunchComponents.side.length;
+  const dinnerCount = candidates.dinnerComponents.base.length
+    + candidates.dinnerComponents.gravy.length
+    + candidates.dinnerComponents.dry_veggie.length
+    + candidates.dinnerComponents.side.length;
+
   let text = `✅ *Review & Confirm*\n`;
-  text += `\n*Breakfasts*`;
-  for (const b of candidates.breakfasts) {
-    text += `\n  • ${b.name}`;
-  }
-  text += `\n\n*Lunches*`;
-  text += formatComponentsByCategory(candidates.lunchComponents);
-  text += `\n\n*Dinners*`;
-  text += formatComponentsByCategory(candidates.dinnerComponents);
+  text += `\n🍳 *${candidates.breakfasts.length} Breakfasts:* ${candidates.breakfasts.map(b => b.name).join(', ')}`;
+  text += `\n🍛 *${lunchCount} Lunch items* across base, gravy, dry veggie & side`;
+  text += `\n🍽️ *${dinnerCount} Dinner items* across base, gravy, dry veggie & side`;
+  text += `\n\nTap Confirm to generate your weekly meal plan!`;
   return text;
 }
 
