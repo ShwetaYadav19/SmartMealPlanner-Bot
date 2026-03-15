@@ -141,21 +141,22 @@ export async function webhookHandler(
     result.updatedState.lastButtonIds = allIds.length > 0 ? allIds : undefined;
 
     // 11. Send message via MessagingProvider
-    if (formatted.listItems && formatted.listItems.length > 0 && formatted.listButtonLabel) {
-      // Send list-picker for item selection (e.g. dish removal)
-      await messagingProvider.sendListMessage(
-        phoneNumber,
-        formatted.text,
-        formatted.listButtonLabel,
-        formatted.listItems,
-      );
-      // Send follow-up quick-reply buttons (e.g. Next / Confirm) as a separate message
+    if (formatted.listItems && formatted.listItems.length > 0) {
+      // Render removable items as numbered text inline for multi-select support
+      // (WhatsApp list-pickers only allow single selection)
+      const numberedItems = formatted.listItems
+        .map((it, i) => `${i + 1}. ${it.item}`)
+        .join('\n');
+      const bodyWithItems = `${formatted.text}\n\n${numberedItems}\n\n_Reply with numbers to remove (e.g. 1,3)_`;
+
       if (formatted.buttons && formatted.buttons.length > 0) {
         await messagingProvider.sendButtonMessage(
           phoneNumber,
-          'Tap an item above to remove it, or:',
+          bodyWithItems,
           formatted.buttons,
         );
+      } else {
+        await messagingProvider.sendTextMessage(phoneNumber, bodyWithItems);
       }
     } else if (formatted.buttons && formatted.buttons.length > 0) {
       await messagingProvider.sendButtonMessage(

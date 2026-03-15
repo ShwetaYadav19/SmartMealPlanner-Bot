@@ -74,10 +74,30 @@ async function handleInput(input: string): Promise<void> {
 
   // Resolve numbered input: if user typed a number and we have stored button IDs,
   // map the number to the corresponding button payload (handles >3 button fallback)
+  // Also supports multi-select: "1,3" or "1 3" resolves to multiple IDs joined by commas
   if (!buttonPayload && userState?.lastButtonIds?.length) {
     const num = parseInt(trimmed, 10);
     if (!isNaN(num) && num >= 1 && num <= userState.lastButtonIds.length && String(num) === trimmed) {
       buttonPayload = userState.lastButtonIds[num - 1];
+    } else {
+      // Try multi-select: split by comma, space, or both
+      const parts = trimmed.split(/[\s,]+/).filter(p => p.length > 0);
+      if (parts.length > 1) {
+        const resolvedIds: string[] = [];
+        let valid = true;
+        for (const part of parts) {
+          const n = parseInt(part, 10);
+          if (isNaN(n) || n < 1 || n > userState.lastButtonIds.length || String(n) !== part) {
+            valid = false;
+            break;
+          }
+          resolvedIds.push(userState.lastButtonIds[n - 1]);
+        }
+        if (valid) {
+          const unique = [...new Set(resolvedIds)];
+          buttonPayload = unique.length > 1 ? unique.join(',') : unique[0];
+        }
+      }
     }
   }
 
