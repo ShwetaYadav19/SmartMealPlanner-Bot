@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import fc from 'fast-check';
 import { DynamoDBUserStateRepository } from '../../src/adapters/dynamodbUserStateRepository';
-import type { UserState, Meal, DayPlan, WeeklyPlan, ConversationState, Ingredient } from '../../src/core/types';
+import type { UserState, Meal, DayPlan, WeeklyPlan, ConversationState, Ingredient, CandidateDishes, MealComponent, ComponentsByCategory } from '../../src/core/types';
 
 /**
  * Property 16: User state persistence round-trip
@@ -47,13 +47,42 @@ const arbConversationState: fc.Arbitrary<ConversationState> = fc.constantFrom(
   'awaiting_cuisine',
   'awaiting_diet',
   'awaiting_meal_style',
+  'awaiting_cook_number_onboarding',
+  'dish_preview',
   'main_menu',
-  'awaiting_cook_number'
+  'more_options',
+  'awaiting_cook_number',
+  'awaiting_preference_cuisine',
+  'awaiting_preference_diet'
 );
 
 const arbPhoneNumber = fc
   .tuple(fc.integer({ min: 1, max: 999 }), fc.integer({ min: 1000000000, max: 9999999999 }))
   .map(([cc, num]) => `+${cc}${num}`);
+
+const arbMealComponent: fc.Arbitrary<MealComponent> = fc.record({
+  id: fc.string({ minLength: 1, maxLength: 20 }),
+  name: fc.string({ minLength: 1, maxLength: 40 }),
+  category: fc.constantFrom('base' as const, 'gravy' as const, 'dry_veggie' as const, 'side' as const),
+  cuisine: fc.constantFrom('north_indian' as const, 'south_indian' as const),
+  diet: fc.constantFrom('veg' as const, 'non_veg' as const),
+  style: fc.constantFrom('health' as const, 'regular' as const),
+  slots: fc.subarray(['lunch' as const, 'dinner' as const], { minLength: 1 }),
+  ingredients: fc.array(arbIngredient, { minLength: 1, maxLength: 5 }),
+});
+
+const arbComponentsByCategory: fc.Arbitrary<ComponentsByCategory> = fc.record({
+  base: fc.array(arbMealComponent, { minLength: 1, maxLength: 5 }),
+  gravy: fc.array(arbMealComponent, { minLength: 1, maxLength: 5 }),
+  dry_veggie: fc.array(arbMealComponent, { minLength: 1, maxLength: 5 }),
+  side: fc.array(arbMealComponent, { minLength: 1, maxLength: 5 }),
+});
+
+const arbCandidateDishes: fc.Arbitrary<CandidateDishes> = fc.record({
+  breakfasts: fc.array(arbMeal, { minLength: 7, maxLength: 7 }),
+  lunchComponents: arbComponentsByCategory,
+  dinnerComponents: arbComponentsByCategory,
+});
 
 const arbUserState: fc.Arbitrary<UserState> = fc.record(
   {
@@ -68,6 +97,9 @@ const arbUserState: fc.Arbitrary<UserState> = fc.record(
       (d) => d.toISOString().split('T')[0]
     ),
     cookPhoneNumber: arbPhoneNumber,
+    excludedDishIds: fc.array(fc.string({ minLength: 1, maxLength: 20 }), { minLength: 0, maxLength: 10 }),
+    candidateDishes: arbCandidateDishes,
+    isPreferenceChange: fc.boolean(),
   },
   { requiredKeys: ['phoneNumber', 'onboardingComplete', 'conversationState'] }
 );
@@ -156,6 +188,24 @@ describe('Property 16: User state persistence round-trip', () => {
           expect(loaded!.cookPhoneNumber).toBe(state.cookPhoneNumber);
         } else {
           expect(loaded!.cookPhoneNumber).toBeUndefined();
+        }
+
+        if (state.excludedDishIds !== undefined) {
+          expect(loaded!.excludedDishIds).toEqual(state.excludedDishIds);
+        } else {
+          expect(loaded!.excludedDishIds).toBeUndefined();
+        }
+
+        if (state.candidateDishes !== undefined) {
+          expect(loaded!.candidateDishes).toEqual(state.candidateDishes);
+        } else {
+          expect(loaded!.candidateDishes).toBeUndefined();
+        }
+
+        if (state.isPreferenceChange !== undefined) {
+          expect(loaded!.isPreferenceChange).toBe(state.isPreferenceChange);
+        } else {
+          expect(loaded!.isPreferenceChange).toBeUndefined();
         }
       }),
       { numRuns: 100 }

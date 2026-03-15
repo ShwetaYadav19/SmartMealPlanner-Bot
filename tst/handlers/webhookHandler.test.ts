@@ -98,15 +98,15 @@ describe('webhookHandler', () => {
     expect(mockGetUser).toHaveBeenCalledWith('+919876543210');
   });
 
-  it('sends button message when formatted response has buttons and templatePurpose', async () => {
-    // New user → onboarding cuisine prompt (has buttons + templatePurpose)
+  it('sends button message when formatted response has buttons', async () => {
+    // New user → onboarding cuisine prompt (has buttons)
     const event = makeEvent('From=whatsapp%3A%2B919876543210&Body=hello');
     await webhookHandler(event);
     expect(mockSendButtonMessage).toHaveBeenCalled();
     expect(mockSendTextMessage).not.toHaveBeenCalled();
   });
 
-  it('sends text message when formatted response has no templatePurpose', async () => {
+  it('sends text message when formatted response has no buttons', async () => {
     // User in awaiting_cook_number state with invalid phone → INVALID_PHONE (no buttons)
     mockGetUser.mockResolvedValue({
       phoneNumber: '+919876543210',

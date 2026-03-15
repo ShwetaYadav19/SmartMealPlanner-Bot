@@ -43,41 +43,91 @@ export const INVALID_INPUT = `Please select one of the options below 👇`;
 export const GENERIC_ERROR = `Something went wrong, please try again 🙏`;
 export const INVALID_PHONE = `Please enter a valid WhatsApp number with country code (e.g., +91XXXXXXXXXX) 📱`;
 
+// --- Cook Number Onboarding ---
+export const COOK_NUMBER_ONBOARDING_PROMPT = `Would you like to add your cook's WhatsApp number? 👨‍🍳\nThis lets you send meal plans directly to your cook.\n\nEnter the number with country code (e.g., +91XXXXXXXXXX) or tap Skip to continue.`;
+export const COOK_NUMBER_SKIP_BUTTON = `Skip`;
+
+// --- Dish Preview ---
+
+const CATEGORY_HEADINGS: Record<string, string> = {
+  base: '*🍚 Base*',
+  gravy: '*🍛 Gravy*',
+  dry_veggie: '*🥗 Dry Veggie*',
+  side: '*🥣 Side*',
+};
+
+function formatComponentsByCategory(components: { base: { name: string }[]; gravy: { name: string }[]; dry_veggie: { name: string }[]; side: { name: string }[] }): string {
+  let text = '';
+  for (const category of ['base', 'gravy', 'dry_veggie', 'side'] as const) {
+    const items = components[category];
+    if (items.length > 0) {
+      text += `\n${CATEGORY_HEADINGS[category]}`;
+      for (const item of items) {
+        text += `\n  • ${item.name}`;
+      }
+    }
+  }
+  return text;
+}
+
+export function formatDishPreviewMessage(candidates: {
+  breakfasts: { name: string }[];
+  lunchComponents: { base: { name: string }[]; gravy: { name: string }[]; dry_veggie: { name: string }[]; side: { name: string }[] };
+  dinnerComponents: { base: { name: string }[]; gravy: { name: string }[]; dry_veggie: { name: string }[]; side: { name: string }[] };
+}): string {
+  let text = `Here are your dishes for the week 🍽️\nTap a dish to remove it.\n`;
+  text += `\n*Breakfasts*`;
+  for (const b of candidates.breakfasts) {
+    text += `\n  • ${b.name}`;
+  }
+  text += `\n\n*Lunches*`;
+  text += formatComponentsByCategory(candidates.lunchComponents);
+  text += `\n\n*Dinners*`;
+  text += formatComponentsByCategory(candidates.dinnerComponents);
+  return text;
+}
+
+export const DISH_REMOVED_CONFIRMATION = (removedDishName: string, replacementDishName: string) =>
+  `Removed *${removedDishName}* 🔄 Replaced with *${replacementDishName}*`;
+
+export const COMPONENT_REMOVED_CONFIRMATION = (name: string, category: string) =>
+  `Removed *${name}* from ${category} 🔄`;
+
+
+export const DISH_PREVIEW_EMPTY_ERROR = `You need at least one dish per meal slot to generate a plan 🍽️\nPlease keep at least one breakfast, one lunch, and one dinner.`;
+
+// --- More Options Menu ---
+export const MORE_OPTIONS_MENU_HEADER = `Here are more options for you 📋`;
+
+// --- Grocery Hint ---
+export const WEEKLY_PLAN_GROCERY_HINT = `💡 Tap 'More Options' to view the weekly grocery list`;
+
+
 // --- Twilio WhatsApp Content Template SID Mapping ---
 
+// --- Twilio WhatsApp Content Template SID Mapping ---
+// Only out-of-session messages (reminders) need pre-approved templates.
+// In-session messages use on-the-fly quick-reply templates via the Content API.
+
 export type TemplatePurpose =
-  | 'main_menu'
-  | 'main_menu_button'
-  | 'menu_more'
   | 'daily_reminder'
-  | 'cook_options'
-  | 'diet_selection'
-  | 'cuisine_selection'
-  | 'meal_style';
+  | 'weekly_reminder'
+  | 'expired_plan';
 
 const DEFAULT_TEMPLATE_SIDS: Record<TemplatePurpose, string> = {
-  main_menu: 'HXe992435f98fde5249c641a135bb5dbd5',
-  main_menu_button: 'HX050102bc4bf8f0f9a48473db7ea7152e',
-  menu_more: 'HX7957efc7a19b2b9c8d2910ba15e6a2c5',
   daily_reminder: 'HX708fce9ebb60de686f73731e071aa8cb',
-  cook_options: 'HX6eddbb2f0eb2678e3f505e3786dec4e8',
-  diet_selection: 'HX5ad138d83501b0b1111e0a19a524dfd5',
-  cuisine_selection: 'HX62d7649f7e38d88bec1b7d85b25ea83e',
-  meal_style: 'HX26deeadd8ad7de0baf4568365e3da981',
+  weekly_reminder: '',  // Set via env var after WhatsApp approval
+  expired_plan: '',     // Set via env var after WhatsApp approval
 };
 
 const ENV_VAR_MAP: Record<TemplatePurpose, string> = {
-  main_menu: 'TWILIO_TEMPLATE_SID_MAIN_MENU',
-  main_menu_button: 'TWILIO_TEMPLATE_SID_MAIN_MENU_BUTTON',
-  menu_more: 'TWILIO_TEMPLATE_SID_MENU_MORE',
   daily_reminder: 'TWILIO_TEMPLATE_SID_DAILY_REMINDER',
-  cook_options: 'TWILIO_TEMPLATE_SID_COOK_OPTIONS',
-  diet_selection: 'TWILIO_TEMPLATE_SID_DIET_SELECTION',
-  cuisine_selection: 'TWILIO_TEMPLATE_SID_CUISINE_SELECTION',
-  meal_style: 'TWILIO_TEMPLATE_SID_MEAL_STYLE',
+  weekly_reminder: 'TWILIO_TEMPLATE_SID_WEEKLY_REMINDER',
+  expired_plan: 'TWILIO_TEMPLATE_SID_EXPIRED_PLAN',
 };
 
-export function getTemplateSid(purpose: TemplatePurpose): string {
+export function getTemplateSid(purpose: TemplatePurpose): string | undefined {
   const envVar = ENV_VAR_MAP[purpose];
-  return process.env[envVar] || DEFAULT_TEMPLATE_SIDS[purpose];
+  const sid = process.env[envVar] || DEFAULT_TEMPLATE_SIDS[purpose];
+  return sid || undefined;
 }

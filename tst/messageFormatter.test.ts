@@ -196,7 +196,6 @@ describe('formatBotResponse', () => {
     expect(result.text).toContain(ONBOARDING_CUISINE_PROMPT);
     expect(result.buttons).toBeDefined();
     expect(result.buttons!.length).toBe(3);
-    expect(result.templatePurpose).toBe('cuisine_selection');
   });
 
   it('should format ONBOARDING_DIET_PROMPT with diet buttons', () => {
@@ -204,7 +203,6 @@ describe('formatBotResponse', () => {
     const result = formatBotResponse(response);
     expect(result.text).toBe(ONBOARDING_DIET_PROMPT);
     expect(result.buttons!.length).toBe(3);
-    expect(result.templatePurpose).toBe('diet_selection');
   });
 
   it('should format ONBOARDING_STYLE_PROMPT with style buttons', () => {
@@ -212,14 +210,13 @@ describe('formatBotResponse', () => {
     const result = formatBotResponse(response);
     expect(result.text).toBe(ONBOARDING_STYLE_PROMPT);
     expect(result.buttons!.length).toBe(2);
-    expect(result.templatePurpose).toBe('meal_style');
   });
 
   it('should format ONBOARDING_COMPLETE with main menu buttons', () => {
     const response: BotResponse = { type: ResponseType.ONBOARDING_COMPLETE };
     const result = formatBotResponse(response);
     expect(result.text).toBe(ONBOARDING_COMPLETE);
-    expect(result.templatePurpose).toBe('main_menu');
+    expect(result.buttons).toBeDefined();
   });
 
   it('should format MAIN_MENU with main menu header and buttons', () => {
@@ -227,7 +224,6 @@ describe('formatBotResponse', () => {
     const result = formatBotResponse(response);
     expect(result.text).toBe(MAIN_MENU_HEADER);
     expect(result.buttons).toBeDefined();
-    expect(result.templatePurpose).toBe('main_menu');
   });
 
   it('should format WEEKLY_PLAN with plan data', () => {
@@ -336,7 +332,6 @@ describe('formatBotResponse', () => {
     const result = formatBotResponse(response);
     expect(result.text).toContain('Monday');
     expect(result.text).toContain(dayPlan.breakfast.name);
-    expect(result.templatePurpose).toBe('daily_reminder');
   });
 
   it('should format SWAP_NO_ALTERNATIVE', () => {

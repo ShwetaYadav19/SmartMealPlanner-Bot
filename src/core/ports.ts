@@ -12,7 +12,7 @@ export interface MessagingProvider {
     to: string,
     body: string,
     buttons: ButtonOption[],
-    templatePurpose?: string
+    contentSid?: string,
   ): Promise<void>;
 }
 

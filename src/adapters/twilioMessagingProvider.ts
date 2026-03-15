@@ -2,26 +2,30 @@ import Twilio from 'twilio';
 import type { MessagingProvider, ButtonOption } from '../core/ports';
 
 /**
- * Resolves a Twilio Content Template SID for a given purpose.
- * Delegates to getTemplateSid from src/messages.ts when available.
- * Can be overridden for testing or when messages module is not yet created.
+ * TwilioMessagingProvider — sends WhatsApp messages via Twilio.
+ *
+ * For in-session messages with ≤3 buttons, creates on-the-fly
+ * twilio/quick-reply Content Templates via the Content API
+ * (no WhatsApp approval needed within the 24-hour session window).
+ *
+ * For out-of-session messages (reminders), callers can pass a pre-approved
+ * contentSid directly to bypass on-the-fly creation.
+ *
+ * Falls back to numbered text buttons when:
+ * - More than 3 buttons (WhatsApp in-session limit)
+ * - Content API call fails for any reason
  */
-export type TemplateSidResolver = (purpose: string) => string | undefined;
-
 export class TwilioMessagingProvider implements MessagingProvider {
   private readonly client: ReturnType<typeof Twilio>;
   private readonly senderNumber: string;
-  private readonly templateSidResolver?: TemplateSidResolver;
 
   constructor(
     accountSid: string,
     authToken: string,
     senderNumber: string,
-    templateSidResolver?: TemplateSidResolver,
   ) {
     this.client = Twilio(accountSid, authToken);
     this.senderNumber = senderNumber;
-    this.templateSidResolver = templateSidResolver;
   }
 
   async sendTextMessage(to: string, body: string): Promise<void> {
@@ -36,29 +40,47 @@ export class TwilioMessagingProvider implements MessagingProvider {
     to: string,
     body: string,
     buttons: ButtonOption[],
-    templatePurpose?: string,
+    contentSid?: string,
   ): Promise<void> {
     const from = `whatsapp:${this.senderNumber}`;
     const toWhatsApp = `whatsapp:${to}`;
 
-    // When a templatePurpose is provided, try to resolve a Twilio Content Template SID
-    if (templatePurpose && this.templateSidResolver) {
-      const contentSid = this.templateSidResolver(templatePurpose);
-      if (contentSid) {
-        try {
-          await this.client.messages.create({
-            from,
-            to: toWhatsApp,
-            contentSid,
-          });
-          return;
-        } catch {
-          // Template failed (e.g., 63027 locale mismatch) — fall through to inline buttons
-        }
+    // If a pre-approved contentSid is provided (e.g. for out-of-session reminders), use it directly
+    if (contentSid) {
+      try {
+        await this.client.messages.create({
+          from,
+          to: toWhatsApp,
+          contentSid,
+        });
+        return;
+      } catch (error: unknown) {
+        const errMsg = error instanceof Error ? error.message : String(error);
+        console.warn(
+          `Pre-approved template failed contentSid="${contentSid}" to="${toWhatsApp}": ${errMsg}. Falling back to text.`,
+        );
       }
     }
 
-    // Fall back to inline button construction
+    // Try interactive quick-reply for ≤3 buttons (WhatsApp in-session limit)
+    if (!contentSid && buttons.length >= 1 && buttons.length <= 3) {
+      try {
+        const sid = await this.createQuickReplyTemplate(body, buttons);
+        await this.client.messages.create({
+          from,
+          to: toWhatsApp,
+          contentSid: sid,
+        });
+        return;
+      } catch (error: unknown) {
+        const errMsg = error instanceof Error ? error.message : String(error);
+        console.warn(
+          `Quick-reply template failed for to="${toWhatsApp}" buttons=${buttons.length}: ${errMsg}. Falling back to text.`,
+        );
+      }
+    }
+
+    // Fallback: numbered text buttons
     const buttonText = buttons
       .map((b, i) => `${i + 1}. ${b.title}`)
       .join('\n');
@@ -69,5 +91,36 @@ export class TwilioMessagingProvider implements MessagingProvider {
       to: toWhatsApp,
       body: fullBody,
     });
+  }
+
+  /**
+   * Creates a twilio/quick-reply Content Template on-the-fly.
+   * These don't need WhatsApp approval for in-session messages.
+   */
+  private async createQuickReplyTemplate(
+    body: string,
+    buttons: ButtonOption[],
+  ): Promise<string> {
+    const actions = buttons.map((b) => ({
+      type: 'QUICK_REPLY' as const,
+      title: b.title.slice(0, 20), // WhatsApp limit: 20 chars
+      id: b.id,
+    }));
+
+    // Generate a unique friendly name to avoid collisions
+    const friendlyName = `qr_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+    const template = await this.client.content.v1.contents.create({
+      friendlyName,
+      language: 'en',
+      types: {
+        'twilio/quick-reply': {
+          body,
+          actions,
+        },
+      },
+    } as any);
+
+    return template.sid;
   }
 }

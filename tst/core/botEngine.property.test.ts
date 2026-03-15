@@ -202,7 +202,7 @@ describe('Property 2: Invalid input rejection during button-expected states', ()
 // **Validates: Requirements 1.1, 1.2, 2.1, 2.2, 3.1, 3.2, 3.3**
 
 describe('Property 3: Onboarding flow completeness', () => {
-  it('after all 3 intents, onboardingComplete=true and state=main_menu', async () => {
+  it('after cuisine, diet, style, and cook number skip, onboardingComplete=true and state=dish_preview', async () => {
     await fc.assert(
       fc.asyncProperty(cuisineArb, dietArb, styleArb, async (cuisine, diet, style) => {
         const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, stubMealRepo, stubMealComponentRepo);
@@ -218,9 +218,17 @@ describe('Property 3: Onboarding flow completeness', () => {
           { intent: Intent.SELECT_MEAL_STYLE, payload: style },
           r3.updatedState, stubMealRepo, stubMealComponentRepo,
         );
-        expect(r4.updatedState.onboardingComplete).toBe(true);
-        expect(r4.updatedState.conversationState).toBe('main_menu');
-        expect(r4.response.type).toBe(ResponseType.MAIN_MENU);
+        expect(r4.updatedState.conversationState).toBe('awaiting_cook_number_onboarding');
+        expect(r4.response.type).toBe(ResponseType.COOK_NUMBER_ONBOARDING_PROMPT);
+
+        // Step 5: Skip cook number — completes onboarding
+        const r5 = await processIntent(
+          { intent: Intent.SKIP_COOK_NUMBER },
+          r4.updatedState, stubMealRepo, stubMealComponentRepo,
+        );
+        expect(r5.updatedState.onboardingComplete).toBe(true);
+        expect(r5.updatedState.conversationState).toBe('dish_preview');
+        expect(r5.response.type).toBe(ResponseType.DISH_PREVIEW);
       }),
     );
   });
@@ -230,7 +238,7 @@ describe('Property 3: Onboarding flow completeness', () => {
 // **Validates: Requirements 11.2, 11.3**
 
 describe('Property 11: Action completion returns to main menu', () => {
-  it('after any action intent, state is main_menu (except SAVE_COOK_NUMBER → awaiting_cook_number)', async () => {
+  it('after any action intent, state is main_menu (except SAVE_COOK_NUMBER → awaiting_cook_number, GENERATE_PLAN → dish_preview)', async () => {
     const actionIntents = fc.constantFrom(
       Intent.GENERATE_PLAN,
       Intent.VIEW_WEEKLY_GROCERY,
@@ -251,6 +259,8 @@ describe('Property 11: Action completion returns to main menu', () => {
 
         if (intentType === Intent.SAVE_COOK_NUMBER) {
           expect(result.updatedState.conversationState).toBe('awaiting_cook_number');
+        } else if (intentType === Intent.GENERATE_PLAN) {
+          expect(result.updatedState.conversationState).toBe('dish_preview');
         } else {
           expect(result.updatedState.conversationState).toBe('main_menu');
         }
@@ -321,11 +331,11 @@ describe('Property 17: Suggested actions for all selection points', () => {
     );
   });
 
-  it('main menu GENERATE_PLAN response has non-empty suggestedActions', async () => {
+  it('main menu GENERATE_PLAN response is DISH_PREVIEW with candidate dishes', async () => {
     const state = makeStateWithPlan();
     const result = await processIntent({ intent: Intent.GENERATE_PLAN }, state, mockMealRepo, mockMealComponentRepo);
-    expect(result.response.suggestedActions).toBeDefined();
-    expect(result.response.suggestedActions!.length).toBeGreaterThan(0);
+    expect(result.response.type).toBe(ResponseType.DISH_PREVIEW);
+    expect(result.response.data?.candidateDishes).toBeDefined();
   });
 
   it('main menu INVALID_INPUT response has non-empty suggestedActions', async () => {

@@ -41,6 +41,41 @@ export function mapWhatsAppToIntent(
       return { intent: Intent.SELECT_MEAL_STYLE, payload: buttonPayload };
     }
 
+    // Skip cook number during onboarding
+    if (conversationState === 'awaiting_cook_number_onboarding' && buttonPayload === 'skip_cook') {
+      return { intent: Intent.SKIP_COOK_NUMBER };
+    }
+
+    // Dish preview actions
+    if (conversationState === 'dish_preview') {
+      if (buttonPayload.startsWith('remove_dish_')) {
+        const dishId = buttonPayload.slice('remove_dish_'.length);
+        return { intent: Intent.REMOVE_DISH, payload: dishId };
+      }
+      if (buttonPayload === 'confirm_dishes') {
+        return { intent: Intent.CONFIRM_DISHES };
+      }
+    }
+
+    // More options from main menu
+    if (conversationState === 'main_menu' && buttonPayload === 'more_options') {
+      return { intent: Intent.MORE_OPTIONS };
+    }
+
+    // More options submenu actions
+    if (conversationState === 'more_options') {
+      switch (buttonPayload) {
+        case 'weekly_plan':
+          return { intent: Intent.GENERATE_PLAN };
+        case 'weekly_grocery':
+          return { intent: Intent.VIEW_WEEKLY_GROCERY };
+        case 'change_preference':
+          return { intent: Intent.CHANGE_PREFERENCE };
+        case 'change_cook_number':
+          return { intent: Intent.CHANGE_COOK_NUMBER };
+      }
+    }
+
     // --- State-independent button payloads (main menu actions) ---
     switch (buttonPayload) {
       case 'weekly_plan':
@@ -91,6 +126,12 @@ export function mapWhatsAppToIntent(
     if (text === '5' || text === 'send menu to cook' || text === 'send to cook') return { intent: Intent.SEND_MENU_TO_COOK };
     if (text === '6' || text === 'swap lunch') return { intent: Intent.SWAP_LUNCH };
     if (text === '7' || text === 'save cook' || text === "save cook's number") return { intent: Intent.SAVE_COOK_NUMBER };
+  }
+
+  // In awaiting_cook_number_onboarding, allow "skip" as free text (sandbox mode support)
+  if (conversationState === 'awaiting_cook_number_onboarding') {
+    if (text === 'skip') return { intent: Intent.SKIP_COOK_NUMBER };
+    return { intent: Intent.PROVIDE_COOK_NUMBER, payload: body };
   }
 
   // In awaiting_cook_number state, free text is the cook's phone number

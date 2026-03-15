@@ -11,7 +11,6 @@ import { processIntent } from '../core/botEngine';
 import { formatBotResponse } from '../messageFormatter';
 import { formatCookMessage } from '../messageFormatter';
 import { loadConfig } from '../config';
-import { getTemplateSid } from '../messages';
 import { ResponseType } from '../core/types';
 
 // Minimal API Gateway types (avoids @types/aws-lambda dependency)
@@ -24,6 +23,31 @@ interface APIGatewayProxyEvent {
 interface APIGatewayProxyResult {
   statusCode: number;
   body: string;
+}
+
+/**
+ * If the user typed a number (e.g. "1", "2") and we have stored button IDs
+ * from the previous response, resolve the number to the corresponding button
+ * payload. This handles the Twilio numbered-text fallback for >3 buttons.
+ */
+function resolveNumberedInput(
+  buttonPayload: string | undefined,
+  body: string,
+  lastButtonIds?: string[],
+): string | undefined {
+  // If there's already a real button payload, use it
+  if (buttonPayload) return buttonPayload;
+
+  // If no stored buttons, nothing to resolve
+  if (!lastButtonIds || lastButtonIds.length === 0) return undefined;
+
+  const trimmed = body.trim();
+  const num = parseInt(trimmed, 10);
+  if (!isNaN(num) && num >= 1 && num <= lastButtonIds.length && String(num) === trimmed) {
+    return lastButtonIds[num - 1];
+  }
+
+  return undefined;
 }
 
 export async function webhookHandler(
@@ -57,16 +81,10 @@ export async function webhookHandler(
     const userStateRepo = new DynamoDBUserStateRepository(config.dynamodbTable);
     const mealRepo = new JsonMealRepository();
     const mealComponentRepo = new JsonMealComponentRepository();
-    // Skip Twilio content templates for sandbox numbers (they don't support templates)
-    const isSandbox = config.twilioSenderNumber === '+14155238886';
-    const templateResolver = isSandbox
-      ? undefined
-      : (purpose: string) => getTemplateSid(purpose as Parameters<typeof getTemplateSid>[0]);
     const messagingProvider = new TwilioMessagingProvider(
       config.twilioAccountSid,
       config.twilioAuthToken,
       config.twilioSenderNumber,
-      templateResolver,
     );
 
     // 6. Load user state
@@ -76,7 +94,10 @@ export async function webhookHandler(
     const conversationState = userState?.conversationState ?? 'awaiting_cuisine';
 
     // 8. Map WhatsApp payload to core intent
-    const intent = mapWhatsAppToIntent(buttonPayload, body, conversationState);
+    //    If the user typed a number and we have stored button IDs from the
+    //    previous response, resolve the number to the corresponding button payload.
+    const resolvedPayload = resolveNumberedInput(buttonPayload, body, userState?.lastButtonIds);
+    const intent = mapWhatsAppToIntent(resolvedPayload, body, conversationState);
 
     // 9. Process intent through BotEngine
     const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, phoneNumber);
@@ -84,13 +105,19 @@ export async function webhookHandler(
     // 10. Format structured response for WhatsApp
     const formatted = formatBotResponse(result.response);
 
+    // 10b. Store button IDs on state so numbered text input can be resolved next turn
+    if (formatted.buttons && formatted.buttons.length > 0) {
+      result.updatedState.lastButtonIds = formatted.buttons.map(b => b.id);
+    } else {
+      result.updatedState.lastButtonIds = undefined;
+    }
+
     // 11. Send message via MessagingProvider
     if (formatted.buttons && formatted.buttons.length > 0) {
       await messagingProvider.sendButtonMessage(
         phoneNumber,
         formatted.text,
         formatted.buttons,
-        formatted.templatePurpose,
       );
     } else {
       await messagingProvider.sendTextMessage(phoneNumber, formatted.text);

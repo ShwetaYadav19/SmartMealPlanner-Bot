@@ -21,15 +21,10 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
   const config = loadConfig();
 
   const userStateRepo = new DynamoDBUserStateRepository(config.dynamodbTable);
-  const isSandbox = config.twilioSenderNumber === '+14155238886';
-  const templateResolver = isSandbox
-    ? undefined
-    : (purpose: string) => getTemplateSid(purpose as Parameters<typeof getTemplateSid>[0]);
   const messagingProvider = new TwilioMessagingProvider(
     config.twilioAccountSid,
     config.twilioAuthToken,
     config.twilioSenderNumber,
-    templateResolver,
   );
 
   // Scan all users with onboardingComplete: true
@@ -37,7 +32,6 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
 
   for (const user of onboardedUsers) {
     try {
-      // Always send WEEKLY_REMINDER regardless of plan status
       const response: BotResponse = {
         type: ResponseType.WEEKLY_REMINDER,
       };
@@ -46,11 +40,14 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
       const formatted = formatBotResponse(response);
 
       if (formatted.buttons && formatted.buttons.length > 0) {
+        // Out-of-session: use pre-approved template SID for weekly reminder
+        const contentSid = getTemplateSid('weekly_reminder');
+
         await messagingProvider.sendButtonMessage(
           user.phoneNumber,
           formatted.text,
           formatted.buttons,
-          formatted.templatePurpose,
+          contentSid,
         );
       } else {
         await messagingProvider.sendTextMessage(user.phoneNumber, formatted.text);

@@ -33,6 +33,8 @@ const BUTTON_IDS = new Set([
   'weekly_plan', 'weekly_grocery',
   'tomorrow_plan', 'tomorrow_grocery',
   'send_to_cook', 'swap_lunch', 'save_cook',
+  'skip_cook', 'confirm_dishes', 'more_options',
+  'change_preference', 'change_cook_number',
 ]);
 
 const PHONE = '+919876543210';
@@ -64,10 +66,30 @@ async function handleInput(input: string): Promise<void> {
   }
 
   // Determine if this is a button tap or free text
-  const isButton = BUTTON_IDS.has(trimmed);
-  const buttonPayload = isButton ? trimmed : undefined;
+  const isButton = BUTTON_IDS.has(trimmed) || trimmed.startsWith('remove_dish_');
+  let buttonPayload = isButton ? trimmed : undefined;
   const body = isButton ? '' : trimmed;
   const convState = userState?.conversationState ?? 'awaiting_cuisine';
+
+  // Resolve numbered input: if user typed a number and we have stored button IDs,
+  // map the number to the corresponding button payload (handles >3 button fallback)
+  if (!buttonPayload && userState?.lastButtonIds?.length) {
+    const num = parseInt(trimmed, 10);
+    if (!isNaN(num) && num >= 1 && num <= userState.lastButtonIds.length && String(num) === trimmed) {
+      buttonPayload = userState.lastButtonIds[num - 1];
+    }
+  }
+
+  // Also resolve bare IDs: if user typed something like "si-base-001",
+  // check if "remove_dish_{input}" matches a stored button ID
+  if (!buttonPayload && userState?.lastButtonIds?.length) {
+    const asRemove = `remove_dish_${trimmed}`;
+    if (userState.lastButtonIds.includes(asRemove)) {
+      buttonPayload = asRemove;
+    } else if (userState.lastButtonIds.includes(trimmed)) {
+      buttonPayload = trimmed;
+    }
+  }
 
   // 1. Intent mapping (same as webhook handler)
   const intent = mapWhatsAppToIntent(buttonPayload, body, convState);
@@ -85,9 +107,11 @@ async function handleInput(input: string): Promise<void> {
 
   if (formatted.buttons && formatted.buttons.length > 0) {
     console.log('\n📱 Buttons:');
-    for (const btn of formatted.buttons) {
-      console.log(`  [${btn.id}] ${btn.title}`);
+    for (let i = 0; i < formatted.buttons.length; i++) {
+      const btn = formatted.buttons[i];
+      console.log(`  ${i + 1}. [${btn.id}] ${btn.title}`);
     }
+    console.log('\n💡 Type a number (e.g. "1") or the button ID to select.');
   }
 
   // 5. If cook message was sent, show what the cook would receive
@@ -102,8 +126,13 @@ async function handleInput(input: string): Promise<void> {
 
   console.log('─'.repeat(50));
 
-  // 6. Update state
+  // 6. Update state and store button IDs for numbered input resolution
   userState = result.updatedState;
+  if (formatted.buttons && formatted.buttons.length > 0) {
+    userState.lastButtonIds = formatted.buttons.map(b => b.id);
+  } else {
+    userState.lastButtonIds = undefined;
+  }
 }
 
 // --- REPL ---

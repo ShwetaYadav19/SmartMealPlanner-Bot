@@ -69,8 +69,13 @@ export type ConversationState =
   | 'awaiting_cuisine'
   | 'awaiting_diet'
   | 'awaiting_meal_style'
+  | 'awaiting_cook_number_onboarding'
+  | 'dish_preview'
   | 'main_menu'
-  | 'awaiting_cook_number';
+  | 'more_options'
+  | 'awaiting_cook_number'
+  | 'awaiting_preference_cuisine'
+  | 'awaiting_preference_diet';
 
 export interface UserState {
   phoneNumber: string;
@@ -82,6 +87,23 @@ export interface UserState {
   weeklyPlan?: WeeklyPlan;
   weeklyPlanStartDate?: string;
   cookPhoneNumber?: string;
+  excludedDishIds?: string[];
+  candidateDishes?: CandidateDishes;
+  lastButtonIds?: string[];
+  isPreferenceChange?: boolean;
+}
+
+export interface ComponentsByCategory {
+  base: MealComponent[];
+  gravy: MealComponent[];
+  dry_veggie: MealComponent[];
+  side: MealComponent[];
+}
+
+export interface CandidateDishes {
+  breakfasts: Meal[];
+  lunchComponents: ComponentsByCategory;
+  dinnerComponents: ComponentsByCategory;
 }
 
 export enum Intent {
@@ -96,6 +118,12 @@ export enum Intent {
   SWAP_LUNCH = 'SWAP_LUNCH',
   SAVE_COOK_NUMBER = 'SAVE_COOK_NUMBER',
   PROVIDE_COOK_NUMBER = 'PROVIDE_COOK_NUMBER',
+  SKIP_COOK_NUMBER = 'SKIP_COOK_NUMBER',
+  REMOVE_DISH = 'REMOVE_DISH',
+  CONFIRM_DISHES = 'CONFIRM_DISHES',
+  MORE_OPTIONS = 'MORE_OPTIONS',
+  CHANGE_PREFERENCE = 'CHANGE_PREFERENCE',
+  CHANGE_COOK_NUMBER = 'CHANGE_COOK_NUMBER',
   UNKNOWN = 'UNKNOWN',
 }
 
@@ -126,6 +154,11 @@ export enum ResponseType {
   EXPIRED_PLAN_PROMPT = 'EXPIRED_PLAN_PROMPT',
   DAILY_REMINDER = 'DAILY_REMINDER',
   WEEKLY_REMINDER = 'WEEKLY_REMINDER',
+  COOK_NUMBER_ONBOARDING_PROMPT = 'COOK_NUMBER_ONBOARDING_PROMPT',
+  DISH_PREVIEW = 'DISH_PREVIEW',
+  DISH_REMOVED = 'DISH_REMOVED',
+  DISH_PREVIEW_EMPTY_ERROR = 'DISH_PREVIEW_EMPTY_ERROR',
+  MORE_OPTIONS_MENU = 'MORE_OPTIONS_MENU',
   ERROR = 'ERROR',
 }
 
@@ -144,6 +177,11 @@ export interface BotResponse {
     newMeal?: string;
     cookNumber?: string;
     dayName?: string;
+    candidateDishes?: CandidateDishes;
+    removedDishName?: string;
+    replacementDishName?: string;
+    removedComponentName?: string;
+    removedComponentCategory?: string;
   };
   suggestedActions?: SuggestedAction[];
 }

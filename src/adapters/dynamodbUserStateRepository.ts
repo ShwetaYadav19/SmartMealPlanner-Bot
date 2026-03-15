@@ -97,6 +97,15 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     if (state.cookPhoneNumber !== undefined) {
       item.cookPhoneNumber = state.cookPhoneNumber;
     }
+    if (state.excludedDishIds !== undefined) {
+      item.excludedDishIds = state.excludedDishIds;
+    }
+    if (state.candidateDishes !== undefined) {
+      item.candidateDishes = state.candidateDishes;
+    }
+    if (state.isPreferenceChange !== undefined) {
+      item.isPreferenceChange = state.isPreferenceChange;
+    }
 
     return item;
   }
@@ -125,6 +134,15 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     }
     if (item.cookPhoneNumber !== undefined) {
       state.cookPhoneNumber = item.cookPhoneNumber as string;
+    }
+    if (item.excludedDishIds !== undefined) {
+      state.excludedDishIds = item.excludedDishIds as string[];
+    }
+    if (item.candidateDishes !== undefined) {
+      state.candidateDishes = item.candidateDishes as UserState['candidateDishes'];
+    }
+    if (item.isPreferenceChange !== undefined) {
+      state.isPreferenceChange = item.isPreferenceChange as boolean;
     }
 
     return state;

@@ -2,7 +2,7 @@
 // Converts structured BotResponse objects into formatted WhatsApp messages
 // All text strings sourced from the MessageCatalog (src/messages.ts) — no inline string literals
 
-import type { BotResponse, DayPlan, GroceryItem, WeeklyPlan } from './core/types';
+import type { BotResponse, CandidateDishes, DayPlan, GroceryItem, WeeklyPlan } from './core/types';
 import { ResponseType } from './core/types';
 import type { ButtonOption } from './core/ports';
 import {
@@ -29,33 +29,32 @@ import {
   INVALID_INPUT,
   GENERIC_ERROR,
   INVALID_PHONE,
+  COOK_NUMBER_ONBOARDING_PROMPT,
+  formatDishPreviewMessage,
+  DISH_REMOVED_CONFIRMATION,
+  COMPONENT_REMOVED_CONFIRMATION,
+  DISH_PREVIEW_EMPTY_ERROR,
+  MORE_OPTIONS_MENU_HEADER,
+  WEEKLY_PLAN_GROCERY_HINT,
 } from './messages';
-import type { TemplatePurpose } from './messages';
 
 export interface FormattedMessage {
   text: string;
   buttons?: ButtonOption[];
-  templatePurpose?: TemplatePurpose;
 }
 
 const MAIN_MENU_BUTTONS: ButtonOption[] = [
+  { id: 'tomorrow_plan', title: "Tomorrow's Meal Plan" },
+  { id: 'tomorrow_grocery', title: "Tomorrow's Grocery" },
+  { id: 'send_to_cook', title: 'Send Menu to Cook' },
+  { id: 'more_options', title: 'More Options' },
+];
+
+const MORE_OPTIONS_BUTTONS: ButtonOption[] = [
   { id: 'weekly_plan', title: 'Weekly Meal Plan' },
-  { id: 'weekly_grocery', title: 'Weekly Grocery List' },
-  { id: 'tomorrow_plan', title: "Tomorrow's Plan" },
-];
-
-const FULL_MENU_BUTTONS: ButtonOption[] = [
-  ...MAIN_MENU_BUTTONS,
-  { id: 'tomorrow_grocery', title: "Tomorrow's Grocery" },
-  { id: 'send_to_cook', title: 'Send Menu to Cook' },
-  { id: 'swap_lunch', title: 'Swap Lunch' },
-  { id: 'save_cook', title: "Save Cook's Number" },
-];
-
-const MENU_MORE_BUTTONS: ButtonOption[] = [
-  { id: 'tomorrow_grocery', title: "Tomorrow's Grocery" },
-  { id: 'send_to_cook', title: 'Send Menu to Cook' },
-  { id: 'swap_lunch', title: 'Swap Lunch' },
+  { id: 'weekly_grocery', title: 'View Weekly Grocery List' },
+  { id: 'change_preference', title: 'Change Meal Preference' },
+  { id: 'change_cook_number', title: "Change Cook's Number" },
 ];
 
 const CUISINE_BUTTONS: ButtonOption[] = [
@@ -127,6 +126,22 @@ export function formatCookMessage(day: DayPlan): string {
   return text;
 }
 
+function generateComponentButtons(candidates: CandidateDishes): ButtonOption[] {
+  const buttons: ButtonOption[] = [];
+  for (const b of candidates.breakfasts) {
+    buttons.push({ id: `remove_dish_${b.id}`, title: `❌ ${b.name}`.slice(0, 20) });
+  }
+  for (const slot of [candidates.lunchComponents, candidates.dinnerComponents]) {
+    for (const category of ['base', 'gravy', 'dry_veggie', 'side'] as const) {
+      for (const comp of slot[category]) {
+        buttons.push({ id: `remove_dish_${comp.id}`, title: `❌ ${comp.name}`.slice(0, 20) });
+      }
+    }
+  }
+  buttons.push({ id: 'confirm_dishes', title: '✅ Confirm Dishes' });
+  return buttons;
+}
+
 export function formatBotResponse(response: BotResponse): FormattedMessage {
   const { type, data, suggestedActions } = response;
 
@@ -141,43 +156,37 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: `${ONBOARDING_WELCOME}\n\n${ONBOARDING_CUISINE_PROMPT}`,
         buttons: suggestedButtons ?? CUISINE_BUTTONS,
-        templatePurpose: 'cuisine_selection',
       };
 
     case ResponseType.ONBOARDING_DIET_PROMPT:
       return {
         text: ONBOARDING_DIET_PROMPT,
         buttons: suggestedButtons ?? DIET_BUTTONS,
-        templatePurpose: 'diet_selection',
       };
 
     case ResponseType.ONBOARDING_STYLE_PROMPT:
       return {
         text: ONBOARDING_STYLE_PROMPT,
         buttons: suggestedButtons ?? STYLE_BUTTONS,
-        templatePurpose: 'meal_style',
       };
 
     case ResponseType.ONBOARDING_COMPLETE:
       return {
         text: ONBOARDING_COMPLETE,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: MAIN_MENU_BUTTONS,
       };
 
     case ResponseType.MAIN_MENU:
       return {
         text: MAIN_MENU_HEADER,
-        buttons: suggestedButtons ?? FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: suggestedButtons ?? MAIN_MENU_BUTTONS,
       };
 
     case ResponseType.WEEKLY_PLAN: {
       const planText = data?.weeklyPlan ? formatWeeklyPlan(data.weeklyPlan) : WEEKLY_PLAN_HEADER;
       return {
-        text: planText,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        text: `${planText}\n\n${WEEKLY_PLAN_GROCERY_HINT}`,
+        buttons: MAIN_MENU_BUTTONS,
       };
     }
 
@@ -187,8 +196,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         : WEEKLY_GROCERY_HEADER;
       return {
         text: groceryText,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: MAIN_MENU_BUTTONS,
       };
     }
 
@@ -196,8 +204,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       const dayText = data?.dayPlan ? formatDayPlan(data.dayPlan) : DAY_PLAN_HEADER('');
       return {
         text: dayText,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: MAIN_MENU_BUTTONS,
       };
     }
 
@@ -207,8 +214,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         : TOMORROW_GROCERY_HEADER;
       return {
         text: tomorrowGroceryText,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: MAIN_MENU_BUTTONS,
       };
     }
 
@@ -218,15 +224,13 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.COOK_NUMBER_SAVED:
       return {
         text: COOK_NUMBER_SAVED,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: MAIN_MENU_BUTTONS,
       };
 
     case ResponseType.COOK_MESSAGE_SENT:
       return {
         text: COOK_MESSAGE_SENT,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: MAIN_MENU_BUTTONS,
       };
 
     case ResponseType.SWAP_CONFIRMATION: {
@@ -236,16 +240,14 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
           : SWAP_CONFIRMATION('', '');
       return {
         text: swapText,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: MAIN_MENU_BUTTONS,
       };
     }
 
     case ResponseType.SWAP_NO_ALTERNATIVE:
       return {
         text: SWAP_NO_ALTERNATIVE,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: MAIN_MENU_BUTTONS,
       };
 
     case ResponseType.NO_PLAN_ERROR:
@@ -257,14 +259,13 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.NO_COOK_ERROR:
       return {
         text: NO_COOK_PROMPT,
-        buttons: FULL_MENU_BUTTONS,
-        templatePurpose: 'main_menu',
+        buttons: MAIN_MENU_BUTTONS,
       };
 
     case ResponseType.INVALID_INPUT:
       return {
         text: INVALID_INPUT,
-        buttons: suggestedButtons ?? FULL_MENU_BUTTONS,
+        buttons: suggestedButtons ?? MAIN_MENU_BUTTONS,
       };
 
     case ResponseType.INVALID_PHONE:
@@ -287,7 +288,6 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
           { id: 'swap_lunch', title: 'Swap Lunch' },
           { id: 'send_to_cook', title: 'Send to Cook' },
         ],
-        templatePurpose: 'daily_reminder',
       };
     }
 
@@ -297,8 +297,70 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         buttons: GENERATE_PLAN_BUTTON,
       };
 
+    case ResponseType.COOK_NUMBER_ONBOARDING_PROMPT:
+      return {
+        text: COOK_NUMBER_ONBOARDING_PROMPT,
+        buttons: [{ id: 'skip_cook', title: 'Skip' }],
+      };
+
+    case ResponseType.DISH_PREVIEW: {
+      const candidates = data?.candidateDishes;
+      const previewText = candidates
+        ? formatDishPreviewMessage(candidates)
+        : 'No dishes available';
+      const dishButtons: ButtonOption[] = candidates
+        ? generateComponentButtons(candidates)
+        : [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }];
+      return {
+        text: previewText,
+        buttons: dishButtons,
+      };
+    }
+
+    case ResponseType.DISH_REMOVED: {
+      const updatedCandidates = data?.candidateDishes;
+      let confirmationText: string;
+      if (data?.removedComponentName && data?.removedComponentCategory) {
+        confirmationText = COMPONENT_REMOVED_CONFIRMATION(data.removedComponentName, data.removedComponentCategory);
+      } else {
+        const removedName = data?.removedDishName ?? '';
+        const replacementName = data?.replacementDishName ?? '';
+        confirmationText = DISH_REMOVED_CONFIRMATION(removedName, replacementName);
+      }
+      const updatedPreviewText = updatedCandidates
+        ? formatDishPreviewMessage(updatedCandidates)
+        : '';
+      const updatedDishButtons: ButtonOption[] = updatedCandidates
+        ? generateComponentButtons(updatedCandidates)
+        : [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }];
+      return {
+        text: `${confirmationText}\n\n${updatedPreviewText}`,
+        buttons: updatedDishButtons,
+      };
+    }
+
+    case ResponseType.DISH_PREVIEW_EMPTY_ERROR: {
+      const originalCandidates = data?.candidateDishes;
+      const originalPreviewText = originalCandidates
+        ? formatDishPreviewMessage(originalCandidates)
+        : '';
+      const errorDishButtons: ButtonOption[] = originalCandidates
+        ? generateComponentButtons(originalCandidates)
+        : [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }];
+      return {
+        text: `${DISH_PREVIEW_EMPTY_ERROR}\n\n${originalPreviewText}`,
+        buttons: errorDishButtons,
+      };
+    }
+
+    case ResponseType.MORE_OPTIONS_MENU:
+      return {
+        text: MORE_OPTIONS_MENU_HEADER,
+        buttons: MORE_OPTIONS_BUTTONS,
+      };
+
     case ResponseType.ERROR:
-      return { text: GENERIC_ERROR, buttons: FULL_MENU_BUTTONS };
+      return { text: GENERIC_ERROR, buttons: MAIN_MENU_BUTTONS };
 
     default:
       return { text: GENERIC_ERROR };

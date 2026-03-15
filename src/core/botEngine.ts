@@ -12,10 +12,12 @@ import {
   type SuggestedAction,
   type Meal,
   type ComposedMeal,
+  type DayPlan,
 } from './types';
 import { generateWeeklyPlan, extractTomorrowPlan, swapTomorrowLunch } from './planGenerator';
 import { generateGroceryList } from './groceryListGenerator';
 import { validatePhoneNumber } from './phoneValidation';
+import { generateCandidateDishes, removeBreakfast, removeComponent, buildPlanFromComponents, hasMinimumComponents, type DishPreviewDeps } from './dishPreview';
 
 // --- Suggested action constants ---
 
@@ -36,14 +38,21 @@ const STYLE_OPTIONS: SuggestedAction[] = [
   { id: 'regular', label: 'Regular Home Meals' },
 ];
 
+const SKIP_COOK_NUMBER_OPTION: SuggestedAction[] = [
+  { id: 'skip_cook', label: 'Skip' },
+];
+
 const MAIN_MENU_OPTIONS: SuggestedAction[] = [
-  { id: 'weekly_plan', label: 'Weekly Meal Plan' },
-  { id: 'weekly_grocery', label: 'Weekly Grocery List' },
-  { id: 'tomorrow_plan', label: "Tomorrow's Plan" },
+  { id: 'tomorrow_plan', label: "Tomorrow's Meal Plan" },
   { id: 'tomorrow_grocery', label: "Tomorrow's Grocery" },
   { id: 'send_to_cook', label: 'Send Menu to Cook' },
-  { id: 'swap_lunch', label: 'Swap Lunch' },
-  { id: 'save_cook', label: "Save Cook's Number" },
+  { id: 'more_options', label: 'More Options' },
+];
+const MORE_OPTIONS_BUTTONS: SuggestedAction[] = [
+  { id: 'weekly_plan', label: 'Weekly Meal Plan' },
+  { id: 'weekly_grocery', label: 'View Weekly Grocery List' },
+  { id: 'change_preference', label: 'Change Meal Preference' },
+  { id: 'change_cook_number', label: "Change Cook's Number" },
 ];
 
 // --- Helper to create a default new-user state ---
@@ -125,13 +134,12 @@ function handleAwaitingMealStyle(intent: UserIntent, state: UserState): BotResul
     const updatedState: UserState = {
       ...state,
       mealStyle: intent.payload as UserState['mealStyle'],
-      onboardingComplete: true,
-      conversationState: 'main_menu',
+      conversationState: 'awaiting_cook_number_onboarding',
     };
     return {
       response: {
-        type: ResponseType.MAIN_MENU,
-        suggestedActions: MAIN_MENU_OPTIONS,
+        type: ResponseType.COOK_NUMBER_ONBOARDING_PROMPT,
+        suggestedActions: SKIP_COOK_NUMBER_OPTION,
       },
       updatedState,
     };
@@ -141,6 +149,234 @@ function handleAwaitingMealStyle(intent: UserIntent, state: UserState): BotResul
     response: {
       type: ResponseType.INVALID_INPUT,
       suggestedActions: STYLE_OPTIONS,
+    },
+    updatedState: state,
+  };
+}
+async function handleAwaitingCookNumberOnboarding(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+): Promise<BotResult> {
+  const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
+  const preferences = {
+    cuisine: state.cuisinePreference ?? 'both',
+    diet: state.dietPreference ?? 'veg',
+    style: state.mealStyle ?? 'regular',
+  };
+
+  if (intent.intent === Intent.PROVIDE_COOK_NUMBER && intent.payload) {
+    const validation = validatePhoneNumber(intent.payload);
+    if (!validation.valid) {
+      return {
+        response: {
+          type: ResponseType.INVALID_PHONE,
+          suggestedActions: SKIP_COOK_NUMBER_OPTION,
+        },
+        updatedState: state,
+      };
+    }
+
+    const candidateDishes = await generateCandidateDishes(
+      deps,
+      preferences,
+      state.excludedDishIds ?? [],
+    );
+
+    const updatedState: UserState = {
+      ...state,
+      cookPhoneNumber: validation.normalized,
+      onboardingComplete: true,
+      conversationState: 'dish_preview',
+      candidateDishes,
+    };
+
+    return {
+      response: {
+        type: ResponseType.DISH_PREVIEW,
+        data: { candidateDishes },
+      },
+      updatedState,
+    };
+  }
+
+  if (intent.intent === Intent.SKIP_COOK_NUMBER) {
+    const candidateDishes = await generateCandidateDishes(
+      deps,
+      preferences,
+      state.excludedDishIds ?? [],
+    );
+
+    const updatedState: UserState = {
+      ...state,
+      onboardingComplete: true,
+      conversationState: 'dish_preview',
+      candidateDishes,
+    };
+
+    return {
+      response: {
+        type: ResponseType.DISH_PREVIEW,
+        data: { candidateDishes },
+      },
+      updatedState,
+    };
+  }
+
+  // Unknown or invalid intent — re-prompt
+  return {
+    response: {
+      type: ResponseType.INVALID_INPUT,
+      suggestedActions: SKIP_COOK_NUMBER_OPTION,
+    },
+    updatedState: state,
+  };
+}
+
+// --- Dish preview handler ---
+
+async function handleDishPreview(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+): Promise<BotResult> {
+  const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
+  const preferences = {
+    cuisine: state.cuisinePreference ?? 'both',
+    diet: state.dietPreference ?? 'veg',
+    style: state.mealStyle ?? 'regular',
+  };
+
+  // Defensive: if candidateDishes is missing, regenerate
+  if (!state.candidateDishes) {
+    const candidateDishes = await generateCandidateDishes(
+      deps,
+      preferences,
+      state.excludedDishIds ?? [],
+    );
+    const updatedState: UserState = {
+      ...state,
+      candidateDishes,
+      conversationState: 'dish_preview',
+    };
+    return {
+      response: {
+        type: ResponseType.DISH_PREVIEW,
+        data: { candidateDishes },
+      },
+      updatedState,
+    };
+  }
+
+  if (intent.intent === Intent.REMOVE_DISH && intent.payload) {
+    const dishId = intent.payload;
+
+    // Check if it's a breakfast ID first — delegate to removeBreakfast
+    const isBreakfast = state.candidateDishes.breakfasts.some(m => m.id === dishId);
+
+    if (isBreakfast) {
+      const result = await removeBreakfast(
+        state.candidateDishes,
+        dishId,
+        deps,
+        preferences,
+        state.excludedDishIds ?? [],
+      );
+
+      // No replacement available — return current preview unchanged
+      if (!result) {
+        return {
+          response: {
+            type: ResponseType.DISH_PREVIEW,
+            data: { candidateDishes: state.candidateDishes },
+          },
+          updatedState: state,
+        };
+      }
+
+      // Successful removal — update exclusion list and candidates
+      const updatedExcluded = [...(state.excludedDishIds ?? []), dishId];
+      const updatedState: UserState = {
+        ...state,
+        candidateDishes: result.updated,
+        excludedDishIds: updatedExcluded,
+      };
+      return {
+        response: {
+          type: ResponseType.DISH_REMOVED,
+          data: {
+            candidateDishes: result.updated,
+            removedDishName: result.removedName,
+            replacementDishName: result.replacementName,
+          },
+        },
+        updatedState,
+      };
+    }
+
+    // Otherwise it's a component — delegate to removeComponent
+    const componentResult = removeComponent(state.candidateDishes, dishId);
+
+    if (!componentResult) {
+      return {
+        response: {
+          type: ResponseType.DISH_PREVIEW_EMPTY_ERROR,
+          data: { candidateDishes: state.candidateDishes },
+        },
+        updatedState: state,
+      };
+    }
+
+    const updatedExcluded = [...(state.excludedDishIds ?? []), dishId];
+    const updatedState: UserState = {
+      ...state,
+      candidateDishes: componentResult.candidates,
+      excludedDishIds: updatedExcluded,
+    };
+    return {
+      response: {
+        type: ResponseType.DISH_REMOVED,
+        data: {
+          candidateDishes: componentResult.candidates,
+          removedComponentName: componentResult.removedComponentName,
+          removedComponentCategory: componentResult.removedComponentCategory,
+        },
+      },
+      updatedState,
+    };
+  }
+
+  if (intent.intent === Intent.CONFIRM_DISHES) {
+    const weeklyPlan = buildPlanFromComponents(state.candidateDishes, {
+      cuisine: state.cuisinePreference ?? 'both',
+      diet: state.dietPreference ?? 'both',
+    });
+    const weeklyPlanStartDate = getCurrentWeekMondayISO();
+    const updatedState: UserState = {
+      ...state,
+      weeklyPlan,
+      weeklyPlanStartDate,
+      onboardingComplete: true,
+      conversationState: 'main_menu',
+      candidateDishes: undefined,
+    };
+    return {
+      response: {
+        type: ResponseType.WEEKLY_PLAN,
+        data: { weeklyPlan },
+        suggestedActions: MAIN_MENU_OPTIONS,
+      },
+      updatedState,
+    };
+  }
+
+  // Unknown intent in dish_preview — re-present current preview
+  return {
+    response: {
+      type: ResponseType.DISH_PREVIEW,
+      data: { candidateDishes: state.candidateDishes },
     },
     updatedState: state,
   };
@@ -212,6 +448,129 @@ function getTomorrowIndex(weeklyPlanStartDate: string): number {
   return Math.round(diffMs / (1000 * 60 * 60 * 24));
 }
 
+// --- More options handler ---
+
+async function handleMoreOptions(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+): Promise<BotResult> {
+  const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
+  const preferences = {
+    cuisine: state.cuisinePreference ?? 'both',
+    diet: state.dietPreference ?? 'veg',
+    style: state.mealStyle ?? 'regular',
+  };
+
+  switch (intent.intent) {
+    case Intent.GENERATE_PLAN: {
+      // If a valid plan already exists, show it instead of regenerating
+      if (state.weeklyPlan && state.weeklyPlanStartDate && !isLegacyPlan(state.weeklyPlan)) {
+        return {
+          response: {
+            type: ResponseType.WEEKLY_PLAN,
+            data: { weeklyPlan: state.weeklyPlan },
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: { ...state, conversationState: 'main_menu' },
+        };
+      }
+      // No plan exists — go through dish preview flow
+      const candidateDishes = await generateCandidateDishes(
+        deps,
+        preferences,
+        state.excludedDishIds ?? [],
+      );
+      const updatedState: UserState = {
+        ...state,
+        candidateDishes,
+        conversationState: 'dish_preview',
+      };
+      return {
+        response: {
+          type: ResponseType.DISH_PREVIEW,
+          data: { candidateDishes },
+        },
+        updatedState,
+      };
+    }
+
+    case Intent.VIEW_WEEKLY_GROCERY: {
+      if (!state.weeklyPlan) {
+        return {
+          response: {
+            type: ResponseType.NO_PLAN_ERROR,
+            suggestedActions: MORE_OPTIONS_BUTTONS,
+          },
+          updatedState: state,
+        };
+      }
+      if (isLegacyPlan(state.weeklyPlan)) {
+        return {
+          response: {
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
+            suggestedActions: MORE_OPTIONS_BUTTONS,
+          },
+          updatedState: state,
+        };
+      }
+      const allMeals: (Meal | ComposedMeal)[] = [];
+      for (const day of state.weeklyPlan) {
+        allMeals.push(day.breakfast, day.lunch, day.dinner);
+      }
+      const groceryList = generateGroceryList(allMeals);
+      return {
+        response: {
+          type: ResponseType.WEEKLY_GROCERY_LIST,
+          data: { groceryList },
+          suggestedActions: MORE_OPTIONS_BUTTONS,
+        },
+        updatedState: state,
+      };
+    }
+
+    case Intent.CHANGE_PREFERENCE: {
+      const updatedState: UserState = {
+        ...state,
+        excludedDishIds: [],
+        isPreferenceChange: true,
+        conversationState: 'awaiting_preference_cuisine',
+      };
+      return {
+        response: {
+          type: ResponseType.ONBOARDING_CUISINE_PROMPT,
+          suggestedActions: CUISINE_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    case Intent.CHANGE_COOK_NUMBER: {
+      const updatedState: UserState = {
+        ...state,
+        conversationState: 'awaiting_cook_number',
+      };
+      return {
+        response: {
+          type: ResponseType.COOK_NUMBER_PROMPT,
+        },
+        updatedState,
+      };
+    }
+
+    default: {
+      return {
+        response: {
+          type: ResponseType.INVALID_INPUT,
+          suggestedActions: MORE_OPTIONS_BUTTONS,
+        },
+        updatedState: state,
+      };
+    }
+  }
+}
+
 // --- Main menu intent handler ---
 
 async function handleMainMenu(
@@ -228,44 +587,38 @@ async function handleMainMenu(
 
   switch (intent.intent) {
     case Intent.GENERATE_PLAN: {
-      const meals = await mealRepository.getMeals({
-        cuisine: state.cuisinePreference,
-        diet: state.dietPreference,
-        style: state.mealStyle,
-      });
-      // Fetch all diet variants for components — bases and sides are always veg,
-      // so filtering by non_veg would leave those categories empty.
-      // The diet preference is applied inside composeMeal for gravy/dry_veggie only.
-      const components = await mealComponentRepository.getComponents({
-        cuisine: state.cuisinePreference,
-        style: state.mealStyle,
-      });
-      try {
-        const weeklyPlan = generateWeeklyPlan(meals, components, preferences);
-        const weeklyPlanStartDate = getCurrentWeekMondayISO();
-        const updatedState: UserState = {
-          ...state,
-          weeklyPlan,
-          weeklyPlanStartDate,
-          conversationState: 'main_menu',
-        };
-        return {
-          response: {
-            type: ResponseType.WEEKLY_PLAN,
-            data: { weeklyPlan },
-            suggestedActions: MAIN_MENU_OPTIONS,
-          },
-          updatedState,
-        };
-      } catch {
-        return {
-          response: {
-            type: ResponseType.ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
-          },
-          updatedState: state,
-        };
-      }
+      const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
+      const candidateDishes = await generateCandidateDishes(
+        deps,
+        preferences,
+        state.excludedDishIds ?? [],
+      );
+      const updatedState: UserState = {
+        ...state,
+        candidateDishes,
+        conversationState: 'dish_preview',
+      };
+      return {
+        response: {
+          type: ResponseType.DISH_PREVIEW,
+          data: { candidateDishes },
+        },
+        updatedState,
+      };
+    }
+
+    case Intent.MORE_OPTIONS: {
+      const updatedState: UserState = {
+        ...state,
+        conversationState: 'more_options',
+      };
+      return {
+        response: {
+          type: ResponseType.MORE_OPTIONS_MENU,
+          suggestedActions: MORE_OPTIONS_BUTTONS,
+        },
+        updatedState,
+      };
     }
 
     case Intent.VIEW_WEEKLY_GROCERY: {
@@ -505,6 +858,81 @@ async function handleMainMenu(
   }
 }
 
+// --- Preference change handlers ---
+
+function handleAwaitingPreferenceCuisine(intent: UserIntent, state: UserState): BotResult {
+  if (intent.intent === Intent.SELECT_CUISINE && intent.payload) {
+    const updatedState: UserState = {
+      ...state,
+      cuisinePreference: intent.payload as UserState['cuisinePreference'],
+      conversationState: 'awaiting_preference_diet',
+      isPreferenceChange: true,
+    };
+    return {
+      response: {
+        type: ResponseType.ONBOARDING_DIET_PROMPT,
+        suggestedActions: DIET_OPTIONS,
+      },
+      updatedState,
+    };
+  }
+
+  return {
+    response: {
+      type: ResponseType.INVALID_INPUT,
+      suggestedActions: CUISINE_OPTIONS,
+    },
+    updatedState: state,
+  };
+}
+
+async function handleAwaitingPreferenceDiet(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+): Promise<BotResult> {
+  if (intent.intent === Intent.SELECT_DIET && intent.payload) {
+    const updatedDietState: UserState = {
+      ...state,
+      dietPreference: intent.payload as UserState['dietPreference'],
+      excludedDishIds: [],
+    };
+
+    const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
+    const preferences = {
+      cuisine: updatedDietState.cuisinePreference ?? 'both',
+      diet: updatedDietState.dietPreference ?? 'veg',
+      style: updatedDietState.mealStyle ?? 'regular',
+    };
+
+    const candidateDishes = await generateCandidateDishes(deps, preferences, []);
+    const updatedState: UserState = {
+      ...updatedDietState,
+      candidateDishes,
+      conversationState: 'dish_preview',
+      isPreferenceChange: false,
+    };
+
+    return {
+      response: {
+        type: ResponseType.DISH_PREVIEW,
+        data: { candidateDishes },
+      },
+      updatedState,
+    };
+  }
+
+  return {
+    response: {
+      type: ResponseType.INVALID_INPUT,
+      suggestedActions: DIET_OPTIONS,
+    },
+    updatedState: state,
+  };
+}
+
+
 // --- Main entry point ---
 
 export async function processIntent(
@@ -530,8 +958,23 @@ export async function processIntent(
     case 'awaiting_meal_style':
       return handleAwaitingMealStyle(intent, userState);
 
+    case 'awaiting_cook_number_onboarding':
+      return handleAwaitingCookNumberOnboarding(intent, userState, mealRepository, mealComponentRepository);
+
+    case 'dish_preview':
+      return handleDishPreview(intent, userState, mealRepository, mealComponentRepository);
+
     case 'main_menu':
       return handleMainMenu(intent, userState, mealRepository, mealComponentRepository);
+
+    case 'more_options':
+      return handleMoreOptions(intent, userState, mealRepository, mealComponentRepository);
+
+    case 'awaiting_preference_cuisine':
+      return handleAwaitingPreferenceCuisine(intent, userState);
+
+    case 'awaiting_preference_diet':
+      return handleAwaitingPreferenceDiet(intent, userState, mealRepository, mealComponentRepository);
 
     case 'awaiting_cook_number': {
       if (intent.intent === Intent.PROVIDE_COOK_NUMBER && intent.payload) {
@@ -588,6 +1031,8 @@ export {
   DIET_OPTIONS,
   STYLE_OPTIONS,
   MAIN_MENU_OPTIONS,
+  MORE_OPTIONS_BUTTONS,
+  SKIP_COOK_NUMBER_OPTION,
   createDefaultState,
   getComingMondayISO,
   getCurrentWeekMondayISO,

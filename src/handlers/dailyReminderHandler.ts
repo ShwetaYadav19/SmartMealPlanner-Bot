@@ -2,9 +2,7 @@
 // Triggered by EventBridge daily at 8 PM
 // Sends tomorrow's meal plan or expired plan prompt to all onboarded users
 
-import * as path from 'path';
 import { DynamoDBUserStateRepository } from '../adapters/dynamodbUserStateRepository';
-import { JsonMealRepository } from '../adapters/jsonMealRepository';
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
 import { formatBotResponse } from '../messageFormatter';
 import { loadConfig } from '../config';
@@ -24,15 +22,10 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
   const config = loadConfig();
 
   const userStateRepo = new DynamoDBUserStateRepository(config.dynamodbTable);
-  const isSandbox = config.twilioSenderNumber === '+14155238886';
-  const templateResolver = isSandbox
-    ? undefined
-    : (purpose: string) => getTemplateSid(purpose as Parameters<typeof getTemplateSid>[0]);
   const messagingProvider = new TwilioMessagingProvider(
     config.twilioAccountSid,
     config.twilioAuthToken,
     config.twilioSenderNumber,
-    templateResolver,
   );
 
   // Scan all users with onboardingComplete: true
@@ -47,19 +40,16 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         const tomorrowPlan = extractTomorrowPlan(user.weeklyPlan, user.weeklyPlanStartDate);
 
         if (tomorrowPlan) {
-          // Plan covers tomorrow → send DAILY_REMINDER with dayPlan data
           response = {
             type: ResponseType.DAILY_REMINDER,
             data: { dayPlan: tomorrowPlan },
           };
         } else {
-          // Plan doesn't cover tomorrow (expired) → prompt to generate new plan
           response = {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
           };
         }
       } else {
-        // No plan at all → prompt to generate new plan
         response = {
           type: ResponseType.EXPIRED_PLAN_PROMPT,
         };
@@ -69,11 +59,16 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
       const formatted = formatBotResponse(response);
 
       if (formatted.buttons && formatted.buttons.length > 0) {
+        // Out-of-session: resolve pre-approved template SID for reminders
+        const contentSid = response.type === ResponseType.DAILY_REMINDER
+          ? getTemplateSid('daily_reminder')
+          : undefined;
+
         await messagingProvider.sendButtonMessage(
           user.phoneNumber,
           formatted.text,
           formatted.buttons,
-          formatted.templatePurpose,
+          contentSid,
         );
       } else {
         await messagingProvider.sendTextMessage(user.phoneNumber, formatted.text);

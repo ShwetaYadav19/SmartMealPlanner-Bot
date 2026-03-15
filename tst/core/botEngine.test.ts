@@ -5,6 +5,7 @@ import {
   DIET_OPTIONS,
   STYLE_OPTIONS,
   MAIN_MENU_OPTIONS,
+  SKIP_COOK_NUMBER_OPTION,
   getComingMondayISO,
 } from '../../src/core/botEngine';
 import { Intent, ResponseType, type UserState, type UserIntent, type Meal, type MealComponent, type ComposedMeal } from '../../src/core/types';
@@ -179,7 +180,7 @@ describe('BotEngine — onboarding flow', () => {
     expect(result.updatedState.conversationState).toBe('awaiting_meal_style');
   });
 
-  it('stores meal style, marks onboarding complete, and returns MAIN_MENU', async () => {
+  it('stores meal style and transitions to cook number onboarding', async () => {
     const state = makeState({
       conversationState: 'awaiting_meal_style',
       cuisinePreference: 'both',
@@ -188,14 +189,14 @@ describe('BotEngine — onboarding flow', () => {
     const intent: UserIntent = { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' };
     const result = await processIntent(intent, state, stubMealRepo, stubMealComponentRepo);
 
-    expect(result.response.type).toBe(ResponseType.MAIN_MENU);
-    expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
+    expect(result.response.type).toBe(ResponseType.COOK_NUMBER_ONBOARDING_PROMPT);
+    expect(result.response.suggestedActions).toEqual(SKIP_COOK_NUMBER_OPTION);
     expect(result.updatedState.mealStyle).toBe('health');
-    expect(result.updatedState.onboardingComplete).toBe(true);
-    expect(result.updatedState.conversationState).toBe('main_menu');
+    expect(result.updatedState.onboardingComplete).toBe(false);
+    expect(result.updatedState.conversationState).toBe('awaiting_cook_number_onboarding');
   });
 
-  it('completes full onboarding flow end-to-end', async () => {
+  it('completes full onboarding flow end-to-end with cook number skip', async () => {
     // Step 1: New user
     const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, stubMealRepo, stubMealComponentRepo);
     expect(r1.response.type).toBe(ResponseType.ONBOARDING_CUISINE_PROMPT);
@@ -216,18 +217,29 @@ describe('BotEngine — onboarding flow', () => {
     );
     expect(r3.response.type).toBe(ResponseType.ONBOARDING_STYLE_PROMPT);
 
-    // Step 4: Select meal style
+    // Step 4: Select meal style — now transitions to cook number onboarding
     const r4 = await processIntent(
       { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' },
       r3.updatedState,
       stubMealRepo, stubMealComponentRepo
     );
-    expect(r4.response.type).toBe(ResponseType.MAIN_MENU);
-    expect(r4.updatedState.onboardingComplete).toBe(true);
-    expect(r4.updatedState.conversationState).toBe('main_menu');
-    expect(r4.updatedState.cuisinePreference).toBe('north_indian');
-    expect(r4.updatedState.dietPreference).toBe('non_veg');
+    expect(r4.response.type).toBe(ResponseType.COOK_NUMBER_ONBOARDING_PROMPT);
+    expect(r4.updatedState.conversationState).toBe('awaiting_cook_number_onboarding');
     expect(r4.updatedState.mealStyle).toBe('regular');
+
+    // Step 5: Skip cook number — completes onboarding, transitions to dish_preview
+    const r5 = await processIntent(
+      { intent: Intent.SKIP_COOK_NUMBER },
+      r4.updatedState,
+      stubMealRepo, stubMealComponentRepo
+    );
+    expect(r5.response.type).toBe(ResponseType.DISH_PREVIEW);
+    expect(r5.updatedState.onboardingComplete).toBe(true);
+    expect(r5.updatedState.conversationState).toBe('dish_preview');
+    expect(r5.updatedState.candidateDishes).toBeDefined();
+    expect(r5.updatedState.cuisinePreference).toBe('north_indian');
+    expect(r5.updatedState.dietPreference).toBe('non_veg');
+    expect(r5.updatedState.mealStyle).toBe('regular');
   });
 });
 
@@ -297,8 +309,8 @@ function makeStateWithPlan(overrides: Partial<UserState> = {}): UserState {
   });
 }
 
-describe('BotEngine — main menu: GENERATE_PLAN', () => {
-  it('generates a weekly plan and stores it in state', async () => {
+describe('BotEngine — main menu: GENERATE_PLAN (dish preview flow)', () => {
+  it('generates candidate dishes and transitions to dish_preview', async () => {
     const state = makeMainMenuState();
     const result = await processIntent(
       { intent: Intent.GENERATE_PLAN },
@@ -307,34 +319,10 @@ describe('BotEngine — main menu: GENERATE_PLAN', () => {
       mockMealComponentRepo,
     );
 
-    expect(result.response.type).toBe(ResponseType.WEEKLY_PLAN);
-    expect(result.response.data?.weeklyPlan).toBeDefined();
-    expect(result.response.data!.weeklyPlan).toHaveLength(7);
-    expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
-    expect(result.updatedState.weeklyPlan).toEqual(result.response.data!.weeklyPlan);
-    expect(result.updatedState.weeklyPlanStartDate).toBeDefined();
-    expect(result.updatedState.conversationState).toBe('main_menu');
-  });
-
-  it('calls mealRepository.getMeals with user preferences', async () => {
-    const getMealsSpy = vi.fn().mockResolvedValue(TEST_MEALS);
-    const spyRepo: MealRepository = {
-      getMeals: getMealsSpy,
-      getMealById: async () => null,
-    };
-    const state = makeMainMenuState({
-      cuisinePreference: 'south_indian',
-      dietPreference: 'non_veg',
-      mealStyle: 'regular',
-    });
-
-    await processIntent({ intent: Intent.GENERATE_PLAN }, state, spyRepo, mockMealComponentRepo);
-
-    expect(getMealsSpy).toHaveBeenCalledWith({
-      cuisine: 'south_indian',
-      diet: 'non_veg',
-      style: 'regular',
-    });
+    expect(result.response.type).toBe(ResponseType.DISH_PREVIEW);
+    expect(result.response.data?.candidateDishes).toBeDefined();
+    expect(result.updatedState.candidateDishes).toBeDefined();
+    expect(result.updatedState.conversationState).toBe('dish_preview');
   });
 });
 
@@ -596,11 +584,11 @@ describe('BotEngine — main menu: UNKNOWN intent', () => {
   });
 });
 
-describe('BotEngine — main menu: state remains main_menu after actions', () => {
-  it('state is main_menu after GENERATE_PLAN', async () => {
+describe('BotEngine — main menu: state transitions after actions', () => {
+  it('state is dish_preview after GENERATE_PLAN', async () => {
     const state = makeMainMenuState();
     const result = await processIntent({ intent: Intent.GENERATE_PLAN }, state, mockMealRepo, mockMealComponentRepo);
-    expect(result.updatedState.conversationState).toBe('main_menu');
+    expect(result.updatedState.conversationState).toBe('dish_preview');
   });
 
   it('state is main_menu after VIEW_WEEKLY_GROCERY', async () => {
