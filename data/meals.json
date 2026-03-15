@@ -772,7 +772,7 @@
     "style": "regular",
     "slots": ["dinner"],
     "ingredients": [
-      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
+      { "name": "Rice Sevai (Idiyappam)", "quantity": "200g", "category": "grains" },
       { "name": "Eggs", "quantity": "4", "category": "protein" },
       { "name": "Coconut Milk", "quantity": "150ml", "category": "dairy" },
       { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
@@ -1447,7 +1447,7 @@
     "style": "health",
     "slots": ["breakfast"],
     "ingredients": [
-      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
+      { "name": "Rice Sevai (Idiyappam)", "quantity": "200g", "category": "grains" },
       { "name": "Lemon", "quantity": "2", "category": "fruits" },
       { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
       { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
@@ -1522,7 +1522,7 @@
     "style": "regular",
     "slots": ["breakfast"],
     "ingredients": [
-      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
+      { "name": "Rice Sevai (Idiyappam)", "quantity": "200g", "category": "grains" },
       { "name": "Coconut", "quantity": "1/2 cup grated", "category": "nuts" },
       { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
       { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
