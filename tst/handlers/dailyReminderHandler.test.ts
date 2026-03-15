@@ -90,16 +90,23 @@ describe('dailyReminderHandler', () => {
   });
 
   it('sends DAILY_REMINDER to users with valid plan covering tomorrow', async () => {
-    const user = makeOnboardedUser('+919876543210', true);
-    mockScanOnboardedUsers.mockResolvedValue([user]);
+    // Set to Wednesday so tomorrow (Thursday) = index 3, within plan
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
+    try {
+      const user = makeOnboardedUser('+919876543210', true);
+      mockScanOnboardedUsers.mockResolvedValue([user]);
 
-    await dailyReminderHandler(scheduledEvent);
+      await dailyReminderHandler(scheduledEvent);
 
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-    const [to, text] = mockSendButtonMessage.mock.calls[0];
-    expect(to).toBe('+919876543210');
-    // Daily reminder text should contain emoji formatting
-    expect(text).toMatch(/🍽️/);
+      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
+      const [to, text] = mockSendButtonMessage.mock.calls[0];
+      expect(to).toBe('+919876543210');
+      // Daily reminder text should contain emoji formatting
+      expect(text).toMatch(/🍽️/);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('sends EXPIRED_PLAN_PROMPT to users with expired/missing plans', async () => {
@@ -148,39 +155,52 @@ describe('dailyReminderHandler', () => {
   });
 
   it('continues processing other users when one fails', async () => {
-    const user1 = makeOnboardedUser('+911111111111', true);
-    const user2 = makeOnboardedUser('+912222222222', true);
-    mockScanOnboardedUsers.mockResolvedValue([user1, user2]);
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
+    try {
+      const user1 = makeOnboardedUser('+911111111111', true);
+      const user2 = makeOnboardedUser('+912222222222', true);
+      mockScanOnboardedUsers.mockResolvedValue([user1, user2]);
 
-    // First call fails, second succeeds
-    mockSendButtonMessage
-      .mockRejectedValueOnce(new Error('Twilio error'))
-      .mockResolvedValueOnce(undefined);
+      // First call fails, second succeeds
+      mockSendButtonMessage
+        .mockRejectedValueOnce(new Error('Twilio error'))
+        .mockResolvedValueOnce(undefined);
 
-    await dailyReminderHandler(scheduledEvent);
+      await dailyReminderHandler(scheduledEvent);
 
-    // Should have attempted both users
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(2);
-    expect(mockSendButtonMessage.mock.calls[1][0]).toBe('+912222222222');
+      // Should have attempted both users
+      expect(mockSendButtonMessage).toHaveBeenCalledTimes(2);
+      expect(mockSendButtonMessage.mock.calls[1][0]).toBe('+912222222222');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('sends button messages (not text) for DAILY_REMINDER', async () => {
-    const user = makeOnboardedUser('+919876543210', true);
-    mockScanOnboardedUsers.mockResolvedValue([user]);
+    // Set to Wednesday so tomorrow (Thursday) = index 3, within plan
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
+    try {
+      const user = makeOnboardedUser('+919876543210', true);
+      mockScanOnboardedUsers.mockResolvedValue([user]);
 
-    await dailyReminderHandler(scheduledEvent);
+      await dailyReminderHandler(scheduledEvent);
 
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-    expect(mockSendTextMessage).not.toHaveBeenCalled();
+      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
+      expect(mockSendTextMessage).not.toHaveBeenCalled();
 
-    const [, , buttons] = mockSendButtonMessage.mock.calls[0];
-    expect(buttons).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ title: 'View Grocery List' }),
-        expect.objectContaining({ title: 'Swap Lunch' }),
-        expect.objectContaining({ title: 'Send to Cook' }),
-      ]),
-    );
+      const [, , buttons] = mockSendButtonMessage.mock.calls[0];
+      expect(buttons).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ title: 'View Grocery List' }),
+          expect.objectContaining({ title: 'Swap Lunch' }),
+          expect.objectContaining({ title: 'Send to Cook' }),
+        ]),
+      );
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('sends button messages (not text) for EXPIRED_PLAN_PROMPT', async () => {

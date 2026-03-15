@@ -170,7 +170,7 @@ describe('formatBotResponse', () => {
     const response: BotResponse = { type: ResponseType.ONBOARDING_DIET_PROMPT };
     const result = formatBotResponse(response);
     expect(result.text).toBe(ONBOARDING_DIET_PROMPT);
-    expect(result.buttons!.length).toBe(2);
+    expect(result.buttons!.length).toBe(3);
     expect(result.templatePurpose).toBe('diet_selection');
   });
 

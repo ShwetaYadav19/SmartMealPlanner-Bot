@@ -66,7 +66,7 @@ describe('generateGroceryList', () => {
     const result = generateGroceryList([meal1, meal2]);
     const salt = result.find((i) => i.name === 'Salt');
     expect(salt).toBeDefined();
-    expect(salt!.quantity).toBe('1 tsp');
+    expect(salt!.quantity).toBe('1 tsp x2');
   });
 
   it('groups output by category', () => {

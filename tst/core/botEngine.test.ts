@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   processIntent,
   CUISINE_OPTIONS,
@@ -316,6 +316,15 @@ describe('BotEngine — main menu: VIEW_WEEKLY_GROCERY', () => {
 });
 
 describe('BotEngine — main menu: VIEW_TOMORROW_PLAN', () => {
+  beforeEach(() => {
+    // Set to Wednesday so tomorrow (Thursday) = index 3, always within plan
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('returns TOMORROW_PLAN with day plan data when plan covers tomorrow', async () => {
     const state = makeStateWithPlan();
     const result = await processIntent(
@@ -353,6 +362,14 @@ describe('BotEngine — main menu: VIEW_TOMORROW_PLAN', () => {
 });
 
 describe('BotEngine — main menu: VIEW_TOMORROW_GROCERY', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('returns TOMORROW_GROCERY_LIST when plan covers tomorrow', async () => {
     const state = makeStateWithPlan();
     const result = await processIntent(
@@ -391,6 +408,14 @@ describe('BotEngine — main menu: VIEW_TOMORROW_GROCERY', () => {
 });
 
 describe('BotEngine — main menu: SEND_MENU_TO_COOK', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('returns COOK_MESSAGE_SENT with dayPlan and cookNumber when all data exists', async () => {
     const state = makeStateWithPlan({ cookPhoneNumber: '+911234567890' });
     const result = await processIntent(
