@@ -258,6 +258,36 @@
       { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
     ]
   },
+  {
+    "id": "si-gravy-013",
+    "name": "Vathal Kuzhambu",
+    "category": "gravy",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Tamarind", "quantity": "2 tbsp", "category": "spices" },
+      { "name": "Sundried Vathal", "quantity": "50g", "category": "vegetables" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
+      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-014",
+    "name": "Milagu Kuzhambu",
+    "category": "gravy",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Black Pepper", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" }
+    ]
+  },
 
   {
     "id": "si-dry_veggie-001",
@@ -392,6 +422,36 @@
       { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
       { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
       { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-014",
+    "name": "Brinjal Fry",
+    "category": "dry_veggie",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Brinjal (Eggplant)", "quantity": "200g", "category": "vegetables" },
+      { "name": "Sambar Powder", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-015",
+    "name": "Drumstick Poriyal",
+    "category": "dry_veggie",
+    "cuisine": "south_indian",
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Drumstick", "quantity": "2", "category": "vegetables" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Urad Dal", "quantity": "1 tsp", "category": "lentils" }
     ]
   },
 
@@ -731,6 +791,21 @@
     ]
   },
   {
+    "id": "ni-gravy-014",
+    "name": "Moong Dal",
+    "category": "gravy",
+    "cuisine": "north_indian",
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Moong Dal", "quantity": "150g", "category": "lentils" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
+      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" }
+    ]
+  },
+  {
     "id": "ni-gravy-008",
     "name": "Egg Curry",
     "category": "gravy",
@@ -882,6 +957,21 @@
     ]
   },
   {
+    "id": "ni-dry_veggie-015",
+    "name": "Palak Sabzi",
+    "category": "dry_veggie",
+    "cuisine": "north_indian",
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Spinach (Palak)", "quantity": "250g", "category": "vegetables" },
+      { "name": "Garlic", "quantity": "3-4 cloves", "category": "spices" },
+      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+    ]
+  },
+  {
     "id": "ni-dry_veggie-009",
     "name": "Chicken Keema",
     "category": "dry_veggie",
@@ -1002,6 +1092,249 @@
       { "name": "Mint Leaves", "quantity": "1 cup", "category": "vegetables" },
       { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
       { "name": "Lemon", "quantity": "1", "category": "fruits" }
+    ]
+  },
+
+  {
+    "id": "si-gravy-010",
+    "name": "Chicken Rasam",
+    "category": "gravy",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "200g", "category": "protein" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-011",
+    "name": "Egg Drop Rasam",
+    "category": "gravy",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "3", "category": "protein" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-012",
+    "name": "Fish Kuzhambu",
+    "category": "gravy",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "250g", "category": "protein" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
+      { "name": "Fenugreek Seeds", "quantity": "1/2 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-010",
+    "name": "Chicken Poriyal",
+    "category": "dry_veggie",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "200g", "category": "protein" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-011",
+    "name": "Egg Poriyal",
+    "category": "dry_veggie",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "4", "category": "protein" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-012",
+    "name": "Fish Fry",
+    "category": "dry_veggie",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "250g", "category": "protein" },
+      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
+      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+
+  {
+    "id": "ni-gravy-010",
+    "name": "Chicken Shorba",
+    "category": "gravy",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "200g", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Whole Spices", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" }
+    ]
+  },
+  {
+    "id": "ni-gravy-011",
+    "name": "Egg Masala",
+    "category": "gravy",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "4", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-gravy-012",
+    "name": "Fish Curry",
+    "category": "gravy",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "250g", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-010",
+    "name": "Chicken Tikka",
+    "category": "dry_veggie",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "250g", "category": "protein" },
+      { "name": "Yogurt", "quantity": "50g", "category": "dairy" },
+      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-011",
+    "name": "Egg Bhurji",
+    "category": "dry_veggie",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "4", "category": "protein" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
+      { "name": "Turmeric Powder", "quantity": "1/4 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-012",
+    "name": "Fish Tikka",
+    "category": "dry_veggie",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "250g", "category": "protein" },
+      { "name": "Yogurt", "quantity": "50g", "category": "dairy" },
+      { "name": "Lemon", "quantity": "1", "category": "fruits" },
+      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+
+  {
+    "id": "ni-gravy-013",
+    "name": "Butter Chicken",
+    "category": "gravy",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "300g", "category": "protein" },
+      { "name": "Butter", "quantity": "2 tbsp", "category": "dairy" },
+      { "name": "Cream", "quantity": "50ml", "category": "dairy" },
+      { "name": "Tomato", "quantity": "3 medium", "category": "vegetables" }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-013",
+    "name": "Egg Bhurji Dry",
+    "category": "dry_veggie",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "4", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
+      { "name": "Turmeric Powder", "quantity": "1/4 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-014",
+    "name": "Tandoori Chicken",
+    "category": "dry_veggie",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "300g", "category": "protein" },
+      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
+      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-013",
+    "name": "Prawn Fry",
+    "category": "dry_veggie",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Prawns", "quantity": "250g", "category": "protein" },
+      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
     ]
   }
 ]

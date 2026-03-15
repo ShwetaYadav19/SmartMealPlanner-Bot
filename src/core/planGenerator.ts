@@ -286,6 +286,7 @@ export function composeMeal(
   slot: 'lunch' | 'dinner',
   cuisine: 'north_indian' | 'south_indian',
   constraints: ComposeMealConstraints,
+  diet?: string,
 ): ComposedMeal {
   // Filter by slot and cuisine
   const pool = components.filter(
@@ -301,6 +302,18 @@ export function composeMeal(
   };
   for (const c of pool) {
     byCategory[c.category].push(c);
+  }
+
+  // Apply diet preference to gravy and dry_veggie only.
+  // Bases and sides are inherently veg, so diet filtering doesn't apply to them.
+  if (diet && diet !== 'both') {
+    for (const cat of ['gravy', 'dry_veggie'] as ComponentCategory[]) {
+      const filtered = byCategory[cat].filter((c) => c.diet === diet);
+      if (filtered.length > 0) {
+        byCategory[cat] = filtered;
+      }
+      // If no items match the diet, keep the full pool as fallback
+    }
   }
 
   // Validate each category has at least one component
@@ -476,7 +489,7 @@ export function generateWeeklyPlan(
       side:       { recentIds: new Set(history.lunch.side),       sameDayIds: new Set() },
     };
 
-    const lunch = composeMeal(components, 'lunch', lunchCuisine, lunchConstraints);
+    const lunch = composeMeal(components, 'lunch', lunchCuisine, lunchConstraints, preferences.diet);
 
     // Collect lunch component IDs for same-day dedup
     const lunchIds: Record<ComponentCategory, string | undefined> = {
@@ -499,7 +512,7 @@ export function generateWeeklyPlan(
       side:       { recentIds: new Set(history.dinner.side),       sameDayIds: new Set(lunchIds.side       ? [lunchIds.side]       : []) },
     };
 
-    const dinner = composeMeal(components, 'dinner', dinnerCuisine, dinnerConstraints);
+    const dinner = composeMeal(components, 'dinner', dinnerCuisine, dinnerConstraints, preferences.diet);
 
     plan.push({ day: DAYS[d], breakfast, lunch, dinner });
 
@@ -608,7 +621,7 @@ export function swapTomorrowLunch(
   }
 
   try {
-    const replacement = composeMeal(components, 'lunch', cuisine, constraints);
+    const replacement = composeMeal(components, 'lunch', cuisine, constraints, preferences.diet);
 
     // Deep-clone the plan so we don't mutate the original
     const updatedPlan: WeeklyPlan = weeklyPlan.map((day) => ({

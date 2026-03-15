@@ -233,9 +233,11 @@ async function handleMainMenu(
         diet: state.dietPreference,
         style: state.mealStyle,
       });
+      // Fetch all diet variants for components — bases and sides are always veg,
+      // so filtering by non_veg would leave those categories empty.
+      // The diet preference is applied inside composeMeal for gravy/dry_veggie only.
       const components = await mealComponentRepository.getComponents({
         cuisine: state.cuisinePreference,
-        diet: state.dietPreference,
         style: state.mealStyle,
       });
       try {
@@ -450,7 +452,6 @@ async function handleMainMenu(
       const tomorrowIdx = getTomorrowIndex(state.weeklyPlanStartDate);
       const components = await mealComponentRepository.getComponents({
         cuisine: state.cuisinePreference,
-        diet: state.dietPreference,
         style: state.mealStyle,
       });
       const swapResult = swapTomorrowLunch(state.weeklyPlan, tomorrowIdx, components, preferences);

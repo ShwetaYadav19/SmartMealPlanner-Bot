@@ -1020,6 +1020,60 @@
     ]
   },
   {
+    "id": "ni-b-019",
+    "name": "Boiled Egg with Multigrain Toast",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "2", "category": "protein" },
+      { "name": "Multigrain Bread", "quantity": "2 slices", "category": "grains" }
+    ]
+  },
+  {
+    "id": "ni-b-020",
+    "name": "Egg White Omelette with Veggies",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Egg Whites", "quantity": "4", "category": "protein" },
+      { "name": "Capsicum", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" }
+    ]
+  },
+  {
+    "id": "ni-b-021",
+    "name": "Chicken Keema Paratha",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Chicken Mince", "quantity": "100g", "category": "protein" },
+      { "name": "Whole Wheat Flour", "quantity": "100g", "category": "grains" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" }
+    ]
+  },
+  {
+    "id": "ni-b-022",
+    "name": "Egg Paratha",
+    "cuisine": "north_indian",
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "2", "category": "protein" },
+      { "name": "Whole Wheat Flour", "quantity": "100g", "category": "grains" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" }
+    ]
+  },
+  {
     "id": "ni-l-011",
     "name": "Rajma with Brown Rice",
     "cuisine": "north_indian",
@@ -1527,6 +1581,76 @@
       { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
       { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
       { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-b-022",
+    "name": "Egg Idiyappam",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Rice Flour Idiyappam", "quantity": "4", "category": "grains" },
+      { "name": "Eggs", "quantity": "2", "category": "protein" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-b-023",
+    "name": "Egg Uttapam",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Dosa Batter", "quantity": "200ml", "category": "grains" },
+      { "name": "Eggs", "quantity": "2", "category": "protein" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" }
+    ]
+  },
+  {
+    "id": "si-b-024",
+    "name": "Egg Pongal",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Rice", "quantity": "100g", "category": "grains" },
+      { "name": "Moong Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Eggs", "quantity": "2", "category": "protein" },
+      { "name": "Black Pepper", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-b-025",
+    "name": "Egg Parotta",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "All Purpose Flour (Maida)", "quantity": "150g", "category": "grains" },
+      { "name": "Eggs", "quantity": "2", "category": "protein" },
+      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-b-026",
+    "name": "Chicken Adai",
+    "cuisine": "south_indian",
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["breakfast"],
+    "ingredients": [
+      { "name": "Mixed Lentils", "quantity": "150g", "category": "lentils" },
+      { "name": "Rice", "quantity": "50g", "category": "grains" },
+      { "name": "Chicken Mince", "quantity": "100g", "category": "protein" },
+      { "name": "Red Chilli", "quantity": "3", "category": "spices" }
     ]
   }
 ]
