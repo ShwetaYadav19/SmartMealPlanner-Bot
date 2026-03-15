@@ -55,6 +55,9 @@ export function mapWhatsAppToIntent(
       if (buttonPayload === 'confirm_dishes') {
         return { intent: Intent.CONFIRM_DISHES };
       }
+      if (buttonPayload === 'next_category') {
+        return { intent: Intent.NEXT_CATEGORY };
+      }
     }
 
     // More options from main menu

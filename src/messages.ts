@@ -49,11 +49,20 @@ export const COOK_NUMBER_SKIP_BUTTON = `Skip`;
 
 // --- Dish Preview ---
 
+import type { ComponentsByCategory } from './core/types';
+
 const CATEGORY_HEADINGS: Record<string, string> = {
   base: '*🍚 Base*',
   gravy: '*🍛 Gravy*',
   dry_veggie: '*🥗 Dry Veggie*',
   side: '*🥣 Side*',
+};
+
+const CATEGORY_LABELS: Record<string, string> = {
+  base: 'Base',
+  gravy: 'Gravy',
+  dry_veggie: 'Dry Veggie',
+  side: 'Side',
 };
 
 function formatComponentsByCategory(components: { base: { name: string }[]; gravy: { name: string }[]; dry_veggie: { name: string }[]; side: { name: string }[] }): string {
@@ -76,6 +85,61 @@ export function formatDishPreviewMessage(candidates: {
   dinnerComponents: { base: { name: string }[]; gravy: { name: string }[]; dry_veggie: { name: string }[]; side: { name: string }[] };
 }): string {
   let text = `Here are your dishes for the week 🍽️\nTap a dish to remove it.\n`;
+  text += `\n*Breakfasts*`;
+  for (const b of candidates.breakfasts) {
+    text += `\n  • ${b.name}`;
+  }
+  text += `\n\n*Lunches*`;
+  text += formatComponentsByCategory(candidates.lunchComponents);
+  text += `\n\n*Dinners*`;
+  text += formatComponentsByCategory(candidates.dinnerComponents);
+  return text;
+}
+
+export function formatBreakfastStepMessage(breakfasts: { name: string }[]): string {
+  let text = `🍽️ Let's review your dishes!\n\n*Step 1/5: Breakfasts*\nRemove any you don't want:`;
+  for (const b of breakfasts) {
+    text += `\n  • ${b.name}`;
+  }
+  return text;
+}
+
+export function formatCategoryStepMessage(
+  category: 'base' | 'gravy' | 'dry_veggie' | 'side',
+  lunchComponents: ComponentsByCategory,
+  dinnerComponents: ComponentsByCategory,
+): string {
+  const stepNumbers: Record<string, number> = { base: 2, gravy: 3, dry_veggie: 4, side: 5 };
+  const stepNum = stepNumbers[category];
+  const heading = CATEGORY_HEADINGS[category];
+  const label = CATEGORY_LABELS[category];
+
+  let text = `*Step ${stepNum}/5: ${label}*\nRemove any you don't want:`;
+
+  const lunchItems = lunchComponents[category];
+  const dinnerItems = dinnerComponents[category];
+
+  if (lunchItems.length > 0) {
+    text += `\n\n*Lunch ${heading}*`;
+    for (const c of lunchItems) {
+      text += `\n  • ${c.name}`;
+    }
+  }
+  if (dinnerItems.length > 0) {
+    text += `\n\n*Dinner ${heading}*`;
+    for (const c of dinnerItems) {
+      text += `\n  • ${c.name}`;
+    }
+  }
+  return text;
+}
+
+export function formatConfirmStepMessage(candidates: {
+  breakfasts: { name: string }[];
+  lunchComponents: { base: { name: string }[]; gravy: { name: string }[]; dry_veggie: { name: string }[]; side: { name: string }[] };
+  dinnerComponents: { base: { name: string }[]; gravy: { name: string }[]; dry_veggie: { name: string }[]; side: { name: string }[] };
+}): string {
+  let text = `✅ *Review & Confirm*\n`;
   text += `\n*Breakfasts*`;
   for (const b of candidates.breakfasts) {
     text += `\n  • ${b.name}`;

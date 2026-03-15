@@ -2,7 +2,7 @@
 // Converts structured BotResponse objects into formatted WhatsApp messages
 // All text strings sourced from the MessageCatalog (src/messages.ts) — no inline string literals
 
-import type { BotResponse, CandidateDishes, DayPlan, GroceryItem, WeeklyPlan } from './core/types';
+import type { BotResponse, CandidateDishes, ComponentsByCategory, DayPlan, GroceryItem, PreviewStep, WeeklyPlan } from './core/types';
 import { ResponseType } from './core/types';
 import type { ButtonOption } from './core/ports';
 import {
@@ -31,6 +31,9 @@ import {
   INVALID_PHONE,
   COOK_NUMBER_ONBOARDING_PROMPT,
   formatDishPreviewMessage,
+  formatBreakfastStepMessage,
+  formatCategoryStepMessage,
+  formatConfirmStepMessage,
   DISH_REMOVED_CONFIRMATION,
   COMPONENT_REMOVED_CONFIRMATION,
   DISH_PREVIEW_EMPTY_ERROR,
@@ -126,20 +129,52 @@ export function formatCookMessage(day: DayPlan): string {
   return text;
 }
 
-function generateComponentButtons(candidates: CandidateDishes): ButtonOption[] {
+function generateStepButtons(candidates: CandidateDishes, step: PreviewStep): ButtonOption[] {
   const buttons: ButtonOption[] = [];
-  for (const b of candidates.breakfasts) {
-    buttons.push({ id: `remove_dish_${b.id}`, title: `❌ ${b.name}`.slice(0, 20) });
-  }
-  for (const slot of [candidates.lunchComponents, candidates.dinnerComponents]) {
-    for (const category of ['base', 'gravy', 'dry_veggie', 'side'] as const) {
-      for (const comp of slot[category]) {
-        buttons.push({ id: `remove_dish_${comp.id}`, title: `❌ ${comp.name}`.slice(0, 20) });
+
+  switch (step) {
+    case 'breakfast':
+      for (const b of candidates.breakfasts) {
+        buttons.push({ id: `remove_dish_${b.id}`, title: `❌ ${b.name}`.slice(0, 20) });
       }
+      buttons.push({ id: 'next_category', title: 'Next ➡️' });
+      break;
+
+    case 'base':
+    case 'gravy':
+    case 'dry_veggie':
+    case 'side': {
+      for (const slot of [candidates.lunchComponents, candidates.dinnerComponents]) {
+        for (const comp of slot[step]) {
+          buttons.push({ id: `remove_dish_${comp.id}`, title: `❌ ${comp.name}`.slice(0, 20) });
+        }
+      }
+      buttons.push({ id: 'next_category', title: 'Next ➡️' });
+      break;
     }
+
+    case 'confirm':
+      buttons.push({ id: 'confirm_dishes', title: '✅ Confirm Dishes' });
+      break;
   }
-  buttons.push({ id: 'confirm_dishes', title: '✅ Confirm Dishes' });
+
   return buttons;
+}
+
+function formatStepText(candidates: CandidateDishes, step: PreviewStep): string {
+  switch (step) {
+    case 'breakfast':
+      return formatBreakfastStepMessage(candidates.breakfasts);
+    case 'base':
+    case 'gravy':
+    case 'dry_veggie':
+    case 'side':
+      return formatCategoryStepMessage(step, candidates.lunchComponents, candidates.dinnerComponents);
+    case 'confirm':
+      return formatConfirmStepMessage(candidates);
+    default:
+      return formatDishPreviewMessage(candidates);
+  }
 }
 
 export function formatBotResponse(response: BotResponse): FormattedMessage {
@@ -305,20 +340,19 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
 
     case ResponseType.DISH_PREVIEW: {
       const candidates = data?.candidateDishes;
-      const previewText = candidates
-        ? formatDishPreviewMessage(candidates)
-        : 'No dishes available';
-      const dishButtons: ButtonOption[] = candidates
-        ? generateComponentButtons(candidates)
-        : [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }];
+      const step = data?.previewStep ?? 'breakfast';
+      if (!candidates) {
+        return { text: 'No dishes available', buttons: [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }] };
+      }
       return {
-        text: previewText,
-        buttons: dishButtons,
+        text: formatStepText(candidates, step),
+        buttons: generateStepButtons(candidates, step),
       };
     }
 
     case ResponseType.DISH_REMOVED: {
       const updatedCandidates = data?.candidateDishes;
+      const removedStep = data?.previewStep ?? 'breakfast';
       let confirmationText: string;
       if (data?.removedComponentName && data?.removedComponentCategory) {
         confirmationText = COMPONENT_REMOVED_CONFIRMATION(data.removedComponentName, data.removedComponentCategory);
@@ -327,29 +361,26 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         const replacementName = data?.replacementDishName ?? '';
         confirmationText = DISH_REMOVED_CONFIRMATION(removedName, replacementName);
       }
-      const updatedPreviewText = updatedCandidates
-        ? formatDishPreviewMessage(updatedCandidates)
-        : '';
-      const updatedDishButtons: ButtonOption[] = updatedCandidates
-        ? generateComponentButtons(updatedCandidates)
-        : [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }];
+      if (!updatedCandidates) {
+        return { text: confirmationText, buttons: [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }] };
+      }
+      const updatedPreviewText = formatStepText(updatedCandidates, removedStep);
       return {
         text: `${confirmationText}\n\n${updatedPreviewText}`,
-        buttons: updatedDishButtons,
+        buttons: generateStepButtons(updatedCandidates, removedStep),
       };
     }
 
     case ResponseType.DISH_PREVIEW_EMPTY_ERROR: {
       const originalCandidates = data?.candidateDishes;
-      const originalPreviewText = originalCandidates
-        ? formatDishPreviewMessage(originalCandidates)
-        : '';
-      const errorDishButtons: ButtonOption[] = originalCandidates
-        ? generateComponentButtons(originalCandidates)
-        : [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }];
+      const errorStep = data?.previewStep ?? 'breakfast';
+      if (!originalCandidates) {
+        return { text: DISH_PREVIEW_EMPTY_ERROR, buttons: [{ id: 'confirm_dishes', title: '✅ Confirm Dishes' }] };
+      }
+      const originalPreviewText = formatStepText(originalCandidates, errorStep);
       return {
         text: `${DISH_PREVIEW_EMPTY_ERROR}\n\n${originalPreviewText}`,
-        buttons: errorDishButtons,
+        buttons: generateStepButtons(originalCandidates, errorStep),
       };
     }
 

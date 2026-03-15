@@ -65,6 +65,10 @@ export interface GroceryItem {
   category: string;
 }
 
+export type PreviewStep = 'breakfast' | 'base' | 'gravy' | 'dry_veggie' | 'side' | 'confirm';
+
+export const PREVIEW_STEP_ORDER: PreviewStep[] = ['breakfast', 'base', 'gravy', 'dry_veggie', 'side', 'confirm'];
+
 export type ConversationState =
   | 'awaiting_cuisine'
   | 'awaiting_diet'
@@ -91,6 +95,7 @@ export interface UserState {
   candidateDishes?: CandidateDishes;
   lastButtonIds?: string[];
   isPreferenceChange?: boolean;
+  previewStep?: PreviewStep;
 }
 
 export interface ComponentsByCategory {
@@ -121,6 +126,7 @@ export enum Intent {
   SKIP_COOK_NUMBER = 'SKIP_COOK_NUMBER',
   REMOVE_DISH = 'REMOVE_DISH',
   CONFIRM_DISHES = 'CONFIRM_DISHES',
+  NEXT_CATEGORY = 'NEXT_CATEGORY',
   MORE_OPTIONS = 'MORE_OPTIONS',
   CHANGE_PREFERENCE = 'CHANGE_PREFERENCE',
   CHANGE_COOK_NUMBER = 'CHANGE_COOK_NUMBER',
@@ -182,6 +188,7 @@ export interface BotResponse {
     replacementDishName?: string;
     removedComponentName?: string;
     removedComponentCategory?: string;
+    previewStep?: PreviewStep;
   };
   suggestedActions?: SuggestedAction[];
 }

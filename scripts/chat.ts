@@ -35,6 +35,7 @@ const BUTTON_IDS = new Set([
   'send_to_cook', 'swap_lunch', 'save_cook',
   'skip_cook', 'confirm_dishes', 'more_options',
   'change_preference', 'change_cook_number',
+  'next_category',
 ]);
 
 const PHONE = '+919876543210';

@@ -5,6 +5,8 @@ import type { MealRepository, MealComponentRepository } from './ports';
 import {
   Intent,
   ResponseType,
+  PREVIEW_STEP_ORDER,
+  type PreviewStep,
   type UserIntent,
   type UserState,
   type BotResult,
@@ -189,13 +191,14 @@ async function handleAwaitingCookNumberOnboarding(
       cookPhoneNumber: validation.normalized,
       onboardingComplete: true,
       conversationState: 'dish_preview',
+      previewStep: 'breakfast',
       candidateDishes,
     };
 
     return {
       response: {
         type: ResponseType.DISH_PREVIEW,
-        data: { candidateDishes },
+        data: { candidateDishes, previewStep: 'breakfast' },
       },
       updatedState,
     };
@@ -212,13 +215,14 @@ async function handleAwaitingCookNumberOnboarding(
       ...state,
       onboardingComplete: true,
       conversationState: 'dish_preview',
+      previewStep: 'breakfast',
       candidateDishes,
     };
 
     return {
       response: {
         type: ResponseType.DISH_PREVIEW,
-        data: { candidateDishes },
+        data: { candidateDishes, previewStep: 'breakfast' },
       },
       updatedState,
     };
@@ -249,24 +253,53 @@ async function handleDishPreview(
     style: state.mealStyle ?? 'regular',
   };
 
-  // Defensive: if candidateDishes is missing, regenerate
+  // Defensive: if candidateDishes is missing, regenerate and start at first step
   if (!state.candidateDishes) {
     const candidateDishes = await generateCandidateDishes(
       deps,
       preferences,
       state.excludedDishIds ?? [],
     );
+    const step: PreviewStep = 'breakfast';
     const updatedState: UserState = {
       ...state,
       candidateDishes,
       conversationState: 'dish_preview',
+      previewStep: step,
     };
     return {
       response: {
         type: ResponseType.DISH_PREVIEW,
-        data: { candidateDishes },
+        data: { candidateDishes, previewStep: step },
       },
       updatedState,
+    };
+  }
+
+  const currentStep = state.previewStep ?? 'breakfast';
+
+  // Handle NEXT_CATEGORY — advance to next step
+  if (intent.intent === Intent.NEXT_CATEGORY) {
+    const currentIndex = PREVIEW_STEP_ORDER.indexOf(currentStep);
+    const nextStep = PREVIEW_STEP_ORDER[currentIndex + 1] ?? 'confirm';
+
+    if (nextStep === 'confirm') {
+      // At confirm step, show full summary with confirm button
+      return {
+        response: {
+          type: ResponseType.DISH_PREVIEW,
+          data: { candidateDishes: state.candidateDishes, previewStep: 'confirm' },
+        },
+        updatedState: { ...state, previewStep: 'confirm' },
+      };
+    }
+
+    return {
+      response: {
+        type: ResponseType.DISH_PREVIEW,
+        data: { candidateDishes: state.candidateDishes, previewStep: nextStep },
+      },
+      updatedState: { ...state, previewStep: nextStep },
     };
   }
 
@@ -285,12 +318,12 @@ async function handleDishPreview(
         state.excludedDishIds ?? [],
       );
 
-      // No replacement available — return current preview unchanged
+      // No replacement available — return current step unchanged
       if (!result) {
         return {
           response: {
             type: ResponseType.DISH_PREVIEW,
-            data: { candidateDishes: state.candidateDishes },
+            data: { candidateDishes: state.candidateDishes, previewStep: currentStep },
           },
           updatedState: state,
         };
@@ -310,6 +343,7 @@ async function handleDishPreview(
             candidateDishes: result.updated,
             removedDishName: result.removedName,
             replacementDishName: result.replacementName,
+            previewStep: currentStep,
           },
         },
         updatedState,
@@ -323,7 +357,7 @@ async function handleDishPreview(
       return {
         response: {
           type: ResponseType.DISH_PREVIEW_EMPTY_ERROR,
-          data: { candidateDishes: state.candidateDishes },
+          data: { candidateDishes: state.candidateDishes, previewStep: currentStep },
         },
         updatedState: state,
       };
@@ -342,6 +376,7 @@ async function handleDishPreview(
           candidateDishes: componentResult.candidates,
           removedComponentName: componentResult.removedComponentName,
           removedComponentCategory: componentResult.removedComponentCategory,
+          previewStep: currentStep,
         },
       },
       updatedState,
@@ -361,6 +396,7 @@ async function handleDishPreview(
       onboardingComplete: true,
       conversationState: 'main_menu',
       candidateDishes: undefined,
+      previewStep: undefined,
     };
     return {
       response: {
@@ -372,11 +408,11 @@ async function handleDishPreview(
     };
   }
 
-  // Unknown intent in dish_preview — re-present current preview
+  // Unknown intent in dish_preview — re-present current step
   return {
     response: {
       type: ResponseType.DISH_PREVIEW,
-      data: { candidateDishes: state.candidateDishes },
+      data: { candidateDishes: state.candidateDishes, previewStep: currentStep },
     },
     updatedState: state,
   };
@@ -486,11 +522,12 @@ async function handleMoreOptions(
         ...state,
         candidateDishes,
         conversationState: 'dish_preview',
+        previewStep: 'breakfast',
       };
       return {
         response: {
           type: ResponseType.DISH_PREVIEW,
-          data: { candidateDishes },
+          data: { candidateDishes, previewStep: 'breakfast' },
         },
         updatedState,
       };
@@ -597,11 +634,12 @@ async function handleMainMenu(
         ...state,
         candidateDishes,
         conversationState: 'dish_preview',
+        previewStep: 'breakfast',
       };
       return {
         response: {
           type: ResponseType.DISH_PREVIEW,
-          data: { candidateDishes },
+          data: { candidateDishes, previewStep: 'breakfast' },
         },
         updatedState,
       };
@@ -911,13 +949,14 @@ async function handleAwaitingPreferenceDiet(
       ...updatedDietState,
       candidateDishes,
       conversationState: 'dish_preview',
+      previewStep: 'breakfast',
       isPreferenceChange: false,
     };
 
     return {
       response: {
         type: ResponseType.DISH_PREVIEW,
-        data: { candidateDishes },
+        data: { candidateDishes, previewStep: 'breakfast' },
       },
       updatedState,
     };

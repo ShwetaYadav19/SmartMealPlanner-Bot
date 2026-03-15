@@ -106,6 +106,12 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     if (state.isPreferenceChange !== undefined) {
       item.isPreferenceChange = state.isPreferenceChange;
     }
+    if (state.lastButtonIds !== undefined) {
+      item.lastButtonIds = state.lastButtonIds;
+    }
+    if (state.previewStep !== undefined) {
+      item.previewStep = state.previewStep;
+    }
 
     return item;
   }
@@ -143,6 +149,12 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     }
     if (item.isPreferenceChange !== undefined) {
       state.isPreferenceChange = item.isPreferenceChange as boolean;
+    }
+    if (item.lastButtonIds !== undefined) {
+      state.lastButtonIds = item.lastButtonIds as string[];
+    }
+    if (item.previewStep !== undefined) {
+      state.previewStep = item.previewStep as UserState['previewStep'];
     }
 
     return state;
