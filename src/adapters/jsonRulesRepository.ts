@@ -9,7 +9,11 @@ export class JsonRulesRepository implements RulesRepository {
   private readonly filePath: string;
 
   constructor(filePath?: string) {
-    this.filePath = filePath ?? path.join(process.cwd(), 'data', 'meal-selection-rules.json');
+    const lambdaRoot = process.env.LAMBDA_TASK_ROOT ?? '/var/task';
+    const defaultPath = process.env.AWS_LAMBDA_FUNCTION_NAME
+      ? path.join(lambdaRoot, 'data', 'meal-selection-rules.json')
+      : path.resolve(__dirname, '..', 'data', 'meal-selection-rules.json');
+    this.filePath = filePath ?? defaultPath;
   }
 
   async getRules(): Promise<Rule[]> {

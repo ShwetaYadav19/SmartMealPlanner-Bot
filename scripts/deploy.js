@@ -135,6 +135,12 @@ function createZipBuffer(handlerFileName) {
       archive.file(mealComponentsPath, { name: 'data/meal-components.json' });
     }
 
+    // Include the meal-selection-rules.json data file for the JsonRulesRepository
+    const rulesPath = path.join(__dirname, '..', 'data', 'meal-selection-rules.json');
+    if (fs.existsSync(rulesPath)) {
+      archive.file(rulesPath, { name: 'data/meal-selection-rules.json' });
+    }
+
     archive.finalize();
   });
 }
