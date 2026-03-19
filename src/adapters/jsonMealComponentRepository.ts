@@ -39,8 +39,12 @@ export class JsonMealComponentRepository implements MealComponentRepository {
 
   async getComponents(filter: MealComponentFilter): Promise<MealComponent[]> {
     return this.components.filter((component) => {
-      if (filter.cuisine && filter.cuisine !== 'both') {
-        if (component.cuisine !== filter.cuisine) return false;
+      if (filter.cuisine) {
+        if (filter.cuisine === 'both') {
+          if (!component.cuisine.includes('north_indian')) return false;
+        } else {
+          if (!component.cuisine.includes(filter.cuisine)) return false;
+        }
       }
 
       if (filter.diet && filter.diet !== 'both') {

@@ -18,8 +18,12 @@ export class JsonMealRepository implements MealRepository {
 
   async getMeals(filter: MealFilter): Promise<Meal[]> {
     return this.meals.filter((meal) => {
-      if (filter.cuisine && filter.cuisine !== 'both') {
-        if (meal.cuisine !== filter.cuisine) return false;
+      if (filter.cuisine) {
+        if (filter.cuisine === 'both') {
+          if (!meal.cuisine.includes('north_indian')) return false;
+        } else {
+          if (!meal.cuisine.includes(filter.cuisine)) return false;
+        }
       }
 
       if (filter.diet && filter.diet !== 'both') {

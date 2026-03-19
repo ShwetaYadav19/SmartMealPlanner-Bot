@@ -23,6 +23,7 @@ import { processIntent } from '../src/core/botEngine';
 import { formatBotResponse, formatCookMessage } from '../src/messageFormatter';
 import { JsonMealRepository } from '../src/adapters/jsonMealRepository';
 import { JsonMealComponentRepository } from '../src/adapters/jsonMealComponentRepository';
+import { JsonRulesRepository } from '../src/adapters/jsonRulesRepository';
 import { UserState, ResponseType } from '../src/core/types';
 
 // Known button IDs — if the user types one of these, treat it as a button tap
@@ -41,6 +42,7 @@ const BUTTON_IDS = new Set([
 const PHONE = '+919876543210';
 const mealRepo = new JsonMealRepository(path.join(__dirname, '../data/meals.json'));
 const mealComponentRepo = new JsonMealComponentRepository(path.join(__dirname, '../data/meal-components.json'));
+const rulesRepo = new JsonRulesRepository(path.join(__dirname, '../data/meal-selection-rules.json'));
 
 let userState: UserState | null = null;
 
@@ -116,7 +118,7 @@ async function handleInput(input: string): Promise<void> {
   const intent = mapWhatsAppToIntent(buttonPayload, body, convState);
 
   // 2. Process through BotEngine
-  const result = await processIntent(intent, userState, mealRepo, mealComponentRepo);
+  const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, undefined, rulesRepo);
 
   // 3. Format for WhatsApp display
   const formatted = formatBotResponse(result.response);

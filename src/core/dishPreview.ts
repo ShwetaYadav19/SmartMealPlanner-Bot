@@ -11,8 +11,10 @@ import type {
   DayPlan,
   WeeklyPlan,
   ComponentCategory,
+  RuleEvaluationContext,
 } from './types';
 import { composeMeal, type ComposeMealConstraints } from './planGenerator';
+import type { MealSelector } from './mealSelector';
 
 export interface DishPreviewDeps {
   mealRepository: MealRepository;
@@ -62,7 +64,9 @@ function resolveCuisine(
   dayIndex: number,
 ): 'north_indian' | 'south_indian' {
   if (preference === 'both') {
-    return dayIndex % 2 === 0 ? 'north_indian' : 'south_indian';
+    // "both" means NI + crossover items — always use north_indian filter
+    // which includes pure NI and dual-tagged crossover items
+    return 'north_indian';
   }
   return preference as 'north_indian' | 'south_indian';
 }
@@ -142,6 +146,23 @@ async function fetchCategoryPool(
 }
 
 /**
+ * Group a flat array of MealComponents into ComponentsByCategory.
+ * Filters by the given slot before grouping.
+ */
+function groupByCategory(
+  components: MealComponent[],
+  slot: 'lunch' | 'dinner',
+): ComponentsByCategory {
+  const result: ComponentsByCategory = { base: [], gravy: [], dry_veggie: [], side: [] };
+  for (const c of components) {
+    if (c.slots.includes(slot) && result[c.category]) {
+      result[c.category].push(c);
+    }
+  }
+  return result;
+}
+
+/**
  * Generate candidate dishes for preview, excluding any in the exclusion list.
  *
  * Produces breakfasts as Meal objects (unchanged) and component pools for
@@ -150,12 +171,24 @@ async function fetchCategoryPool(
  * Diet fallback: non_veg users also receive veg components.
  * Style fallback: health users receive regular components (with "(Regular)"
  * suffix) when health options in a category are fewer than 2.
+ *
+ * When a MealSelector is provided, rule-based candidate pool generation is
+ * used instead of the inline fetchCategoryPool logic. The MealSelector's
+ * getCandidatePool method applies all filter rules (cuisine, diet, diet-fallback,
+ * style, style-fallback, excluded-dishes, south-indian-crossover) based on the
+ * rules from the repository.
  */
 export async function generateCandidateDishes(
   deps: DishPreviewDeps,
   preferences: { cuisine: string; diet: string; style: string },
   excludedDishIds: string[],
+  mealSelector?: MealSelector,
 ): Promise<CandidateDishes> {
+  // When MealSelector is provided, delegate to rule-based candidate pool generation
+  if (mealSelector) {
+    return generateCandidateDishesWithSelector(preferences, excludedDishIds, mealSelector);
+  }
+
   const excludedSet = new Set(excludedDishIds);
 
   // --- Breakfasts (unchanged) ---
@@ -190,6 +223,49 @@ export async function generateCandidateDishes(
       }
     }
   }
+
+  return { breakfasts, lunchComponents, dinnerComponents };
+}
+
+/**
+ * Generate candidate dishes using MealSelector's rule-based filtering.
+ *
+ * Builds a RuleEvaluationContext for each slot (breakfast, lunch, dinner),
+ * calls getCandidatePool to get filtered meals/components, and groups
+ * the flat component arrays into ComponentsByCategory format.
+ */
+async function generateCandidateDishesWithSelector(
+  preferences: { cuisine: string; diet: string; style: string },
+  excludedDishIds: string[],
+  mealSelector: MealSelector,
+): Promise<CandidateDishes> {
+  const baseContext: Omit<RuleEvaluationContext, 'slot'> = {
+    userPreferences: {
+      cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
+      diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+      style: preferences.style as 'health' | 'regular',
+    },
+    excludedDishIds,
+    dayIndex: 0,
+    history: {},
+    sameDaySelections: {},
+  };
+
+  // --- Breakfasts via MealSelector ---
+  const breakfastContext: RuleEvaluationContext = { ...baseContext, slot: 'breakfast' };
+  const breakfastPool = await mealSelector.getCandidatePool(breakfastContext);
+  const shuffledBreakfasts = shuffle(breakfastPool.meals);
+  const breakfasts: Meal[] = shuffledBreakfasts.slice(0, 7);
+
+  // --- Lunch components via MealSelector ---
+  const lunchContext: RuleEvaluationContext = { ...baseContext, slot: 'lunch' };
+  const lunchPool = await mealSelector.getCandidatePool(lunchContext);
+  const lunchComponents = groupByCategory(lunchPool.components, 'lunch');
+
+  // --- Dinner components via MealSelector ---
+  const dinnerContext: RuleEvaluationContext = { ...baseContext, slot: 'dinner' };
+  const dinnerPool = await mealSelector.getCandidatePool(dinnerContext);
+  const dinnerComponents = groupByCategory(dinnerPool.components, 'dinner');
 
   return { breakfasts, lunchComponents, dinnerComponents };
 }
@@ -414,19 +490,22 @@ export function buildPlanFromComponents(
       daySlot[i].push(comp.id);
     }
 
-    // Build constraints for dinner — same-day dedup from lunch picks
+    // Build constraints for dinner — same-day dedup for base, gravy, and dry_veggie
+    // Sides (small pool) are allowed to repeat same day
     const sameDayLunchIds: Record<ComponentCategory, Set<string>> = {
       base: new Set<string>(), gravy: new Set<string>(), dry_veggie: new Set<string>(), side: new Set<string>(),
     };
     for (const comp of lunch.components) {
-      sameDayLunchIds[comp.category].add(comp.id);
+      if (comp.category === 'base' || comp.category === 'gravy' || comp.category === 'dry_veggie') {
+        sameDayLunchIds[comp.category].add(comp.id);
+      }
     }
 
     const dinnerConstraints: ComposeMealConstraints = {
       base:       { recentIds: new Set<string>(), sameDayIds: sameDayLunchIds.base },
       gravy:      { recentIds: new Set<string>(), sameDayIds: sameDayLunchIds.gravy },
       dry_veggie: { recentIds: new Set<string>(), sameDayIds: sameDayLunchIds.dry_veggie },
-      side:       { recentIds: new Set<string>(), sameDayIds: sameDayLunchIds.side },
+      side:       { recentIds: new Set<string>(), sameDayIds: new Set<string>() },
     };
     for (const cat of categories) {
       const recentDays = dinnerHistory[cat].slice(-WINDOW);

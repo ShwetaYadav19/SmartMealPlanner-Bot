@@ -1,7 +1,7 @@
 // BotEngine — intent-based conversation engine
 // Zero imports from adapters, WhatsApp, Twilio, or AWS modules
 
-import type { MealRepository, MealComponentRepository } from './ports';
+import type { MealRepository, MealComponentRepository, RulesRepository } from './ports';
 import {
   Intent,
   ResponseType,
@@ -20,6 +20,7 @@ import { generateWeeklyPlan, extractTomorrowPlan, swapTomorrowLunch } from './pl
 import { generateGroceryList } from './groceryListGenerator';
 import { validatePhoneNumber } from './phoneValidation';
 import { generateCandidateDishes, removeBreakfast, removeComponent, buildPlanFromComponents, hasMinimumComponents, type DishPreviewDeps } from './dishPreview';
+import { MealSelector } from './mealSelector';
 
 // --- Suggested action constants ---
 
@@ -160,6 +161,7 @@ async function handleAwaitingCookNumberOnboarding(
   state: UserState,
   mealRepository: MealRepository,
   mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
 ): Promise<BotResult> {
   const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
   const preferences = {
@@ -184,6 +186,7 @@ async function handleAwaitingCookNumberOnboarding(
       deps,
       preferences,
       state.excludedDishIds ?? [],
+      mealSelector,
     );
 
     const updatedState: UserState = {
@@ -209,6 +212,7 @@ async function handleAwaitingCookNumberOnboarding(
       deps,
       preferences,
       state.excludedDishIds ?? [],
+      mealSelector,
     );
 
     const updatedState: UserState = {
@@ -245,6 +249,7 @@ async function handleDishPreview(
   state: UserState,
   mealRepository: MealRepository,
   mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
 ): Promise<BotResult> {
   const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
   const preferences = {
@@ -259,6 +264,7 @@ async function handleDishPreview(
       deps,
       preferences,
       state.excludedDishIds ?? [],
+      mealSelector,
     );
     const step: PreviewStep = 'breakfast';
     const updatedState: UserState = {
@@ -553,6 +559,7 @@ async function handleMoreOptions(
   state: UserState,
   mealRepository: MealRepository,
   mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
 ): Promise<BotResult> {
   const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
   const preferences = {
@@ -579,6 +586,7 @@ async function handleMoreOptions(
         deps,
         preferences,
         state.excludedDishIds ?? [],
+        mealSelector,
       );
       const updatedState: UserState = {
         ...state,
@@ -677,6 +685,7 @@ async function handleMainMenu(
   state: UserState,
   mealRepository: MealRepository,
   mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
 ): Promise<BotResult> {
   const preferences = {
     cuisine: state.cuisinePreference ?? 'both',
@@ -691,6 +700,7 @@ async function handleMainMenu(
         deps,
         preferences,
         state.excludedDishIds ?? [],
+        mealSelector,
       );
       const updatedState: UserState = {
         ...state,
@@ -991,6 +1001,7 @@ async function handleAwaitingPreferenceDiet(
   state: UserState,
   mealRepository: MealRepository,
   mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
 ): Promise<BotResult> {
   if (intent.intent === Intent.SELECT_DIET && intent.payload) {
     const updatedDietState: UserState = {
@@ -1006,7 +1017,7 @@ async function handleAwaitingPreferenceDiet(
       style: updatedDietState.mealStyle ?? 'regular',
     };
 
-    const candidateDishes = await generateCandidateDishes(deps, preferences, []);
+    const candidateDishes = await generateCandidateDishes(deps, preferences, [], mealSelector);
     const updatedState: UserState = {
       ...updatedDietState,
       candidateDishes,
@@ -1042,7 +1053,13 @@ export async function processIntent(
   mealRepository: MealRepository,
   mealComponentRepository: MealComponentRepository,
   phoneNumber?: string,
+  rulesRepository?: RulesRepository,
 ): Promise<BotResult> {
+  // Create MealSelector when a RulesRepository is provided
+  const mealSelector = rulesRepository
+    ? new MealSelector(rulesRepository, mealRepository, mealComponentRepository)
+    : undefined;
+
   // New user — no state exists
   if (!userState) {
     return handleNewUser(phoneNumber ?? 'unknown');
@@ -1060,22 +1077,22 @@ export async function processIntent(
       return handleAwaitingMealStyle(intent, userState);
 
     case 'awaiting_cook_number_onboarding':
-      return handleAwaitingCookNumberOnboarding(intent, userState, mealRepository, mealComponentRepository);
+      return handleAwaitingCookNumberOnboarding(intent, userState, mealRepository, mealComponentRepository, mealSelector);
 
     case 'dish_preview':
-      return handleDishPreview(intent, userState, mealRepository, mealComponentRepository);
+      return handleDishPreview(intent, userState, mealRepository, mealComponentRepository, mealSelector);
 
     case 'main_menu':
-      return handleMainMenu(intent, userState, mealRepository, mealComponentRepository);
+      return handleMainMenu(intent, userState, mealRepository, mealComponentRepository, mealSelector);
 
     case 'more_options':
-      return handleMoreOptions(intent, userState, mealRepository, mealComponentRepository);
+      return handleMoreOptions(intent, userState, mealRepository, mealComponentRepository, mealSelector);
 
     case 'awaiting_preference_cuisine':
       return handleAwaitingPreferenceCuisine(intent, userState);
 
     case 'awaiting_preference_diet':
-      return handleAwaitingPreferenceDiet(intent, userState, mealRepository, mealComponentRepository);
+      return handleAwaitingPreferenceDiet(intent, userState, mealRepository, mealComponentRepository, mealSelector);
 
     case 'awaiting_cook_number': {
       if (intent.intent === Intent.PROVIDE_COOK_NUMBER && intent.payload) {

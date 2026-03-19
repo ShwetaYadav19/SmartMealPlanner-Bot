@@ -15,20 +15,24 @@ describe('JsonMealRepository', () => {
   it('filters by cuisine north_indian', async () => {
     const meals = await repo.getMeals({ cuisine: 'north_indian' });
     expect(meals.length).toBeGreaterThan(0);
-    meals.forEach((m) => expect(m.cuisine).toBe('north_indian'));
+    meals.forEach((m) => expect(m.cuisine).toContain('north_indian'));
   });
 
   it('filters by cuisine south_indian', async () => {
     const meals = await repo.getMeals({ cuisine: 'south_indian' });
     expect(meals.length).toBeGreaterThan(0);
-    meals.forEach((m) => expect(m.cuisine).toBe('south_indian'));
+    meals.forEach((m) => expect(m.cuisine).toContain('south_indian'));
   });
 
-  it('returns both cuisines when cuisine filter is "both"', async () => {
+  it('returns only north_indian-tagged items when cuisine filter is "both"', async () => {
     const meals = await repo.getMeals({ cuisine: 'both' });
-    const cuisines = new Set(meals.map((m) => m.cuisine));
-    expect(cuisines.has('north_indian')).toBe(true);
-    expect(cuisines.has('south_indian')).toBe(true);
+    expect(meals.length).toBeGreaterThan(0);
+    for (const m of meals) {
+      expect(m.cuisine).toContain('north_indian');
+    }
+    // No south_indian-only items
+    const southOnly = meals.filter((m) => !m.cuisine.includes('north_indian'));
+    expect(southOnly.length).toBe(0);
   });
 
   it('filters by diet', async () => {
@@ -66,7 +70,7 @@ describe('JsonMealRepository', () => {
       slot: 'breakfast',
     });
     meals.forEach((m) => {
-      expect(m.cuisine).toBe('north_indian');
+      expect(m.cuisine).toContain('north_indian');
       expect(m.diet).toBe('veg');
       expect(m.style).toBe('health');
       expect(m.slots).toContain('breakfast');

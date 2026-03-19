@@ -9,7 +9,7 @@ export interface Ingredient {
 export interface Meal {
   id: string;
   name: string;
-  cuisine: 'north_indian' | 'south_indian';
+  cuisine: ('north_indian' | 'south_indian')[];
   diet: 'veg' | 'non_veg';
   style: 'health' | 'regular';
   slots: ('breakfast' | 'lunch' | 'dinner')[];
@@ -29,7 +29,7 @@ export interface MealComponent {
   id: string;
   name: string;
   category: ComponentCategory;
-  cuisine: 'north_indian' | 'south_indian';
+  cuisine: ('north_indian' | 'south_indian')[];
   diet: 'veg' | 'non_veg';
   style: 'health' | 'regular';
   slots: ('lunch' | 'dinner')[];
@@ -197,4 +197,48 @@ export interface BotResponse {
 export interface BotResult {
   response: BotResponse;
   updatedState: UserState;
+}
+
+// ── Rules Engine Types ──────────────────────────────────────────────
+
+/** Action types supported by the rules engine */
+export type RuleAction = 'filter' | 'prefer' | 'constrain' | 'limit';
+
+/** Scopes a rule can target */
+export type RuleScope = 'breakfast' | 'lunch_component' | 'dinner_component' | 'all_slots';
+
+/** Conditions that determine when a rule activates */
+export interface RuleConditions {
+  preferenceField?: 'cuisine' | 'diet' | 'style';
+  preferenceValues?: string[];
+  constraintType?: 'same_day_dedup' | 'ingredient_overlap' | 'cuisine_alternation';
+  windowSize?: number;
+  whitelist?: string[];
+  keyIngredients?: string[];
+}
+
+/** Evaluation context passed at runtime */
+export interface RuleEvaluationContext {
+  userPreferences: {
+    cuisine: 'north_indian' | 'south_indian' | 'both';
+    diet: 'veg' | 'non_veg' | 'both';
+    style: 'health' | 'regular';
+  };
+  excludedDishIds: string[];
+  slot: 'breakfast' | 'lunch' | 'dinner';
+  dayIndex: number;
+  history: Record<string, string[]>;
+  sameDaySelections: Record<string, string[]>;
+}
+
+/** A single rule definition as stored in the rules file */
+export interface Rule {
+  id: string;
+  name: string;
+  description: string;
+  scope: RuleScope;
+  categories?: ComponentCategory[];
+  action: RuleAction;
+  conditions: RuleConditions;
+  parameters?: Record<string, unknown>;
 }

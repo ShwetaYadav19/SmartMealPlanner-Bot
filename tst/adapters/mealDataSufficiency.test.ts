@@ -39,7 +39,7 @@ describe('Data sufficiency: breakfasts', () => {
         it(`${cuisine}/${diet}/${style} has >= ${MIN_BREAKFASTS} breakfasts`, () => {
           const count = meals.filter(
             (m) =>
-              m.cuisine === cuisine &&
+              m.cuisine.includes(cuisine) &&
               m.diet === diet &&
               m.style === style &&
               m.slots.includes('breakfast'),
@@ -56,15 +56,17 @@ describe('Data sufficiency: components per category', () => {
     for (const style of STYLES) {
       for (const category of CATEGORIES) {
         for (const slot of ['lunch', 'dinner'] as const) {
-          it(`${cuisine}/${style}/${category}/${slot} has >= ${MIN_COMPONENTS_PER_CATEGORY} components`, () => {
+          // Sides and bases are exempt from same-day dedup, so 2 is enough
+          const minRequired = (category === 'side' || category === 'base') ? 2 : MIN_COMPONENTS_PER_CATEGORY;
+          it(`${cuisine}/${style}/${category}/${slot} has >= ${minRequired} components`, () => {
             const count = components.filter(
               (c) =>
-                c.cuisine === cuisine &&
+                c.cuisine.includes(cuisine) &&
                 c.style === style &&
                 c.category === category &&
                 c.slots.includes(slot),
             ).length;
-            expect(count).toBeGreaterThanOrEqual(MIN_COMPONENTS_PER_CATEGORY);
+            expect(count).toBeGreaterThanOrEqual(minRequired);
           });
         }
       }
@@ -79,7 +81,7 @@ describe('Data sufficiency: non-veg components for protein categories', () => {
         it(`${cuisine}/${style}/${category} has >= ${MIN_NON_VEG_PER_PROTEIN_CATEGORY} non-veg items`, () => {
           const count = components.filter(
             (c) =>
-              c.cuisine === cuisine &&
+              c.cuisine.includes(cuisine) &&
               c.style === style &&
               c.category === category &&
               c.diet === 'non_veg',
@@ -100,7 +102,11 @@ describe('Data sufficiency: component schema validity', () => {
   it('every component has valid category, cuisine, diet, style, and non-empty slots', () => {
     for (const c of components) {
       expect(CATEGORIES).toContain(c.category);
-      expect(['north_indian', 'south_indian']).toContain(c.cuisine);
+      expect(Array.isArray(c.cuisine)).toBe(true);
+      expect(c.cuisine.length).toBeGreaterThan(0);
+      for (const cui of c.cuisine) {
+        expect(['north_indian', 'south_indian']).toContain(cui);
+      }
       expect(['veg', 'non_veg']).toContain(c.diet);
       expect(['health', 'regular']).toContain(c.style);
       expect(c.slots.length).toBeGreaterThan(0);

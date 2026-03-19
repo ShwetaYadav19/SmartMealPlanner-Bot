@@ -45,8 +45,13 @@ describe('Property 14: Meal data schema validity', () => {
         expect(typeof m.name).toBe('string');
         expect((m.name as string).length).toBeGreaterThan(0);
 
-        // cuisine is a valid enum value
-        expect(VALID_CUISINES).toContain(m.cuisine);
+        // cuisine is a non-empty array of valid enum values
+        expect(Array.isArray(m.cuisine)).toBe(true);
+        const cuisines = m.cuisine as unknown as string[];
+        expect(cuisines.length).toBeGreaterThan(0);
+        cuisines.forEach((c) => {
+          expect(VALID_CUISINES).toContain(c);
+        });
 
         // diet is a valid enum value
         expect(VALID_DIETS).toContain(m.diet);
@@ -91,8 +96,9 @@ describe('Property 14: Meal data schema validity', () => {
         expect(m.id).toMatch(idPattern);
 
         // Cuisine prefix matches the cuisine field
-        const expectedCuisinePrefix = CUISINE_PREFIXES[m.cuisine];
-        expect(m.id.startsWith(expectedCuisinePrefix + '-')).toBe(true);
+        const expectedCuisinePrefixes = m.cuisine.map((c) => CUISINE_PREFIXES[c]);
+        const idCuisinePrefix = m.id.split('-')[0];
+        expect(expectedCuisinePrefixes).toContain(idCuisinePrefix);
 
         // Slot prefix matches one of the meal's slots
         const idSlotPrefix = m.id.split('-')[1];

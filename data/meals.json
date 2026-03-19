@@ -2,1655 +2,4299 @@
   {
     "id": "ni-b-001",
     "name": "Poha",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Flattened Rice (Poha)", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" }
+      {
+        "name": "Flattened Rice (Poha)",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-002",
     "name": "Aloo Paratha",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Whole Wheat Flour", "quantity": "200g", "category": "grains" },
-      { "name": "Potato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" },
-      { "name": "Butter", "quantity": "2 tbsp", "category": "dairy" }
+      {
+        "name": "Whole Wheat Flour",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      },
+      {
+        "name": "Butter",
+        "quantity": "2 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "ni-b-003",
     "name": "Upma",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Semolina (Rava)", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Green Peas", "quantity": "50g", "category": "vegetables" }
+      {
+        "name": "Semolina (Rava)",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "50g",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-004",
     "name": "Daliya Porridge",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Broken Wheat (Daliya)", "quantity": "150g", "category": "grains" },
-      { "name": "Milk", "quantity": "200ml", "category": "dairy" },
-      { "name": "Mixed Vegetables", "quantity": "100g", "category": "vegetables" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Broken Wheat (Daliya)",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Milk",
+        "quantity": "200ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Mixed Vegetables",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-b-005",
     "name": "Moong Dal Cheela",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Moong Dal", "quantity": "150g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" }
+      {
+        "name": "Moong Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-006",
     "name": "Paneer Paratha",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Whole Wheat Flour", "quantity": "200g", "category": "grains" },
-      { "name": "Paneer", "quantity": "150g", "category": "dairy" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" },
-      { "name": "Butter", "quantity": "2 tbsp", "category": "dairy" }
+      {
+        "name": "Whole Wheat Flour",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Paneer",
+        "quantity": "150g",
+        "category": "dairy"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      },
+      {
+        "name": "Butter",
+        "quantity": "2 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "ni-b-007",
     "name": "Egg Bhurji with Toast",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "3", "category": "protein" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" },
-      { "name": "Bread", "quantity": "4 slices", "category": "grains" }
+      {
+        "name": "Eggs",
+        "quantity": "3",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      },
+      {
+        "name": "Bread",
+        "quantity": "4 slices",
+        "category": "grains"
+      }
     ]
   },
   {
     "id": "ni-b-008",
     "name": "Oats Porridge",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Oats", "quantity": "100g", "category": "grains" },
-      { "name": "Milk", "quantity": "250ml", "category": "dairy" },
-      { "name": "Banana", "quantity": "1", "category": "fruits" },
-      { "name": "Honey", "quantity": "1 tbsp", "category": "sweetener" },
-      { "name": "Almonds", "quantity": "5-6", "category": "nuts" }
+      {
+        "name": "Oats",
+        "quantity": "100g",
+        "category": "grains"
+      },
+      {
+        "name": "Milk",
+        "quantity": "250ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Banana",
+        "quantity": "1",
+        "category": "fruits"
+      },
+      {
+        "name": "Honey",
+        "quantity": "1 tbsp",
+        "category": "sweetener"
+      },
+      {
+        "name": "Almonds",
+        "quantity": "5-6",
+        "category": "nuts"
+      }
     ]
   },
   {
     "id": "ni-b-009",
     "name": "Besan Cheela",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Gram Flour (Besan)", "quantity": "150g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" }
+      {
+        "name": "Gram Flour (Besan)",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-010",
     "name": "Egg Omelette with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Capsicum", "quantity": "1/2", "category": "vegetables" },
-      { "name": "Whole Wheat Roti", "quantity": "2", "category": "grains" },
-      { "name": "Oil", "quantity": "1 tsp", "category": "oils" }
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1/2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "2",
+        "category": "grains"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "ni-l-001",
     "name": "Dal Chawal",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Toor Dal", "quantity": "150g", "category": "lentils" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" }
+      {
+        "name": "Toor Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "ni-l-002",
     "name": "Rajma Chawal",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Rajma (Kidney Beans)", "quantity": "200g", "category": "lentils" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Rajma (Kidney Beans)",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-003",
     "name": "Chole with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Chickpeas (Chole)", "quantity": "200g", "category": "lentils" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Chole Masala", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Chickpeas (Chole)",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Chole Masala",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-004",
     "name": "Aloo Gobi with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Potato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Cauliflower", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cauliflower",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "ni-l-005",
     "name": "Palak Paneer with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Spinach (Palak)", "quantity": "250g", "category": "vegetables" },
-      { "name": "Paneer", "quantity": "150g", "category": "dairy" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Garlic", "quantity": "3-4 cloves", "category": "spices" }
+      {
+        "name": "Spinach (Palak)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Paneer",
+        "quantity": "150g",
+        "category": "dairy"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "3-4 cloves",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-006",
     "name": "Khichdi",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "150g", "category": "grains" },
-      { "name": "Moong Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+      {
+        "name": "Rice",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Moong Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-007",
     "name": "Egg Curry with Rice",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-008",
     "name": "Chicken Curry with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-009",
     "name": "Mixed Veg with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mixed Vegetables", "quantity": "300g", "category": "vegetables" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Mixed Vegetables",
+        "quantity": "300g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-010",
     "name": "Jeera Rice with Moong Dal",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Moong Dal", "quantity": "150g", "category": "lentils" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Moong Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-d-001",
     "name": "Roti with Toor Dal",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Toor Dal", "quantity": "150g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" }
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "ni-d-002",
     "name": "Paneer Bhurji with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Capsicum", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" }
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-d-003",
     "name": "Aloo Matar with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Potato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "100g", "category": "vegetables" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-d-004",
     "name": "Lauki with Dal Rice",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Bottle Gourd (Lauki)", "quantity": "250g", "category": "vegetables" },
-      { "name": "Moong Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Rice", "quantity": "150g", "category": "grains" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" }
+      {
+        "name": "Bottle Gourd (Lauki)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Moong Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Rice",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "ni-d-005",
     "name": "Keema with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton Mince (Keema)", "quantity": "250g", "category": "protein" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "50g", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Mutton Mince (Keema)",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-d-006",
     "name": "Baingan Bharta with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggplant (Baingan)", "quantity": "1 large", "category": "vegetables" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Mustard Oil", "quantity": "2 tbsp", "category": "oils" }
+      {
+        "name": "Eggplant (Baingan)",
+        "quantity": "1 large",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "ni-d-007",
     "name": "Kadhi Chawal",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Yogurt", "quantity": "200g", "category": "dairy" },
-      { "name": "Gram Flour (Besan)", "quantity": "2 tbsp", "category": "grains" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Fenugreek Seeds", "quantity": "1/2 tsp", "category": "spices" }
+      {
+        "name": "Yogurt",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Gram Flour (Besan)",
+        "quantity": "2 tbsp",
+        "category": "grains"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Fenugreek Seeds",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-d-008",
     "name": "Masoor Dal with Jeera Rice",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Masoor Dal (Red Lentils)", "quantity": "150g", "category": "lentils" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Masoor Dal (Red Lentils)",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-d-009",
     "name": "Chicken Keema with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken Mince", "quantity": "250g", "category": "protein" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Chicken Mince",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-d-010",
     "name": "Bhindi with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Okra (Bhindi)", "quantity": "250g", "category": "vegetables" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
+      {
+        "name": "Okra (Bhindi)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-001",
     "name": "Idli with Sambar",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Idli Batter", "quantity": "300g", "category": "grains" },
-      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Drumstick", "quantity": "1", "category": "vegetables" },
-      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
+      {
+        "name": "Idli Batter",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Drumstick",
+        "quantity": "1",
+        "category": "vegetables"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-b-002",
     "name": "Dosa with Coconut Chutney",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Dosa Batter", "quantity": "300g", "category": "grains" },
-      { "name": "Coconut", "quantity": "1/2 cup grated", "category": "nuts" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Dosa Batter",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "1/2 cup grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-b-003",
     "name": "Pongal",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "150g", "category": "grains" },
-      { "name": "Moong Dal", "quantity": "75g", "category": "lentils" },
-      { "name": "Black Pepper", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Ghee", "quantity": "2 tbsp", "category": "dairy" }
+      {
+        "name": "Rice",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Moong Dal",
+        "quantity": "75g",
+        "category": "lentils"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "2 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "si-b-004",
     "name": "Rava Dosa",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Semolina (Rava)", "quantity": "150g", "category": "grains" },
-      { "name": "Rice Flour", "quantity": "50g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
+      {
+        "name": "Semolina (Rava)",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Rice Flour",
+        "quantity": "50g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-005",
     "name": "Pesarattu",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Green Moong Dal", "quantity": "200g", "category": "lentils" },
-      { "name": "Rice", "quantity": "50g", "category": "grains" },
-      { "name": "Ginger", "quantity": "1 inch piece", "category": "spices" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+      {
+        "name": "Green Moong Dal",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Rice",
+        "quantity": "50g",
+        "category": "grains"
+      },
+      {
+        "name": "Ginger",
+        "quantity": "1 inch piece",
+        "category": "spices"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-006",
     "name": "Appam with Veg Stew",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
-      { "name": "Potato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Carrot", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "50g", "category": "vegetables" }
+      {
+        "name": "Rice Flour",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "200ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Potato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Carrot",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "50g",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "si-b-007",
     "name": "Egg Dosa",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Dosa Batter", "quantity": "200g", "category": "grains" },
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
+      {
+        "name": "Dosa Batter",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-008",
     "name": "Ragi Dosa",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Ragi Flour", "quantity": "150g", "category": "grains" },
-      { "name": "Rice Flour", "quantity": "50g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+      {
+        "name": "Ragi Flour",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Rice Flour",
+        "quantity": "50g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-009",
     "name": "Medu Vada with Sambar",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Urad Dal", "quantity": "200g", "category": "lentils" },
-      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Black Pepper", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "for frying", "category": "oils" }
+      {
+        "name": "Urad Dal",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "for frying",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-010",
     "name": "Egg Appam",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Coconut Milk", "quantity": "100ml", "category": "dairy" },
-      { "name": "Salt", "quantity": "to taste", "category": "spices" },
-      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+      {
+        "name": "Rice Flour",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "100ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Salt",
+        "quantity": "to taste",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-l-001",
     "name": "Sambar Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Drumstick", "quantity": "1", "category": "vegetables" },
-      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Drumstick",
+        "quantity": "1",
+        "category": "vegetables"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-l-002",
     "name": "Curd Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Yogurt", "quantity": "200g", "category": "dairy" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Pomegranate", "quantity": "2 tbsp", "category": "fruits" }
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Pomegranate",
+        "quantity": "2 tbsp",
+        "category": "fruits"
+      }
     ]
   },
   {
     "id": "si-l-003",
     "name": "Rasam Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
-      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      },
+      {
+        "name": "Rasam Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-l-004",
     "name": "Lemon Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Lemon", "quantity": "2", "category": "fruits" },
-      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "2",
+        "category": "fruits"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-l-005",
     "name": "Tamarind Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Tamarind", "quantity": "50g", "category": "spices" },
-      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "50g",
+        "category": "spices"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-l-006",
     "name": "Chicken Chettinad with Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Black Pepper", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-l-007",
     "name": "Vegetable Kootu with Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mixed Vegetables", "quantity": "250g", "category": "vegetables" },
-      { "name": "Chana Dal", "quantity": "50g", "category": "lentils" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Mixed Vegetables",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Chana Dal",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-l-008",
     "name": "Fish Curry with Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "300g", "category": "protein" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Fish",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "200ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-l-009",
     "name": "Bisi Bele Bath",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "150g", "category": "grains" },
-      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Mixed Vegetables", "quantity": "150g", "category": "vegetables" },
-      { "name": "Bisi Bele Bath Powder", "quantity": "2 tbsp", "category": "spices" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" }
+      {
+        "name": "Rice",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Mixed Vegetables",
+        "quantity": "150g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Bisi Bele Bath Powder",
+        "quantity": "2 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "si-l-010",
     "name": "Egg Curry with Appam",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" }
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Rice Flour",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "200ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "si-d-001",
     "name": "Chapati with Vegetable Kurma",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Whole Wheat Flour", "quantity": "200g", "category": "grains" },
-      { "name": "Mixed Vegetables", "quantity": "250g", "category": "vegetables" },
-      { "name": "Coconut Milk", "quantity": "100ml", "category": "dairy" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Whole Wheat Flour",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Mixed Vegetables",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "100ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-d-002",
     "name": "Idiyappam with Egg Curry",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Rice Sevai (Idiyappam)", "quantity": "200g", "category": "grains" },
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Coconut Milk", "quantity": "150ml", "category": "dairy" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Rice Sevai (Idiyappam)",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "150ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-d-003",
     "name": "Dosa with Potato Masala",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Dosa Batter", "quantity": "300g", "category": "grains" },
-      { "name": "Potato", "quantity": "3 medium", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+      {
+        "name": "Dosa Batter",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Potato",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-d-004",
     "name": "Ragi Mudde with Sambar",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Ragi Flour", "quantity": "150g", "category": "grains" },
-      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Mixed Vegetables", "quantity": "100g", "category": "vegetables" },
-      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
+      {
+        "name": "Ragi Flour",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Mixed Vegetables",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-d-005",
     "name": "Coconut Rice with Papad",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut", "quantity": "1/2 cup grated", "category": "nuts" },
-      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Papad", "quantity": "2", "category": "grains" }
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "1/2 cup grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Papad",
+        "quantity": "2",
+        "category": "grains"
+      }
     ]
   },
   {
     "id": "si-d-006",
     "name": "Chicken Stew with Appam",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
-      { "name": "Potato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "50g", "category": "vegetables" }
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Rice Flour",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "200ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Potato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "50g",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "si-d-007",
     "name": "Tomato Rice with Raita",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Tomato", "quantity": "3 medium", "category": "vegetables" },
-      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" }
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      }
     ]
   },
   {
     "id": "si-d-008",
     "name": "Vendakkai Poriyal with Rice and Dal",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Okra (Vendakkai)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Okra (Vendakkai)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-d-009",
     "name": "Uttapam",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Dosa Batter", "quantity": "300g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Capsicum", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
+      {
+        "name": "Dosa Batter",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-d-010",
     "name": "Fish Fry with Malabar Parotta",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "300g", "category": "protein" },
-      { "name": "All Purpose Flour (Maida)", "quantity": "200g", "category": "grains" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "for frying", "category": "oils" }
+      {
+        "name": "Fish",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "All Purpose Flour (Maida)",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "for frying",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "ni-b-011",
     "name": "Moong Dal Chilla with Mint Chutney",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Moong Dal", "quantity": "150g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Mint Leaves", "quantity": "1/2 cup", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" }
+      {
+        "name": "Moong Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mint Leaves",
+        "quantity": "1/2 cup",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-012",
     "name": "Besan Chilla with Vegetables",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Gram Flour (Besan)", "quantity": "150g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Capsicum", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" }
+      {
+        "name": "Gram Flour (Besan)",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-013",
     "name": "Vegetable Omelette with Whole Wheat Toast",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "3", "category": "protein" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Capsicum", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Whole Wheat Bread", "quantity": "2 slices", "category": "grains" }
+      {
+        "name": "Eggs",
+        "quantity": "3",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Wheat Bread",
+        "quantity": "2 slices",
+        "category": "grains"
+      }
     ]
   },
   {
     "id": "ni-b-014",
     "name": "Sprouts Bowl",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Moong Sprouts", "quantity": "200g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Lemon", "quantity": "1", "category": "fruits" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" }
+      {
+        "name": "Moong Sprouts",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "1",
+        "category": "fruits"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-015",
     "name": "Paneer Stuffed Cheela",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Gram Flour (Besan)", "quantity": "150g", "category": "grains" },
-      { "name": "Paneer", "quantity": "100g", "category": "dairy" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" }
+      {
+        "name": "Gram Flour (Besan)",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Paneer",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-016",
     "name": "Oats with Yogurt and Seeds",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Oats", "quantity": "100g", "category": "grains" },
-      { "name": "Yogurt", "quantity": "150g", "category": "dairy" },
-      { "name": "Mixed Seeds", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Honey", "quantity": "1 tbsp", "category": "sweetener" },
-      { "name": "Banana", "quantity": "1", "category": "fruits" }
+      {
+        "name": "Oats",
+        "quantity": "100g",
+        "category": "grains"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "150g",
+        "category": "dairy"
+      },
+      {
+        "name": "Mixed Seeds",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Honey",
+        "quantity": "1 tbsp",
+        "category": "sweetener"
+      },
+      {
+        "name": "Banana",
+        "quantity": "1",
+        "category": "fruits"
+      }
     ]
   },
   {
     "id": "ni-b-017",
     "name": "Sattu Paratha with Curd",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Whole Wheat Flour", "quantity": "200g", "category": "grains" },
-      { "name": "Sattu (Roasted Gram Flour)", "quantity": "100g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Yogurt", "quantity": "100g", "category": "dairy" }
+      {
+        "name": "Whole Wheat Flour",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Sattu (Roasted Gram Flour)",
+        "quantity": "100g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "ni-b-018",
     "name": "Egg Bhurji with Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "3", "category": "protein" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" },
-      { "name": "Whole Wheat Roti", "quantity": "2", "category": "grains" }
+      {
+        "name": "Eggs",
+        "quantity": "3",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "2",
+        "category": "grains"
+      }
     ]
   },
   {
     "id": "ni-b-019",
     "name": "Boiled Egg with Multigrain Toast",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Multigrain Bread", "quantity": "2 slices", "category": "grains" }
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Multigrain Bread",
+        "quantity": "2 slices",
+        "category": "grains"
+      }
     ]
   },
   {
     "id": "ni-b-020",
     "name": "Egg White Omelette with Veggies",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Egg Whites", "quantity": "4", "category": "protein" },
-      { "name": "Capsicum", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" }
+      {
+        "name": "Egg Whites",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 small",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-021",
     "name": "Chicken Keema Paratha",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Chicken Mince", "quantity": "100g", "category": "protein" },
-      { "name": "Whole Wheat Flour", "quantity": "100g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" }
+      {
+        "name": "Chicken Mince",
+        "quantity": "100g",
+        "category": "protein"
+      },
+      {
+        "name": "Whole Wheat Flour",
+        "quantity": "100g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-b-022",
     "name": "Egg Paratha",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Whole Wheat Flour", "quantity": "100g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" }
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Whole Wheat Flour",
+        "quantity": "100g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-l-011",
     "name": "Rajma with Brown Rice",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Rajma (Kidney Beans)", "quantity": "200g", "category": "lentils" },
-      { "name": "Brown Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Rajma (Kidney Beans)",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Brown Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-012",
     "name": "Chole with Jeera Rice",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Chickpeas (Chole)", "quantity": "200g", "category": "lentils" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Chickpeas (Chole)",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-013",
     "name": "Dal Palak with Bajra Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Toor Dal", "quantity": "150g", "category": "lentils" },
-      { "name": "Spinach (Palak)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Bajra Flour", "quantity": "150g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Garlic", "quantity": "3-4 cloves", "category": "spices" }
+      {
+        "name": "Toor Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Spinach (Palak)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Bajra Flour",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "3-4 cloves",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-014",
     "name": "Lobia Curry with Brown Rice",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Lobia (Black-Eyed Peas)", "quantity": "200g", "category": "lentils" },
-      { "name": "Brown Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Lobia (Black-Eyed Peas)",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Brown Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-015",
     "name": "Kadhi with Rice and Cabbage Sabzi",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Yogurt", "quantity": "200g", "category": "dairy" },
-      { "name": "Gram Flour (Besan)", "quantity": "2 tbsp", "category": "grains" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Cabbage", "quantity": "200g", "category": "vegetables" },
-      { "name": "Fenugreek Seeds", "quantity": "1/2 tsp", "category": "spices" }
+      {
+        "name": "Yogurt",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Gram Flour (Besan)",
+        "quantity": "2 tbsp",
+        "category": "grains"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Cabbage",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Fenugreek Seeds",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-016",
     "name": "Soya Chunk Curry with Multigrain Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Soya Chunks", "quantity": "100g", "category": "protein" },
-      { "name": "Multigrain Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Soya Chunks",
+        "quantity": "100g",
+        "category": "protein"
+      },
+      {
+        "name": "Multigrain Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-017",
     "name": "Dal Tadka with Brown Rice",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Toor Dal", "quantity": "150g", "category": "lentils" },
-      { "name": "Brown Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" }
+      {
+        "name": "Toor Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Brown Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "ni-l-018",
     "name": "Masoor Dal with Bajra Roti",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Masoor Dal (Red Lentils)", "quantity": "150g", "category": "lentils" },
-      { "name": "Bajra Flour", "quantity": "150g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Masoor Dal (Red Lentils)",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Bajra Flour",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-l-019",
     "name": "Chicken Curry with Brown Rice",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Brown Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Brown Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-d-011",
     "name": "Palak Tofu with Salad",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Tofu", "quantity": "200g", "category": "protein" },
-      { "name": "Spinach (Palak)", "quantity": "250g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Garlic", "quantity": "3-4 cloves", "category": "spices" },
-      { "name": "Cucumber", "quantity": "1 medium", "category": "vegetables" }
+      {
+        "name": "Tofu",
+        "quantity": "200g",
+        "category": "protein"
+      },
+      {
+        "name": "Spinach (Palak)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "3-4 cloves",
+        "category": "spices"
+      },
+      {
+        "name": "Cucumber",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-d-012",
     "name": "Tofu Butter Masala with Sauteed Beans",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Tofu", "quantity": "200g", "category": "protein" },
-      { "name": "French Beans", "quantity": "150g", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Cashew Paste", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Butter", "quantity": "1 tbsp", "category": "dairy" }
+      {
+        "name": "Tofu",
+        "quantity": "200g",
+        "category": "protein"
+      },
+      {
+        "name": "French Beans",
+        "quantity": "150g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cashew Paste",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Butter",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "ni-d-013",
     "name": "Paneer Tikka with Sauteed Vegetables",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Capsicum", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Yogurt", "quantity": "50g", "category": "dairy" },
-      { "name": "Tikka Masala", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "50g",
+        "category": "dairy"
+      },
+      {
+        "name": "Tikka Masala",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-d-014",
     "name": "Grilled Fish with Vegetable Stir Fry",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "300g", "category": "protein" },
-      { "name": "Mixed Vegetables", "quantity": "200g", "category": "vegetables" },
-      { "name": "Lemon", "quantity": "1", "category": "fruits" },
-      { "name": "Garlic", "quantity": "3-4 cloves", "category": "spices" },
-      { "name": "Olive Oil", "quantity": "1 tbsp", "category": "oils" }
+      {
+        "name": "Fish",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Mixed Vegetables",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "1",
+        "category": "fruits"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "3-4 cloves",
+        "category": "spices"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "ni-d-015",
     "name": "Chicken Tikka with Stir Fried Capsicum",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Capsicum", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Yogurt", "quantity": "50g", "category": "dairy" },
-      { "name": "Tikka Masala", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Lemon", "quantity": "1", "category": "fruits" }
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "50g",
+        "category": "dairy"
+      },
+      {
+        "name": "Tikka Masala",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "1",
+        "category": "fruits"
+      }
     ]
   },
   {
     "id": "ni-d-016",
     "name": "Grilled Prawns with Vegetable Stir Fry",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Prawns", "quantity": "250g", "category": "protein" },
-      { "name": "Mixed Vegetables", "quantity": "200g", "category": "vegetables" },
-      { "name": "Garlic", "quantity": "3-4 cloves", "category": "spices" },
-      { "name": "Lemon", "quantity": "1", "category": "fruits" },
-      { "name": "Olive Oil", "quantity": "1 tbsp", "category": "oils" }
+      {
+        "name": "Prawns",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Mixed Vegetables",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "3-4 cloves",
+        "category": "spices"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "1",
+        "category": "fruits"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "ni-d-017",
     "name": "Dal Makhani with Brown Rice",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Urad Dal", "quantity": "150g", "category": "lentils" },
-      { "name": "Rajma (Kidney Beans)", "quantity": "50g", "category": "lentils" },
-      { "name": "Brown Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Butter", "quantity": "2 tbsp", "category": "dairy" },
-      { "name": "Cream", "quantity": "2 tbsp", "category": "dairy" }
+      {
+        "name": "Urad Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Rajma (Kidney Beans)",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Brown Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Butter",
+        "quantity": "2 tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "Cream",
+        "quantity": "2 tbsp",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "ni-d-018",
     "name": "Paneer Bhurji with Cucumber Salad",
-    "cuisine": "north_indian",
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Capsicum", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Cucumber", "quantity": "1 medium", "category": "vegetables" }
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cucumber",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "si-l-011",
     "name": "Fish Coconut Curry with Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "300g", "category": "protein" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+      {
+        "name": "Fish",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "200ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-l-012",
     "name": "Chicken Tikka with Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Yogurt", "quantity": "50g", "category": "dairy" },
-      { "name": "Tikka Masala", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Lemon", "quantity": "1", "category": "fruits" }
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "50g",
+        "category": "dairy"
+      },
+      {
+        "name": "Tikka Masala",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "1",
+        "category": "fruits"
+      }
     ]
   },
   {
     "id": "si-d-011",
     "name": "Grilled Fish with Sauteed Broccoli",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "300g", "category": "protein" },
-      { "name": "Broccoli", "quantity": "200g", "category": "vegetables" },
-      { "name": "Garlic", "quantity": "3-4 cloves", "category": "spices" },
-      { "name": "Lemon", "quantity": "1", "category": "fruits" },
-      { "name": "Olive Oil", "quantity": "1 tbsp", "category": "oils" }
+      {
+        "name": "Fish",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Broccoli",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "3-4 cloves",
+        "category": "spices"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "1",
+        "category": "fruits"
+      },
+      {
+        "name": "Olive Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-d-012",
     "name": "Chicken Stew with Millet Rice",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["dinner"],
+    "slots": [
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Millet", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut Milk", "quantity": "150ml", "category": "dairy" },
-      { "name": "Potato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "50g", "category": "vegetables" }
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Millet",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "150ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Potato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "50g",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "si-b-011",
     "name": "Moong Sprouts Salad",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Moong Sprouts", "quantity": "200g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Lemon", "quantity": "1", "category": "fruits" },
-      { "name": "Coconut", "quantity": "1 tbsp grated", "category": "nuts" }
+      {
+        "name": "Moong Sprouts",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "1",
+        "category": "fruits"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "1 tbsp grated",
+        "category": "nuts"
+      }
     ]
   },
   {
     "id": "si-l-013",
     "name": "Chole with Millet Roti",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Chickpeas (Chole)", "quantity": "200g", "category": "lentils" },
-      { "name": "Millet Flour", "quantity": "150g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Chole Masala", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Chickpeas (Chole)",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Millet Flour",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Chole Masala",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-l-014",
     "name": "Lobia Curry with Roti",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch"],
+    "slots": [
+      "lunch"
+    ],
     "ingredients": [
-      { "name": "Lobia (Black-Eyed Peas)", "quantity": "200g", "category": "lentils" },
-      { "name": "Whole Wheat Roti", "quantity": "3", "category": "grains" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Lobia (Black-Eyed Peas)",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Whole Wheat Roti",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-b-012",
     "name": "Adai (Millet Lentil Crepe)",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Mixed Millets", "quantity": "100g", "category": "grains" },
-      { "name": "Toor Dal", "quantity": "50g", "category": "lentils" },
-      { "name": "Chana Dal", "quantity": "50g", "category": "lentils" },
-      { "name": "Red Chilli", "quantity": "3-4", "category": "spices" },
-      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+      {
+        "name": "Mixed Millets",
+        "quantity": "100g",
+        "category": "grains"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Chana Dal",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Red Chilli",
+        "quantity": "3-4",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-013",
     "name": "Kerala Puttu with Kadala Curry",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Rice Flour", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut", "quantity": "1/2 cup grated", "category": "nuts" },
-      { "name": "Black Chickpeas (Kadala)", "quantity": "150g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Coconut Milk", "quantity": "100ml", "category": "dairy" }
+      {
+        "name": "Rice Flour",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "1/2 cup grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Black Chickpeas (Kadala)",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "100ml",
+        "category": "dairy"
+      }
     ]
   },
   {
     "id": "si-b-014",
     "name": "Khara Bhath (Rava Bhath)",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Semolina (Rava)", "quantity": "200g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Cashews", "quantity": "10-12", "category": "nuts" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Semolina (Rava)",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cashews",
+        "quantity": "10-12",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-b-015",
     "name": "Masala Paniyaram",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Dosa Batter", "quantity": "250g", "category": "grains" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Carrot", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+      {
+        "name": "Dosa Batter",
+        "quantity": "250g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Carrot",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-016",
     "name": "Lemon Sevai (Lemon Idiyappam)",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Rice Sevai (Idiyappam)", "quantity": "200g", "category": "grains" },
-      { "name": "Lemon", "quantity": "2", "category": "fruits" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" }
+      {
+        "name": "Rice Sevai (Idiyappam)",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "2",
+        "category": "fruits"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      }
     ]
   },
   {
     "id": "si-b-017",
     "name": "Aval Upma (South Indian Poha)",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Flattened Rice (Aval)", "quantity": "200g", "category": "grains" },
-      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Flattened Rice (Aval)",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-b-018",
     "name": "Upma Kozhukattai",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Broken Rice", "quantity": "200g", "category": "grains" },
-      { "name": "Moong Dal", "quantity": "50g", "category": "lentils" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Broken Rice",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Moong Dal",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-b-019",
     "name": "Egg Kothu Parotta",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Parotta", "quantity": "3", "category": "grains" },
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Parotta",
+        "quantity": "3",
+        "category": "grains"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-b-020",
     "name": "Oats Mor Kali (Buttermilk Porridge)",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Oats", "quantity": "100g", "category": "grains" },
-      { "name": "Buttermilk", "quantity": "300ml", "category": "dairy" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" }
+      {
+        "name": "Oats",
+        "quantity": "100g",
+        "category": "grains"
+      },
+      {
+        "name": "Buttermilk",
+        "quantity": "300ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "si-b-021",
     "name": "Coconut Sevai (Thengai Idiyappam)",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Rice Sevai (Idiyappam)", "quantity": "200g", "category": "grains" },
-      { "name": "Coconut", "quantity": "1/2 cup grated", "category": "nuts" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Oil", "quantity": "1 tbsp", "category": "oils" }
+      {
+        "name": "Rice Sevai (Idiyappam)",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "1/2 cup grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-022",
     "name": "Egg Idiyappam",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Rice Flour Idiyappam", "quantity": "4", "category": "grains" },
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Rice Flour Idiyappam",
+        "quantity": "4",
+        "category": "grains"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-b-023",
     "name": "Egg Uttapam",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Dosa Batter", "quantity": "200ml", "category": "grains" },
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "1", "category": "vegetables" }
+      {
+        "name": "Dosa Batter",
+        "quantity": "200ml",
+        "category": "grains"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "1",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "si-b-024",
     "name": "Egg Pongal",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Rice", "quantity": "100g", "category": "grains" },
-      { "name": "Moong Dal", "quantity": "50g", "category": "lentils" },
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Black Pepper", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+      {
+        "name": "Rice",
+        "quantity": "100g",
+        "category": "grains"
+      },
+      {
+        "name": "Moong Dal",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "si-b-025",
     "name": "Egg Parotta",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "All Purpose Flour (Maida)", "quantity": "150g", "category": "grains" },
-      { "name": "Eggs", "quantity": "2", "category": "protein" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
+      {
+        "name": "All Purpose Flour (Maida)",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
     ]
   },
   {
     "id": "si-b-026",
     "name": "Chicken Adai",
-    "cuisine": "south_indian",
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["breakfast"],
+    "slots": [
+      "breakfast"
+    ],
     "ingredients": [
-      { "name": "Mixed Lentils", "quantity": "150g", "category": "lentils" },
-      { "name": "Rice", "quantity": "50g", "category": "grains" },
-      { "name": "Chicken Mince", "quantity": "100g", "category": "protein" },
-      { "name": "Red Chilli", "quantity": "3", "category": "spices" }
+      {
+        "name": "Mixed Lentils",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Rice",
+        "quantity": "50g",
+        "category": "grains"
+      },
+      {
+        "name": "Chicken Mince",
+        "quantity": "100g",
+        "category": "protein"
+      },
+      {
+        "name": "Red Chilli",
+        "quantity": "3",
+        "category": "spices"
+      }
     ]
   }
 ]

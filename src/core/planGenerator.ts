@@ -1,5 +1,6 @@
 // Plan generation — zero imports from adapters, WhatsApp, or AWS modules
-import type { Meal, DayPlan, WeeklyPlan, MealComponent, ComposedMeal, ComponentCategory } from './types';
+import type { Meal, DayPlan, WeeklyPlan, MealComponent, ComposedMeal, ComponentCategory, Rule, RuleEvaluationContext } from './types';
+import type { MealSelector } from './mealSelector';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const;
 type SlotName = 'breakfast' | 'lunch' | 'dinner';
@@ -105,7 +106,7 @@ function pickMealFromCursor(
     for (let i = 0; i < len; i++) {
       const meal = pool[(start + i) % len];
       if (
-        meal.cuisine === preferredCuisine &&
+        meal.cuisine.includes(preferredCuisine) &&
         !usedToday.has(meal.id) &&
         !recentSlotMealIds.has(meal.id) &&
         !hasKeyIngredientOverlap(meal, usedKeyIngredients)
@@ -162,8 +163,8 @@ function buildCuisineSchedule(): Record<number, Record<SlotName, 'north_indian' 
   for (let d = 0; d < 7; d++) {
     schedule[d] = {} as Record<SlotName, 'north_indian' | 'south_indian'>;
     for (let s = 0; s < SLOTS.length; s++) {
-      // Alternate based on (day + slot) parity for even distribution
-      schedule[d][SLOTS[s]] = (d + s) % 2 === 0 ? 'north_indian' : 'south_indian';
+      // "both" cuisine = NI + crossover items, so always use north_indian
+      schedule[d][SLOTS[s]] = 'north_indian';
     }
   }
   return schedule;
@@ -177,14 +178,58 @@ function getComponentIngredientNames(component: MealComponent): Set<string> {
 }
 
 /**
- * Check if two components share any ingredient name (case-insensitive).
+ * Protein groups — items within the same group are compatible,
+ * but mixing across groups in a single meal is undesirable
+ * (e.g. chicken + fish in the same meal).
+ */
+const PROTEIN_GROUPS: Record<string, string> = {
+  chicken: 'poultry',
+  'chicken mince': 'poultry',
+  fish: 'seafood',
+  prawns: 'seafood',
+  eggs: 'egg',
+};
+
+/**
+ * Extract the protein group(s) present in a component's ingredients.
+ */
+function getProteinGroups(component: MealComponent): Set<string> {
+  const groups = new Set<string>();
+  for (const ing of component.ingredients) {
+    const name = ing.name.toLowerCase();
+    for (const [keyword, group] of Object.entries(PROTEIN_GROUPS)) {
+      if (name.includes(keyword)) groups.add(group);
+    }
+  }
+  return groups;
+}
+
+/**
+ * Check if two components have conflicting proteins (different protein groups).
+ * Returns true if both have proteins but from different groups (e.g. chicken + fish).
+ */
+function hasProteinConflict(a: MealComponent, b: MealComponent): boolean {
+  const groupsA = getProteinGroups(a);
+  const groupsB = getProteinGroups(b);
+  // No conflict if either has no protein
+  if (groupsA.size === 0 || groupsB.size === 0) return false;
+  // Conflict if they have different protein groups
+  for (const g of groupsA) {
+    if (groupsB.has(g)) return false; // shared group = compatible
+  }
+  return true; // no shared group = conflict
+}
+
+/**
+ * Check if two components share any ingredient name (case-insensitive)
+ * or have conflicting proteins (e.g. chicken gravy + fish dry_veggie).
  */
 function hasIngredientOverlap(a: MealComponent, b: MealComponent): boolean {
   const namesA = getComponentIngredientNames(a);
   for (const name of getComponentIngredientNames(b)) {
     if (namesA.has(name)) return true;
   }
-  return false;
+  return hasProteinConflict(a, b);
 }
 
 /**
@@ -192,6 +237,41 @@ function hasIngredientOverlap(a: MealComponent, b: MealComponent): boolean {
  */
 function pickRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/**
+ * Filter components for cuisine coherence with a chosen base.
+ *
+ * When the base is "pure" (tagged with only one cuisine, e.g. Missi Roti = ["north_indian"]),
+ * we prefer components that are also pure same-cuisine. This prevents pairing
+ * Missi Roti with Sambar (crossover) — even though Sambar is tagged north_indian too,
+ * it's culinarily a south Indian dish.
+ *
+ * When the base is crossover (tagged both), any item matching the day's cuisine is fine.
+ *
+ * Falls back to the full pool if strict filtering leaves nothing.
+ */
+function filterForCuisineCoherence(
+  candidates: MealComponent[],
+  base: MealComponent,
+  dayCuisine: 'north_indian' | 'south_indian',
+): MealComponent[] {
+  // If the base is crossover (tagged both cuisines), no extra filtering needed
+  if (base.cuisine.length > 1) return candidates;
+
+  const baseCuisine = base.cuisine[0];
+
+  if (baseCuisine === 'north_indian') {
+    // Pure NI base (e.g. Roti): prefer pure NI items only.
+    // Crossover items like Sambar are culinarily SI, so exclude them.
+    const pureNI = candidates.filter(c => c.cuisine.length === 1 && c.cuisine[0] === 'north_indian');
+    return pureNI.length > 0 ? pureNI : candidates;
+  }
+
+  // Pure SI base (e.g. Ragi Mudde): allow pure SI + crossover items.
+  // Crossover items like Sambar, Egg Curry are culinarily SI-compatible.
+  const siCompatible = candidates.filter(c => c.cuisine.includes('south_indian'));
+  return siCompatible.length > 0 ? siCompatible : candidates;
 }
 
 /**
@@ -243,33 +323,49 @@ export interface ComposeMealConstraints {
  *  1. Not in recentIds AND not in sameDayIds AND no ingredient overlap with `overlapRef`
  *  2. Relax ingredient overlap
  *  3. Relax recentIds (sliding window)
- *  4. Relax sameDayIds (last resort)
+ *  4. Relax sameDayIds (last resort — only if pool has a single item)
+ *
+ * Same-day dedup is treated as a near-hard constraint: it is only relaxed
+ * when the candidate pool literally has one item (i.e. no alternative exists).
  */
 function pickComponent(
   candidates: MealComponent[],
   recentIds: Set<string>,
   sameDayIds: Set<string>,
   overlapRef: MealComponent | null,
+  proteinRef: MealComponent | null = null,
 ): MealComponent {
   const shuffled = fisherYatesShuffle(candidates);
 
-  // Pass 1: all constraints
+  // Pass 1: all constraints (including protein conflict)
   for (const c of shuffled) {
     if (
       !recentIds.has(c.id) &&
       !sameDayIds.has(c.id) &&
-      (!overlapRef || !hasIngredientOverlap(c, overlapRef))
+      (!overlapRef || !hasIngredientOverlap(c, overlapRef)) &&
+      (!proteinRef || !hasProteinConflict(c, proteinRef))
     ) return c;
   }
-  // Pass 2: relax ingredient overlap
+  // Pass 2: relax ingredient overlap, keep protein conflict + same-day dedup
   for (const c of shuffled) {
-    if (!recentIds.has(c.id) && !sameDayIds.has(c.id)) return c;
+    if (
+      !recentIds.has(c.id) &&
+      !sameDayIds.has(c.id) &&
+      (!proteinRef || !hasProteinConflict(c, proteinRef))
+    ) return c;
   }
-  // Pass 3: relax sliding window
+  // Pass 3: relax sliding window, keep protein conflict + same-day dedup
+  for (const c of shuffled) {
+    if (
+      !sameDayIds.has(c.id) &&
+      (!proteinRef || !hasProteinConflict(c, proteinRef))
+    ) return c;
+  }
+  // Pass 4: relax protein conflict, keep same-day dedup
   for (const c of shuffled) {
     if (!sameDayIds.has(c.id)) return c;
   }
-  // Pass 4: last resort
+  // Pass 5: last resort — only reached when every candidate was used same day
   return shuffled[0];
 }
 
@@ -287,10 +383,13 @@ export function composeMeal(
   cuisine: 'north_indian' | 'south_indian',
   constraints: ComposeMealConstraints,
   diet?: string,
+  mealSelector?: MealSelector,
+  constraintRules?: Rule[],
+  constraintContext?: RuleEvaluationContext,
 ): ComposedMeal {
   // Filter by slot and cuisine
   const pool = components.filter(
-    (c) => c.slots.includes(slot) && c.cuisine === cuisine,
+    (c) => c.slots.includes(slot) && c.cuisine.includes(cuisine),
   );
 
   // Group by category
@@ -306,7 +405,9 @@ export function composeMeal(
 
   // Apply diet preference to gravy and dry_veggie only.
   // Bases and sides are inherently veg, so diet filtering doesn't apply to them.
-  if (diet && diet !== 'both') {
+  // Non-veg users keep the full pool (veg + non_veg) for variety — this matches
+  // the diet-fallback rule behavior in MealSelector.
+  if (diet && diet !== 'both' && diet !== 'non_veg') {
     for (const cat of ['gravy', 'dry_veggie'] as ComponentCategory[]) {
       const filtered = byCategory[cat].filter((c) => c.diet === diet);
       if (filtered.length > 0) {
@@ -325,6 +426,57 @@ export function composeMeal(
     }
   }
 
+  // When MealSelector is provided, use rule-based constraint evaluation
+  if (mealSelector && constraintRules && constraintContext) {
+    // 1. Pick base — apply constraints then pick first
+    const constrainedBases = mealSelector.applyConstraints(
+      fisherYatesShuffle(byCategory.base), constraintRules, constraintContext,
+    );
+    const base = constrainedBases[0];
+
+    // Apply cuisine coherence: filter remaining categories based on base's cuisine
+    const coherentGravies = filterForCuisineCoherence(byCategory.gravy, base, cuisine);
+    const coherentDryVeggies = filterForCuisineCoherence(byCategory.dry_veggie, base, cuisine);
+    const coherentSides = filterForCuisineCoherence(byCategory.side, base, cuisine);
+
+    // 2. Pick gravy — apply constraints + ingredient overlap with base
+    const constrainedGravies = mealSelector.applyIngredientOverlap(
+      mealSelector.applyConstraints(
+        fisherYatesShuffle(coherentGravies), constraintRules, constraintContext,
+      ),
+      constraintRules.find((r) => r.conditions.constraintType === 'ingredient_overlap') ?? constraintRules[0],
+      base,
+    );
+    const gravy = constrainedGravies[0];
+
+    // 3. Pick dry_veggie — apply constraints + ingredient overlap with gravy + protein conflict with gravy
+    const constrainedDryVeggies = mealSelector.applyIngredientOverlap(
+      mealSelector.applyConstraints(
+        fisherYatesShuffle(coherentDryVeggies), constraintRules, constraintContext,
+      ),
+      constraintRules.find((r) => r.conditions.constraintType === 'ingredient_overlap') ?? constraintRules[0],
+      gravy,
+    );
+    // Filter out protein conflicts with the chosen gravy
+    const proteinSafe = constrainedDryVeggies.filter(c => !hasProteinConflict(c, gravy));
+    const dryVeggie = (proteinSafe.length > 0 ? proteinSafe : constrainedDryVeggies)[0];
+
+    // 4. Pick side — apply constraints only
+    const constrainedSides = mealSelector.applyConstraints(
+      fisherYatesShuffle(coherentSides), constraintRules, constraintContext,
+    );
+    const side = constrainedSides[0];
+
+    // 5. Assemble ComposedMeal
+    const mealComponents = [base, gravy, dryVeggie, side];
+    return {
+      components: mealComponents,
+      name: mealComponents.map((c) => c.name).join(', '),
+      ingredients: mealComponents.flatMap((c) => c.ingredients),
+    };
+  }
+
+  // Existing inline logic when MealSelector is not provided
   // 1. Pick base (no ingredient-overlap ref)
   const base = pickComponent(
     byCategory.base,
@@ -333,25 +485,31 @@ export function composeMeal(
     null,
   );
 
+  // Apply cuisine coherence: filter remaining categories based on base's cuisine
+  const coherentGravies = filterForCuisineCoherence(byCategory.gravy, base, cuisine);
+  const coherentDryVeggies = filterForCuisineCoherence(byCategory.dry_veggie, base, cuisine);
+  const coherentSides = filterForCuisineCoherence(byCategory.side, base, cuisine);
+
   // 2. Pick gravy (avoid ingredient overlap with base)
   const gravy = pickComponent(
-    byCategory.gravy,
+    coherentGravies,
     constraints.gravy.recentIds,
     constraints.gravy.sameDayIds,
     base,
   );
 
-  // 3. Pick dry_veggie (avoid ingredient overlap with gravy)
+  // 3. Pick dry_veggie (avoid ingredient overlap with gravy + protein conflict with gravy)
   const dryVeggie = pickComponent(
-    byCategory.dry_veggie,
+    coherentDryVeggies,
     constraints.dry_veggie.recentIds,
     constraints.dry_veggie.sameDayIds,
     gravy,
+    gravy, // protein conflict reference
   );
 
   // 4. Pick side (no ingredient-overlap ref)
   const side = pickComponent(
-    byCategory.side,
+    coherentSides,
     constraints.side.recentIds,
     constraints.side.sameDayIds,
     null,
@@ -363,6 +521,37 @@ export function composeMeal(
     components: mealComponents,
     name: mealComponents.map((c) => c.name).join(', '),
     ingredients: mealComponents.flatMap((c) => c.ingredients),
+  };
+}
+
+/**
+ * Build a RuleEvaluationContext for use with MealSelector constraint methods.
+ */
+function buildEvalContext(
+  dayIndex: number,
+  slot: 'breakfast' | 'lunch' | 'dinner',
+  preferences: { cuisine: string; diet: string; style: string },
+  history: Record<'lunch' | 'dinner', Record<ComponentCategory, string[]>>,
+  sameDaySelections: Record<string, string[]>,
+): RuleEvaluationContext {
+  // Flatten history into a single Record<string, string[]> keyed by category
+  const flatHistory: Record<string, string[]> = {};
+  const slotHistory = slot === 'lunch' ? history.lunch : history.dinner;
+  for (const [cat, ids] of Object.entries(slotHistory)) {
+    flatHistory[cat] = [...ids];
+  }
+
+  return {
+    userPreferences: {
+      cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
+      diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+      style: preferences.style as 'health' | 'regular',
+    },
+    excludedDishIds: [],
+    slot,
+    dayIndex,
+    history: flatHistory,
+    sameDaySelections,
   };
 }
 
@@ -380,6 +569,8 @@ export function generateWeeklyPlan(
   meals: Meal[],
   components: MealComponent[],
   preferences: { cuisine: string; diet: string; style: string },
+  mealSelector?: MealSelector,
+  rules?: Rule[],
 ): WeeklyPlan {
   const isBothCuisine = preferences.cuisine === 'both';
   const isBothDiet = preferences.diet === 'both';
@@ -408,6 +599,14 @@ export function generateWeeklyPlan(
   const nonVegCursor: Record<SlotName, number> = { breakfast: 0, lunch: 0, dinner: 0 };
 
   const cuisineSchedule = isBothCuisine ? buildCuisineSchedule() : null;
+
+  // When mealSelector is provided, load rules synchronously from the schedule
+  // (rules are pre-loaded by the caller; we use getCuisineForDay for cuisine assignment)
+  const useMealSelector = mealSelector != null;
+
+  // Placeholder for constraint rules — populated lazily on first use
+  // These are the limit/constrain rules used by MealSelector for composeMeal delegation
+  let allConstraintRules: Rule[] = useMealSelector && rules ? rules : [];
 
   // Track recent meal ids per slot using a sliding 3-day window (for breakfast)
   const recentSlotHistory: Record<SlotName, string[]> = {
@@ -477,9 +676,11 @@ export function generateWeeklyPlan(
     }
 
     // --- Lunch (composed from components) ---
-    const lunchCuisine: 'north_indian' | 'south_indian' = cuisineSchedule
-      ? cuisineSchedule[d]['lunch']
-      : (preferences.cuisine as 'north_indian' | 'south_indian');
+    const lunchCuisine: 'north_indian' | 'south_indian' = useMealSelector
+      ? mealSelector!.getCuisineForDay(d, allConstraintRules, buildEvalContext(d, 'lunch', preferences, history, {}))
+      : cuisineSchedule
+        ? cuisineSchedule[d]['lunch']
+        : (preferences.cuisine as 'north_indian' | 'south_indian');
 
     // Build lunch constraints — no same-day IDs yet (lunch is first)
     const lunchConstraints: ComposeMealConstraints = {
@@ -489,7 +690,15 @@ export function generateWeeklyPlan(
       side:       { recentIds: new Set(history.lunch.side),       sameDayIds: new Set() },
     };
 
-    const lunch = composeMeal(components, 'lunch', lunchCuisine, lunchConstraints, preferences.diet);
+    const lunchEvalContext = useMealSelector
+      ? buildEvalContext(d, 'lunch', preferences, history, {})
+      : undefined;
+    const lunch = composeMeal(
+      components, 'lunch', lunchCuisine, lunchConstraints, preferences.diet,
+      useMealSelector ? mealSelector : undefined,
+      useMealSelector ? allConstraintRules : undefined,
+      lunchEvalContext,
+    );
 
     // Collect lunch component IDs for same-day dedup
     const lunchIds: Record<ComponentCategory, string | undefined> = {
@@ -500,19 +709,39 @@ export function generateWeeklyPlan(
     }
 
     // --- Dinner (composed from components) ---
-    const dinnerCuisine: 'north_indian' | 'south_indian' = cuisineSchedule
-      ? cuisineSchedule[d]['dinner']
-      : (preferences.cuisine as 'north_indian' | 'south_indian');
+    const dinnerCuisine: 'north_indian' | 'south_indian' = useMealSelector
+      ? mealSelector!.getCuisineForDay(d, allConstraintRules, buildEvalContext(d, 'dinner', preferences, history, {}))
+      : cuisineSchedule
+        ? cuisineSchedule[d]['dinner']
+        : (preferences.cuisine as 'north_indian' | 'south_indian');
 
-    // Build dinner constraints — same-day IDs come from lunch
+    // Build dinner constraints — same-day dedup for base, gravy, and dry_veggie
+    // Sides (small pool) are allowed to repeat same day
     const dinnerConstraints: ComposeMealConstraints = {
-      base:       { recentIds: new Set(history.dinner.base),       sameDayIds: new Set(lunchIds.base       ? [lunchIds.base]       : []) },
+      base:       { recentIds: new Set(history.dinner.base),       sameDayIds: new Set(lunchIds.base        ? [lunchIds.base]       : []) },
       gravy:      { recentIds: new Set(history.dinner.gravy),      sameDayIds: new Set(lunchIds.gravy      ? [lunchIds.gravy]      : []) },
       dry_veggie: { recentIds: new Set(history.dinner.dry_veggie), sameDayIds: new Set(lunchIds.dry_veggie ? [lunchIds.dry_veggie] : []) },
-      side:       { recentIds: new Set(history.dinner.side),       sameDayIds: new Set(lunchIds.side       ? [lunchIds.side]       : []) },
+      side:       { recentIds: new Set(history.dinner.side),       sameDayIds: new Set() },
     };
 
-    const dinner = composeMeal(components, 'dinner', dinnerCuisine, dinnerConstraints, preferences.diet);
+    // Build same-day selections from lunch for MealSelector context
+    // Base, gravy, and dry_veggie are deduped — sides may repeat same day
+    const sameDaySelections: Record<string, string[]> = {};
+    for (const c of lunch.components) {
+      if (c.category !== 'base' && c.category !== 'gravy' && c.category !== 'dry_veggie') continue;
+      if (!sameDaySelections[c.category]) sameDaySelections[c.category] = [];
+      sameDaySelections[c.category].push(c.id);
+    }
+
+    const dinnerEvalContext = useMealSelector
+      ? buildEvalContext(d, 'dinner', preferences, history, sameDaySelections)
+      : undefined;
+    const dinner = composeMeal(
+      components, 'dinner', dinnerCuisine, dinnerConstraints, preferences.diet,
+      useMealSelector ? mealSelector : undefined,
+      useMealSelector ? allConstraintRules : undefined,
+      dinnerEvalContext,
+    );
 
     plan.push({ day: DAYS[d], breakfast, lunch, dinner });
 

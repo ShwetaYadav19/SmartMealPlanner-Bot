@@ -1,0 +1,136 @@
+[
+  {
+    "id": "cuisine-filter",
+    "name": "Cuisine Preference Filter",
+    "description": "Only include meals and components that match the user's cuisine preference. When the user likes both cuisines, all items are included.",
+    "scope": "all_slots",
+    "action": "filter",
+    "conditions": {
+      "preferenceField": "cuisine"
+    }
+  },
+  {
+    "id": "diet-filter",
+    "name": "Diet Preference Filter",
+    "description": "Only include meals and components that match the user's diet preference. When the user likes both diets, all items are included.",
+    "scope": "all_slots",
+    "action": "filter",
+    "conditions": {
+      "preferenceField": "diet"
+    }
+  },
+  {
+    "id": "diet-fallback",
+    "name": "Diet Fallback for Non-Veg Users",
+    "description": "Non-vegetarian users also see all vegetarian dishes to give them more variety.",
+    "scope": "all_slots",
+    "action": "filter",
+    "conditions": {
+      "preferenceField": "diet",
+      "preferenceValues": [
+        "non_veg"
+      ]
+    },
+    "parameters": {
+      "includeFallback": "veg"
+    }
+  },
+  {
+    "id": "style-filter",
+    "name": "Style Preference Filter",
+    "description": "Only include meals and components that match the user's style preference (health or regular).",
+    "scope": "all_slots",
+    "action": "filter",
+    "conditions": {
+      "preferenceField": "style"
+    }
+  },
+  {
+    "id": "style-fallback",
+    "name": "Style Fallback for Health Users",
+    "description": "When a user prefers healthy meals but a food category has fewer than 2 healthy options, regular options are added with a '(Regular)' label so the user still has enough variety.",
+    "scope": "lunch_component",
+    "action": "filter",
+    "conditions": {
+      "preferenceField": "style",
+      "preferenceValues": [
+        "health"
+      ]
+    },
+    "parameters": {
+      "threshold": 2,
+      "fallbackStyle": "regular",
+      "labelSuffix": "(Regular)"
+    }
+  },
+  {
+    "id": "excluded-dishes",
+    "name": "Excluded Dishes Filter",
+    "description": "Dishes that the user has previously removed are excluded from all future selections.",
+    "scope": "all_slots",
+    "action": "filter",
+    "conditions": {}
+  },
+  {
+    "id": "sliding-window",
+    "name": "Variety Sliding Window",
+    "description": "Prevents the same dish or component from repeating within a 3-day window, so the weekly plan has good variety. If all options have been used recently, the constraint is relaxed.",
+    "scope": "all_slots",
+    "action": "limit",
+    "conditions": {
+      "windowSize": 3
+    }
+  },
+  {
+    "id": "same-day-dedup",
+    "name": "Same-Day Deduplication",
+    "description": "The same gravy or dry_veggie component should not appear in both lunch and dinner on the same day. Bases and sides are exempt since they are staples with small pools. If no alternatives exist, the constraint is relaxed.",
+    "scope": "lunch_component",
+    "action": "constrain",
+    "conditions": {
+      "constraintType": "same_day_dedup"
+    }
+  },
+  {
+    "id": "ingredient-overlap",
+    "name": "Ingredient Overlap Avoidance",
+    "description": "Two components in the same meal should not share key ingredients like chicken, egg, fish, paneer, cauliflower, spinach, or okra. This ensures each meal has ingredient diversity.",
+    "scope": "lunch_component",
+    "action": "constrain",
+    "conditions": {
+      "constraintType": "ingredient_overlap",
+      "keyIngredients": [
+        "chicken",
+        "egg",
+        "fish",
+        "paneer",
+        "cauliflower",
+        "spinach",
+        "okra",
+        "lauki",
+        "ridge_gourd",
+        "brinjal",
+        "cabbage",
+        "drumstick",
+        "banana_flower",
+        "parwal",
+        "tinda",
+        "ash_gourd",
+        "raw_banana"
+      ]
+    }
+  },
+  {
+    "id": "cuisine-alternation",
+    "name": "Cuisine Alternation",
+    "description": "When the user likes both cuisines, all days use north_indian filtering which includes pure NI items and dual-tagged crossover items, excluding south_indian-only items.",
+    "scope": "all_slots",
+    "action": "constrain",
+    "conditions": {
+      "constraintType": "cuisine_alternation"
+    },
+    "parameters": {
+      "pattern": "alternate_by_day"
+    }
+  }
+]

@@ -5,6 +5,7 @@ import * as querystring from 'querystring';
 import { DynamoDBUserStateRepository } from '../adapters/dynamodbUserStateRepository';
 import { JsonMealRepository } from '../adapters/jsonMealRepository';
 import { JsonMealComponentRepository } from '../adapters/jsonMealComponentRepository';
+import { JsonRulesRepository } from '../adapters/jsonRulesRepository';
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
 import { mapWhatsAppToIntent } from '../intentMapper';
 import { processIntent } from '../core/botEngine';
@@ -105,6 +106,7 @@ export async function webhookHandler(
     const userStateRepo = new DynamoDBUserStateRepository(config.dynamodbTable);
     const mealRepo = new JsonMealRepository();
     const mealComponentRepo = new JsonMealComponentRepository();
+    const rulesRepo = new JsonRulesRepository();
     const messagingProvider = new TwilioMessagingProvider(
       config.twilioAccountSid,
       config.twilioAuthToken,
@@ -124,7 +126,7 @@ export async function webhookHandler(
     const intent = mapWhatsAppToIntent(resolvedPayload, body, conversationState);
 
     // 9. Process intent through BotEngine
-    const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, phoneNumber);
+    const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, phoneNumber, rulesRepo);
 
     // 10. Format structured response for WhatsApp
     const formatted = formatBotResponse(result.response);

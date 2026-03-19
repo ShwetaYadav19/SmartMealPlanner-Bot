@@ -1,0 +1,36 @@
+# Tasks — Cuisine Array Crossover Bugfix
+
+- [x] 1. Update type definitions
+  - [x] 1.1 Change `cuisine` field on `Meal` interface in `src/core/types.ts` from `'north_indian' | 'south_indian'` to `('north_indian' | 'south_indian')[]`
+  - [x] 1.2 Change `cuisine` field on `MealComponent` interface in `src/core/types.ts` from `'north_indian' | 'south_indian'` to `('north_indian' | 'south_indian')[]`
+- [x] 2. Update data files
+  - [x] 2.1 Convert `cuisine` values in `data/meals.json` from strings to arrays; whitelist items (Idli, Dosa, Rava Dosa, Masala Dosa, Uttapam, Sambar, Sambhar, Idli with Sambar, Medu Vada with Sambar, Ragi Dosa, Egg Dosa, Egg Appam, Steamed Rice, Jeera Rice, Lemon Rice, Chapati, Rasam, Egg Curry, Chicken Pepper Fry, Egg Podimas, Fish Fry, Prawn Fry, Curd, Pickle, Papad, Onion Raita, Cucumber Salad) get `["south_indian", "north_indian"]`, others get single-element arrays
+  - [x] 2.2 Convert `cuisine` values in `data/meal-components.json` from strings to arrays using the same whitelist logic as 2.1
+  - [x] 2.3 Remove the `south-indian-crossover` rule from `data/meal-selection-rules.json`
+- [x] 3. Update MealSelector
+  - [x] 3.1 Remove `DEFAULT_SI_WHITELIST` constant, `matchesWhitelist()` function, and `applySouthIndianCrossover()` method from `src/core/mealSelector.ts`
+  - [x] 3.2 Remove all `south-indian-crossover` case branches from `applyFilterRule`, `applyMealFilters`, and `applyComponentFilters` in `src/core/mealSelector.ts`
+  - [x] 3.3 Update `applyCuisineFilter` in `src/core/mealSelector.ts` to use `item.cuisine.includes(pref)` instead of `item.cuisine === pref`
+- [x] 4. Update repository adapters
+  - [x] 4.1 Update `getMeals` in `src/adapters/jsonMealRepository.ts` to use `!meal.cuisine.includes(filter.cuisine)` instead of `meal.cuisine !== filter.cuisine`
+  - [x] 4.2 Update `getComponents` in `src/adapters/jsonMealComponentRepository.ts` to use `!component.cuisine.includes(filter.cuisine)` instead of `component.cuisine !== filter.cuisine`
+- [x] 5. Update schema and sufficiency tests
+  - [x] 5.1 Update `tst/adapters/mealDataSchema.test.ts` to validate `cuisine` as an array of valid cuisine strings instead of a single string
+  - [x] 5.2 Update `tst/adapters/mealDataSufficiency.test.ts` to use `m.cuisine.includes(cuisine)` and `c.cuisine.includes(cuisine)` instead of `===`
+- [x] 6. Update MealSelector property tests
+  - [x] 6.1 Update `arbMealComponent` and `arbMeal` arbitraries in `tst/core/mealSelector.property.test.ts` to generate `cuisine` as arrays
+  - [x] 6.2 Remove `southIndianCrossoverRule` constant and Property 16 tests from `tst/core/mealSelector.property.test.ts`
+  - [x] 6.3 Update cuisine assertions in Property 5 tests from `item.cuisine === pref` to `item.cuisine.includes(pref)` in `tst/core/mealSelector.property.test.ts`
+- [x] 7. Update MealSelector integration tests
+  - [x] 7.1 Remove south-indian-crossover whitelist tests from `tst/core/mealSelector.integration.test.ts`
+  - [x] 7.2 Update rule count assertion from 11 to 10 in `tst/core/mealSelector.integration.test.ts`
+  - [x] 7.3 Update cuisine assertions from `meal.cuisine === 'north_indian'` to `meal.cuisine.includes('north_indian')` in `tst/core/mealSelector.integration.test.ts`
+- [x] 8. Update backward compatibility tests
+  - [x] 8.1 Remove south-indian-crossover references and whitelist tests from `tst/core/backwardCompat.property.test.ts`
+  - [x] 8.2 Update rule count assertion from 11 to 10 in `tst/core/backwardCompat.property.test.ts`
+  - [x] 8.3 Update `south-indian-crossover` rule ID expectation to be removed from the expected IDs list in `tst/core/backwardCompat.property.test.ts`
+- [x] 9. Write new property-based tests for cuisine array filtering
+  - [x] 9.1 [PBT: Property 1] Write property test: for any item with a cuisine array and any single-cuisine preference, `applyCuisineFilter` includes the item if and only if the array contains the preference value
+  - [x] 9.2 [PBT: Property 2] Write property test: for any pool filtered by diet, style, excluded-dishes, sliding-window, same-day-dedup, or ingredient-overlap rules, the result is identical to the original code's result (non-cuisine rules unchanged)
+- [x] 10. Run all tests and verify
+  - [x] 10.1 Run `vitest --run` and verify all tests pass with no regressions

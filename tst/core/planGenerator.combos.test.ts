@@ -118,8 +118,15 @@ describe('Plan generation: all 18 cuisine × diet × style combos', () => {
           const plan = generateWeeklyPlan(meals, components, { cuisine, diet, style });
 
           for (const day of plan) {
-            const lunchIds = day.lunch.components.map((c) => c.id);
-            const dinnerIds = day.dinner.components.map((c) => c.id);
+            // Same-day dedup applies to base, gravy, and dry_veggie
+            // Sides (small pool) may repeat
+            const dedupCategories = ['base', 'gravy', 'dry_veggie'];
+            const lunchIds = day.lunch.components
+              .filter((c) => dedupCategories.includes(c.category))
+              .map((c) => c.id);
+            const dinnerIds = day.dinner.components
+              .filter((c) => dedupCategories.includes(c.category))
+              .map((c) => c.id);
             const overlap = lunchIds.filter((id) => dinnerIds.includes(id));
             expect(overlap).toEqual([]);
           }

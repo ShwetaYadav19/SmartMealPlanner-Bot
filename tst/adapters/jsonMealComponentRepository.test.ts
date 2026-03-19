@@ -96,11 +96,15 @@ describe('JsonMealComponentRepository', () => {
     components.forEach((c) => expect(c.cuisine).toBe('north_indian'));
   });
 
-  it('returns all cuisines when cuisine filter is "both"', async () => {
+  it('returns only north_indian-tagged items when cuisine filter is "both"', async () => {
     const components = await repo.getComponents({ cuisine: 'both' });
-    const cuisines = new Set(components.map((c) => c.cuisine));
-    expect(cuisines.has('north_indian')).toBe(true);
-    expect(cuisines.has('south_indian')).toBe(true);
+    expect(components.length).toBeGreaterThan(0);
+    for (const c of components) {
+      expect(c.cuisine).toContain('north_indian');
+    }
+    // Should not include south_indian-only items
+    const southOnly = components.filter((c) => !c.cuisine.includes('north_indian'));
+    expect(southOnly.length).toBe(0);
   });
 
   it('filters by diet', async () => {
