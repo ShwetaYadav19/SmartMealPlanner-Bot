@@ -619,6 +619,38 @@ describe('Property 13: Adjacent components avoid key ingredient overlap', () => 
     const selector = makeSelector();
     const keyIngredients = ingredientOverlapRule.conditions.keyIngredients!;
 
+    // Protein groups map mirrors MealSelector.PROTEIN_GROUPS for conflict checking
+    const PROTEIN_GROUPS: Record<string, string> = {
+      chicken: 'poultry',
+      'chicken mince': 'poultry',
+      fish: 'seafood',
+      prawns: 'seafood',
+      eggs: 'egg',
+      paneer: 'dairy_protein',
+      tofu: 'plant_protein',
+    };
+
+    function getProteinGroups(component: MealComponent): Set<string> {
+      const groups = new Set<string>();
+      for (const ing of component.ingredients) {
+        const name = ing.name.toLowerCase();
+        for (const [keyword, group] of Object.entries(PROTEIN_GROUPS)) {
+          if (name.includes(keyword)) groups.add(group);
+        }
+      }
+      return groups;
+    }
+
+    function hasProteinConflict(a: MealComponent, b: MealComponent): boolean {
+      const groupsA = getProteinGroups(a);
+      const groupsB = getProteinGroups(b);
+      if (groupsA.size === 0 || groupsB.size === 0) return false;
+      for (const g of groupsA) {
+        if (groupsB.has(g)) return false;
+      }
+      return true;
+    }
+
     fc.assert(
       fc.property(
         fc.array(arbMealComponentWithIngredients(), { minLength: 2, maxLength: 10 }),
@@ -637,12 +669,12 @@ describe('Property 13: Adjacent components avoid key ingredient overlap', () => 
             }
           }
 
-          if (refKeys.size === 0) {
-            // No key ingredients in ref — pool returned as-is
-            expect(result.length).toBe(pool.length);
-          } else {
-            // Check if strict filtering would leave items
-            const strictFiltered = pool.filter((item) => {
+          // Simulate the same filtering logic as applyIngredientOverlap
+          const strictFiltered = pool.filter((item) => {
+            // Check protein conflict
+            if (hasProteinConflict(item, refComponent)) return false;
+            // Check key ingredient overlap
+            if (refKeys.size > 0) {
               for (const ing of item.ingredients) {
                 const name = ing.name.toLowerCase();
                 for (const kw of keyIngredients) {
@@ -651,12 +683,17 @@ describe('Property 13: Adjacent components avoid key ingredient overlap', () => 
                   }
                 }
               }
-              return true;
-            });
+            }
+            return true;
+          });
 
-            if (strictFiltered.length > 0) {
-              // Strict mode: no overlapping key ingredients
-              for (const item of result) {
+          if (strictFiltered.length > 0) {
+            // Strict mode: no overlapping key ingredients and no protein conflicts
+            for (const item of result) {
+              // No protein conflict with reference
+              expect(hasProteinConflict(item, refComponent)).toBe(false);
+              // No key ingredient overlap
+              if (refKeys.size > 0) {
                 const itemKeys = new Set<string>();
                 for (const ing of item.ingredients) {
                   const name = ing.name.toLowerCase();
@@ -669,10 +706,10 @@ describe('Property 13: Adjacent components avoid key ingredient overlap', () => 
                 const overlap = [...itemKeys].some((k) => refKeys.has(k));
                 expect(overlap).toBe(false);
               }
-            } else {
-              // Relaxation: full pool returned
-              expect(result.length).toBe(pool.length);
             }
+          } else {
+            // Relaxation: full pool returned
+            expect(result.length).toBe(pool.length);
           }
         },
       ),

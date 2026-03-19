@@ -188,7 +188,28 @@ const PROTEIN_GROUPS: Record<string, string> = {
   fish: 'seafood',
   prawns: 'seafood',
   eggs: 'egg',
+  paneer: 'dairy_protein',
+  tofu: 'plant_protein',
 };
+
+/**
+ * Keywords that identify a component as a protein dish.
+ */
+const PROTEIN_KEYWORDS: string[] = ['chicken', 'chicken mince', 'fish', 'prawns', 'eggs', 'paneer', 'tofu'];
+
+/**
+ * Check if a component is a protein dish by testing whether any of its
+ * ingredient names contain a protein keyword (case-insensitive).
+ */
+export function isProteinDish(component: MealComponent): boolean {
+  for (const ing of component.ingredients) {
+    const name = ing.name.toLowerCase();
+    for (const keyword of PROTEIN_KEYWORDS) {
+      if (name.includes(keyword)) return true;
+    }
+  }
+  return false;
+}
 
 /**
  * Extract the protein group(s) present in a component's ingredients.
@@ -321,12 +342,18 @@ export interface ComposeMealConstraints {
  *
  * Relaxation order:
  *  1. Not in recentIds AND not in sameDayIds AND no ingredient overlap with `overlapRef`
+ *     AND no dual-protein pairing AND no cross-group protein conflict
  *  2. Relax ingredient overlap
  *  3. Relax recentIds (sliding window)
- *  4. Relax sameDayIds (last resort — only if pool has a single item)
+ *  4. Relax dual-protein + cross-group protein constraints (graceful fallback)
+ *  5. Relax sameDayIds (last resort — only if pool has a single item)
  *
  * Same-day dedup is treated as a near-hard constraint: it is only relaxed
  * when the candidate pool literally has one item (i.e. no alternative exists).
+ *
+ * @param dualProteinRef - When non-null and is a protein dish, candidates that
+ *   are also protein dishes are skipped in Passes 1–3 to prevent dual-protein
+ *   meals. Relaxed in Pass 4+ so composition never fails.
  */
 function pickComponent(
   candidates: MealComponent[],
@@ -334,34 +361,39 @@ function pickComponent(
   sameDayIds: Set<string>,
   overlapRef: MealComponent | null,
   proteinRef: MealComponent | null = null,
+  dualProteinRef: MealComponent | null = null,
 ): MealComponent {
   const shuffled = fisherYatesShuffle(candidates);
+  const skipProtein = dualProteinRef !== null && isProteinDish(dualProteinRef);
 
-  // Pass 1: all constraints (including protein conflict)
+  // Pass 1: all constraints (including dual-protein prevention + cross-group protein conflict)
   for (const c of shuffled) {
     if (
       !recentIds.has(c.id) &&
       !sameDayIds.has(c.id) &&
       (!overlapRef || !hasIngredientOverlap(c, overlapRef)) &&
-      (!proteinRef || !hasProteinConflict(c, proteinRef))
+      (!proteinRef || !hasProteinConflict(c, proteinRef)) &&
+      (!skipProtein || !isProteinDish(c))
     ) return c;
   }
-  // Pass 2: relax ingredient overlap, keep protein conflict + same-day dedup
+  // Pass 2: relax ingredient overlap, keep dual-protein + cross-group + same-day dedup
   for (const c of shuffled) {
     if (
       !recentIds.has(c.id) &&
       !sameDayIds.has(c.id) &&
-      (!proteinRef || !hasProteinConflict(c, proteinRef))
+      (!proteinRef || !hasProteinConflict(c, proteinRef)) &&
+      (!skipProtein || !isProteinDish(c))
     ) return c;
   }
-  // Pass 3: relax sliding window, keep protein conflict + same-day dedup
+  // Pass 3: relax sliding window, keep dual-protein + cross-group + same-day dedup
   for (const c of shuffled) {
     if (
       !sameDayIds.has(c.id) &&
-      (!proteinRef || !hasProteinConflict(c, proteinRef))
+      (!proteinRef || !hasProteinConflict(c, proteinRef)) &&
+      (!skipProtein || !isProteinDish(c))
     ) return c;
   }
-  // Pass 4: relax protein conflict, keep same-day dedup
+  // Pass 4: relax dual-protein + cross-group protein constraints, keep same-day dedup
   for (const c of shuffled) {
     if (!sameDayIds.has(c.id)) return c;
   }
@@ -459,7 +491,14 @@ export function composeMeal(
     );
     // Filter out protein conflicts with the chosen gravy
     const proteinSafe = constrainedDryVeggies.filter(c => !hasProteinConflict(c, gravy));
-    const dryVeggie = (proteinSafe.length > 0 ? proteinSafe : constrainedDryVeggies)[0];
+    // Filter out dual-protein pairings: if gravy is a protein dish, prefer non-protein dry_veggies
+    const dualProteinSafe = isProteinDish(gravy)
+      ? (proteinSafe.length > 0 ? proteinSafe : constrainedDryVeggies).filter(c => !isProteinDish(c))
+      : (proteinSafe.length > 0 ? proteinSafe : constrainedDryVeggies);
+    // Graceful fallback: if no non-protein candidates remain, use the protein-conflict-safe pool (or full pool)
+    const dryVeggie = (dualProteinSafe.length > 0
+      ? dualProteinSafe
+      : proteinSafe.length > 0 ? proteinSafe : constrainedDryVeggies)[0];
 
     // 4. Pick side — apply constraints only
     const constrainedSides = mealSelector.applyConstraints(
@@ -498,13 +537,14 @@ export function composeMeal(
     base,
   );
 
-  // 3. Pick dry_veggie (avoid ingredient overlap with gravy + protein conflict with gravy)
+  // 3. Pick dry_veggie (avoid ingredient overlap with gravy + protein conflict with gravy + dual-protein prevention)
   const dryVeggie = pickComponent(
     coherentDryVeggies,
     constraints.dry_veggie.recentIds,
     constraints.dry_veggie.sameDayIds,
     gravy,
     gravy, // protein conflict reference
+    gravy, // dual-protein reference — prevents two protein dishes in the same meal
   );
 
   // 4. Pick side (no ingredient-overlap ref)

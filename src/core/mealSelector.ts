@@ -301,6 +301,8 @@ export class MealSelector {
     fish: 'seafood',
     prawns: 'seafood',
     eggs: 'egg',
+    paneer: 'dairy_protein',
+    tofu: 'plant_protein',
   };
 
   /**
