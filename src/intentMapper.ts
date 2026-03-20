@@ -157,7 +157,9 @@ export function mapWhatsAppToIntent(
   // Free-text navigation in dish_preview state (fallback when quick-reply buttons fail)
   if (conversationState === 'dish_preview') {
     const navWords = ['next', 'continue', 'skip', 'next category', 'forward'];
-    if (navWords.includes(text)) {
+    // Strip emojis and extra whitespace for matching (e.g. "Next ➡️" → "next")
+    const stripped = text.replace(/[^\p{L}\p{N}\s]/gu, '').trim();
+    if (navWords.includes(text) || navWords.includes(stripped)) {
       return { intent: Intent.NEXT_CATEGORY };
     }
   }

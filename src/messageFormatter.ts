@@ -133,7 +133,7 @@ export function formatCookMessage(day: DayPlan): string {
 
 function generateStepListItems(candidates: CandidateDishes, step: PreviewStep): ListItem[] {
   const items: ListItem[] = [];
-  const MAX_LIST_ITEMS = 10; // WhatsApp list-picker limit
+  const MAX_LIST_ITEMS = 20; // Numbered text supports more than WhatsApp list-picker's 10
 
   switch (step) {
     case 'breakfast':
