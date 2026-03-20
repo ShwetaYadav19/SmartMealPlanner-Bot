@@ -115,7 +115,7 @@ describe('Cross-meal gravy overlap', () => {
         undefined,   // mealSelector
         undefined,   // constraintRules
         undefined,   // constraintContext
-        lunchGravyRef,
+        [lunchGravyRef],
       );
 
       const dinnerGravy = result.components.find(c => c.category === 'gravy')!;

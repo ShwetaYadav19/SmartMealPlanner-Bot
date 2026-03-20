@@ -37,43 +37,6 @@
     "keyIngredient": "chicken"
   },
   {
-    "id": "ni-gravy-010",
-    "name": "Chicken Shorba",
-    "category": "gravy",
-    "cuisine": [
-      "north_indian"
-    ],
-    "diet": "non_veg",
-    "style": "health",
-    "slots": [
-      "lunch",
-      "dinner"
-    ],
-    "ingredients": [
-      {
-        "name": "Chicken",
-        "quantity": "200g",
-        "category": "protein"
-      },
-      {
-        "name": "Onion",
-        "quantity": "1 medium",
-        "category": "vegetables"
-      },
-      {
-        "name": "Whole Spices",
-        "quantity": "1 tbsp",
-        "category": "spices"
-      },
-      {
-        "name": "Coriander Leaves",
-        "quantity": "2 tbsp",
-        "category": "vegetables"
-      }
-    ],
-    "keyIngredient": "chicken"
-  },
-  {
     "id": "ni-gravy-011",
     "name": "Egg Masala",
     "category": "gravy",
@@ -184,5 +147,42 @@
       }
     ],
     "keyIngredient": "prawns"
+  },
+  {
+    "id": "ni-gravy-010",
+    "name": "Chicken Shorba",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "200g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Spices",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      }
+    ],
+    "keyIngredient": "chicken"
   }
 ]

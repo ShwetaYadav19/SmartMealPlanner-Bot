@@ -415,7 +415,7 @@ const slidingWindowRule: Rule = {
 const ingredientOverlapRule: Rule = {
   id: 'ingredient-overlap', name: 'Ingredient Overlap', description: 'Avoid overlap',
   scope: 'lunch_component', action: 'constrain',
-  conditions: { constraintType: 'ingredient_overlap', keyIngredients: ['chicken', 'egg', 'paneer', 'spinach', 'cauliflower', 'okra'] },
+  conditions: { constraintType: 'ingredient_overlap', autoKeyCategories: ['protein'] },
 };
 
 const cuisineAlternationRule: Rule = {
@@ -441,6 +441,7 @@ function arbMealComponentWithIngredients(): fc.Arbitrary<MealComponent> {
     style: fc.constantFrom('health' as const, 'regular' as const),
     slots: fc.constantFrom(['lunch'] as ('lunch' | 'dinner')[], ['dinner'] as ('lunch' | 'dinner')[], ['lunch', 'dinner'] as ('lunch' | 'dinner')[]),
     ingredients: fc.array(arbIngredient, { minLength: 1, maxLength: 4 }),
+    keyIngredient: fc.option(fc.constantFrom('chicken', 'egg', 'paneer', 'spinach', 'cauliflower', 'okra', 'potato', 'dal'), { nil: undefined }),
   });
 }
 
@@ -617,7 +618,6 @@ describe('Property 13: Adjacent components avoid key ingredient overlap', () => 
 
   it('no item in the result shares key ingredients with the reference (unless relaxation)', () => {
     const selector = makeSelector();
-    const keyIngredients = ingredientOverlapRule.conditions.keyIngredients!;
 
     // Protein groups map mirrors MealSelector.PROTEIN_GROUPS for conflict checking
     const PROTEIN_GROUPS: Record<string, string> = {
@@ -651,6 +651,20 @@ describe('Property 13: Adjacent components avoid key ingredient overlap', () => 
       return true;
     }
 
+    /** Extract key ingredients: autoKeyCategories (protein) + component.keyIngredient */
+    function extractKeys(component: MealComponent): Set<string> {
+      const keys = new Set<string>();
+      for (const ing of component.ingredients) {
+        if (ing.category.toLowerCase() === 'protein') {
+          keys.add(ing.name.toLowerCase());
+        }
+      }
+      if (component.keyIngredient) {
+        keys.add(component.keyIngredient.toLowerCase());
+      }
+      return keys;
+    }
+
     fc.assert(
       fc.property(
         fc.array(arbMealComponentWithIngredients(), { minLength: 2, maxLength: 10 }),
@@ -658,30 +672,15 @@ describe('Property 13: Adjacent components avoid key ingredient overlap', () => 
         (pool, refComponent) => {
           const result = selector.applyIngredientOverlap(pool, ingredientOverlapRule, refComponent);
 
-          // Extract key ingredients from reference
-          const refKeys = new Set<string>();
-          for (const ing of refComponent.ingredients) {
-            const name = ing.name.toLowerCase();
-            for (const kw of keyIngredients) {
-              if (name.includes(kw.toLowerCase())) {
-                refKeys.add(kw.toLowerCase());
-              }
-            }
-          }
+          const refKeys = extractKeys(refComponent);
 
           // Simulate the same filtering logic as applyIngredientOverlap
           const strictFiltered = pool.filter((item) => {
-            // Check protein conflict
             if (hasProteinConflict(item, refComponent)) return false;
-            // Check key ingredient overlap
             if (refKeys.size > 0) {
-              for (const ing of item.ingredients) {
-                const name = ing.name.toLowerCase();
-                for (const kw of keyIngredients) {
-                  if (name.includes(kw.toLowerCase()) && refKeys.has(kw.toLowerCase())) {
-                    return false;
-                  }
-                }
+              const itemKeys = extractKeys(item);
+              for (const k of itemKeys) {
+                if (refKeys.has(k)) return false;
               }
             }
             return true;
@@ -690,19 +689,9 @@ describe('Property 13: Adjacent components avoid key ingredient overlap', () => 
           if (strictFiltered.length > 0) {
             // Strict mode: no overlapping key ingredients and no protein conflicts
             for (const item of result) {
-              // No protein conflict with reference
               expect(hasProteinConflict(item, refComponent)).toBe(false);
-              // No key ingredient overlap
               if (refKeys.size > 0) {
-                const itemKeys = new Set<string>();
-                for (const ing of item.ingredients) {
-                  const name = ing.name.toLowerCase();
-                  for (const kw of keyIngredients) {
-                    if (name.includes(kw.toLowerCase())) {
-                      itemKeys.add(kw.toLowerCase());
-                    }
-                  }
-                }
+                const itemKeys = extractKeys(item);
                 const overlap = [...itemKeys].some((k) => refKeys.has(k));
                 expect(overlap).toBe(false);
               }

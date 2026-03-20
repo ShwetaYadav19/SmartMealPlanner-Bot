@@ -95,36 +95,12 @@
   {
     "id": "ingredient-overlap",
     "name": "Ingredient Overlap Avoidance",
-    "description": "Two components in the same meal should not share key ingredients. Proteins are auto-detected from ingredient category. Distinctive vegetables are listed explicitly. This ensures each meal has ingredient diversity.",
+    "description": "Two components in the same meal should not share key ingredients, and lunch and dinner on the same day should avoid sharing signature ingredients (gravy and dry_veggie). Proteins are auto-detected from ingredient category. Distinctive vegetables are listed explicitly. This ensures each meal and each day has ingredient diversity.",
     "scope": "lunch_component",
     "action": "constrain",
     "conditions": {
       "constraintType": "ingredient_overlap",
-      "autoKeyCategories": ["protein"],
-      "keyIngredients": [
-        "cauliflower",
-        "spinach",
-        "okra",
-        "brinjal",
-        "cabbage",
-        "drumstick",
-        "banana flower",
-        "tinda",
-        "ash gourd",
-        "raw banana",
-        "bottle gourd",
-        "bitter gourd",
-        "mushroom",
-        "broccoli",
-        "pumpkin",
-        "yam",
-        "taro root",
-        "jackfruit",
-        "ivy gourd",
-        "snake gourd",
-        "flat beans",
-        "fenugreek leaves"
-      ]
+      "autoKeyCategories": ["protein"]
     }
   },
   {

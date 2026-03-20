@@ -370,25 +370,19 @@ export class MealSelector {
    */
   private extractKeyIngredients(
     component: MealComponent,
-    keyIngredients: string[],
+    _keyIngredients: string[],
     autoKeyCategories?: string[],
   ): Set<string> {
     const keys = new Set<string>();
+    // Auto-detect by ingredient category (e.g. "protein")
     for (const ing of component.ingredients) {
-      // Auto-detect by ingredient category (e.g. "protein")
       if (autoKeyCategories && autoKeyCategories.includes(ing.category.toLowerCase())) {
         keys.add(ing.name.toLowerCase());
-        continue;
       }
-      // Match by keyword — use word-boundary check to avoid "egg" matching "eggplant"
-      const name = ing.name.toLowerCase();
-      for (const keyword of keyIngredients) {
-        const kw = keyword.toLowerCase();
-        const regex = new RegExp(`\\b${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
-        if (regex.test(name)) {
-          keys.add(kw);
-        }
-      }
+    }
+    // Use the component's own keyIngredient field (e.g. "paneer", "potato")
+    if (component.keyIngredient) {
+      keys.add(component.keyIngredient.toLowerCase());
     }
     return keys;
   }

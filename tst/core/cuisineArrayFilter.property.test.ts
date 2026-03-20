@@ -144,7 +144,7 @@ const ingredientOverlapRule: Rule = {
   action: 'constrain',
   conditions: {
     constraintType: 'ingredient_overlap',
-    keyIngredients: ['chicken', 'egg', 'paneer', 'spinach', 'cauliflower', 'okra'],
+    autoKeyCategories: ['protein'],
   },
 };
 

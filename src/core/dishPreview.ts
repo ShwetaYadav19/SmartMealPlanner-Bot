@@ -516,7 +516,10 @@ export function buildPlanFromComponents(
       side:       { recentIds: new Set<string>(dinnerHistory.side),       sameDayIds: new Set<string>() },
     };
 
-    const dinner = composeMeal(dinnerPool, 'dinner', cuisine, dinnerConstraints, preferences.diet);
+    const dinner = composeMeal(dinnerPool, 'dinner', cuisine, dinnerConstraints, preferences.diet,
+      undefined, undefined, undefined,
+      lunch.components.filter(c => c.category === 'gravy' || c.category === 'dry_veggie'),
+    );
 
     // Record dinner picks in cumulative history
     for (const comp of dinner.components) {

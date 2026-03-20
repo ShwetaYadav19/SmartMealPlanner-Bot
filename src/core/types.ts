@@ -34,6 +34,7 @@ export interface MealComponent {
   style: 'health' | 'regular';
   slots: ('lunch' | 'dinner')[];
   ingredients: Ingredient[];
+  keyIngredient?: string;
 }
 
 export interface ComposedMeal {
