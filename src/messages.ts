@@ -106,32 +106,15 @@ export function formatBreakfastStepMessage(breakfasts: { name: string }[]): stri
 
 export function formatCategoryStepMessage(
   category: 'base' | 'gravy' | 'dry_veggie' | 'side',
-  lunchComponents: ComponentsByCategory,
-  dinnerComponents: ComponentsByCategory,
+  _lunchComponents: ComponentsByCategory,
+  _dinnerComponents: ComponentsByCategory,
 ): string {
   const stepNumbers: Record<string, number> = { base: 2, gravy: 3, dry_veggie: 4, side: 5 };
   const stepNum = stepNumbers[category];
-  const heading = CATEGORY_HEADINGS[category];
   const label = CATEGORY_LABELS[category];
 
-  let text = `*Step ${stepNum}/5: ${label}*\nRemove any you don't want:`;
-
-  const lunchItems = lunchComponents[category];
-  const dinnerItems = dinnerComponents[category];
-
-  if (lunchItems.length > 0) {
-    text += `\n\n*Lunch ${heading}*`;
-    for (const c of lunchItems) {
-      text += `\n  • ${c.name}`;
-    }
-  }
-  if (dinnerItems.length > 0) {
-    text += `\n\n*Dinner ${heading}*`;
-    for (const c of dinnerItems) {
-      text += `\n  • ${c.name}`;
-    }
-  }
-  return text;
+  // Keep text short — the webhook handler appends a numbered list of removable items
+  return `*Step ${stepNum}/5: ${label}*\nRemove any you don't want:`;
 }
 
 export function formatConfirmStepMessage(candidates: {
