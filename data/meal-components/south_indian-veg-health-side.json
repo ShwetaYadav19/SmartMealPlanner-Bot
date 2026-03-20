@@ -18,7 +18,8 @@
         "quantity": "150g",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "si-side-005",
@@ -50,7 +51,8 @@
         "quantity": "1 tbsp",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "si-side-007",
@@ -82,7 +84,8 @@
         "quantity": "1",
         "category": "fruits"
       }
-    ]
+    ],
+    "keyIngredient": "cucumber"
   },
   {
     "id": "ni-side-006",
@@ -103,6 +106,7 @@
         "quantity": "150g",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   }
 ]

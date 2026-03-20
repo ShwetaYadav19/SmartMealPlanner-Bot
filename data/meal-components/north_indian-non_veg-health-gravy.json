@@ -33,7 +33,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-gravy-010",
@@ -69,7 +70,8 @@
         "quantity": "2 tbsp",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-gravy-011",
@@ -105,7 +107,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-gravy-012",
@@ -141,7 +144,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "si-gravy-015",
@@ -178,6 +182,7 @@
         "quantity": "1 small piece",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "prawns"
   }
 ]

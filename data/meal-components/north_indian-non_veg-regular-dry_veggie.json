@@ -3,150 +3,371 @@
     "id": "si-dry_veggie-006",
     "name": "Chicken Pepper Fry",
     "category": "dry_veggie",
-    "cuisine": ["south_indian", "north_indian"],
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "250g", "category": "protein" },
-      { "name": "Black Pepper", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-014",
     "name": "Tandoori Chicken",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-031",
     "name": "Tandoori Prawns",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Prawns", "quantity": "250g", "category": "protein" },
-      { "name": "Yogurt", "quantity": "50g", "category": "dairy" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Prawns",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "50g",
+        "category": "dairy"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "prawns"
   },
   {
     "id": "ni-dry_veggie-032",
     "name": "Egg Potato Fry (Ande Aloo)",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Potato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-dry_veggie-033",
     "name": "Chicken Tikka (Regular)",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-034",
     "name": "Keema Dry",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton Mince", "quantity": "250g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "50g", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Mutton Mince",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "ni-dry_veggie-035",
     "name": "Egg Bhurji (Regular)",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Butter", "quantity": "1 tbsp", "category": "dairy" }
-    ]
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Butter",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-dry_veggie-036",
     "name": "Fish Fry (Regular)",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "250g", "category": "protein" },
-      { "name": "Gram Flour (Besan)", "quantity": "2 tbsp", "category": "grains" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Gram Flour (Besan)",
+        "quantity": "2 tbsp",
+        "category": "grains"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "3 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "ni-dry_veggie-037",
     "name": "Mutton Fry",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton", "quantity": "250g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Mutton",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "ni-dry_veggie-038",
     "name": "Chicken Seekh Kebab",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken Mince", "quantity": "250g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken Mince",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   }
 ]

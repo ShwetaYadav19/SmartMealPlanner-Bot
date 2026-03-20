@@ -29,7 +29,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-003",
@@ -70,7 +71,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-004",
@@ -106,7 +108,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-006",
@@ -141,7 +144,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-008",
@@ -166,7 +170,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "si-base-009",
@@ -197,7 +202,8 @@
         "quantity": "1 small",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-base-003",
@@ -229,6 +235,7 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   }
 ]

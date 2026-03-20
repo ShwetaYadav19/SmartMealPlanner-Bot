@@ -47,20 +47,21 @@
   },
   {
     "id": "style-fallback",
-    "name": "Style Fallback for Health Users",
-    "description": "When a user prefers healthy meals but a food category has fewer than 2 healthy options, regular options are added with a '(Regular)' label so the user still has enough variety.",
+    "name": "Bidirectional Style Fallback",
+    "description": "When a food category has fewer than 2 options in the user's preferred style, options from the other style are added with a label suffix so the user still has enough variety. Works for both health and regular users.",
     "scope": "lunch_component",
     "action": "filter",
     "conditions": {
       "preferenceField": "style",
       "preferenceValues": [
-        "health"
+        "health",
+        "regular"
       ]
     },
     "parameters": {
       "threshold": 2,
-      "fallbackStyle": "regular",
-      "labelSuffix": "(Regular)"
+      "healthLabelSuffix": "(Regular)",
+      "regularLabelSuffix": "(Healthy)"
     }
   },
   {
@@ -94,29 +95,35 @@
   {
     "id": "ingredient-overlap",
     "name": "Ingredient Overlap Avoidance",
-    "description": "Two components in the same meal should not share key ingredients like chicken, egg, fish, paneer, cauliflower, spinach, or okra. This ensures each meal has ingredient diversity.",
+    "description": "Two components in the same meal should not share key ingredients. Proteins are auto-detected from ingredient category. Distinctive vegetables are listed explicitly. This ensures each meal has ingredient diversity.",
     "scope": "lunch_component",
     "action": "constrain",
     "conditions": {
       "constraintType": "ingredient_overlap",
+      "autoKeyCategories": ["protein"],
       "keyIngredients": [
-        "chicken",
-        "egg",
-        "fish",
-        "paneer",
         "cauliflower",
         "spinach",
         "okra",
-        "lauki",
-        "ridge_gourd",
         "brinjal",
         "cabbage",
         "drumstick",
-        "banana_flower",
-        "parwal",
+        "banana flower",
         "tinda",
-        "ash_gourd",
-        "raw_banana"
+        "ash gourd",
+        "raw banana",
+        "bottle gourd",
+        "bitter gourd",
+        "mushroom",
+        "broccoli",
+        "pumpkin",
+        "yam",
+        "taro root",
+        "jackfruit",
+        "ivy gourd",
+        "snake gourd",
+        "flat beans",
+        "fenugreek leaves"
       ]
     }
   },

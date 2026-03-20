@@ -19,7 +19,8 @@
         "quantity": "2 tbsp",
         "category": "condiments"
       }
-    ]
+    ],
+    "keyIngredient": "pickle"
   },
   {
     "id": "si-side-004",
@@ -41,7 +42,8 @@
         "quantity": "2",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "papad"
   },
   {
     "id": "ni-side-003",
@@ -63,7 +65,8 @@
         "quantity": "2 tbsp",
         "category": "condiments"
       }
-    ]
+    ],
+    "keyIngredient": "pickle"
   },
   {
     "id": "ni-side-004",
@@ -85,7 +88,8 @@
         "quantity": "2",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "papad"
   },
   {
     "id": "ni-side-005",
@@ -116,7 +120,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "ni-side-007",
@@ -147,6 +152,7 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "onion"
   }
 ]

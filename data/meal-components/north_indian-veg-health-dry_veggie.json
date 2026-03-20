@@ -33,7 +33,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "lauki"
   },
   {
     "id": "ni-dry_veggie-005",
@@ -69,7 +70,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "tinda"
   },
   {
     "id": "ni-dry_veggie-006",
@@ -105,7 +107,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "cauliflower"
   },
   {
     "id": "ni-dry_veggie-008",
@@ -141,7 +144,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "karela"
   },
   {
     "id": "ni-dry_veggie-015",
@@ -177,7 +181,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "spinach"
   },
   {
     "id": "ni-dry_veggie-016",
@@ -213,7 +218,8 @@
         "quantity": "1/4 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-dry_veggie-017",
@@ -249,7 +255,8 @@
         "quantity": "1/4 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "tofu"
   },
   {
     "id": "ni-dry_veggie-019",
@@ -285,7 +292,8 @@
         "quantity": "2 tbsp",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "soya"
   },
   {
     "id": "ni-dry_veggie-020",
@@ -321,7 +329,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "soya"
   },
   {
     "id": "ni-dry_veggie-021",
@@ -362,6 +371,7 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "brinjal"
   }
 ]

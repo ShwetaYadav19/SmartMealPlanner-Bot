@@ -29,7 +29,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-003",
@@ -70,7 +71,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-base-003",
@@ -102,7 +104,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-base-004",
@@ -128,7 +131,8 @@
         "quantity": "2 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "ni-base-005",
@@ -164,7 +168,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-base-008",
@@ -194,7 +199,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "ni-base-009",
@@ -229,7 +235,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-base-010",
@@ -265,6 +272,7 @@
         "quantity": "1 tbsp",
         "category": "condiments"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   }
 ]

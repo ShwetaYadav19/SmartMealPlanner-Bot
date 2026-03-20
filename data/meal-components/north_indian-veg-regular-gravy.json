@@ -3,150 +3,370 @@
     "id": "ni-gravy-005",
     "name": "Kadhi",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Yogurt", "quantity": "200g", "category": "dairy" },
-      { "name": "Gram Flour (Besan)", "quantity": "2 tbsp", "category": "grains" },
-      { "name": "Fenugreek Seeds", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Yogurt",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Gram Flour (Besan)",
+        "quantity": "2 tbsp",
+        "category": "grains"
+      },
+      {
+        "name": "Fenugreek Seeds",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "ni-gravy-009",
     "name": "Shahi Paneer",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Cashew Paste", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Cream", "quantity": "50ml", "category": "dairy" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" }
-    ]
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Cashew Paste",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Cream",
+        "quantity": "50ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      }
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-gravy-016",
     "name": "Kadhai Paneer",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Capsicum", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Kadhai Masala", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Kadhai Masala",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-gravy-032",
     "name": "Paneer Butter Masala",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Butter", "quantity": "2 tbsp", "category": "dairy" },
-      { "name": "Tomato", "quantity": "3 medium", "category": "vegetables" },
-      { "name": "Cream", "quantity": "50ml", "category": "dairy" }
-    ]
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Butter",
+        "quantity": "2 tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cream",
+        "quantity": "50ml",
+        "category": "dairy"
+      }
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-gravy-033",
     "name": "Aloo Matar",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Potato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "100g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "potato"
   },
   {
     "id": "ni-gravy-034",
     "name": "Chana Masala",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chickpeas", "quantity": "200g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Chana Masala Powder", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Chickpeas",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Chana Masala Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chickpeas"
   },
   {
     "id": "ni-gravy-035",
     "name": "Dum Aloo",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Baby Potato", "quantity": "250g", "category": "vegetables" },
-      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Baby Potato",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "potato"
   },
   {
     "id": "ni-gravy-036",
     "name": "Matar Paneer",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "150g", "category": "dairy" },
-      { "name": "Green Peas", "quantity": "100g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" }
-    ]
+      {
+        "name": "Paneer",
+        "quantity": "150g",
+        "category": "dairy"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      }
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-gravy-037",
     "name": "Lauki Chana Dal",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Bottle Gourd (Lauki)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Chana Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Bottle Gourd (Lauki)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Chana Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "lauki"
   },
   {
     "id": "ni-gravy-038",
     "name": "Baingan Ka Salan",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Brinjal (Eggplant)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Sesame Seeds", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Brinjal (Eggplant)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Sesame Seeds",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "brinjal"
   }
 ]

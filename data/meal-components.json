@@ -19,7 +19,8 @@
         "quantity": "300g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-002",
@@ -51,7 +52,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-003",
@@ -92,7 +94,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-004",
@@ -128,7 +131,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-005",
@@ -149,7 +153,8 @@
         "quantity": "200g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "si-base-006",
@@ -184,7 +189,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-007",
@@ -205,7 +211,8 @@
         "quantity": "200g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "ragi"
   },
   {
     "id": "si-base-008",
@@ -230,7 +237,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "si-base-009",
@@ -261,7 +269,8 @@
         "quantity": "1 small",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-gravy-001",
@@ -298,7 +307,8 @@
         "quantity": "1 small piece",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "si-gravy-002",
@@ -334,7 +344,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "si-gravy-003",
@@ -370,7 +381,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "mixed_veggies"
   },
   {
     "id": "si-gravy-004",
@@ -406,7 +418,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "si-gravy-005",
@@ -442,7 +455,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-gravy-006",
@@ -478,7 +492,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "tamarind"
   },
   {
     "id": "si-gravy-007",
@@ -514,7 +529,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "si-gravy-008",
@@ -550,7 +566,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "si-gravy-009",
@@ -587,7 +604,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-gravy-013",
@@ -623,7 +641,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "tamarind"
   },
   {
     "id": "si-gravy-014",
@@ -659,7 +678,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "pepper"
   },
   {
     "id": "si-dry_veggie-001",
@@ -695,7 +715,8 @@
         "quantity": "1 tsp",
         "category": "lentils"
       }
-    ]
+    ],
+    "keyIngredient": "beans"
   },
   {
     "id": "si-dry_veggie-002",
@@ -731,7 +752,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "cabbage"
   },
   {
     "id": "si-dry_veggie-003",
@@ -767,7 +789,8 @@
         "quantity": "1 tsp",
         "category": "lentils"
       }
-    ]
+    ],
+    "keyIngredient": "carrot"
   },
   {
     "id": "si-dry_veggie-004",
@@ -803,7 +826,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "raw_banana"
   },
   {
     "id": "si-dry_veggie-005",
@@ -839,7 +863,8 @@
         "quantity": "1 tsp",
         "category": "lentils"
       }
-    ]
+    ],
+    "keyIngredient": "beetroot"
   },
   {
     "id": "si-dry_veggie-006",
@@ -876,7 +901,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-dry_veggie-007",
@@ -912,7 +938,8 @@
         "quantity": "1/4 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "ivy_gourd"
   },
   {
     "id": "si-dry_veggie-008",
@@ -948,7 +975,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "snake_gourd"
   },
   {
     "id": "si-dry_veggie-009",
@@ -985,7 +1013,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-014",
@@ -1021,7 +1050,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "brinjal"
   },
   {
     "id": "si-dry_veggie-015",
@@ -1057,7 +1087,8 @@
         "quantity": "1 tsp",
         "category": "lentils"
       }
-    ]
+    ],
+    "keyIngredient": "drumstick"
   },
   {
     "id": "si-side-001",
@@ -1078,7 +1109,8 @@
         "quantity": "150g",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "si-side-002",
@@ -1109,7 +1141,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "coconut"
   },
   {
     "id": "si-side-003",
@@ -1131,7 +1164,8 @@
         "quantity": "2 tbsp",
         "category": "condiments"
       }
-    ]
+    ],
+    "keyIngredient": "pickle"
   },
   {
     "id": "si-side-004",
@@ -1153,7 +1187,8 @@
         "quantity": "2",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "papad"
   },
   {
     "id": "si-side-005",
@@ -1185,7 +1220,8 @@
         "quantity": "1 tbsp",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "si-side-006",
@@ -1216,7 +1252,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "tomato"
   },
   {
     "id": "si-side-007",
@@ -1248,7 +1285,8 @@
         "quantity": "1",
         "category": "fruits"
       }
-    ]
+    ],
+    "keyIngredient": "cucumber"
   },
   {
     "id": "si-side-008",
@@ -1279,7 +1317,8 @@
         "quantity": "to taste",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chilli"
   },
   {
     "id": "ni-base-001",
@@ -1322,7 +1361,8 @@
         "quantity": "200g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "ni-base-003",
@@ -1354,7 +1394,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-base-004",
@@ -1380,7 +1421,8 @@
         "quantity": "2 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "ni-base-005",
@@ -1416,7 +1458,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-base-006",
@@ -1447,7 +1490,8 @@
         "quantity": "1 small",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "ni-base-007",
@@ -1468,7 +1512,8 @@
         "quantity": "200g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "millet"
   },
   {
     "id": "ni-base-008",
@@ -1498,7 +1543,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "ni-base-009",
@@ -1533,7 +1579,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-gravy-001",
@@ -1574,7 +1621,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "ni-gravy-002",
@@ -1610,7 +1658,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "rajma"
   },
   {
     "id": "ni-gravy-003",
@@ -1646,7 +1695,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chickpeas"
   },
   {
     "id": "ni-gravy-004",
@@ -1682,7 +1732,8 @@
         "quantity": "3-4 cloves",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-gravy-005",
@@ -1718,7 +1769,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "ni-gravy-006",
@@ -1754,7 +1806,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-gravy-007",
@@ -1790,7 +1843,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "ni-gravy-014",
@@ -1826,7 +1880,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "ni-gravy-008",
@@ -1863,7 +1918,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-gravy-009",
@@ -1899,7 +1955,8 @@
         "quantity": "1 medium",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-dry_veggie-001",
@@ -1935,7 +1992,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "cauliflower"
   },
   {
     "id": "ni-dry_veggie-002",
@@ -1971,7 +2029,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "okra"
   },
   {
     "id": "ni-dry_veggie-003",
@@ -2007,7 +2066,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "brinjal"
   },
   {
     "id": "ni-dry_veggie-004",
@@ -2043,7 +2103,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "lauki"
   },
   {
     "id": "ni-dry_veggie-005",
@@ -2079,7 +2140,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "tinda"
   },
   {
     "id": "ni-dry_veggie-006",
@@ -2115,7 +2177,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "cauliflower"
   },
   {
     "id": "ni-dry_veggie-007",
@@ -2151,7 +2214,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "capsicum"
   },
   {
     "id": "ni-dry_veggie-008",
@@ -2187,7 +2251,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "karela"
   },
   {
     "id": "ni-dry_veggie-015",
@@ -2223,7 +2288,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "spinach"
   },
   {
     "id": "ni-dry_veggie-009",
@@ -2259,7 +2325,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-side-001",
@@ -2290,7 +2357,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "ni-side-002",
@@ -2326,7 +2394,8 @@
         "quantity": "1",
         "category": "fruits"
       }
-    ]
+    ],
+    "keyIngredient": "salad"
   },
   {
     "id": "ni-side-003",
@@ -2348,7 +2417,8 @@
         "quantity": "2 tbsp",
         "category": "condiments"
       }
-    ]
+    ],
+    "keyIngredient": "pickle"
   },
   {
     "id": "ni-side-004",
@@ -2370,7 +2440,8 @@
         "quantity": "2",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "papad"
   },
   {
     "id": "ni-side-005",
@@ -2401,7 +2472,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "ni-side-006",
@@ -2422,7 +2494,8 @@
         "quantity": "150g",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "curd"
   },
   {
     "id": "ni-side-007",
@@ -2453,7 +2526,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "onion"
   },
   {
     "id": "ni-side-008",
@@ -2484,7 +2558,8 @@
         "quantity": "1",
         "category": "fruits"
       }
-    ]
+    ],
+    "keyIngredient": "mint"
   },
   {
     "id": "si-gravy-010",
@@ -2520,7 +2595,8 @@
         "quantity": "1 small piece",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-gravy-011",
@@ -2556,7 +2632,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-gravy-012",
@@ -2592,7 +2669,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "si-dry_veggie-010",
@@ -2629,7 +2707,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-dry_veggie-011",
@@ -2666,7 +2745,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-012",
@@ -2703,7 +2783,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "ni-gravy-010",
@@ -2739,7 +2820,8 @@
         "quantity": "2 tbsp",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-gravy-011",
@@ -2775,7 +2857,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-gravy-012",
@@ -2811,7 +2894,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "ni-dry_veggie-010",
@@ -2847,7 +2931,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-011",
@@ -2883,7 +2968,8 @@
         "quantity": "1/4 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-dry_veggie-012",
@@ -2919,7 +3005,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "ni-gravy-013",
@@ -2955,7 +3042,8 @@
         "quantity": "3 medium",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-013",
@@ -2991,7 +3079,8 @@
         "quantity": "1/4 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-dry_veggie-014",
@@ -3027,7 +3116,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-dry_veggie-013",
@@ -3064,7 +3154,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "prawns"
   },
   {
     "id": "ni-dry_veggie-016",
@@ -3100,7 +3191,8 @@
         "quantity": "1/4 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-dry_veggie-017",
@@ -3136,7 +3228,8 @@
         "quantity": "1/4 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "tofu"
   },
   {
     "id": "ni-gravy-015",
@@ -3172,7 +3265,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "tofu"
   },
   {
     "id": "ni-gravy-016",
@@ -3208,7 +3302,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "si-gravy-015",
@@ -3245,7 +3340,8 @@
         "quantity": "1 small piece",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "prawns"
   },
   {
     "id": "ni-dry_veggie-018",
@@ -3281,7 +3377,8 @@
         "quantity": "1 tbsp",
         "category": "condiments"
       }
-    ]
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-base-010",
@@ -3317,7 +3414,8 @@
         "quantity": "1 tbsp",
         "category": "condiments"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-gravy-017",
@@ -3353,7 +3451,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "soya"
   },
   {
     "id": "ni-gravy-018",
@@ -3389,7 +3488,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "soya"
   },
   {
     "id": "ni-dry_veggie-019",
@@ -3425,7 +3525,8 @@
         "quantity": "2 tbsp",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "soya"
   },
   {
     "id": "ni-dry_veggie-020",
@@ -3461,7 +3562,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "soya"
   },
   {
     "id": "ni-dry_veggie-021",
@@ -3502,7 +3604,8 @@
         "quantity": "2 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "brinjal"
   },
   {
     "id": "ni-dry_veggie-022",
@@ -3543,7 +3646,8 @@
         "quantity": "1 medium",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-023",
@@ -3579,7 +3683,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "ni-dry_veggie-024",
@@ -3615,7 +3720,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-025",
@@ -3651,7 +3757,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-026",
@@ -3687,7 +3794,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-027",
@@ -3723,7 +3831,8 @@
         "quantity": "1 medium",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-dry_veggie-028",
@@ -3759,7 +3868,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-029",
@@ -3795,7 +3905,8 @@
         "quantity": "1/4 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-dry_veggie-030",
@@ -3867,7 +3978,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "prawns"
   },
   {
     "id": "ni-dry_veggie-032",
@@ -3903,7 +4015,8 @@
         "quantity": "1/2 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-016",
@@ -3939,7 +4052,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-017",
@@ -3975,7 +4089,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "prawns"
   },
   {
     "id": "si-dry_veggie-018",
@@ -4011,7 +4126,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "carrot"
   },
   {
     "id": "si-dry_veggie-019",
@@ -4047,7 +4163,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-020",
@@ -4083,7 +4200,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "mushroom"
   },
   {
     "id": "si-dry_veggie-021",
@@ -4119,7 +4237,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "raw_banana"
   },
   {
     "id": "si-dry_veggie-022",
@@ -4155,7 +4274,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "beetroot"
   },
   {
     "id": "si-dry_veggie-023",
@@ -4191,7 +4311,8 @@
         "quantity": "2 tbsp grated",
         "category": "nuts"
       }
-    ]
+    ],
+    "keyIngredient": "flat_beans"
   },
   {
     "id": "si-dry_veggie-024",
@@ -4227,7 +4348,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "taro"
   },
   {
     "id": "si-dry_veggie-025",
@@ -4263,7 +4385,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "ivy_gourd"
   },
   {
     "id": "si-dry_veggie-026",
@@ -4299,7 +4422,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "banana_flower"
   },
   {
     "id": "si-dry_veggie-027",
@@ -4335,7 +4459,8 @@
         "quantity": "2 tbsp grated",
         "category": "nuts"
       }
-    ]
+    ],
+    "keyIngredient": "cabbage"
   },
   {
     "id": "si-dry_veggie-028",
@@ -4371,7 +4496,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "carrot"
   },
   {
     "id": "si-dry_veggie-029",
@@ -4407,7 +4533,8 @@
         "quantity": "1 tsp",
         "category": "lentils"
       }
-    ]
+    ],
+    "keyIngredient": "radish"
   },
   {
     "id": "si-dry_veggie-030",
@@ -4443,1071 +4570,2629 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "onion"
   },
   {
     "id": "si-gravy-016",
     "name": "Paruppu Kuzhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
-      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "si-gravy-017",
     "name": "Vendakkai Kuzhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Okra (Vendakkai)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
-      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Okra (Vendakkai)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "okra"
   },
   {
     "id": "si-gravy-018",
     "name": "Murungakkai Sambar",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Drumstick", "quantity": "2", "category": "vegetables" },
-      { "name": "Sambar Powder", "quantity": "2 tbsp", "category": "spices" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
-    ]
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Drumstick",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "2 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "drumstick"
   },
   {
     "id": "si-gravy-019",
     "name": "Keerai Masiyal",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Spinach (Keerai)", "quantity": "250g", "category": "vegetables" },
-      { "name": "Toor Dal", "quantity": "50g", "category": "lentils" },
-      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Spinach (Keerai)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Shallots",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "spinach"
   },
   {
     "id": "si-gravy-020",
     "name": "Parangikai Kootu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Pumpkin (Parangikai)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Chana Dal", "quantity": "50g", "category": "lentils" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Pumpkin (Parangikai)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Chana Dal",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "pumpkin"
   },
   {
     "id": "si-gravy-021",
     "name": "Chow Chow Kootu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chayote (Chow Chow)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Moong Dal", "quantity": "50g", "category": "lentils" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
-    ]
+      {
+        "name": "Chayote (Chow Chow)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Moong Dal",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chow_chow"
   },
   {
     "id": "si-gravy-022",
     "name": "Puli Kuzhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Tamarind", "quantity": "2 tbsp", "category": "spices" },
-      { "name": "Brinjal (Eggplant)", "quantity": "100g", "category": "vegetables" },
-      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
-      { "name": "Jaggery", "quantity": "1 tsp", "category": "condiments" }
-    ]
+      {
+        "name": "Tamarind",
+        "quantity": "2 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Brinjal (Eggplant)",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      },
+      {
+        "name": "Jaggery",
+        "quantity": "1 tsp",
+        "category": "condiments"
+      }
+    ],
+    "keyIngredient": "tamarind"
   },
   {
     "id": "si-gravy-023",
     "name": "Tomato Rasam",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Tomato", "quantity": "3 medium", "category": "vegetables" },
-      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
-    ]
+      {
+        "name": "Tomato",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Rasam Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "tomato"
   },
   {
     "id": "si-gravy-024",
     "name": "Paruppu Urundai Kuzhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "si-gravy-025",
     "name": "Manathakkali Kuzhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Manathakkali Vathal", "quantity": "50g", "category": "vegetables" },
-      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
-      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Manathakkali Vathal",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "manathakkali"
   },
   {
     "id": "si-gravy-026",
     "name": "Vendhaya Kuzhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fenugreek Seeds", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
-      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Fenugreek Seeds",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Shallots",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "fenugreek"
   },
   {
     "id": "si-gravy-027",
     "name": "Nellikkai Kuzhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Amla (Nellikkai)", "quantity": "100g", "category": "vegetables" },
-      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
-      { "name": "Jaggery", "quantity": "1 tsp", "category": "condiments" }
-    ]
+      {
+        "name": "Amla (Nellikkai)",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      },
+      {
+        "name": "Jaggery",
+        "quantity": "1 tsp",
+        "category": "condiments"
+      }
+    ],
+    "keyIngredient": "amla"
   },
   {
     "id": "si-gravy-028",
     "name": "Chicken Kuzhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "250g", "category": "protein" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-gravy-029",
     "name": "Meen Kozhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "250g", "category": "protein" },
-      { "name": "Tamarind", "quantity": "2 tbsp", "category": "spices" },
-      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
-      { "name": "Fenugreek Seeds", "quantity": "1/2 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "2 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Shallots",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Fenugreek Seeds",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "si-gravy-030",
     "name": "Egg Rasam",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "3", "category": "protein" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
-    ]
+      {
+        "name": "Eggs",
+        "quantity": "3",
+        "category": "protein"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Rasam Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-gravy-031",
     "name": "Mutton Bone Soup",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton Bones", "quantity": "300g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Whole Spices", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" }
-    ]
+      {
+        "name": "Mutton Bones",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Spices",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "si-gravy-032",
     "name": "Chicken Stew",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "250g", "category": "protein" },
-      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
-      { "name": "Potato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Whole Spices", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "200ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Potato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Spices",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-gravy-033",
     "name": "Fish Molee",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "250g", "category": "protein" },
-      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "200ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "si-gravy-034",
     "name": "Chicken Varutha Curry",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Coconut", "quantity": "3 tbsp grated", "category": "nuts" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Fennel Seeds", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "3 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Fennel Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-gravy-035",
     "name": "Mutton Kuzhambu",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton", "quantity": "300g", "category": "protein" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Coriander Powder", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Mutton",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Coriander Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "si-gravy-036",
     "name": "Prawn Masala",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Prawns", "quantity": "250g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Prawns",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "prawns"
   },
   {
     "id": "si-gravy-037",
     "name": "Meen Kuzhambu (Coconut)",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "250g", "category": "protein" },
-      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
-      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
-    ]
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "200ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Shallots",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "si-gravy-038",
     "name": "Egg Roast",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Coconut Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-gravy-039",
     "name": "Chicken Sukka",
     "category": "gravy",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Coconut", "quantity": "3 tbsp grated", "category": "nuts" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Black Pepper", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "3 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-gravy-019",
     "name": "Mutton Shorba",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton", "quantity": "200g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Whole Spices", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" }
+      {
+        "name": "Mutton",
+        "quantity": "200g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Spices",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "2 tbsp",
+        "category": "vegetables"
+      }
     ]
   },
   {
     "id": "ni-gravy-020",
     "name": "Chicken Stew",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "250g", "category": "protein" },
-      { "name": "Potato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Carrot", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Whole Spices", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Chicken",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Potato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Carrot",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Whole Spices",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-gravy-021",
     "name": "Keema Curry",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken Mince", "quantity": "250g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+      {
+        "name": "Chicken Mince",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-gravy-022",
     "name": "Fish Stew",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "250g", "category": "protein" },
-      { "name": "Coconut Milk", "quantity": "150ml", "category": "dairy" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut Milk",
+        "quantity": "150ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-gravy-023",
     "name": "Egg Drop Curry",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
     ]
   },
   {
     "id": "ni-gravy-024",
     "name": "Chicken Curry (Regular)",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Ghee", "quantity": "2 tbsp", "category": "dairy" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "2 tbsp",
+        "category": "dairy"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-gravy-025",
     "name": "Mutton Rogan Josh",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton", "quantity": "300g", "category": "protein" },
-      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Kashmiri Red Chilli", "quantity": "2 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Mutton",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Kashmiri Red Chilli",
+        "quantity": "2 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "ni-gravy-026",
     "name": "Keema Matar Gravy",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton Mince", "quantity": "250g", "category": "protein" },
-      { "name": "Green Peas", "quantity": "100g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Mutton Mince",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "ni-gravy-027",
     "name": "Fish Masala",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "250g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "ni-gravy-028",
     "name": "Chicken Do Pyaza",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Onion", "quantity": "3 medium", "category": "vegetables" },
-      { "name": "Yogurt", "quantity": "50g", "category": "dairy" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "50g",
+        "category": "dairy"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-gravy-029",
     "name": "Mutton Korma",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton", "quantity": "300g", "category": "protein" },
-      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
-      { "name": "Cashew Paste", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" }
-    ]
+      {
+        "name": "Mutton",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Cashew Paste",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "ni-gravy-030",
     "name": "Chicken Handi",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Cream", "quantity": "50ml", "category": "dairy" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Cream",
+        "quantity": "50ml",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-gravy-031",
     "name": "Anda Curry",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" }
-    ]
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-gravy-032",
     "name": "Paneer Butter Masala",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Butter", "quantity": "2 tbsp", "category": "dairy" },
-      { "name": "Tomato", "quantity": "3 medium", "category": "vegetables" },
-      { "name": "Cream", "quantity": "50ml", "category": "dairy" }
-    ]
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Butter",
+        "quantity": "2 tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cream",
+        "quantity": "50ml",
+        "category": "dairy"
+      }
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-gravy-033",
     "name": "Aloo Matar",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Potato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "100g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "potato"
   },
   {
     "id": "ni-gravy-034",
     "name": "Chana Masala",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chickpeas", "quantity": "200g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Chana Masala Powder", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Chickpeas",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Chana Masala Powder",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chickpeas"
   },
   {
     "id": "ni-gravy-035",
     "name": "Dum Aloo",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Baby Potato", "quantity": "250g", "category": "vegetables" },
-      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Baby Potato",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "potato"
   },
   {
     "id": "ni-gravy-036",
     "name": "Matar Paneer",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "150g", "category": "dairy" },
-      { "name": "Green Peas", "quantity": "100g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" }
-    ]
+      {
+        "name": "Paneer",
+        "quantity": "150g",
+        "category": "dairy"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      }
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-gravy-037",
     "name": "Lauki Chana Dal",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Bottle Gourd (Lauki)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Chana Dal", "quantity": "100g", "category": "lentils" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Bottle Gourd (Lauki)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Chana Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "lauki"
   },
   {
     "id": "ni-gravy-038",
     "name": "Baingan Ka Salan",
     "category": "gravy",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Brinjal (Eggplant)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Peanuts", "quantity": "2 tbsp", "category": "nuts" },
-      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Sesame Seeds", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Brinjal (Eggplant)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Sesame Seeds",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "brinjal"
   },
   {
     "id": "si-dry_veggie-031",
     "name": "Chicken Varuval",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Fennel Seeds", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Fennel Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-dry_veggie-032",
     "name": "Muttai Poriyal",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-033",
     "name": "Fish Varuval",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "250g", "category": "protein" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "3 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "si-dry_veggie-034",
     "name": "Prawn Varuval",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Prawns", "quantity": "250g", "category": "protein" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
-      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Prawns",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "3 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "prawns"
   },
   {
     "id": "si-dry_veggie-035",
     "name": "Chicken Chukka",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Black Pepper", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Coconut Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Coconut Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-dry_veggie-036",
     "name": "Egg Masala Dry",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-037",
     "name": "Chicken Roast",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Coconut", "quantity": "3 tbsp grated", "category": "nuts" },
-      { "name": "Shallots", "quantity": "100g", "category": "vegetables" },
-      { "name": "Fennel Seeds", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "3 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Shallots",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Fennel Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-dry_veggie-038",
     "name": "Mutton Chukka",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton", "quantity": "300g", "category": "protein" },
-      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Black Pepper", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Fennel Seeds", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Mutton",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Fennel Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "ni-dry_veggie-033",
     "name": "Chicken Tikka (Regular)",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "300g", "category": "protein" },
-      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "300g",
+        "category": "protein"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-034",
     "name": "Keema Dry",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton Mince", "quantity": "250g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "50g", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
-    ]
+      {
+        "name": "Mutton Mince",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "ni-dry_veggie-035",
     "name": "Egg Bhurji (Regular)",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggs", "quantity": "4", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Butter", "quantity": "1 tbsp", "category": "dairy" }
-    ]
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Butter",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "ni-dry_veggie-036",
     "name": "Fish Fry (Regular)",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "250g", "category": "protein" },
-      { "name": "Gram Flour (Besan)", "quantity": "2 tbsp", "category": "grains" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Gram Flour (Besan)",
+        "quantity": "2 tbsp",
+        "category": "grains"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "3 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "ni-dry_veggie-037",
     "name": "Mutton Fry",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Mutton", "quantity": "250g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Mutton",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "mutton"
   },
   {
     "id": "ni-dry_veggie-038",
     "name": "Chicken Seekh Kebab",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "non_veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken Mince", "quantity": "250g", "category": "protein" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Chicken Mince",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "ni-dry_veggie-039",
     "name": "Jeera Aloo",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Potato", "quantity": "3 medium", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Potato",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "potato"
   },
   {
     "id": "ni-dry_veggie-040",
     "name": "Aloo Methi",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Potato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Fenugreek Leaves (Methi)", "quantity": "100g", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Fenugreek Leaves (Methi)",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "potato"
   },
   {
     "id": "ni-dry_veggie-041",
     "name": "Gobi Matar",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Cauliflower", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "100g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Cauliflower",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "cauliflower"
   },
   {
     "id": "ni-dry_veggie-042",
     "name": "Tawa Paneer",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Capsicum", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" }
-    ]
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      }
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-dry_veggie-043",
     "name": "Karela Fry (Regular)",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Bitter Gourd (Karela)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Bitter Gourd (Karela)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "3 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "karela"
   },
   {
     "id": "si-dry_veggie-039",
     "name": "Paruppu Usili",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Green Beans", "quantity": "200g", "category": "vegetables" },
-      { "name": "Toor Dal", "quantity": "50g", "category": "lentils" },
-      { "name": "Red Chilli", "quantity": "3", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Green Beans",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Toor Dal",
+        "quantity": "50g",
+        "category": "lentils"
+      },
+      {
+        "name": "Red Chilli",
+        "quantity": "3",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "si-dry_veggie-040",
     "name": "Keerai Poriyal",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Spinach (Keerai)", "quantity": "250g", "category": "vegetables" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Urad Dal", "quantity": "1 tsp", "category": "lentils" }
-    ]
+      {
+        "name": "Spinach (Keerai)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Urad Dal",
+        "quantity": "1 tsp",
+        "category": "lentils"
+      }
+    ],
+    "keyIngredient": "spinach"
   },
   {
     "id": "si-dry_veggie-041",
     "name": "Senai Varuval",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Yam (Senai)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Sambar Powder", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
-    ]
+      {
+        "name": "Yam (Senai)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "3 tbsp",
+        "category": "oils"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "yam"
   },
   {
     "id": "si-dry_veggie-042",
     "name": "Chow Chow Poriyal",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chayote (Chow Chow)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Urad Dal", "quantity": "1 tsp", "category": "lentils" }
-    ]
+      {
+        "name": "Chayote (Chow Chow)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Urad Dal",
+        "quantity": "1 tsp",
+        "category": "lentils"
+      }
+    ],
+    "keyIngredient": "chow_chow"
   },
   {
     "id": "si-dry_veggie-043",
     "name": "Beetroot Poriyal (Regular)",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Beetroot", "quantity": "200g", "category": "vegetables" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Beetroot",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "beetroot"
   },
   {
     "id": "si-dry_veggie-044",
     "name": "Murungakkai Poriyal",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Drumstick", "quantity": "3", "category": "vegetables" },
-      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
-      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
-    ]
+      {
+        "name": "Drumstick",
+        "quantity": "3",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "drumstick"
   },
   {
     "id": "si-dry_veggie-045",
     "name": "Chicken Chettinad Dry",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Chicken", "quantity": "250g", "category": "protein" },
-      { "name": "Black Pepper", "quantity": "1 tbsp", "category": "spices" },
-      { "name": "Fennel Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
-    ]
+      {
+        "name": "Chicken",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Fennel Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-dry_veggie-046",
     "name": "Meen Varuval",
     "category": "dry_veggie",
-    "cuisine": ["south_indian"],
+    "cuisine": [
+      "south_indian"
+    ],
     "diet": "non_veg",
     "style": "health",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Fish", "quantity": "250g", "category": "protein" },
-      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
-    ]
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "fish"
   }
 ]

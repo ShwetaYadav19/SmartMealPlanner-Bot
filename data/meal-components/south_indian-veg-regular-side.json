@@ -28,7 +28,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "coconut"
   },
   {
     "id": "si-side-003",
@@ -50,7 +51,8 @@
         "quantity": "2 tbsp",
         "category": "condiments"
       }
-    ]
+    ],
+    "keyIngredient": "pickle"
   },
   {
     "id": "si-side-004",
@@ -72,7 +74,8 @@
         "quantity": "2",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "papad"
   },
   {
     "id": "si-side-006",
@@ -103,7 +106,8 @@
         "quantity": "1 tbsp",
         "category": "oils"
       }
-    ]
+    ],
+    "keyIngredient": "tomato"
   },
   {
     "id": "si-side-008",
@@ -134,7 +138,8 @@
         "quantity": "to taste",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chilli"
   },
   {
     "id": "ni-side-003",
@@ -156,7 +161,8 @@
         "quantity": "2 tbsp",
         "category": "condiments"
       }
-    ]
+    ],
+    "keyIngredient": "pickle"
   },
   {
     "id": "ni-side-004",
@@ -178,6 +184,7 @@
         "quantity": "2",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "papad"
   }
 ]

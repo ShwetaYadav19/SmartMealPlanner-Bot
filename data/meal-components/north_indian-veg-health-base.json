@@ -19,7 +19,8 @@
         "quantity": "300g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "ni-base-002",
@@ -40,7 +41,8 @@
         "quantity": "200g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "ni-base-006",
@@ -71,7 +73,8 @@
         "quantity": "1 small",
         "category": "vegetables"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "ni-base-007",
@@ -92,6 +95,7 @@
         "quantity": "200g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "millet"
   }
 ]

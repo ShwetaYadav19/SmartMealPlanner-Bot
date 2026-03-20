@@ -34,7 +34,8 @@
         "quantity": "1 small piece",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "ni-gravy-001",
@@ -75,7 +76,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "ni-gravy-002",
@@ -111,7 +113,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "rajma"
   },
   {
     "id": "ni-gravy-003",
@@ -147,7 +150,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chickpeas"
   },
   {
     "id": "ni-gravy-004",
@@ -183,7 +187,8 @@
         "quantity": "3-4 cloves",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-gravy-007",
@@ -219,7 +224,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "ni-gravy-014",
@@ -255,7 +261,8 @@
         "quantity": "1 tbsp",
         "category": "dairy"
       }
-    ]
+    ],
+    "keyIngredient": "lentils"
   },
   {
     "id": "ni-gravy-015",
@@ -291,7 +298,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "tofu"
   },
   {
     "id": "ni-gravy-017",
@@ -327,7 +335,8 @@
         "quantity": "1 tbsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "soya"
   },
   {
     "id": "ni-gravy-018",
@@ -363,6 +372,7 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "soya"
   }
 ]

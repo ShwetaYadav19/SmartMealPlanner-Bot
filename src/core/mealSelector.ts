@@ -338,10 +338,11 @@ export class MealSelector {
     if (pool.length === 0 || !overlapRef) return pool;
 
     const keyIngredients = rule.conditions.keyIngredients ?? [];
-    if (keyIngredients.length === 0) return pool;
+    const autoKeyCategories = rule.conditions.autoKeyCategories;
+    if (keyIngredients.length === 0 && (!autoKeyCategories || autoKeyCategories.length === 0)) return pool;
 
     // Extract key ingredient keywords present in the reference component
-    const refKeys = this.extractKeyIngredients(overlapRef, keyIngredients);
+    const refKeys = this.extractKeyIngredients(overlapRef, keyIngredients, autoKeyCategories);
 
     const filtered = pool.filter((item) => {
       // Check protein group conflict (e.g. chicken gravy + fish dry_veggie)
@@ -349,7 +350,7 @@ export class MealSelector {
 
       // Check if any key ingredient overlaps
       if (refKeys.size > 0) {
-        const itemKeys = this.extractKeyIngredients(item, keyIngredients);
+        const itemKeys = this.extractKeyIngredients(item, keyIngredients, autoKeyCategories);
         for (const key of itemKeys) {
           if (refKeys.has(key)) return false;
         }
@@ -370,13 +371,22 @@ export class MealSelector {
   private extractKeyIngredients(
     component: MealComponent,
     keyIngredients: string[],
+    autoKeyCategories?: string[],
   ): Set<string> {
     const keys = new Set<string>();
     for (const ing of component.ingredients) {
+      // Auto-detect by ingredient category (e.g. "protein")
+      if (autoKeyCategories && autoKeyCategories.includes(ing.category.toLowerCase())) {
+        keys.add(ing.name.toLowerCase());
+        continue;
+      }
+      // Match by keyword — use word-boundary check to avoid "egg" matching "eggplant"
       const name = ing.name.toLowerCase();
       for (const keyword of keyIngredients) {
-        if (name.includes(keyword.toLowerCase())) {
-          keys.add(keyword.toLowerCase());
+        const kw = keyword.toLowerCase();
+        const regex = new RegExp(`\\b${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+        if (regex.test(name)) {
+          keys.add(kw);
         }
       }
     }

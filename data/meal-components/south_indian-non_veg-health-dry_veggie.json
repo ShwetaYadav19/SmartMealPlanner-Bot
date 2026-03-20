@@ -34,7 +34,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-dry_veggie-011",
@@ -71,7 +72,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-012",
@@ -108,7 +110,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "fish"
   },
   {
     "id": "si-dry_veggie-013",
@@ -145,7 +148,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "prawns"
   },
   {
     "id": "si-dry_veggie-016",
@@ -181,7 +185,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-017",
@@ -217,7 +222,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "prawns"
   },
   {
     "id": "si-dry_veggie-018",
@@ -253,7 +259,8 @@
         "quantity": "1 tsp",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "carrot"
   },
   {
     "id": "si-dry_veggie-019",
@@ -289,7 +296,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "egg"
   },
   {
     "id": "si-dry_veggie-045",
@@ -325,7 +333,8 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "chicken"
   },
   {
     "id": "si-dry_veggie-046",
@@ -361,6 +370,7 @@
         "quantity": "8-10",
         "category": "spices"
       }
-    ]
+    ],
+    "keyIngredient": "fish"
   }
 ]

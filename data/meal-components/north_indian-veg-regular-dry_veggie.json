@@ -3,150 +3,370 @@
     "id": "ni-dry_veggie-001",
     "name": "Aloo Gobi",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Potato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Cauliflower", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cauliflower",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "cauliflower"
   },
   {
     "id": "ni-dry_veggie-002",
     "name": "Bhindi Masala",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Okra (Bhindi)", "quantity": "250g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Okra (Bhindi)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "okra"
   },
   {
     "id": "ni-dry_veggie-003",
     "name": "Baingan Bharta",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Eggplant (Baingan)", "quantity": "1 large", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Mustard Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Eggplant (Baingan)",
+        "quantity": "1 large",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "brinjal"
   },
   {
     "id": "ni-dry_veggie-007",
     "name": "Shimla Mirch Aloo",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Capsicum", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Potato", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Capsicum",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Potato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "capsicum"
   },
   {
     "id": "ni-dry_veggie-018",
     "name": "Chilly Paneer",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Capsicum", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Soy Sauce", "quantity": "1 tbsp", "category": "condiments" }
-    ]
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Soy Sauce",
+        "quantity": "1 tbsp",
+        "category": "condiments"
+      }
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-dry_veggie-039",
     "name": "Jeera Aloo",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Potato", "quantity": "3 medium", "category": "vegetables" },
-      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" },
-      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Potato",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "potato"
   },
   {
     "id": "ni-dry_veggie-040",
     "name": "Aloo Methi",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Potato", "quantity": "2 medium", "category": "vegetables" },
-      { "name": "Fenugreek Leaves (Methi)", "quantity": "100g", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Fenugreek Leaves (Methi)",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "potato"
   },
   {
     "id": "ni-dry_veggie-041",
     "name": "Gobi Matar",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Cauliflower", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Green Peas", "quantity": "100g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
-    ]
+      {
+        "name": "Cauliflower",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
+    ],
+    "keyIngredient": "cauliflower"
   },
   {
     "id": "ni-dry_veggie-042",
     "name": "Tawa Paneer",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Paneer", "quantity": "200g", "category": "dairy" },
-      { "name": "Capsicum", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
-      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" }
-    ]
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Capsicum",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      }
+    ],
+    "keyIngredient": "paneer"
   },
   {
     "id": "ni-dry_veggie-043",
     "name": "Karela Fry (Regular)",
     "category": "dry_veggie",
-    "cuisine": ["north_indian"],
+    "cuisine": [
+      "north_indian"
+    ],
     "diet": "veg",
     "style": "regular",
-    "slots": ["lunch", "dinner"],
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
     "ingredients": [
-      { "name": "Bitter Gourd (Karela)", "quantity": "200g", "category": "vegetables" },
-      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
-      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" },
-      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" }
-    ]
+      {
+        "name": "Bitter Gourd (Karela)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "3 tbsp",
+        "category": "oils"
+      }
+    ],
+    "keyIngredient": "karela"
   }
 ]

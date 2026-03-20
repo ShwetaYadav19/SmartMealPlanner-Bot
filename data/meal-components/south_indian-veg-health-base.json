@@ -19,7 +19,8 @@
         "quantity": "300g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "rice"
   },
   {
     "id": "si-base-005",
@@ -40,7 +41,8 @@
         "quantity": "200g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "wheat"
   },
   {
     "id": "si-base-007",
@@ -61,6 +63,7 @@
         "quantity": "200g",
         "category": "grains"
       }
-    ]
+    ],
+    "keyIngredient": "ragi"
   }
 ]

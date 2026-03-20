@@ -215,6 +215,7 @@ export interface RuleConditions {
   windowSize?: number;
   whitelist?: string[];
   keyIngredients?: string[];
+  autoKeyCategories?: string[];
 }
 
 /** Evaluation context passed at runtime */
