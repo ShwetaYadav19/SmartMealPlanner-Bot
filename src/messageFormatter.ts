@@ -39,6 +39,15 @@ import {
   DISH_PREVIEW_EMPTY_ERROR,
   MORE_OPTIONS_MENU_HEADER,
   WEEKLY_PLAN_GROCERY_HINT,
+  CHANGE_PLAN_MENU_HEADER,
+  FEW_MEALS_DAY_PROMPT,
+  FEW_MEALS_SLOT_PROMPT,
+  FEW_MEALS_ALTERNATIVES_HEADER,
+  FEW_MEALS_UPDATED,
+  FEW_MEALS_NO_ALTERNATIVE_MSG,
+  ENTIRE_PLAN_PREVIEW_HEADER,
+  ADHOC_MENU_HEADER,
+  FOOTER_HINT,
 } from './messages';
 
 export interface FormattedMessage {
@@ -81,6 +90,44 @@ const STYLE_BUTTONS: ButtonOption[] = [
 
 const GENERATE_PLAN_BUTTON: ButtonOption[] = [
   { id: 'weekly_plan', title: 'Generate Weekly Plan' },
+];
+
+const CHANGE_PLAN_BUTTONS: ButtonOption[] = [
+  { id: 'few_meals', title: 'Change a Few Meals' },
+  { id: 'entire_plan', title: 'Regenerate Entire Plan' },
+  { id: 'change_preference', title: 'Change Preferences' },
+];
+
+const DAY_BUTTONS: ButtonOption[] = [
+  { id: 'day_0', title: 'Monday' },
+  { id: 'day_1', title: 'Tuesday' },
+  { id: 'day_2', title: 'Wednesday' },
+  { id: 'day_3', title: 'Thursday' },
+  { id: 'day_4', title: 'Friday' },
+  { id: 'day_5', title: 'Saturday' },
+  { id: 'day_6', title: 'Sunday' },
+];
+
+const SLOT_BUTTONS: ButtonOption[] = [
+  { id: 'slot_breakfast', title: 'Breakfast' },
+  { id: 'slot_lunch', title: 'Lunch' },
+  { id: 'slot_dinner', title: 'Dinner' },
+];
+
+const FEW_MEALS_DONE_BUTTONS: ButtonOption[] = [
+  { id: 'change_more', title: 'Change More Meals' },
+  { id: 'done_changing', title: 'Done' },
+];
+
+const ENTIRE_PLAN_BUTTONS: ButtonOption[] = [
+  { id: 'accept_plan', title: 'Accept' },
+  { id: 'retry_plan', title: 'Try Again' },
+];
+
+const ADHOC_MENU_BUTTONS: ButtonOption[] = [
+  { id: 'weekly_plan', title: 'Weekly Meal Plan' },
+  { id: 'tomorrow_plan', title: "Tomorrow's Plan" },
+  { id: 'change_preference', title: 'Change Preferences' },
 ];
 
 export function formatWeeklyPlan(plan: WeeklyPlan): string {
@@ -243,8 +290,8 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.WEEKLY_PLAN: {
       const planText = data?.weeklyPlan ? formatWeeklyPlan(data.weeklyPlan) : WEEKLY_PLAN_HEADER;
       return {
-        text: `${planText}\n\n${WEEKLY_PLAN_GROCERY_HINT}`,
-        buttons: MAIN_MENU_BUTTONS,
+        text: `${planText}\n\n${WEEKLY_PLAN_GROCERY_HINT}${FOOTER_HINT}`,
+        buttons: suggestedButtons ?? MAIN_MENU_BUTTONS,
       };
     }
 
@@ -253,7 +300,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         ? formatGroceryList(data.groceryList)
         : WEEKLY_GROCERY_HEADER;
       return {
-        text: groceryText,
+        text: `${groceryText}${FOOTER_HINT}`,
         buttons: MAIN_MENU_BUTTONS,
       };
     }
@@ -271,7 +318,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         ? `${TOMORROW_GROCERY_HEADER}${formatGroceryListBody(data.groceryList)}`
         : TOMORROW_GROCERY_HEADER;
       return {
-        text: tomorrowGroceryText,
+        text: `${tomorrowGroceryText}${FOOTER_HINT}`,
         buttons: MAIN_MENU_BUTTONS,
       };
     }
@@ -287,7 +334,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
 
     case ResponseType.COOK_MESSAGE_SENT:
       return {
-        text: COOK_MESSAGE_SENT,
+        text: `${COOK_MESSAGE_SENT}${FOOTER_HINT}`,
         buttons: MAIN_MENU_BUTTONS,
       };
 
@@ -297,7 +344,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
           ? SWAP_CONFIRMATION(data.oldMeal, data.newMeal)
           : SWAP_CONFIRMATION('', '');
       return {
-        text: swapText,
+        text: `${swapText}${FOOTER_HINT}`,
         buttons: MAIN_MENU_BUTTONS,
       };
     }
@@ -340,7 +387,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         ? `${DAILY_REMINDER_HEADER(data.dayPlan.day)}\n${formatDayPlanBody(data.dayPlan)}`
         : DAILY_REMINDER_HEADER('');
       return {
-        text: reminderDayText,
+        text: `${reminderDayText}${FOOTER_HINT}`,
         buttons: [
           { id: 'tomorrow_grocery', title: 'View Grocery List' },
           { id: 'swap_lunch', title: 'Swap Lunch' },
@@ -351,7 +398,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
 
     case ResponseType.WEEKLY_REMINDER:
       return {
-        text: WEEKLY_REMINDER,
+        text: `${WEEKLY_REMINDER}${FOOTER_HINT}`,
         buttons: GENERATE_PLAN_BUTTON,
       };
 
@@ -417,6 +464,66 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: MORE_OPTIONS_MENU_HEADER,
         buttons: MORE_OPTIONS_BUTTONS,
+      };
+
+    case ResponseType.CHANGE_PLAN_MENU:
+      return {
+        text: CHANGE_PLAN_MENU_HEADER,
+        buttons: suggestedButtons ?? CHANGE_PLAN_BUTTONS,
+      };
+
+    case ResponseType.FEW_MEALS_DAY_PROMPT:
+      return {
+        text: FEW_MEALS_DAY_PROMPT,
+        buttons: suggestedButtons ?? DAY_BUTTONS,
+      };
+
+    case ResponseType.FEW_MEALS_SLOT_PROMPT: {
+      const slotDayName = data?.dayName ?? '';
+      return {
+        text: FEW_MEALS_SLOT_PROMPT(slotDayName),
+        buttons: suggestedButtons ?? SLOT_BUTTONS,
+      };
+    }
+
+    case ResponseType.FEW_MEALS_ALTERNATIVES: {
+      const altDayName = data?.dayName ?? '';
+      const altSlot = data?.oldMeal ?? '';
+      const alternatives = response.suggestedActions ?? [];
+      const altButtons: ButtonOption[] = alternatives.map((a) => ({
+        id: a.id,
+        title: a.label,
+      }));
+      return {
+        text: FEW_MEALS_ALTERNATIVES_HEADER(altDayName, altSlot),
+        buttons: altButtons.length > 0 ? altButtons : suggestedButtons,
+      };
+    }
+
+    case ResponseType.FEW_MEALS_UPDATED:
+      return {
+        text: `${FEW_MEALS_UPDATED}${FOOTER_HINT}`,
+        buttons: FEW_MEALS_DONE_BUTTONS,
+      };
+
+    case ResponseType.FEW_MEALS_NO_ALTERNATIVE:
+      return {
+        text: FEW_MEALS_NO_ALTERNATIVE_MSG,
+        buttons: suggestedButtons ?? DAY_BUTTONS,
+      };
+
+    case ResponseType.ENTIRE_PLAN_PREVIEW: {
+      const previewPlanText = data?.weeklyPlan ? formatWeeklyPlan(data.weeklyPlan) : WEEKLY_PLAN_HEADER;
+      return {
+        text: `${ENTIRE_PLAN_PREVIEW_HEADER}\n\n${previewPlanText}`,
+        buttons: suggestedButtons ?? ENTIRE_PLAN_BUTTONS,
+      };
+    }
+
+    case ResponseType.ADHOC_MENU:
+      return {
+        text: `${ADHOC_MENU_HEADER}${FOOTER_HINT}`,
+        buttons: suggestedButtons ?? ADHOC_MENU_BUTTONS,
       };
 
     case ResponseType.ERROR:

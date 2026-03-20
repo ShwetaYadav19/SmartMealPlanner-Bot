@@ -455,17 +455,13 @@ export function composeMeal(
     byCategory[c.category].push(c);
   }
 
-  // Apply diet preference to gravy and dry_veggie only.
+  // Apply diet preference to gravy and dry_veggie.
   // Bases and sides are inherently veg, so diet filtering doesn't apply to them.
-  // Non-veg users keep the full pool (veg + non_veg) for variety — this matches
-  // the diet-fallback rule behavior in MealSelector.
+  // Non-veg users keep the full pool (veg + non_veg) for variety.
+  // HARD GUARDRAIL: veg users must NEVER see non-veg — no fallback to full pool.
   if (diet && diet !== 'both' && diet !== 'non_veg') {
     for (const cat of ['gravy', 'dry_veggie'] as ComponentCategory[]) {
-      const filtered = byCategory[cat].filter((c) => c.diet === diet);
-      if (filtered.length > 0) {
-        byCategory[cat] = filtered;
-      }
-      // If no items match the diet, keep the full pool as fallback
+      byCategory[cat] = byCategory[cat].filter((c) => c.diet === diet);
     }
   }
 
@@ -694,6 +690,8 @@ export function generateWeeklyPlan(
     lunch: [],
     dinner: [],
   };
+  // Track ALL used breakfast IDs — only repeat after pool is exhausted
+  const allUsedBreakfastIds = new Set<string>();
   const BREAKFAST_RECENT_WINDOW = 3;
 
   // Track cumulative used IDs per slot per category (no eviction — full used set)
@@ -751,7 +749,13 @@ export function generateWeeklyPlan(
     const isBreakfastNonVeg = breakfastSlot === nonVegSlot;
     const breakfastPool = isBreakfastNonVeg ? nonVegPools[breakfastSlot] : pools[breakfastSlot];
     const breakfastCursorMap = isBreakfastNonVeg ? nonVegCursor : cursor;
-    const breakfastRecentIds = new Set<string>(recentSlotHistory[breakfastSlot]);
+    const breakfastRecentIds = new Set<string>(allUsedBreakfastIds);
+
+    // If all breakfasts in the pool have been used, reset to allow repeats
+    const breakfastPoolUsedAll = breakfastPool.every(m => allUsedBreakfastIds.has(m.id));
+    if (breakfastPoolUsedAll) {
+      breakfastRecentIds.clear();
+    }
 
     let breakfast = pickMealFromCursor(
       breakfastPool,
@@ -784,6 +788,7 @@ export function generateWeeklyPlan(
     }
 
     usedToday.add(breakfast.id);
+    allUsedBreakfastIds.add(breakfast.id);
     for (const key of getKeyIngredients(breakfast)) {
       usedKeyIngredients.add(key);
     }
@@ -885,6 +890,176 @@ export function generateWeeklyPlan(
   return plan;
 }
 
+
+/**
+ * Generate N alternative meals for a specific day and slot,
+ * respecting same-day dedup against the other slot's components.
+ *
+ * - For breakfast: filter meals by preferences and slot, exclude the current breakfast, return up to `count` alternatives.
+ * - For lunch/dinner: use the composeMeal pipeline to generate alternative composed meals,
+ *   respecting same-day dedup against the other slot's components.
+ */
+export function generateAlternatives(
+  weeklyPlan: WeeklyPlan,
+  dayIndex: number,
+  slot: 'breakfast' | 'lunch' | 'dinner',
+  meals: Meal[],
+  components: MealComponent[],
+  preferences: { cuisine: string; diet: string; style: string },
+  count: number,
+): (Meal | ComposedMeal)[] {
+  if (dayIndex < 0 || dayIndex > 6 || !weeklyPlan[dayIndex]) return [];
+
+  const dayPlan = weeklyPlan[dayIndex];
+
+  if (slot === 'breakfast') {
+    // Filter meals for breakfast slot
+    const breakfastMeals = mealsForSlot(meals, 'breakfast');
+    // Hard guardrail: filter by diet and cuisine — non-negotiable
+    const dietFiltered = breakfastMeals.filter((m) => {
+      // Diet check: veg users must never see non_veg
+      if (preferences.diet !== 'both' && preferences.diet !== 'non_veg' && m.diet !== preferences.diet) return false;
+      // Cuisine check: north_indian users must never see south_indian and vice versa
+      if (preferences.cuisine !== 'both' && !m.cuisine.includes(preferences.cuisine as 'north_indian' | 'south_indian')) return false;
+      // Style check
+      if (preferences.style && m.style !== preferences.style) return false;
+      return true;
+    });
+    const currentId = dayPlan.breakfast.id;
+    // Exclude the current breakfast
+    const candidates = dietFiltered.filter((m) => m.id !== currentId);
+    // Shuffle and return up to count
+    return fisherYatesShuffle(candidates).slice(0, count);
+  }
+
+  // For lunch/dinner: compose alternative meals using the composeMeal pipeline
+  const currentMeal = slot === 'lunch' ? dayPlan.lunch : dayPlan.dinner;
+  const otherSlot = slot === 'lunch' ? 'dinner' : 'lunch';
+  const otherMeal = slot === 'lunch' ? dayPlan.dinner : dayPlan.lunch;
+
+  // Determine cuisine
+  const cuisine: 'north_indian' | 'south_indian' = preferences.cuisine === 'both'
+    ? 'north_indian'
+    : (preferences.cuisine as 'north_indian' | 'south_indian');
+
+  // Collect IDs from the other slot for same-day dedup (base, gravy, dry_veggie)
+  const otherSlotIds: Record<ComponentCategory, Set<string>> = {
+    base: new Set<string>(),
+    gravy: new Set<string>(),
+    dry_veggie: new Set<string>(),
+    side: new Set<string>(),
+  };
+  for (const c of otherMeal.components) {
+    if (c.category === 'base' || c.category === 'gravy' || c.category === 'dry_veggie') {
+      otherSlotIds[c.category].add(c.id);
+    }
+  }
+
+  // Collect current meal's component IDs to try to avoid repeating them
+  const currentIds = new Set(currentMeal.components.map((c) => c.id));
+
+  const alternatives: ComposedMeal[] = [];
+  const usedGravyIds = new Set<string>();
+
+  for (let i = 0; i < count; i++) {
+    // Build constraints: same-day dedup from other slot + exclude gravies already used in alternatives
+    const constraints: ComposeMealConstraints = {
+      base:       { recentIds: new Set(), sameDayIds: otherSlotIds.base },
+      gravy:      { recentIds: new Set([...currentIds, ...usedGravyIds]), sameDayIds: otherSlotIds.gravy },
+      dry_veggie: { recentIds: new Set(), sameDayIds: otherSlotIds.dry_veggie },
+      side:       { recentIds: new Set(), sameDayIds: new Set() },
+    };
+
+    try {
+      const alt = composeMeal(components, slot as 'lunch' | 'dinner', cuisine, constraints, preferences.diet);
+      // Only add if it differs from the current meal (check gravy ID as primary differentiator)
+      const altGravy = alt.components.find((c) => c.category === 'gravy');
+      const currentGravy = currentMeal.components.find((c) => c.category === 'gravy');
+      if (altGravy && currentGravy && altGravy.id !== currentGravy.id) {
+        alternatives.push(alt);
+        if (altGravy) usedGravyIds.add(altGravy.id);
+      } else if (!currentGravy || !altGravy) {
+        alternatives.push(alt);
+      }
+    } catch {
+      // If composition fails, stop generating more alternatives
+      break;
+    }
+  }
+
+  return alternatives;
+}
+
+/**
+ * Regenerate a weekly plan excluding ~70% of meals from the current plan.
+ * Collects meal/component IDs from the current plan, randomly selects ~70%
+ * to exclude, and passes them as excludedDishIds to the generation pipeline.
+ */
+export function regenerateWeeklyPlan(
+  currentPlan: WeeklyPlan,
+  meals: Meal[],
+  components: MealComponent[],
+  preferences: { cuisine: string; diet: string; style: string },
+  mealSelector?: MealSelector,
+  rules?: Rule[],
+): WeeklyPlan {
+  // Collect all meal/component IDs from the current plan
+  const allIds = new Set<string>();
+  for (const day of currentPlan) {
+    allIds.add(day.breakfast.id);
+    for (const c of day.lunch.components) allIds.add(c.id);
+    for (const c of day.dinner.components) allIds.add(c.id);
+  }
+
+  const idArray = Array.from(allIds);
+  const shuffled = fisherYatesShuffle(idArray);
+
+  // Select ~70% to exclude
+  const excludeCount = Math.round(idArray.length * 0.7);
+  const excludedIds = new Set(shuffled.slice(0, excludeCount));
+
+  // Filter out excluded meals
+  const filteredMeals = meals.filter((m) => !excludedIds.has(m.id));
+  // Filter out excluded components
+  const filteredComponents = components.filter((c) => !excludedIds.has(c.id));
+
+  // If filtering removed too many items, fall back to full pools
+  const safeMeals = mealsForSlot(filteredMeals, 'breakfast').length > 0 ? filteredMeals : meals;
+
+  // Check per-category sufficiency: each category must have at least 1 component
+  // for each slot/cuisine combo. If a category is depleted, selectively un-exclude
+  // the minimum IDs needed to restore it, preserving as many exclusions as possible.
+  const isBoth = preferences.cuisine === 'both';
+  const targetCuisine = isBoth ? 'north_indian' : preferences.cuisine;
+  const REQUIRED_CATEGORIES: ComponentCategory[] = ['base', 'gravy', 'dry_veggie', 'side'];
+
+  for (const slot of ['lunch', 'dinner'] as const) {
+    for (const cat of REQUIRED_CATEGORIES) {
+      const hasAny = filteredComponents.some(c =>
+        c.category === cat && c.slots.includes(slot) && c.cuisine.includes(targetCuisine),
+      );
+      if (!hasAny) {
+        // Find excluded components that would fill this gap and un-exclude them
+        for (const c of components) {
+          if (
+            excludedIds.has(c.id) &&
+            c.category === cat &&
+            c.slots.includes(slot) &&
+            c.cuisine.includes(targetCuisine)
+          ) {
+            excludedIds.delete(c.id);
+            filteredComponents.push(c);
+            break; // one is enough
+          }
+        }
+      }
+    }
+  }
+
+  const safeComponents = filteredComponents;
+
+  return generateWeeklyPlan(safeMeals, safeComponents, preferences, mealSelector, rules);
+}
 
 /**
  * Extract tomorrow's plan from a weekly plan.

@@ -255,7 +255,7 @@ describe('formatBotResponse', () => {
       data: { oldMeal: 'Dal Rice', newMeal: 'Paneer Tikka' },
     };
     const result = formatBotResponse(response);
-    expect(result.text).toBe(SWAP_CONFIRMATION('Dal Rice', 'Paneer Tikka'));
+    expect(result.text).toContain(SWAP_CONFIRMATION('Dal Rice', 'Paneer Tikka'));
   });
 
   it('should format NO_PLAN_ERROR with generate plan button', () => {
@@ -306,13 +306,13 @@ describe('formatBotResponse', () => {
   it('should format COOK_MESSAGE_SENT', () => {
     const response: BotResponse = { type: ResponseType.COOK_MESSAGE_SENT };
     const result = formatBotResponse(response);
-    expect(result.text).toBe(COOK_MESSAGE_SENT);
+    expect(result.text).toContain(COOK_MESSAGE_SENT);
   });
 
   it('should format WEEKLY_REMINDER', () => {
     const response: BotResponse = { type: ResponseType.WEEKLY_REMINDER };
     const result = formatBotResponse(response);
-    expect(result.text).toBe(WEEKLY_REMINDER);
+    expect(result.text).toContain(WEEKLY_REMINDER);
     expect(result.buttons!.some((b) => b.id === 'weekly_plan')).toBe(true);
   });
 

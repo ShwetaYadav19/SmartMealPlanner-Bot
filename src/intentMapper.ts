@@ -91,6 +91,46 @@ export function mapWhatsAppToIntent(
       }
     }
 
+    // --- Change Plan flow button payloads ---
+    switch (buttonPayload) {
+      case 'change_plan':
+        return { intent: Intent.CHANGE_PLAN };
+      case 'few_meals':
+        return { intent: Intent.CHANGE_FEW_MEALS };
+      case 'entire_plan':
+        return { intent: Intent.CHANGE_ENTIRE_PLAN };
+      case 'accept_plan':
+        return { intent: Intent.ACCEPT_PLAN };
+      case 'retry_plan':
+        return { intent: Intent.RETRY_PLAN };
+      case 'change_more':
+        return { intent: Intent.CHANGE_MORE_MEALS };
+      case 'done_changing':
+        return { intent: Intent.DONE_CHANGING };
+    }
+
+    // --- Day selection payloads (day_0 through day_6) ---
+    const dayMatch = buttonPayload.match(/^day_([0-6])$/);
+    if (dayMatch) {
+      return { intent: Intent.SELECT_DAY, payload: dayMatch[1] };
+    }
+
+    // --- Slot selection payloads ---
+    switch (buttonPayload) {
+      case 'slot_breakfast':
+        return { intent: Intent.SELECT_MEAL_SLOT, payload: 'breakfast' };
+      case 'slot_lunch':
+        return { intent: Intent.SELECT_MEAL_SLOT, payload: 'lunch' };
+      case 'slot_dinner':
+        return { intent: Intent.SELECT_MEAL_SLOT, payload: 'dinner' };
+    }
+
+    // --- Alternative selection payloads (alt_0, alt_1, alt_2) ---
+    const altMatch = buttonPayload.match(/^alt_([0-2])$/);
+    if (altMatch) {
+      return { intent: Intent.SELECT_ALTERNATIVE, payload: altMatch[1] };
+    }
+
     // --- State-independent button payloads (main menu actions) ---
     switch (buttonPayload) {
       case 'weekly_plan':
@@ -134,6 +174,8 @@ export function mapWhatsAppToIntent(
 
   // Main menu actions via text
   if (conversationState === 'main_menu') {
+    // Adhoc menu trigger for onboarded users
+    if (text === 'hi' || text === 'menu') return { intent: Intent.ADHOC_MENU };
     if (text === '1' || text === 'weekly meal plan' || text === 'weekly plan') return { intent: Intent.GENERATE_PLAN };
     if (text === '2' || text === 'weekly grocery list' || text === 'weekly grocery') return { intent: Intent.VIEW_WEEKLY_GROCERY };
     if (text === '3' || text === "tomorrow's plan" || text === 'tomorrow plan') return { intent: Intent.VIEW_TOMORROW_PLAN };

@@ -154,6 +154,24 @@ export const MORE_OPTIONS_MENU_HEADER = `Here are more options for you 📋`;
 // --- Grocery Hint ---
 export const WEEKLY_PLAN_GROCERY_HINT = `💡 Tap 'More Options' to view the weekly grocery list`;
 
+// --- Change Plan Flow ---
+export const CHANGE_PLAN_MENU_HEADER = `How would you like to change your plan? 🔄`;
+export const FEW_MEALS_DAY_PROMPT = `Which day would you like to change? 📅`;
+export const FEW_MEALS_SLOT_PROMPT = (dayName: string) => `Which meal on ${dayName} would you like to change? 🍽️`;
+export const FEW_MEALS_ALTERNATIVES_HEADER = (dayName: string, slot: string) =>
+  `Here are 3 alternatives for ${dayName} ${slot} 🔄\nPick one:`;
+export const FEW_MEALS_UPDATED = `Meal updated! ✅\nWould you like to change more meals?`;
+export const FEW_MEALS_NO_ALTERNATIVE_MSG = `Sorry, no alternatives are available for this slot 😕`;
+
+// --- Entire Plan Flow ---
+export const ENTIRE_PLAN_PREVIEW_HEADER = `Here's your new meal plan 🍽️\nWould you like to accept or try again?`;
+
+// --- Adhoc Menu ---
+export const ADHOC_MENU_HEADER = `Hey! 👋 What would you like to do?`;
+
+// --- Footer Hint ---
+export const FOOTER_HINT = `\nType "hi" to start a new conversation`;
+
 
 // --- Twilio WhatsApp Content Template SID Mapping ---
 

@@ -16,7 +16,7 @@ import {
   type ComposedMeal,
   type DayPlan,
 } from './types';
-import { generateWeeklyPlan, extractTomorrowPlan, swapTomorrowLunch } from './planGenerator';
+import { generateWeeklyPlan, extractTomorrowPlan, swapTomorrowLunch, generateAlternatives, regenerateWeeklyPlan } from './planGenerator';
 import { generateGroceryList } from './groceryListGenerator';
 import { validatePhoneNumber } from './phoneValidation';
 import { generateCandidateDishes, removeBreakfast, removeComponent, buildPlanFromComponents, hasMinimumComponents, type DishPreviewDeps } from './dishPreview';
@@ -51,11 +51,53 @@ const MAIN_MENU_OPTIONS: SuggestedAction[] = [
   { id: 'send_to_cook', label: 'Send Menu to Cook' },
   { id: 'more_options', label: 'More Options' },
 ];
+const WEEKLY_PLAN_OPTIONS: SuggestedAction[] = [
+  { id: 'weekly_grocery', label: 'View Grocery List' },
+  { id: 'change_plan', label: 'Change Plan' },
+];
 const MORE_OPTIONS_BUTTONS: SuggestedAction[] = [
   { id: 'weekly_plan', label: 'Weekly Meal Plan' },
   { id: 'weekly_grocery', label: 'View Weekly Grocery List' },
   { id: 'change_preference', label: 'Change Meal Preference' },
   { id: 'change_cook_number', label: "Change Cook's Number" },
+];
+
+const CHANGE_PLAN_OPTIONS: SuggestedAction[] = [
+  { id: 'few_meals', label: 'Change a Few Meals' },
+  { id: 'entire_plan', label: 'Regenerate Entire Plan' },
+  { id: 'change_preference', label: 'Change Preferences' },
+];
+
+const DAY_SELECT_OPTIONS: SuggestedAction[] = [
+  { id: 'day_0', label: 'Monday' },
+  { id: 'day_1', label: 'Tuesday' },
+  { id: 'day_2', label: 'Wednesday' },
+  { id: 'day_3', label: 'Thursday' },
+  { id: 'day_4', label: 'Friday' },
+  { id: 'day_5', label: 'Saturday' },
+  { id: 'day_6', label: 'Sunday' },
+];
+
+const SLOT_SELECT_OPTIONS: SuggestedAction[] = [
+  { id: 'slot_breakfast', label: 'Breakfast' },
+  { id: 'slot_lunch', label: 'Lunch' },
+  { id: 'slot_dinner', label: 'Dinner' },
+];
+
+const ENTIRE_PLAN_OPTIONS: SuggestedAction[] = [
+  { id: 'accept_plan', label: 'Accept Plan' },
+  { id: 'retry_plan', label: 'Retry' },
+];
+
+const FEW_MEALS_DONE_OPTIONS: SuggestedAction[] = [
+  { id: 'change_more', label: 'Change More Meals' },
+  { id: 'done_changing', label: 'Done' },
+];
+
+const ADHOC_MENU_OPTIONS: SuggestedAction[] = [
+  { id: 'weekly_plan', label: 'Weekly Meal Plan' },
+  { id: 'tomorrow_plan', label: "Tomorrow's Plan" },
+  { id: 'change_preference', label: 'Change Preferences' },
 ];
 
 // --- Helper to create a default new-user state ---
@@ -132,17 +174,50 @@ function handleAwaitingDiet(intent: UserIntent, state: UserState): BotResult {
   };
 }
 
-function handleAwaitingMealStyle(intent: UserIntent, state: UserState): BotResult {
+async function handleAwaitingMealStyle(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
+): Promise<BotResult> {
   if (intent.intent === Intent.SELECT_MEAL_STYLE && intent.payload) {
+    const preferences = {
+      cuisine: state.cuisinePreference ?? 'both',
+      diet: state.dietPreference ?? 'veg',
+      style: intent.payload as string,
+    };
+    const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
+    const candidateDishes = await generateCandidateDishes(
+      deps,
+      preferences,
+      state.excludedDishIds ?? [],
+      mealSelector,
+    );
+
+    // Build weekly plan directly from candidates — no dish review step
+    const weeklyPlan = buildPlanFromComponents(candidateDishes, {
+      cuisine: state.cuisinePreference ?? 'both',
+      diet: state.dietPreference ?? 'both',
+    });
+    const weeklyPlanStartDate = getCurrentWeekMondayISO();
+
     const updatedState: UserState = {
       ...state,
       mealStyle: intent.payload as UserState['mealStyle'],
-      conversationState: 'awaiting_cook_number_onboarding',
+      onboardingComplete: true,
+      conversationState: 'main_menu',
+      weeklyPlan,
+      weeklyPlanStartDate,
+      candidateDishes: undefined,
+      previewStep: undefined,
     };
+
     return {
       response: {
-        type: ResponseType.COOK_NUMBER_ONBOARDING_PROMPT,
-        suggestedActions: SKIP_COOK_NUMBER_OPTION,
+        type: ResponseType.WEEKLY_PLAN,
+        data: { weeklyPlan },
+        suggestedActions: WEEKLY_PLAN_OPTIONS,
       },
       updatedState,
     };
@@ -470,7 +545,7 @@ async function handleDishPreview(
       response: {
         type: ResponseType.WEEKLY_PLAN,
         data: { weeklyPlan },
-        suggestedActions: MAIN_MENU_OPTIONS,
+        suggestedActions: WEEKLY_PLAN_OPTIONS,
       },
       updatedState,
     };
@@ -576,7 +651,7 @@ async function handleMoreOptions(
           response: {
             type: ResponseType.WEEKLY_PLAN,
             data: { weeklyPlan: state.weeklyPlan },
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: WEEKLY_PLAN_OPTIONS,
           },
           updatedState: { ...state, conversationState: 'main_menu' },
         };
@@ -865,12 +940,15 @@ async function handleMainMenu(
         };
       }
       if (!state.cookPhoneNumber) {
+        const updatedState: UserState = {
+          ...state,
+          conversationState: 'awaiting_cook_number',
+        };
         return {
           response: {
-            type: ResponseType.NO_COOK_ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            type: ResponseType.COOK_NUMBER_PROMPT,
           },
-          updatedState: state,
+          updatedState,
         };
       }
       const cookDayPlan = extractTomorrowPlan(state.weeklyPlan, state.weeklyPlanStartDate);
@@ -955,6 +1033,31 @@ async function handleMainMenu(
       };
     }
 
+    case Intent.CHANGE_PLAN: {
+      const updatedState: UserState = {
+        ...state,
+        conversationState: 'change_plan_menu',
+      };
+      return {
+        response: {
+          type: ResponseType.CHANGE_PLAN_MENU,
+          suggestedActions: CHANGE_PLAN_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    case Intent.ADHOC_MENU: {
+      return {
+        response: {
+          type: ResponseType.ADHOC_MENU,
+          data: { weeklyPlan: state.weeklyPlan },
+          suggestedActions: ADHOC_MENU_OPTIONS,
+        },
+        updatedState: state,
+      };
+    }
+
     default: {
       // UNKNOWN or any unrecognized intent
       return {
@@ -965,6 +1068,402 @@ async function handleMainMenu(
         updatedState: state,
       };
     }
+  }
+}
+
+// --- Change Plan Menu handler (Task 3.1) ---
+
+async function handleChangePlanMenu(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+): Promise<BotResult> {
+  switch (intent.intent) {
+    case Intent.CHANGE_FEW_MEALS: {
+      const updatedState: UserState = {
+        ...state,
+        conversationState: 'few_meals_day_select',
+      };
+      return {
+        response: {
+          type: ResponseType.FEW_MEALS_DAY_PROMPT,
+          suggestedActions: DAY_SELECT_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    case Intent.CHANGE_ENTIRE_PLAN: {
+      if (!state.weeklyPlan) {
+        return {
+          response: {
+            type: ResponseType.NO_PLAN_ERROR,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: { ...state, conversationState: 'main_menu' },
+        };
+      }
+
+      const meals = await mealRepository.getMeals({});
+      const components = await mealComponentRepository.getComponents({});
+      const preferences = {
+        cuisine: state.cuisinePreference ?? 'both',
+        diet: state.dietPreference ?? 'veg',
+        style: state.mealStyle ?? 'regular',
+      };
+
+      const newPlan = regenerateWeeklyPlan(state.weeklyPlan, meals, components, preferences);
+      const weeklyPlanStartDate = getCurrentWeekMondayISO();
+
+      const updatedState: UserState = {
+        ...state,
+        previousWeeklyPlan: state.weeklyPlan,
+        weeklyPlan: newPlan,
+        weeklyPlanStartDate,
+        conversationState: 'entire_plan_confirm',
+      };
+      return {
+        response: {
+          type: ResponseType.ENTIRE_PLAN_PREVIEW,
+          data: { weeklyPlan: newPlan },
+          suggestedActions: ENTIRE_PLAN_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    case Intent.CHANGE_PREFERENCE: {
+      const updatedState: UserState = {
+        ...state,
+        excludedDishIds: [],
+        isPreferenceChange: true,
+        conversationState: 'awaiting_preference_cuisine',
+      };
+      return {
+        response: {
+          type: ResponseType.ONBOARDING_CUISINE_PROMPT,
+          suggestedActions: CUISINE_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    default:
+      return {
+        response: {
+          type: ResponseType.INVALID_INPUT,
+          suggestedActions: CHANGE_PLAN_OPTIONS,
+        },
+        updatedState: state,
+      };
+  }
+}
+
+// --- Few Meals Day Select handler (Task 3.2) ---
+
+function handleFewMealsDaySelect(intent: UserIntent, state: UserState): BotResult {
+  if (intent.intent === Intent.SELECT_DAY && intent.payload != null) {
+    const day = parseInt(intent.payload, 10);
+    if (day >= 0 && day <= 6) {
+      const updatedState: UserState = {
+        ...state,
+        fewMealsSelectedDay: day,
+        conversationState: 'few_meals_slot_select',
+      };
+      return {
+        response: {
+          type: ResponseType.FEW_MEALS_SLOT_PROMPT,
+          suggestedActions: SLOT_SELECT_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+  }
+
+  return {
+    response: {
+      type: ResponseType.INVALID_INPUT,
+      suggestedActions: DAY_SELECT_OPTIONS,
+    },
+    updatedState: state,
+  };
+}
+
+// --- Few Meals Slot Select handler (Task 3.3) ---
+
+async function handleFewMealsSlotSelect(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+): Promise<BotResult> {
+  if (intent.intent === Intent.SELECT_MEAL_SLOT && intent.payload) {
+    const slot = intent.payload as 'breakfast' | 'lunch' | 'dinner';
+    if (slot !== 'breakfast' && slot !== 'lunch' && slot !== 'dinner') {
+      return {
+        response: {
+          type: ResponseType.INVALID_INPUT,
+          suggestedActions: SLOT_SELECT_OPTIONS,
+        },
+        updatedState: state,
+      };
+    }
+
+    if (!state.weeklyPlan || state.fewMealsSelectedDay == null) {
+      return {
+        response: {
+          type: ResponseType.NO_PLAN_ERROR,
+          suggestedActions: MAIN_MENU_OPTIONS,
+        },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+
+    const meals = await mealRepository.getMeals({
+      cuisine: state.cuisinePreference ?? 'both',
+      diet: state.dietPreference ?? 'veg',
+      style: state.mealStyle ?? 'regular',
+    });
+    const components = await mealComponentRepository.getComponents({
+      cuisine: state.cuisinePreference ?? 'both',
+      diet: state.dietPreference ?? 'veg',
+      style: state.mealStyle ?? 'regular',
+    });
+    const preferences = {
+      cuisine: state.cuisinePreference ?? 'both',
+      diet: state.dietPreference ?? 'veg',
+      style: state.mealStyle ?? 'regular',
+    };
+
+    const alternatives = generateAlternatives(
+      state.weeklyPlan,
+      state.fewMealsSelectedDay,
+      slot,
+      meals,
+      components,
+      preferences,
+      3,
+    );
+
+    if (alternatives.length === 0) {
+      return {
+        response: {
+          type: ResponseType.FEW_MEALS_NO_ALTERNATIVE,
+          suggestedActions: DAY_SELECT_OPTIONS,
+        },
+        updatedState: { ...state, conversationState: 'few_meals_day_select' },
+      };
+    }
+
+    const altActions: SuggestedAction[] = alternatives.map((alt, i) => ({
+      id: `alt_${i}`,
+      label: alt.name,
+    }));
+
+    const updatedState: UserState = {
+      ...state,
+      fewMealsSelectedSlot: slot,
+      fewMealsAlternatives: alternatives,
+      conversationState: 'few_meals_alternatives',
+    };
+
+    return {
+      response: {
+        type: ResponseType.FEW_MEALS_ALTERNATIVES,
+        suggestedActions: altActions,
+      },
+      updatedState,
+    };
+  }
+
+  return {
+    response: {
+      type: ResponseType.INVALID_INPUT,
+      suggestedActions: SLOT_SELECT_OPTIONS,
+    },
+    updatedState: state,
+  };
+}
+
+// --- Few Meals Alternatives handler (Task 3.4) ---
+
+function handleFewMealsAlternatives(intent: UserIntent, state: UserState): BotResult {
+  switch (intent.intent) {
+    case Intent.SELECT_ALTERNATIVE: {
+      if (!intent.payload || !state.weeklyPlan || state.fewMealsSelectedDay == null || !state.fewMealsSelectedSlot || !state.fewMealsAlternatives) {
+        return {
+          response: {
+            type: ResponseType.INVALID_INPUT,
+            suggestedActions: FEW_MEALS_DONE_OPTIONS,
+          },
+          updatedState: state,
+        };
+      }
+
+      const altIndex = parseInt(intent.payload, 10);
+      if (isNaN(altIndex) || altIndex < 0 || altIndex >= state.fewMealsAlternatives.length) {
+        return {
+          response: {
+            type: ResponseType.INVALID_INPUT,
+            suggestedActions: FEW_MEALS_DONE_OPTIONS,
+          },
+          updatedState: state,
+        };
+      }
+
+      const selectedAlt = state.fewMealsAlternatives[altIndex];
+      const dayIndex = state.fewMealsSelectedDay;
+      const slot = state.fewMealsSelectedSlot;
+
+      // Deep-clone the plan
+      const updatedPlan = state.weeklyPlan.map((day) => ({
+        ...day,
+        breakfast: { ...day.breakfast },
+        lunch: { ...day.lunch },
+        dinner: { ...day.dinner },
+      }));
+
+      // Update the selected day/slot
+      updatedPlan[dayIndex] = {
+        ...updatedPlan[dayIndex],
+        [slot]: selectedAlt,
+      };
+
+      const updatedState: UserState = {
+        ...state,
+        weeklyPlan: updatedPlan,
+        fewMealsAlternatives: undefined,
+        conversationState: 'few_meals_alternatives',
+      };
+
+      return {
+        response: {
+          type: ResponseType.FEW_MEALS_UPDATED,
+          suggestedActions: FEW_MEALS_DONE_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    case Intent.CHANGE_MORE_MEALS: {
+      const updatedState: UserState = {
+        ...state,
+        fewMealsSelectedDay: undefined,
+        fewMealsSelectedSlot: undefined,
+        fewMealsAlternatives: undefined,
+        conversationState: 'few_meals_day_select',
+      };
+      return {
+        response: {
+          type: ResponseType.FEW_MEALS_DAY_PROMPT,
+          suggestedActions: DAY_SELECT_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    case Intent.DONE_CHANGING: {
+      const updatedState: UserState = {
+        ...state,
+        fewMealsSelectedDay: undefined,
+        fewMealsSelectedSlot: undefined,
+        fewMealsAlternatives: undefined,
+        conversationState: 'main_menu',
+      };
+      return {
+        response: {
+          type: ResponseType.MAIN_MENU,
+          suggestedActions: MAIN_MENU_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    default:
+      return {
+        response: {
+          type: ResponseType.INVALID_INPUT,
+          suggestedActions: FEW_MEALS_DONE_OPTIONS,
+        },
+        updatedState: state,
+      };
+  }
+}
+
+// --- Entire Plan Confirm handler (Task 3.5) ---
+
+async function handleEntirePlanConfirm(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+): Promise<BotResult> {
+  switch (intent.intent) {
+    case Intent.ACCEPT_PLAN: {
+      const updatedState: UserState = {
+        ...state,
+        previousWeeklyPlan: undefined,
+        conversationState: 'main_menu',
+      };
+      return {
+        response: {
+          type: ResponseType.WEEKLY_PLAN,
+          data: { weeklyPlan: state.weeklyPlan },
+          suggestedActions: WEEKLY_PLAN_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    case Intent.RETRY_PLAN: {
+      const currentPlan = state.weeklyPlan ?? state.previousWeeklyPlan;
+      if (!currentPlan) {
+        return {
+          response: {
+            type: ResponseType.NO_PLAN_ERROR,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: { ...state, conversationState: 'main_menu' },
+        };
+      }
+
+      const meals = await mealRepository.getMeals({});
+      const components = await mealComponentRepository.getComponents({});
+      const preferences = {
+        cuisine: state.cuisinePreference ?? 'both',
+        diet: state.dietPreference ?? 'veg',
+        style: state.mealStyle ?? 'regular',
+      };
+
+      const newPlan = regenerateWeeklyPlan(currentPlan, meals, components, preferences);
+      const weeklyPlanStartDate = getCurrentWeekMondayISO();
+
+      const updatedState: UserState = {
+        ...state,
+        weeklyPlan: newPlan,
+        weeklyPlanStartDate,
+        conversationState: 'entire_plan_confirm',
+      };
+
+      return {
+        response: {
+          type: ResponseType.ENTIRE_PLAN_PREVIEW,
+          data: { weeklyPlan: newPlan },
+          suggestedActions: ENTIRE_PLAN_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
+    default:
+      return {
+        response: {
+          type: ResponseType.INVALID_INPUT,
+          suggestedActions: ENTIRE_PLAN_OPTIONS,
+        },
+        updatedState: state,
+      };
   }
 }
 
@@ -1074,7 +1573,7 @@ export async function processIntent(
       return handleAwaitingDiet(intent, userState);
 
     case 'awaiting_meal_style':
-      return handleAwaitingMealStyle(intent, userState);
+      return handleAwaitingMealStyle(intent, userState, mealRepository, mealComponentRepository, mealSelector);
 
     case 'awaiting_cook_number_onboarding':
       return handleAwaitingCookNumberOnboarding(intent, userState, mealRepository, mealComponentRepository, mealSelector);
@@ -1093,6 +1592,21 @@ export async function processIntent(
 
     case 'awaiting_preference_diet':
       return handleAwaitingPreferenceDiet(intent, userState, mealRepository, mealComponentRepository, mealSelector);
+
+    case 'change_plan_menu':
+      return handleChangePlanMenu(intent, userState, mealRepository, mealComponentRepository);
+
+    case 'few_meals_day_select':
+      return handleFewMealsDaySelect(intent, userState);
+
+    case 'few_meals_slot_select':
+      return handleFewMealsSlotSelect(intent, userState, mealRepository, mealComponentRepository);
+
+    case 'few_meals_alternatives':
+      return handleFewMealsAlternatives(intent, userState);
+
+    case 'entire_plan_confirm':
+      return handleEntirePlanConfirm(intent, userState, mealRepository, mealComponentRepository);
 
     case 'awaiting_cook_number': {
       if (intent.intent === Intent.PROVIDE_COOK_NUMBER && intent.payload) {
@@ -1149,8 +1663,15 @@ export {
   DIET_OPTIONS,
   STYLE_OPTIONS,
   MAIN_MENU_OPTIONS,
+  WEEKLY_PLAN_OPTIONS,
   MORE_OPTIONS_BUTTONS,
   SKIP_COOK_NUMBER_OPTION,
+  CHANGE_PLAN_OPTIONS,
+  DAY_SELECT_OPTIONS,
+  SLOT_SELECT_OPTIONS,
+  ENTIRE_PLAN_OPTIONS,
+  FEW_MEALS_DONE_OPTIONS,
+  ADHOC_MENU_OPTIONS,
   createDefaultState,
   getComingMondayISO,
   getCurrentWeekMondayISO,

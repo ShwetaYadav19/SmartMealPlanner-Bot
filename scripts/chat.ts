@@ -37,6 +37,15 @@ const BUTTON_IDS = new Set([
   'skip_cook', 'confirm_dishes', 'more_options',
   'change_preference', 'change_cook_number',
   'next_category',
+  // Change Plan flow
+  'change_plan', 'few_meals', 'entire_plan',
+  'accept_plan', 'retry_plan', 'change_more', 'done_changing',
+  // Day selection
+  'day_0', 'day_1', 'day_2', 'day_3', 'day_4', 'day_5', 'day_6',
+  // Slot selection
+  'slot_breakfast', 'slot_lunch', 'slot_dinner',
+  // Alternative selection
+  'alt_0', 'alt_1', 'alt_2',
 ]);
 
 const PHONE = '+919876543210';

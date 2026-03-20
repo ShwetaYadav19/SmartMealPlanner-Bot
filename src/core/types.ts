@@ -80,7 +80,12 @@ export type ConversationState =
   | 'more_options'
   | 'awaiting_cook_number'
   | 'awaiting_preference_cuisine'
-  | 'awaiting_preference_diet';
+  | 'awaiting_preference_diet'
+  | 'change_plan_menu'
+  | 'few_meals_day_select'
+  | 'few_meals_slot_select'
+  | 'few_meals_alternatives'
+  | 'entire_plan_confirm';
 
 export interface UserState {
   phoneNumber: string;
@@ -97,6 +102,10 @@ export interface UserState {
   lastButtonIds?: string[];
   isPreferenceChange?: boolean;
   previewStep?: PreviewStep;
+  fewMealsSelectedDay?: number;
+  fewMealsSelectedSlot?: 'breakfast' | 'lunch' | 'dinner';
+  fewMealsAlternatives?: (Meal | ComposedMeal)[];
+  previousWeeklyPlan?: WeeklyPlan;
 }
 
 export interface ComponentsByCategory {
@@ -132,6 +141,17 @@ export enum Intent {
   MORE_OPTIONS = 'MORE_OPTIONS',
   CHANGE_PREFERENCE = 'CHANGE_PREFERENCE',
   CHANGE_COOK_NUMBER = 'CHANGE_COOK_NUMBER',
+  CHANGE_PLAN = 'CHANGE_PLAN',
+  CHANGE_FEW_MEALS = 'CHANGE_FEW_MEALS',
+  CHANGE_ENTIRE_PLAN = 'CHANGE_ENTIRE_PLAN',
+  SELECT_DAY = 'SELECT_DAY',
+  SELECT_MEAL_SLOT = 'SELECT_MEAL_SLOT',
+  SELECT_ALTERNATIVE = 'SELECT_ALTERNATIVE',
+  CHANGE_MORE_MEALS = 'CHANGE_MORE_MEALS',
+  DONE_CHANGING = 'DONE_CHANGING',
+  ACCEPT_PLAN = 'ACCEPT_PLAN',
+  RETRY_PLAN = 'RETRY_PLAN',
+  ADHOC_MENU = 'ADHOC_MENU',
   UNKNOWN = 'UNKNOWN',
 }
 
@@ -167,6 +187,14 @@ export enum ResponseType {
   DISH_REMOVED = 'DISH_REMOVED',
   DISH_PREVIEW_EMPTY_ERROR = 'DISH_PREVIEW_EMPTY_ERROR',
   MORE_OPTIONS_MENU = 'MORE_OPTIONS_MENU',
+  CHANGE_PLAN_MENU = 'CHANGE_PLAN_MENU',
+  FEW_MEALS_DAY_PROMPT = 'FEW_MEALS_DAY_PROMPT',
+  FEW_MEALS_SLOT_PROMPT = 'FEW_MEALS_SLOT_PROMPT',
+  FEW_MEALS_ALTERNATIVES = 'FEW_MEALS_ALTERNATIVES',
+  FEW_MEALS_UPDATED = 'FEW_MEALS_UPDATED',
+  FEW_MEALS_NO_ALTERNATIVE = 'FEW_MEALS_NO_ALTERNATIVE',
+  ENTIRE_PLAN_PREVIEW = 'ENTIRE_PLAN_PREVIEW',
+  ADHOC_MENU = 'ADHOC_MENU',
   ERROR = 'ERROR',
 }
 

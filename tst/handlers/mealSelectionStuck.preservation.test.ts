@@ -76,6 +76,21 @@ describe('Preservation 4.1: mapWhatsAppToIntent returns same results for non-dis
         continue; // These states have special free-text handling
       }
 
+      if (state === 'main_menu') {
+        // In main_menu, "menu" maps to ADHOC_MENU (valid behavior from adhoc menu feature)
+        it(`"${state}": non-navigation text returns Intent.UNKNOWN (except "menu" → ADHOC_MENU)`, () => {
+          for (const text of nonNavTexts) {
+            const result = mapWhatsAppToIntent(undefined, text, state);
+            if (text === 'menu') {
+              expect(result.intent).toBe(Intent.ADHOC_MENU);
+            } else {
+              expect(result.intent).toBe(Intent.UNKNOWN);
+            }
+          }
+        });
+        continue;
+      }
+
       it(`"${state}": non-navigation text returns Intent.UNKNOWN`, () => {
         for (const text of nonNavTexts) {
           const result = mapWhatsAppToIntent(undefined, text, state);

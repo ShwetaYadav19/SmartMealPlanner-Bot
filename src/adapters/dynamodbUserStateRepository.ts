@@ -112,6 +112,18 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     if (state.previewStep !== undefined) {
       item.previewStep = state.previewStep;
     }
+    if (state.fewMealsSelectedDay !== undefined) {
+      item.fewMealsSelectedDay = state.fewMealsSelectedDay;
+    }
+    if (state.fewMealsSelectedSlot !== undefined) {
+      item.fewMealsSelectedSlot = state.fewMealsSelectedSlot;
+    }
+    if (state.fewMealsAlternatives !== undefined) {
+      item.fewMealsAlternatives = state.fewMealsAlternatives;
+    }
+    if (state.previousWeeklyPlan !== undefined) {
+      item.previousWeeklyPlan = state.previousWeeklyPlan;
+    }
 
     return item;
   }
@@ -155,6 +167,18 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     }
     if (item.previewStep !== undefined) {
       state.previewStep = item.previewStep as UserState['previewStep'];
+    }
+    if (item.fewMealsSelectedDay !== undefined) {
+      state.fewMealsSelectedDay = item.fewMealsSelectedDay as number;
+    }
+    if (item.fewMealsSelectedSlot !== undefined) {
+      state.fewMealsSelectedSlot = item.fewMealsSelectedSlot as UserState['fewMealsSelectedSlot'];
+    }
+    if (item.fewMealsAlternatives !== undefined) {
+      state.fewMealsAlternatives = item.fewMealsAlternatives as UserState['fewMealsAlternatives'];
+    }
+    if (item.previousWeeklyPlan !== undefined) {
+      state.previousWeeklyPlan = item.previousWeeklyPlan as UserState['previousWeeklyPlan'];
     }
 
     return state;
