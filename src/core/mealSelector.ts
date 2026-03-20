@@ -228,13 +228,11 @@ export class MealSelector {
   ): MealComponent[] {
     if (pool.length === 0) return pool;
 
-    const windowSize = (rule.conditions.windowSize as number | undefined) ?? 3;
-
-    // Collect all recent IDs from history across all categories, trimmed to windowSize
+    // Use ALL IDs from history (no windowSize slicing) to maximize variety.
+    // The existing progressive relaxation handles pool exhaustion.
     const recentIds = new Set<string>();
     for (const ids of Object.values(context.history)) {
-      const window = ids.slice(-windowSize);
-      for (const id of window) {
+      for (const id of ids) {
         recentIds.add(id);
       }
     }

@@ -680,18 +680,51 @@ export function generateWeeklyPlan(
     lunch: [],
     dinner: [],
   };
-  const RECENT_WINDOW = 3;
+  const BREAKFAST_RECENT_WINDOW = 3;
 
-  // Track sliding-window history per slot per category (last RECENT_WINDOW days)
+  // Track cumulative used IDs per slot per category (no eviction — full used set)
   const CATEGORIES: ComponentCategory[] = ['base', 'gravy', 'dry_veggie', 'side'];
   const history: Record<'lunch' | 'dinner', Record<ComponentCategory, string[]>> = {
     lunch:  { base: [], gravy: [], dry_veggie: [], side: [] },
     dinner: { base: [], gravy: [], dry_veggie: [], side: [] },
   };
 
+  // Compute pool sizes per category-slot for pool-exhaustion reset.
+  // Key: `${category}-${slot}`, Value: number of eligible components.
+  const poolSizes = new Map<string, number>();
+  for (const slot of ['lunch', 'dinner'] as const) {
+    for (const cat of CATEGORIES) {
+      const eligible = components.filter(c =>
+        c.category === cat &&
+        c.slots.includes(slot) &&
+        c.cuisine.includes(
+          isBothCuisine ? 'north_indian' : (preferences.cuisine as 'north_indian' | 'south_indian'),
+        ),
+      );
+      // Apply diet filtering consistent with composeMeal: only filter for strict veg
+      const dietFiltered = (preferences.diet && preferences.diet !== 'both' && preferences.diet !== 'non_veg')
+        ? eligible.filter(c => c.diet === preferences.diet)
+        : eligible;
+      const pool = dietFiltered.length > 0 ? dietFiltered : eligible;
+      poolSizes.set(`${cat}-${slot}`, pool.length);
+    }
+  }
+
   const plan: WeeklyPlan = [];
 
   for (let d = 0; d < 7; d++) {
+    // Pool-exhaustion reset: if all items in a category-slot pool have been used,
+    // clear the used set so the cycle can restart.
+    for (const slot of ['lunch', 'dinner'] as const) {
+      for (const cat of CATEGORIES) {
+        const key = `${cat}-${slot}`;
+        const size = poolSizes.get(key) ?? 0;
+        if (size > 0 && history[slot][cat].length >= size) {
+          history[slot][cat] = [];
+        }
+      }
+    }
+
     const usedToday = new Set<string>();
     const usedKeyIngredients = new Set<string>();
 
@@ -817,20 +850,17 @@ export function generateWeeklyPlan(
 
     // Update breakfast sliding window
     recentSlotHistory.breakfast.push(breakfast.id);
-    if (recentSlotHistory.breakfast.length > RECENT_WINDOW) {
+    if (recentSlotHistory.breakfast.length > BREAKFAST_RECENT_WINDOW) {
       recentSlotHistory.breakfast.shift();
     }
 
-    // Update per-category sliding windows for lunch and dinner
+    // Update per-category cumulative used sets for lunch and dinner (no eviction)
     for (const slot of ['lunch', 'dinner'] as const) {
       const meal = slot === 'lunch' ? lunch : dinner;
       for (const cat of CATEGORIES) {
         const comp = meal.components.find(c => c.category === cat);
         if (comp) {
           history[slot][cat].push(comp.id);
-          if (history[slot][cat].length > RECENT_WINDOW) {
-            history[slot][cat].shift();
-          }
         }
       }
     }

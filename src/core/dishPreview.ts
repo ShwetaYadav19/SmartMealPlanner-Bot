@@ -448,46 +448,54 @@ export function buildPlanFromComponents(
   const lunchPool = flattenWithHealthFirst(candidates.lunchComponents);
   const dinnerPool = flattenWithHealthFirst(candidates.dinnerComponents);
 
-  // Sliding-window history (recent 2 days) per category per slot
-  const WINDOW = 2;
-  const lunchHistory: Record<ComponentCategory, string[][]> = {
+  // Cumulative used IDs per category per slot (no eviction — full used set)
+  const categories: ComponentCategory[] = ['base', 'gravy', 'dry_veggie', 'side'];
+  const lunchHistory: Record<ComponentCategory, string[]> = {
     base: [], gravy: [], dry_veggie: [], side: [],
   };
-  const dinnerHistory: Record<ComponentCategory, string[][]> = {
+  const dinnerHistory: Record<ComponentCategory, string[]> = {
     base: [], gravy: [], dry_veggie: [], side: [],
   };
+
+  // Compute pool sizes per category-slot for pool-exhaustion reset
+  const poolSizes = new Map<string, number>();
+  for (const cat of categories) {
+    poolSizes.set(`${cat}-lunch`, candidates.lunchComponents[cat].length);
+    poolSizes.set(`${cat}-dinner`, candidates.dinnerComponents[cat].length);
+  }
 
   for (let i = 0; i < 7; i++) {
-    // Resolve cuisine for this day
-    const cuisine = resolveCuisine(preferences.cuisine, i);
-
-    // Build constraints for lunch from history
-    const lunchConstraints: ComposeMealConstraints = {
-      base:       { recentIds: new Set<string>(), sameDayIds: new Set<string>() },
-      gravy:      { recentIds: new Set<string>(), sameDayIds: new Set<string>() },
-      dry_veggie: { recentIds: new Set<string>(), sameDayIds: new Set<string>() },
-      side:       { recentIds: new Set<string>(), sameDayIds: new Set<string>() },
-    };
-    const categories: ComponentCategory[] = ['base', 'gravy', 'dry_veggie', 'side'];
+    // Pool-exhaustion reset: if all items in a category-slot pool have been used,
+    // clear the used set so the cycle can restart.
     for (const cat of categories) {
-      // Recent IDs from sliding window
-      const recentDays = lunchHistory[cat].slice(-WINDOW);
-      for (const dayIds of recentDays) {
-        for (const id of dayIds) {
-          lunchConstraints[cat].recentIds.add(id);
-        }
+      const lunchSize = poolSizes.get(`${cat}-lunch`) ?? 0;
+      if (lunchSize > 0 && lunchHistory[cat].length >= lunchSize) {
+        lunchHistory[cat] = [];
+      }
+      const dinnerSize = poolSizes.get(`${cat}-dinner`) ?? 0;
+      if (dinnerSize > 0 && dinnerHistory[cat].length >= dinnerSize) {
+        dinnerHistory[cat] = [];
       }
     }
 
+    // Resolve cuisine for this day
+    const cuisine = resolveCuisine(preferences.cuisine, i);
+
+    // Build constraints for lunch from cumulative used sets
+    const lunchConstraints: ComposeMealConstraints = {
+      base:       { recentIds: new Set<string>(lunchHistory.base),       sameDayIds: new Set<string>() },
+      gravy:      { recentIds: new Set<string>(lunchHistory.gravy),      sameDayIds: new Set<string>() },
+      dry_veggie: { recentIds: new Set<string>(lunchHistory.dry_veggie), sameDayIds: new Set<string>() },
+      side:       { recentIds: new Set<string>(lunchHistory.side),       sameDayIds: new Set<string>() },
+    };
+
     const lunch = composeMeal(lunchPool, 'lunch', cuisine, lunchConstraints, preferences.diet);
 
-    // Record lunch picks in history
+    // Record lunch picks in cumulative history
     for (const comp of lunch.components) {
-      if (!lunchHistory[comp.category]) continue;
-      const daySlot = lunchHistory[comp.category];
-      if (daySlot.length <= i) daySlot.push([]);
-      daySlot[i] = daySlot[i] || [];
-      daySlot[i].push(comp.id);
+      if (lunchHistory[comp.category]) {
+        lunchHistory[comp.category].push(comp.id);
+      }
     }
 
     // Build constraints for dinner — same-day dedup for base, gravy, and dry_veggie
@@ -502,29 +510,19 @@ export function buildPlanFromComponents(
     }
 
     const dinnerConstraints: ComposeMealConstraints = {
-      base:       { recentIds: new Set<string>(), sameDayIds: sameDayLunchIds.base },
-      gravy:      { recentIds: new Set<string>(), sameDayIds: sameDayLunchIds.gravy },
-      dry_veggie: { recentIds: new Set<string>(), sameDayIds: sameDayLunchIds.dry_veggie },
-      side:       { recentIds: new Set<string>(), sameDayIds: new Set<string>() },
+      base:       { recentIds: new Set<string>(dinnerHistory.base),       sameDayIds: sameDayLunchIds.base },
+      gravy:      { recentIds: new Set<string>(dinnerHistory.gravy),      sameDayIds: sameDayLunchIds.gravy },
+      dry_veggie: { recentIds: new Set<string>(dinnerHistory.dry_veggie), sameDayIds: sameDayLunchIds.dry_veggie },
+      side:       { recentIds: new Set<string>(dinnerHistory.side),       sameDayIds: new Set<string>() },
     };
-    for (const cat of categories) {
-      const recentDays = dinnerHistory[cat].slice(-WINDOW);
-      for (const dayIds of recentDays) {
-        for (const id of dayIds) {
-          dinnerConstraints[cat].recentIds.add(id);
-        }
-      }
-    }
 
     const dinner = composeMeal(dinnerPool, 'dinner', cuisine, dinnerConstraints, preferences.diet);
 
-    // Record dinner picks in history
+    // Record dinner picks in cumulative history
     for (const comp of dinner.components) {
-      if (!dinnerHistory[comp.category]) continue;
-      const daySlot = dinnerHistory[comp.category];
-      if (daySlot.length <= i) daySlot.push([]);
-      daySlot[i] = daySlot[i] || [];
-      daySlot[i].push(comp.id);
+      if (dinnerHistory[comp.category]) {
+        dinnerHistory[comp.category].push(comp.id);
+      }
     }
 
     // Wrap breakfasts with reuse
