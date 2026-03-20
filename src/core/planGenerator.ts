@@ -177,6 +177,20 @@ function getComponentIngredientNames(component: MealComponent): Set<string> {
   return new Set(component.ingredients.map((ing) => ing.name.toLowerCase()));
 }
 
+const SIGNATURE_CATEGORIES: Set<string> = new Set(['protein', 'lentils', 'vegetables']);
+
+/**
+ * Extract only "signature" ingredient names (protein, lentils, vegetables)
+ * from a MealComponent as a lowercase set, ignoring pantry staples.
+ */
+export function getSignatureIngredientNames(component: MealComponent): Set<string> {
+  return new Set(
+    component.ingredients
+      .filter((ing) => SIGNATURE_CATEGORIES.has(ing.category))
+      .map((ing) => ing.name.toLowerCase()),
+  );
+}
+
 /**
  * Protein groups — items within the same group are compatible,
  * but mixing across groups in a single meal is undesirable
@@ -246,8 +260,8 @@ function hasProteinConflict(a: MealComponent, b: MealComponent): boolean {
  * or have conflicting proteins (e.g. chicken gravy + fish dry_veggie).
  */
 function hasIngredientOverlap(a: MealComponent, b: MealComponent): boolean {
-  const namesA = getComponentIngredientNames(a);
-  for (const name of getComponentIngredientNames(b)) {
+  const namesA = getSignatureIngredientNames(a);
+  for (const name of getSignatureIngredientNames(b)) {
     if (namesA.has(name)) return true;
   }
   return hasProteinConflict(a, b);
@@ -362,6 +376,7 @@ function pickComponent(
   overlapRef: MealComponent | null,
   proteinRef: MealComponent | null = null,
   dualProteinRef: MealComponent | null = null,
+  additionalOverlapRef: MealComponent | null = null,
 ): MealComponent {
   const shuffled = fisherYatesShuffle(candidates);
   const skipProtein = dualProteinRef !== null && isProteinDish(dualProteinRef);
@@ -372,11 +387,12 @@ function pickComponent(
       !recentIds.has(c.id) &&
       !sameDayIds.has(c.id) &&
       (!overlapRef || !hasIngredientOverlap(c, overlapRef)) &&
+      (!additionalOverlapRef || !hasIngredientOverlap(c, additionalOverlapRef)) &&
       (!proteinRef || !hasProteinConflict(c, proteinRef)) &&
       (!skipProtein || !isProteinDish(c))
     ) return c;
   }
-  // Pass 2: relax ingredient overlap, keep dual-protein + cross-group + same-day dedup
+  // Pass 2: relax ingredient overlap (both overlapRef and additionalOverlapRef), keep dual-protein + cross-group + same-day dedup
   for (const c of shuffled) {
     if (
       !recentIds.has(c.id) &&
@@ -418,6 +434,7 @@ export function composeMeal(
   mealSelector?: MealSelector,
   constraintRules?: Rule[],
   constraintContext?: RuleEvaluationContext,
+  lunchGravyRef?: MealComponent | null,
 ): ComposedMeal {
   // Filter by slot and cuisine
   const pool = components.filter(
@@ -472,13 +489,19 @@ export function composeMeal(
     const coherentSides = filterForCuisineCoherence(byCategory.side, base, cuisine);
 
     // 2. Pick gravy — apply constraints + ingredient overlap with base
-    const constrainedGravies = mealSelector.applyIngredientOverlap(
+    let constrainedGravies = mealSelector.applyIngredientOverlap(
       mealSelector.applyConstraints(
         fisherYatesShuffle(coherentGravies), constraintRules, constraintContext,
       ),
       constraintRules.find((r) => r.conditions.constraintType === 'ingredient_overlap') ?? constraintRules[0],
       base,
     );
+    // Cross-meal overlap: filter out gravies sharing signature ingredients with lunch gravy
+    if (lunchGravyRef) {
+      const crossMealFiltered = constrainedGravies.filter(c => !hasIngredientOverlap(c, lunchGravyRef));
+      if (crossMealFiltered.length > 0) constrainedGravies = crossMealFiltered;
+      // Progressive relaxation: if all candidates overlap with lunch gravy, keep full pool
+    }
     const gravy = constrainedGravies[0];
 
     // 3. Pick dry_veggie — apply constraints + ingredient overlap with gravy + protein conflict with gravy
@@ -529,12 +552,15 @@ export function composeMeal(
   const coherentDryVeggies = filterForCuisineCoherence(byCategory.dry_veggie, base, cuisine);
   const coherentSides = filterForCuisineCoherence(byCategory.side, base, cuisine);
 
-  // 2. Pick gravy (avoid ingredient overlap with base)
+  // 2. Pick gravy (avoid ingredient overlap with base + cross-meal overlap with lunch gravy)
   const gravy = pickComponent(
     coherentGravies,
     constraints.gravy.recentIds,
     constraints.gravy.sameDayIds,
     base,
+    null,  // no protein ref for gravy
+    null,  // no dual-protein ref for gravy
+    lunchGravyRef ?? null,  // cross-meal overlap ref
   );
 
   // 3. Pick dry_veggie (avoid ingredient overlap with gravy + protein conflict with gravy + dual-protein prevention)
@@ -748,6 +774,9 @@ export function generateWeeklyPlan(
       lunchIds[c.category] = c.id;
     }
 
+    // Extract lunch gravy for cross-meal overlap reference
+    const lunchGravy = lunch.components.find(c => c.category === 'gravy') ?? null;
+
     // --- Dinner (composed from components) ---
     const dinnerCuisine: 'north_indian' | 'south_indian' = useMealSelector
       ? mealSelector!.getCuisineForDay(d, allConstraintRules, buildEvalContext(d, 'dinner', preferences, history, {}))
@@ -781,6 +810,7 @@ export function generateWeeklyPlan(
       useMealSelector ? mealSelector : undefined,
       useMealSelector ? allConstraintRules : undefined,
       dinnerEvalContext,
+      lunchGravy,
     );
 
     plan.push({ day: DAYS[d], breakfast, lunch, dinner });

@@ -1584,7 +1584,7 @@
       "north_indian"
     ],
     "diet": "veg",
-    "style": "regular",
+    "style": "health",
     "slots": [
       "lunch",
       "dinner"
@@ -1620,7 +1620,7 @@
       "north_indian"
     ],
     "diet": "veg",
-    "style": "regular",
+    "style": "health",
     "slots": [
       "lunch",
       "dinner"
