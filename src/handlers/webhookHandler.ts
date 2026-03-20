@@ -34,7 +34,7 @@ interface APIGatewayProxyResult {
  * Also supports multi-select: "1,3" or "1 3" resolves to multiple IDs
  * joined by commas.
  */
-function resolveNumberedInput(
+export function resolveNumberedInput(
   buttonPayload: string | undefined,
   body: string,
   lastButtonIds?: string[],
@@ -156,6 +156,8 @@ export async function webhookHandler(
           phoneNumber,
           bodyWithItems,
           formatted.buttons,
+          undefined,
+          formatted.listItems?.length ?? 0,
         );
       } else {
         await messagingProvider.sendTextMessage(phoneNumber, bodyWithItems);
@@ -165,6 +167,8 @@ export async function webhookHandler(
         phoneNumber,
         formatted.text,
         formatted.buttons,
+        undefined,
+        formatted.listItems?.length ?? 0,
       );
     } else {
       await messagingProvider.sendTextMessage(phoneNumber, formatted.text);

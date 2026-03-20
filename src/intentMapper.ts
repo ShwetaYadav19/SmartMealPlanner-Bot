@@ -154,6 +154,14 @@ export function mapWhatsAppToIntent(
     return { intent: Intent.PROVIDE_COOK_NUMBER, payload: body };
   }
 
+  // Free-text navigation in dish_preview state (fallback when quick-reply buttons fail)
+  if (conversationState === 'dish_preview') {
+    const navWords = ['next', 'continue', 'skip', 'next category', 'forward'];
+    if (navWords.includes(text)) {
+      return { intent: Intent.NEXT_CATEGORY };
+    }
+  }
+
   // Free text in any other state is unrecognized
   return { intent: Intent.UNKNOWN };
 }

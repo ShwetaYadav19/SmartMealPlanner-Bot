@@ -41,6 +41,7 @@ export class TwilioMessagingProvider implements MessagingProvider {
     body: string,
     buttons: ButtonOption[],
     contentSid?: string,
+    listItemCount?: number,
   ): Promise<void> {
     const from = `whatsapp:${this.senderNumber}`;
     const toWhatsApp = `whatsapp:${to}`;
@@ -81,8 +82,9 @@ export class TwilioMessagingProvider implements MessagingProvider {
     }
 
     // Fallback: numbered text buttons
+    const offset = listItemCount ?? 0;
     const buttonText = buttons
-      .map((b, i) => `${i + 1}. ${b.title}`)
+      .map((b, i) => `${offset + i + 1}. ${b.title}`)
       .join('\n');
     const fullBody = `${body}\n\n${buttonText}`;
 

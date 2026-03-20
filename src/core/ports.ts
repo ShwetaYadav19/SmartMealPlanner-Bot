@@ -19,6 +19,7 @@ export interface MessagingProvider {
     body: string,
     buttons: ButtonOption[],
     contentSid?: string,
+    listItemCount?: number,
   ): Promise<void>;
   sendListMessage(
     to: string,
