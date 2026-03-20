@@ -78,7 +78,7 @@ function buildCategoryPool(
       `${prefix}-${category}-${String(i).padStart(3, '0')}`,
       `${prefix} ${category} ${i}`,
       category,
-      [makeIngredient(UNIQUE_VEGGIES[i % UNIQUE_VEGGIES.length])],
+      [makeIngredient(`${category}_${UNIQUE_VEGGIES[i % UNIQUE_VEGGIES.length]}`)],
     ),
   );
 }
