@@ -1,0 +1,108 @@
+[
+  {
+    "id": "si-side-001",
+    "name": "Curd",
+    "category": "side",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch"
+    ],
+    "ingredients": [
+      {
+        "name": "Yogurt",
+        "quantity": "150g",
+        "category": "dairy"
+      }
+    ]
+  },
+  {
+    "id": "si-side-005",
+    "name": "Onion Raita",
+    "category": "side",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Yogurt",
+        "quantity": "150g",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coriander Leaves",
+        "quantity": "1 tbsp",
+        "category": "vegetables"
+      }
+    ]
+  },
+  {
+    "id": "si-side-007",
+    "name": "Cucumber Salad",
+    "category": "side",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Cucumber",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Carrot",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "1",
+        "category": "fruits"
+      }
+    ]
+  },
+  {
+    "id": "ni-side-006",
+    "name": "Curd",
+    "category": "side",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch"
+    ],
+    "ingredients": [
+      {
+        "name": "Yogurt",
+        "quantity": "150g",
+        "category": "dairy"
+      }
+    ]
+  }
+]

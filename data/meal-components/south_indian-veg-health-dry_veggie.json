@@ -1,0 +1,578 @@
+[
+  {
+    "id": "si-dry_veggie-001",
+    "name": "Beans Poriyal",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Green Beans",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Urad Dal",
+        "quantity": "1 tsp",
+        "category": "lentils"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-002",
+    "name": "Cabbage Thoran",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Cabbage",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-003",
+    "name": "Carrot Poriyal",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Carrot",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Chana Dal",
+        "quantity": "1 tsp",
+        "category": "lentils"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-005",
+    "name": "Beetroot Poriyal",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Beetroot",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Urad Dal",
+        "quantity": "1 tsp",
+        "category": "lentils"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-008",
+    "name": "Snake Gourd Stir Fry",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Snake Gourd",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Urad Dal",
+        "quantity": "1 tsp",
+        "category": "lentils"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-020",
+    "name": "Mushroom Pepper Dry (Chettinad)",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Mushroom",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Coconut Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-021",
+    "name": "Raw Banana Stir-Fry",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Raw Banana",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Coconut Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-022",
+    "name": "Beetroot Varai",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Beetroot",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-023",
+    "name": "Avarakkai Poriyal (Flat Beans Stir-Fry)",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Flat Beans (Avarakkai)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Urad Dal",
+        "quantity": "1 tsp",
+        "category": "lentils"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-024",
+    "name": "Seppankizhangu Varuval (Taro Root Fry)",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Taro Root (Arbi)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Coconut Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-025",
+    "name": "Kovakkai Vepudu (Ivy Gourd Fry)",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Ivy Gourd (Kovakkai)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "4 cloves",
+        "category": "spices"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-026",
+    "name": "Banana Flower (Vazhaipoo) Thoran",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Banana Flower",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "3 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Shallots",
+        "quantity": "4-5",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-027",
+    "name": "Cabbage and Green Peas Poriyal",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Cabbage",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-028",
+    "name": "Carrot and Beans Stir-Fry",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Carrot",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Beans",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-029",
+    "name": "Red Radish Poriyal",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Red Radish",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Urad Dal",
+        "quantity": "1 tsp",
+        "category": "lentils"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-030",
+    "name": "Onion Palya",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Onion",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  }
+]

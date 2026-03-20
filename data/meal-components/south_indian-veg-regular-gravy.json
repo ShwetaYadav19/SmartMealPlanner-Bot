@@ -1,0 +1,152 @@
+[
+  {
+    "id": "si-gravy-004",
+    "name": "Mor Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Yogurt", "quantity": "200g", "category": "dairy" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Fenugreek Seeds", "quantity": "1/2 tsp", "category": "spices" },
+      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-006",
+    "name": "Kara Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Shallots", "quantity": "100g", "category": "vegetables" },
+      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
+      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-013",
+    "name": "Vathal Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Tamarind", "quantity": "2 tbsp", "category": "spices" },
+      { "name": "Sundried Vathal", "quantity": "50g", "category": "vegetables" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
+      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-014",
+    "name": "Milagu Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Black Pepper", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-gravy-022",
+    "name": "Puli Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Tamarind", "quantity": "2 tbsp", "category": "spices" },
+      { "name": "Brinjal (Eggplant)", "quantity": "100g", "category": "vegetables" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
+      { "name": "Jaggery", "quantity": "1 tsp", "category": "condiments" }
+    ]
+  },
+  {
+    "id": "si-gravy-023",
+    "name": "Tomato Rasam",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Tomato", "quantity": "3 medium", "category": "vegetables" },
+      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-024",
+    "name": "Paruppu Urundai Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
+      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-025",
+    "name": "Manathakkali Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Manathakkali Vathal", "quantity": "50g", "category": "vegetables" },
+      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
+      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-026",
+    "name": "Vendhaya Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fenugreek Seeds", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-gravy-027",
+    "name": "Nellikkai Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Amla (Nellikkai)", "quantity": "100g", "category": "vegetables" },
+      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" },
+      { "name": "Jaggery", "quantity": "1 tsp", "category": "condiments" }
+    ]
+  }
+]

@@ -1,0 +1,183 @@
+[
+  {
+    "id": "si-side-002",
+    "name": "Coconut Chutney",
+    "category": "side",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Coconut",
+        "quantity": "1/2 cup grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-side-003",
+    "name": "Pickle",
+    "category": "side",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Mango Pickle",
+        "quantity": "2 tbsp",
+        "category": "condiments"
+      }
+    ]
+  },
+  {
+    "id": "si-side-004",
+    "name": "Papad",
+    "category": "side",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Papad",
+        "quantity": "2",
+        "category": "grains"
+      }
+    ]
+  },
+  {
+    "id": "si-side-006",
+    "name": "Tomato Chutney",
+    "category": "side",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Red Chilli",
+        "quantity": "3",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "si-side-008",
+    "name": "Mor Milagai",
+    "category": "side",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Green Chilli",
+        "quantity": "6",
+        "category": "vegetables"
+      },
+      {
+        "name": "Yogurt",
+        "quantity": "100g",
+        "category": "dairy"
+      },
+      {
+        "name": "Salt",
+        "quantity": "to taste",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-side-003",
+    "name": "Pickle",
+    "category": "side",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Mixed Pickle",
+        "quantity": "2 tbsp",
+        "category": "condiments"
+      }
+    ]
+  },
+  {
+    "id": "ni-side-004",
+    "name": "Papad",
+    "category": "side",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Papad",
+        "quantity": "2",
+        "category": "grains"
+      }
+    ]
+  }
+]

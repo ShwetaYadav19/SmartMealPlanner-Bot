@@ -1,0 +1,97 @@
+[
+  {
+    "id": "si-base-001",
+    "name": "Steamed Rice",
+    "category": "base",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Rice",
+        "quantity": "300g",
+        "category": "grains"
+      }
+    ]
+  },
+  {
+    "id": "ni-base-002",
+    "name": "Roti",
+    "category": "base",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Whole Wheat Flour",
+        "quantity": "200g",
+        "category": "grains"
+      }
+    ]
+  },
+  {
+    "id": "ni-base-006",
+    "name": "Missi Roti",
+    "category": "base",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Whole Wheat Flour",
+        "quantity": "150g",
+        "category": "grains"
+      },
+      {
+        "name": "Gram Flour (Besan)",
+        "quantity": "50g",
+        "category": "grains"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      }
+    ]
+  },
+  {
+    "id": "ni-base-007",
+    "name": "Bajra Roti",
+    "category": "base",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Bajra Flour",
+        "quantity": "200g",
+        "category": "grains"
+      }
+    ]
+  }
+]

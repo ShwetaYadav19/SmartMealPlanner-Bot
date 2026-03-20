@@ -17,7 +17,7 @@ const mealRepo = new JsonMealRepository(
   path.resolve(__dirname, '../../data/meals.json'),
 );
 const componentRepo = new JsonMealComponentRepository(
-  path.resolve(__dirname, '../../data/meal-components.json'),
+  path.resolve(__dirname, '../../data/meal-components'),
 );
 
 const CUISINES = ['north_indian', 'south_indian', 'both'] as const;

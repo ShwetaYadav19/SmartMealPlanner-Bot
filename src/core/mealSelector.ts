@@ -554,9 +554,14 @@ export class MealSelector {
     // Find style-fallback rule for later use
     const styleFallbackRule = filterRules.find((r) => r.id === 'style-fallback');
     const threshold = (styleFallbackRule?.parameters?.threshold as number) ?? 2;
-    const labelSuffix = (styleFallbackRule?.parameters?.labelSuffix as string) ?? '(Regular)';
-    const isHealthStyle = context.userPreferences.style === 'health';
-    const styleFallbackActive = isHealthStyle && styleFallbackRule != null &&
+    const userStyle = context.userPreferences.style;
+    const isHealthStyle = userStyle === 'health';
+    const labelSuffix = isHealthStyle
+      ? ((styleFallbackRule?.parameters?.healthLabelSuffix as string) ?? '(Regular)')
+      : ((styleFallbackRule?.parameters?.regularLabelSuffix as string) ?? '(Healthy)');
+    const fallbackStyle = isHealthStyle ? 'regular' : 'health';
+    const styleFallbackActive = styleFallbackRule != null &&
+      (styleFallbackRule.conditions.preferenceValues ?? []).includes(userStyle) &&
       (scope === 'lunch_component' || scope === 'dinner_component' || scope === 'all_slots');
 
     for (const rule of filterRules) {
@@ -583,25 +588,25 @@ export class MealSelector {
           if (styleFallbackActive) {
             // Don't apply strict style filter yet — we need to check per-category thresholds
             // Save the full pool before style filtering for fallback
-            const healthPool = pool.filter((c) => c.style === 'health');
-            const regularPool = pool.filter((c) => c.style === 'regular');
+            const preferredPool = pool.filter((c) => c.style === userStyle);
+            const fallbackPool = pool.filter((c) => c.style === fallbackStyle);
 
-            // Group health items by category and check thresholds
+            // Group preferred items by category and check thresholds
             const categories: ComponentCategory[] = ['base', 'gravy', 'dry_veggie', 'side'];
             const result: MealComponent[] = [];
 
             for (const cat of categories) {
-              const healthInCat = healthPool.filter((c) => c.category === cat);
-              if (healthInCat.length < threshold) {
-                // Add health items + regular items with suffix
-                result.push(...healthInCat);
-                const regularInCat = regularPool.filter((c) => c.category === cat);
-                result.push(...regularInCat.map((c) => ({
+              const preferredInCat = preferredPool.filter((c) => c.category === cat);
+              if (preferredInCat.length < threshold) {
+                // Add preferred items + fallback items with suffix
+                result.push(...preferredInCat);
+                const fallbackInCat = fallbackPool.filter((c) => c.category === cat);
+                result.push(...fallbackInCat.map((c) => ({
                   ...c,
                   name: `${c.name} ${labelSuffix}`,
                 })));
               } else {
-                result.push(...healthInCat);
+                result.push(...preferredInCat);
               }
             }
 

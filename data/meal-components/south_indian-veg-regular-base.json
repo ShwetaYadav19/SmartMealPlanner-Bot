@@ -1,0 +1,234 @@
+[
+  {
+    "id": "si-base-002",
+    "name": "Jeera Rice",
+    "category": "base",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Rice",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
+    ]
+  },
+  {
+    "id": "si-base-003",
+    "name": "Lemon Rice",
+    "category": "base",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch"
+    ],
+    "ingredients": [
+      {
+        "name": "Rice",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Lemon",
+        "quantity": "2",
+        "category": "fruits"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-base-004",
+    "name": "Coconut Rice",
+    "category": "base",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Rice",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "1/2 cup grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Cashews",
+        "quantity": "1 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-base-006",
+    "name": "Tamarind Rice",
+    "category": "base",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch"
+    ],
+    "ingredients": [
+      {
+        "name": "Rice",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "50g",
+        "category": "spices"
+      },
+      {
+        "name": "Peanuts",
+        "quantity": "2 tbsp",
+        "category": "nuts"
+      },
+      {
+        "name": "Sesame Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "si-base-008",
+    "name": "Parotta",
+    "category": "base",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "All Purpose Flour (Maida)",
+        "quantity": "200g",
+        "category": "grains"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "si-base-009",
+    "name": "Tomato Rice",
+    "category": "base",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Rice",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "3 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      }
+    ]
+  },
+  {
+    "id": "ni-base-003",
+    "name": "Jeera Rice",
+    "category": "base",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "regular",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Rice",
+        "quantity": "300g",
+        "category": "grains"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
+    ]
+  }
+]

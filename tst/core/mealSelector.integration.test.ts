@@ -10,7 +10,7 @@ import type { RuleEvaluationContext } from '../../src/core/types';
 const dataDir = path.resolve(__dirname, '..', '..', 'data');
 const rulesPath = path.join(dataDir, 'meal-selection-rules.json');
 const mealsPath = path.join(dataDir, 'meals.json');
-const componentsPath = path.join(dataDir, 'meal-components.json');
+const componentsPath = path.join(dataDir, 'meal-components');
 
 function makeContext(overrides?: Partial<RuleEvaluationContext>): RuleEvaluationContext {
   return {

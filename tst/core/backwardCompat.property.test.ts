@@ -14,7 +14,7 @@ import type { CandidateDishes, ComponentsByCategory } from '../../src/core/types
 // --- Real data file paths ---
 const RULES_PATH = path.resolve(process.cwd(), 'data', 'meal-selection-rules.json');
 const MEALS_PATH = path.resolve(process.cwd(), 'data', 'meals.json');
-const COMPONENTS_PATH = path.resolve(process.cwd(), 'data', 'meal-components.json');
+const COMPONENTS_PATH = path.resolve(process.cwd(), 'data', 'meal-components');
 
 // --- Helpers ---
 

@@ -1,0 +1,66 @@
+[
+  {
+    "id": "si-base-001",
+    "name": "Steamed Rice",
+    "category": "base",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Rice",
+        "quantity": "300g",
+        "category": "grains"
+      }
+    ]
+  },
+  {
+    "id": "si-base-005",
+    "name": "Chapati",
+    "category": "base",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Whole Wheat Flour",
+        "quantity": "200g",
+        "category": "grains"
+      }
+    ]
+  },
+  {
+    "id": "si-base-007",
+    "name": "Ragi Mudde",
+    "category": "base",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Ragi Flour",
+        "quantity": "200g",
+        "category": "grains"
+      }
+    ]
+  }
+]

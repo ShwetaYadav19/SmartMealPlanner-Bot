@@ -41,7 +41,7 @@ const BUTTON_IDS = new Set([
 
 const PHONE = '+919876543210';
 const mealRepo = new JsonMealRepository(path.join(__dirname, '../data/meals.json'));
-const mealComponentRepo = new JsonMealComponentRepository(path.join(__dirname, '../data/meal-components.json'));
+const mealComponentRepo = new JsonMealComponentRepository(path.join(__dirname, '../data/meal-components'));
 const rulesRepo = new JsonRulesRepository(path.join(__dirname, '../data/meal-selection-rules.json'));
 
 let userState: UserState | null = null;

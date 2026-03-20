@@ -1,0 +1,368 @@
+[
+  {
+    "id": "si-gravy-001",
+    "name": "Sambar",
+    "category": "gravy",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Toor Dal",
+        "quantity": "100g",
+        "category": "lentils"
+      },
+      {
+        "name": "Drumstick",
+        "quantity": "1",
+        "category": "vegetables"
+      },
+      {
+        "name": "Sambar Powder",
+        "quantity": "2 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Tamarind",
+        "quantity": "1 small piece",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-gravy-001",
+    "name": "Dal Tadka",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Toor Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-gravy-002",
+    "name": "Rajma",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Rajma (Kidney Beans)",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-gravy-003",
+    "name": "Chole",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Chickpeas (Chole)",
+        "quantity": "200g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Chole Masala",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-gravy-004",
+    "name": "Palak Paneer",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Spinach (Palak)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Paneer",
+        "quantity": "150g",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "3-4 cloves",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-gravy-007",
+    "name": "Masoor Dal",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Masoor Dal (Red Lentils)",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-gravy-014",
+    "name": "Moong Dal",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Moong Dal",
+        "quantity": "150g",
+        "category": "lentils"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Ghee",
+        "quantity": "1 tbsp",
+        "category": "dairy"
+      }
+    ]
+  },
+  {
+    "id": "ni-gravy-015",
+    "name": "Tofu Curry",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Tofu",
+        "quantity": "200g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-gravy-017",
+    "name": "Soya Curry",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Soya Chunks",
+        "quantity": "150g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-gravy-018",
+    "name": "Soya Keema",
+    "category": "gravy",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Soya Granules",
+        "quantity": "150g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  }
+]

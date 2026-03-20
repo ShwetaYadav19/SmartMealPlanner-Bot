@@ -1,0 +1,366 @@
+[
+  {
+    "id": "si-dry_veggie-010",
+    "name": "Chicken Fry",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "200g",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-011",
+    "name": "Egg Fry",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Eggs",
+        "quantity": "4",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-012",
+    "name": "Fish Fry",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-013",
+    "name": "Prawn Fry",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian",
+      "north_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Prawns",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-016",
+    "name": "Beans Poriyal with Egg Scramble",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Green Beans",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-017",
+    "name": "Cabbage Thoran with Prawns",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Cabbage",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Prawns",
+        "quantity": "100g",
+        "category": "protein"
+      },
+      {
+        "name": "Coconut",
+        "quantity": "2 tbsp grated",
+        "category": "nuts"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-018",
+    "name": "Carrot and Peas Podimas",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Carrot",
+        "quantity": "150g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-019",
+    "name": "Keerai Stir-Fry with Egg",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Spinach (Keerai)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Eggs",
+        "quantity": "2",
+        "category": "protein"
+      },
+      {
+        "name": "Mustard Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-045",
+    "name": "Chicken Chettinad Dry",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Chicken",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Black Pepper",
+        "quantity": "1 tbsp",
+        "category": "spices"
+      },
+      {
+        "name": "Fennel Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-046",
+    "name": "Meen Varuval",
+    "category": "dry_veggie",
+    "cuisine": [
+      "south_indian"
+    ],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Fish",
+        "quantity": "250g",
+        "category": "protein"
+      },
+      {
+        "name": "Red Chilli Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Curry Leaves",
+        "quantity": "8-10",
+        "category": "spices"
+      }
+    ]
+  }
+]

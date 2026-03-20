@@ -1,0 +1,152 @@
+[
+  {
+    "id": "si-gravy-001",
+    "name": "Sambar",
+    "category": "gravy",
+    "cuisine": ["south_indian", "north_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
+      { "name": "Drumstick", "quantity": "1", "category": "vegetables" },
+      { "name": "Sambar Powder", "quantity": "2 tbsp", "category": "spices" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-002",
+    "name": "Rasam",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-003",
+    "name": "Vegetable Kootu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chana Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Mixed Vegetables", "quantity": "200g", "category": "vegetables" },
+      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-008",
+    "name": "Poricha Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Toor Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Ash Gourd", "quantity": "200g", "category": "vegetables" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-016",
+    "name": "Paruppu Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
+      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-017",
+    "name": "Vendakkai Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Okra (Vendakkai)", "quantity": "200g", "category": "vegetables" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
+      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Sesame Oil", "quantity": "2 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-gravy-018",
+    "name": "Murungakkai Sambar",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Toor Dal", "quantity": "100g", "category": "lentils" },
+      { "name": "Drumstick", "quantity": "2", "category": "vegetables" },
+      { "name": "Sambar Powder", "quantity": "2 tbsp", "category": "spices" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-019",
+    "name": "Keerai Masiyal",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Spinach (Keerai)", "quantity": "250g", "category": "vegetables" },
+      { "name": "Toor Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
+      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-020",
+    "name": "Parangikai Kootu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Pumpkin (Parangikai)", "quantity": "200g", "category": "vegetables" },
+      { "name": "Chana Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Cumin Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-021",
+    "name": "Chow Chow Kootu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chayote (Chow Chow)", "quantity": "200g", "category": "vegetables" },
+      { "name": "Moong Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  }
+]

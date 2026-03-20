@@ -129,10 +129,10 @@ function createZipBuffer(handlerFileName) {
       archive.file(mealsPath, { name: 'data/meals.json' });
     }
 
-    // Include the meal-components.json data file for the JsonMealComponentRepository
-    const mealComponentsPath = path.join(__dirname, '..', 'data', 'meal-components.json');
-    if (fs.existsSync(mealComponentsPath)) {
-      archive.file(mealComponentsPath, { name: 'data/meal-components.json' });
+    // Include the meal-components directory for the JsonMealComponentRepository
+    const mealComponentsDir = path.join(__dirname, '..', 'data', 'meal-components');
+    if (fs.existsSync(mealComponentsDir)) {
+      archive.directory(mealComponentsDir, 'data/meal-components');
     }
 
     // Include the meal-selection-rules.json data file for the JsonRulesRepository

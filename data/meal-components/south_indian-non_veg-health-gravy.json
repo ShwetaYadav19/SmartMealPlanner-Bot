@@ -1,0 +1,152 @@
+[
+  {
+    "id": "si-gravy-010",
+    "name": "Chicken Rasam",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "200g", "category": "protein" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-011",
+    "name": "Egg Drop Rasam",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "3", "category": "protein" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-012",
+    "name": "Fish Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "250g", "category": "protein" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
+      { "name": "Fenugreek Seeds", "quantity": "1/2 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-015",
+    "name": "Prawns Curry",
+    "category": "gravy",
+    "cuisine": ["south_indian", "north_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Prawns", "quantity": "250g", "category": "protein" },
+      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-028",
+    "name": "Chicken Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "250g", "category": "protein" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" },
+      { "name": "Sambar Powder", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-029",
+    "name": "Meen Kozhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "250g", "category": "protein" },
+      { "name": "Tamarind", "quantity": "2 tbsp", "category": "spices" },
+      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
+      { "name": "Fenugreek Seeds", "quantity": "1/2 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-030",
+    "name": "Egg Rasam",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "3", "category": "protein" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Rasam Powder", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-031",
+    "name": "Mutton Bone Soup",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Mutton Bones", "quantity": "300g", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Whole Spices", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Coriander Leaves", "quantity": "2 tbsp", "category": "vegetables" }
+    ]
+  },
+  {
+    "id": "si-gravy-032",
+    "name": "Chicken Stew",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "250g", "category": "protein" },
+      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
+      { "name": "Potato", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Whole Spices", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-033",
+    "name": "Fish Molee",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "250g", "category": "protein" },
+      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
+      { "name": "Green Chilli", "quantity": "2", "category": "vegetables" },
+      { "name": "Turmeric Powder", "quantity": "1/2 tsp", "category": "spices" }
+    ]
+  }
+]

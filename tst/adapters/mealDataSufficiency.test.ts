@@ -16,9 +16,17 @@ import type { Meal, MealComponent, ComponentCategory } from '../../src/core/type
 const meals: Meal[] = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../../data/meals.json'), 'utf-8'),
 );
-const components: MealComponent[] = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../data/meal-components.json'), 'utf-8'),
-);
+const componentsDir = path.resolve(__dirname, '../../data/meal-components');
+const components: MealComponent[] = (() => {
+  const seen = new Set<string>();
+  const all: MealComponent[] = [];
+  for (const f of fs.readdirSync(componentsDir).filter(f => f.endsWith('.json')).sort()) {
+    for (const item of JSON.parse(fs.readFileSync(path.join(componentsDir, f), 'utf-8')) as MealComponent[]) {
+      if (!seen.has(item.id)) { seen.add(item.id); all.push(item); }
+    }
+  }
+  return all;
+})();
 
 const CUISINES = ['north_indian', 'south_indian'] as const;
 const DIETS = ['veg', 'non_veg'] as const;

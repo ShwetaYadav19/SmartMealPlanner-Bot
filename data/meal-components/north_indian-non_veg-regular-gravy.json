@@ -1,0 +1,152 @@
+[
+  {
+    "id": "si-gravy-009",
+    "name": "Egg Curry",
+    "category": "gravy",
+    "cuisine": ["south_indian", "north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "4", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Coconut Milk", "quantity": "100ml", "category": "dairy" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-gravy-013",
+    "name": "Butter Chicken",
+    "category": "gravy",
+    "cuisine": ["north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "300g", "category": "protein" },
+      { "name": "Butter", "quantity": "2 tbsp", "category": "dairy" },
+      { "name": "Cream", "quantity": "50ml", "category": "dairy" },
+      { "name": "Tomato", "quantity": "3 medium", "category": "vegetables" }
+    ]
+  },
+  {
+    "id": "ni-gravy-024",
+    "name": "Chicken Curry (Regular)",
+    "category": "gravy",
+    "cuisine": ["north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "300g", "category": "protein" },
+      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Ghee", "quantity": "2 tbsp", "category": "dairy" }
+    ]
+  },
+  {
+    "id": "ni-gravy-025",
+    "name": "Mutton Rogan Josh",
+    "category": "gravy",
+    "cuisine": ["north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Mutton", "quantity": "300g", "category": "protein" },
+      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
+      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Kashmiri Red Chilli", "quantity": "2 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-gravy-026",
+    "name": "Keema Matar Gravy",
+    "category": "gravy",
+    "cuisine": ["north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Mutton Mince", "quantity": "250g", "category": "protein" },
+      { "name": "Green Peas", "quantity": "100g", "category": "vegetables" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-gravy-027",
+    "name": "Fish Masala",
+    "category": "gravy",
+    "cuisine": ["north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "250g", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-gravy-028",
+    "name": "Chicken Do Pyaza",
+    "category": "gravy",
+    "cuisine": ["north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "300g", "category": "protein" },
+      { "name": "Onion", "quantity": "3 medium", "category": "vegetables" },
+      { "name": "Yogurt", "quantity": "50g", "category": "dairy" },
+      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-gravy-029",
+    "name": "Mutton Korma",
+    "category": "gravy",
+    "cuisine": ["north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Mutton", "quantity": "300g", "category": "protein" },
+      { "name": "Yogurt", "quantity": "100g", "category": "dairy" },
+      { "name": "Cashew Paste", "quantity": "2 tbsp", "category": "nuts" },
+      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" }
+    ]
+  },
+  {
+    "id": "ni-gravy-030",
+    "name": "Chicken Handi",
+    "category": "gravy",
+    "cuisine": ["north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "300g", "category": "protein" },
+      { "name": "Cream", "quantity": "50ml", "category": "dairy" },
+      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Garam Masala", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-gravy-031",
+    "name": "Anda Curry",
+    "category": "gravy",
+    "cuisine": ["north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "4", "category": "protein" },
+      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Ghee", "quantity": "1 tbsp", "category": "dairy" }
+    ]
+  }
+]

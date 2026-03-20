@@ -1,0 +1,152 @@
+[
+  {
+    "id": "si-gravy-005",
+    "name": "Chicken Chettinad Curry",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "300g", "category": "protein" },
+      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Black Pepper", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Fennel Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-007",
+    "name": "Fish Curry",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "300g", "category": "protein" },
+      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
+      { "name": "Tamarind", "quantity": "1 small piece", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-009",
+    "name": "Egg Curry",
+    "category": "gravy",
+    "cuisine": ["south_indian", "north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "4", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Coconut Milk", "quantity": "100ml", "category": "dairy" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "ni-gravy-008",
+    "name": "Egg Curry",
+    "category": "gravy",
+    "cuisine": ["south_indian", "north_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "4", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Ginger-Garlic Paste", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-034",
+    "name": "Chicken Varutha Curry",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "300g", "category": "protein" },
+      { "name": "Coconut", "quantity": "3 tbsp grated", "category": "nuts" },
+      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Fennel Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-035",
+    "name": "Mutton Kuzhambu",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Mutton", "quantity": "300g", "category": "protein" },
+      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Tamarind", "quantity": "1 tbsp", "category": "spices" },
+      { "name": "Coriander Powder", "quantity": "1 tbsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-036",
+    "name": "Prawn Masala",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Prawns", "quantity": "250g", "category": "protein" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Red Chilli Powder", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-037",
+    "name": "Meen Kuzhambu (Coconut)",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Fish", "quantity": "250g", "category": "protein" },
+      { "name": "Coconut Milk", "quantity": "200ml", "category": "dairy" },
+      { "name": "Shallots", "quantity": "50g", "category": "vegetables" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-gravy-038",
+    "name": "Egg Roast",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Eggs", "quantity": "4", "category": "protein" },
+      { "name": "Onion", "quantity": "2 medium", "category": "vegetables" },
+      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Coconut Oil", "quantity": "2 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-gravy-039",
+    "name": "Chicken Sukka",
+    "category": "gravy",
+    "cuisine": ["south_indian"],
+    "diet": "non_veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chicken", "quantity": "300g", "category": "protein" },
+      { "name": "Coconut", "quantity": "3 tbsp grated", "category": "nuts" },
+      { "name": "Onion", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Black Pepper", "quantity": "1 tsp", "category": "spices" }
+    ]
+  }
+]

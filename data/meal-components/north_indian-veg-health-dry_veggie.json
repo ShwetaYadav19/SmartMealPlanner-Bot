@@ -1,0 +1,367 @@
+[
+  {
+    "id": "ni-dry_veggie-004",
+    "name": "Lauki Sabzi",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Bottle Gourd (Lauki)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-005",
+    "name": "Tinda Masala",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Tinda (Apple Gourd)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Coriander Powder",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-006",
+    "name": "Gobhi Matar",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Cauliflower",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "100g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-008",
+    "name": "Karela Fry",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Bitter Gourd (Karela)",
+        "quantity": "200g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 small",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/2 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-015",
+    "name": "Palak Sabzi",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Spinach (Palak)",
+        "quantity": "250g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "3-4 cloves",
+        "category": "spices"
+      },
+      {
+        "name": "Cumin Seeds",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Oil",
+        "quantity": "1 tbsp",
+        "category": "oils"
+      }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-016",
+    "name": "Paneer Bhurji",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Paneer",
+        "quantity": "200g",
+        "category": "dairy"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/4 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-017",
+    "name": "Tofu Bhurji",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Tofu",
+        "quantity": "200g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Turmeric Powder",
+        "quantity": "1/4 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-019",
+    "name": "Soya Tikki",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Soya Chunks",
+        "quantity": "150g",
+        "category": "protein"
+      },
+      {
+        "name": "Potato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Ginger-Garlic Paste",
+        "quantity": "1 tsp",
+        "category": "spices"
+      },
+      {
+        "name": "Bread Crumbs",
+        "quantity": "2 tbsp",
+        "category": "grains"
+      }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-020",
+    "name": "Soya Keema",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Soya Granules",
+        "quantity": "150g",
+        "category": "protein"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Peas",
+        "quantity": "50g",
+        "category": "vegetables"
+      },
+      {
+        "name": "Garam Masala",
+        "quantity": "1 tsp",
+        "category": "spices"
+      }
+    ]
+  },
+  {
+    "id": "ni-dry_veggie-021",
+    "name": "Baingan Bharta",
+    "category": "dry_veggie",
+    "cuisine": [
+      "north_indian"
+    ],
+    "diet": "veg",
+    "style": "health",
+    "slots": [
+      "lunch",
+      "dinner"
+    ],
+    "ingredients": [
+      {
+        "name": "Brinjal (Baingan)",
+        "quantity": "1 large",
+        "category": "vegetables"
+      },
+      {
+        "name": "Onion",
+        "quantity": "1 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Tomato",
+        "quantity": "2 medium",
+        "category": "vegetables"
+      },
+      {
+        "name": "Green Chilli",
+        "quantity": "2",
+        "category": "vegetables"
+      },
+      {
+        "name": "Mustard Oil",
+        "quantity": "2 tbsp",
+        "category": "oils"
+      }
+    ]
+  }
+]

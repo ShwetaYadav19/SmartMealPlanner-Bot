@@ -1,0 +1,152 @@
+[
+  {
+    "id": "si-dry_veggie-004",
+    "name": "Vazhaikai Varuval",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Raw Banana", "quantity": "2", "category": "vegetables" },
+      { "name": "Sambar Powder", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-007",
+    "name": "Kovakkai Poriyal",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Ivy Gourd (Kovakkai)", "quantity": "200g", "category": "vegetables" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Turmeric Powder", "quantity": "1/4 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-014",
+    "name": "Brinjal Fry",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Brinjal (Eggplant)", "quantity": "200g", "category": "vegetables" },
+      { "name": "Sambar Powder", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-015",
+    "name": "Drumstick Poriyal",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Drumstick", "quantity": "2", "category": "vegetables" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Urad Dal", "quantity": "1 tsp", "category": "lentils" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-039",
+    "name": "Paruppu Usili",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Green Beans", "quantity": "200g", "category": "vegetables" },
+      { "name": "Toor Dal", "quantity": "50g", "category": "lentils" },
+      { "name": "Red Chilli", "quantity": "3", "category": "spices" },
+      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-040",
+    "name": "Keerai Poriyal",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Spinach (Keerai)", "quantity": "250g", "category": "vegetables" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Urad Dal", "quantity": "1 tsp", "category": "lentils" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-041",
+    "name": "Senai Varuval",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Yam (Senai)", "quantity": "200g", "category": "vegetables" },
+      { "name": "Sambar Powder", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Oil", "quantity": "3 tbsp", "category": "oils" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-042",
+    "name": "Chow Chow Poriyal",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Chayote (Chow Chow)", "quantity": "200g", "category": "vegetables" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Urad Dal", "quantity": "1 tsp", "category": "lentils" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-043",
+    "name": "Beetroot Poriyal (Regular)",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Beetroot", "quantity": "200g", "category": "vegetables" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Oil", "quantity": "2 tbsp", "category": "oils" }
+    ]
+  },
+  {
+    "id": "si-dry_veggie-044",
+    "name": "Murungakkai Poriyal",
+    "category": "dry_veggie",
+    "cuisine": ["south_indian"],
+    "diet": "veg",
+    "style": "regular",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Drumstick", "quantity": "3", "category": "vegetables" },
+      { "name": "Coconut", "quantity": "2 tbsp grated", "category": "nuts" },
+      { "name": "Mustard Seeds", "quantity": "1 tsp", "category": "spices" },
+      { "name": "Curry Leaves", "quantity": "8-10", "category": "spices" }
+    ]
+  }
+]
