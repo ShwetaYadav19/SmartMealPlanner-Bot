@@ -8,6 +8,7 @@ import { formatBotResponse } from '../messageFormatter';
 import { loadConfig } from '../config';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
+import { getCurrentWeekMondayISO } from '../core/botEngine';
 
 // Minimal EventBridge scheduled event type
 interface ScheduledEvent {
@@ -72,6 +73,15 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
             await messagingProvider.sendTextMessage(user.phoneNumber, followUpMsg.text);
           }
         }
+      }
+
+      // Reset weeklyPlanStartDate to the new week so daily reminders work correctly
+      if (user.weeklyPlan) {
+        await userStateRepo.saveUser({
+          ...user,
+          weeklyPlanStartDate: getCurrentWeekMondayISO(),
+          conversationState: 'main_menu',
+        });
       }
     } catch (error) {
       console.error(`Failed to send weekly reminder to ${user.phoneNumber}:`, error);
