@@ -60,8 +60,7 @@ const HAPPY_MENU_OPTIONS: SuggestedAction[] = [
   { id: 'weekly_grocery', label: 'Get the grocery list' },
 ];
 const CHANGE_PLAN_OPTIONS: SuggestedAction[] = [
-  { id: 'tomorrow_meals', label: "Change Tomorrow's Meals" },
-  { id: 'few_meals', label: 'Change Another Day' },
+  { id: 'few_meals', label: 'Change a Few Meals' },
   { id: 'entire_plan', label: 'Regenerate Plan' },
   { id: 'change_preference', label: 'Change Preferences' },
 ];
