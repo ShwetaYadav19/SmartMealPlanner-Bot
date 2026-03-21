@@ -64,7 +64,8 @@ export class TwilioMessagingProvider implements MessagingProvider {
     }
 
     // Try interactive quick-reply for ≤3 buttons (WhatsApp in-session limit)
-    if (!contentSid && buttons.length >= 1 && buttons.length <= 3) {
+    // Skip template for long messages — WhatsApp template body limit is 1024 chars
+    if (!contentSid && buttons.length >= 1 && buttons.length <= 3 && body.length <= 900) {
       try {
         const sid = await this.createQuickReplyTemplate(body, buttons);
         await this.client.messages.create({

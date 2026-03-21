@@ -131,14 +131,10 @@ const ADHOC_MENU_BUTTONS: ButtonOption[] = [
 ];
 
 export function formatWeeklyPlan(plan: WeeklyPlan): string {
-  let text = WEEKLY_PLAN_HEADER;
-  for (const day of plan) {
-    text += `\n*${day.day}*`;
-    text += `\n🥣 Breakfast: ${day.breakfast.name}`;
-    text += `\n🍛 Lunch: ${day.lunch.name}`;
-    text += `\n🍽️ Dinner: ${day.dinner.name}\n`;
-  }
-  return text;
+  const days = plan.map((day) =>
+    `*${day.day}*\n🥣 ${day.breakfast.name}\n🍛 ${day.lunch.name}\n🍽️ ${day.dinner.name}`
+  );
+  return `${WEEKLY_PLAN_HEADER}\n${days.join('\n\n')}`;
 }
 
 export function formatDayPlan(day: DayPlan): string {
@@ -290,7 +286,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.WEEKLY_PLAN: {
       const planText = data?.weeklyPlan ? formatWeeklyPlan(data.weeklyPlan) : WEEKLY_PLAN_HEADER;
       return {
-        text: `${planText}\n\n${WEEKLY_PLAN_GROCERY_HINT}${FOOTER_HINT}`,
+        text: `${planText}\n\n${WEEKLY_PLAN_GROCERY_HINT}`,
         buttons: suggestedButtons ?? MAIN_MENU_BUTTONS,
       };
     }
