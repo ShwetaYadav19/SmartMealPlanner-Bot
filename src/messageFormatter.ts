@@ -486,11 +486,22 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         buttons: suggestedButtons ?? CHANGE_PLAN_BUTTONS,
       };
 
-    case ResponseType.FEW_MEALS_DAY_PROMPT:
+    case ResponseType.FEW_MEALS_DAY_PROMPT: {
+      const dayBtns = suggestedButtons ?? DAY_BUTTONS;
+      // WhatsApp allows max 3 buttons per message — split days across messages
+      const dayChunks: ButtonOption[][] = [];
+      for (let i = 0; i < dayBtns.length; i += 3) {
+        dayChunks.push(dayBtns.slice(i, i + 3));
+      }
       return {
         text: FEW_MEALS_DAY_PROMPT,
-        buttons: suggestedButtons ?? DAY_BUTTONS,
+        buttons: dayChunks[0],
+        followUp: dayChunks.slice(1).map((chunk) => ({
+          text: '📅',
+          buttons: chunk,
+        })),
       };
+    }
 
     case ResponseType.FEW_MEALS_SLOT_PROMPT: {
       const slotDayName = data?.dayName ?? '';
@@ -520,11 +531,21 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         buttons: FEW_MEALS_DONE_BUTTONS,
       };
 
-    case ResponseType.FEW_MEALS_NO_ALTERNATIVE:
+    case ResponseType.FEW_MEALS_NO_ALTERNATIVE: {
+      const noAltDayBtns = suggestedButtons ?? DAY_BUTTONS;
+      const noAltChunks: ButtonOption[][] = [];
+      for (let i = 0; i < noAltDayBtns.length; i += 3) {
+        noAltChunks.push(noAltDayBtns.slice(i, i + 3));
+      }
       return {
         text: FEW_MEALS_NO_ALTERNATIVE_MSG,
-        buttons: suggestedButtons ?? DAY_BUTTONS,
+        buttons: noAltChunks[0],
+        followUp: noAltChunks.slice(1).map((chunk) => ({
+          text: '📅',
+          buttons: chunk,
+        })),
       };
+    }
 
     case ResponseType.ENTIRE_PLAN_PREVIEW: {
       const previewPlanText = data?.weeklyPlan ? formatWeeklyPlan(data.weeklyPlan) : WEEKLY_PLAN_HEADER;

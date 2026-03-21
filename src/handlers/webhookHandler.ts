@@ -165,14 +165,17 @@ export async function webhookHandler(
     const formatted = formatBotResponse(result.response);
 
     // 10b. Store button IDs on state so numbered text input can be resolved next turn
-    //      Use the LAST message's buttons (follow-up if present, otherwise primary)
-    const lastMsg = formatted.followUp?.length ? formatted.followUp[formatted.followUp.length - 1] : formatted;
+    //      Collect button IDs from ALL messages (primary + follow-ups) so numbered
+    //      text fallback resolves correctly when buttons are split across messages.
     const allIds: string[] = [];
-    if (lastMsg.listItems && lastMsg.listItems.length > 0) {
-      allIds.push(...lastMsg.listItems.map(li => li.id));
-    }
-    if (lastMsg.buttons && lastMsg.buttons.length > 0) {
-      allIds.push(...lastMsg.buttons.map(b => b.id));
+    const allMessages = [formatted, ...(formatted.followUp ?? [])];
+    for (const msg of allMessages) {
+      if (msg.listItems && msg.listItems.length > 0) {
+        allIds.push(...msg.listItems.map(li => li.id));
+      }
+      if (msg.buttons && msg.buttons.length > 0) {
+        allIds.push(...msg.buttons.map(b => b.id));
+      }
     }
     result.updatedState.lastButtonIds = allIds.length > 0 ? allIds : undefined;
 

@@ -74,12 +74,20 @@ describe('New ResponseType formatting (Task 5.2)', () => {
     );
   });
 
-  it('FEW_MEALS_DAY_PROMPT produces non-empty text with 7 day buttons', () => {
+  it('FEW_MEALS_DAY_PROMPT splits 7 days into clickable button groups of ≤3', () => {
     const res: BotResponse = { type: ResponseType.FEW_MEALS_DAY_PROMPT };
     const fmt = formatBotResponse(res);
     expect(fmt.text.length).toBeGreaterThan(0);
     expect(fmt.buttons).toBeDefined();
-    expect(fmt.buttons!.length).toBe(7);
+    expect(fmt.buttons!.length).toBe(3);
+    expect(fmt.followUp).toBeDefined();
+    expect(fmt.followUp!.length).toBe(2);
+    expect(fmt.followUp![0].buttons!.length).toBe(3);
+    expect(fmt.followUp![1].buttons!.length).toBe(1);
+    // Total across all messages = 7
+    const totalButtons = fmt.buttons!.length
+      + fmt.followUp!.reduce((sum, f) => sum + (f.buttons?.length ?? 0), 0);
+    expect(totalButtons).toBe(7);
   });
 
   it('FEW_MEALS_SLOT_PROMPT includes day name and has 3 slot buttons', () => {
