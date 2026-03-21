@@ -125,8 +125,12 @@ export async function webhookHandler(
     const resolvedPayload = resolveNumberedInput(buttonPayload, body, userState?.lastButtonIds);
     const intent = mapWhatsAppToIntent(resolvedPayload, body, conversationState);
 
+    console.log('[webhook]', phoneNumber, 'state:', conversationState, 'intent:', intent.intent, 'payload:', intent.payload ?? '-');
+
     // 9. Process intent through BotEngine
     const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, phoneNumber, rulesRepo);
+
+    console.log('[webhook]', phoneNumber, 'response:', result.response.type, 'newState:', result.updatedState.conversationState);
 
     // 10. Format structured response for WhatsApp
     const formatted = formatBotResponse(result.response);
@@ -194,6 +198,10 @@ export async function webhookHandler(
     return { statusCode: 200, body: '' };
   } catch (error) {
     console.error('Webhook handler error:', error);
+    // Log the stack trace separately for CloudWatch readability
+    if (error instanceof Error) {
+      console.error('[webhook] stack:', error.stack);
+    }
     return { statusCode: 500, body: '' };
   }
 }

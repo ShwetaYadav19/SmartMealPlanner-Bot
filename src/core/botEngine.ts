@@ -187,12 +187,18 @@ async function handleAwaitingMealStyle(
       diet: state.dietPreference ?? 'veg',
       style: intent.payload as string,
     };
+    console.log('[botEngine] handleAwaitingMealStyle preferences:', JSON.stringify(preferences));
     const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
     const candidateDishes = await generateCandidateDishes(
       deps,
       preferences,
       state.excludedDishIds ?? [],
       mealSelector,
+    );
+    console.log('[botEngine] candidateDishes: breakfasts=%d, lunchCats=%s, dinnerCats=%s',
+      candidateDishes.breakfasts.length,
+      Object.entries(candidateDishes.lunchComponents).map(([k, v]) => `${k}:${(v as any[]).length}`).join(','),
+      Object.entries(candidateDishes.dinnerComponents).map(([k, v]) => `${k}:${(v as any[]).length}`).join(','),
     );
 
     // Build weekly plan directly from candidates — no dish review step

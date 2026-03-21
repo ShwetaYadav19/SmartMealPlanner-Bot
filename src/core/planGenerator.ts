@@ -468,6 +468,8 @@ export function composeMeal(
   // Validate each category has at least one component
   for (const cat of ['base', 'gravy', 'dry_veggie', 'side'] as ComponentCategory[]) {
     if (byCategory[cat].length === 0) {
+      console.error('[composeMeal] EMPTY category %s for %s/%s, diet=%s. Pool size=%d',
+        cat, cuisine, slot, diet ?? 'none', pool.length);
       throw new Error(
         `Not enough ${cat} components for ${cuisine}/${slot} to compose a meal`,
       );
@@ -1030,7 +1032,7 @@ export function regenerateWeeklyPlan(
   // for each slot/cuisine combo. If a category is depleted, selectively un-exclude
   // the minimum IDs needed to restore it, preserving as many exclusions as possible.
   const isBoth = preferences.cuisine === 'both';
-  const targetCuisine = isBoth ? 'north_indian' : preferences.cuisine;
+  const targetCuisine: 'north_indian' | 'south_indian' = isBoth ? 'north_indian' : preferences.cuisine as 'north_indian' | 'south_indian';
   const REQUIRED_CATEGORIES: ComponentCategory[] = ['base', 'gravy', 'dry_veggie', 'side'];
 
   for (const slot of ['lunch', 'dinner'] as const) {

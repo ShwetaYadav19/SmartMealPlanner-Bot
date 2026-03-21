@@ -142,7 +142,12 @@ async function fetchCategoryPool(
   }
 
   // Non-health style: just filter exclusions
-  return allForCategory.filter(c => !excludedSet.has(c.id));
+  const result = allForCategory.filter(c => !excludedSet.has(c.id));
+  if (result.length === 0) {
+    console.warn('[fetchCategoryPool] EMPTY pool for %s/%s/%s (cuisine=%s, diet=%s, style=%s)',
+      slot, category, preferences.style, preferences.cuisine, preferences.diet, style);
+  }
+  return result;
 }
 
 /**
@@ -205,6 +210,8 @@ export async function generateCandidateDishes(
   for (let i = 0; i < 7 && i < shuffledBreakfasts.length; i++) {
     breakfasts.push(shuffledBreakfasts[i]);
   }
+  console.log('[generateCandidateDishes] breakfasts: all=%d, afterExclude=%d, picked=%d',
+    allBreakfasts.length, availableBreakfasts.length, breakfasts.length);
 
   // --- Lunch & Dinner component pools ---
   const categories: ComponentCategory[] = ['base', 'gravy', 'dry_veggie', 'side'];
@@ -443,6 +450,16 @@ export function buildPlanFromComponents(
   candidates: CandidateDishes,
   preferences: { cuisine: string; diet: string },
 ): WeeklyPlan {
+  if (candidates.breakfasts.length === 0) {
+    console.error('[buildPlanFromComponents] EMPTY breakfasts pool — cannot build plan. preferences:', JSON.stringify(preferences));
+    throw new Error('No breakfast options available for the selected preferences');
+  }
+  console.log('[buildPlanFromComponents] building plan: breakfasts=%d, lunchPool=%d, dinnerPool=%d, prefs=%s',
+    candidates.breakfasts.length,
+    Object.values(candidates.lunchComponents).reduce((s, a) => s + a.length, 0),
+    Object.values(candidates.dinnerComponents).reduce((s, a) => s + a.length, 0),
+    JSON.stringify(preferences),
+  );
   const plan: WeeklyPlan = [];
 
   const lunchPool = flattenWithHealthFirst(candidates.lunchComponents);
