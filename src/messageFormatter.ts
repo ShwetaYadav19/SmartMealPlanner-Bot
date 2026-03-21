@@ -68,8 +68,8 @@ const MAIN_MENU_BUTTONS: ButtonOption[] = [
 
 const MORE_OPTIONS_BUTTONS: ButtonOption[] = [
   { id: 'weekly_plan', title: 'Weekly Meal Plan' },
-  { id: 'weekly_grocery', title: 'View Weekly Grocery List' },
-  { id: 'change_preference', title: 'Change Meal Preference' },
+  { id: 'weekly_grocery', title: 'Weekly Grocery List' },
+  { id: 'change_preference', title: 'Change Preferences' },
   { id: 'change_cook_number', title: "Change Cook's Number" },
 ];
 
@@ -106,7 +106,7 @@ const GENERATE_PLAN_BUTTON: ButtonOption[] = [
 
 const CHANGE_PLAN_BUTTONS: ButtonOption[] = [
   { id: 'few_meals', title: 'Change a Few Meals' },
-  { id: 'entire_plan', title: 'Regenerate Entire Plan' },
+  { id: 'entire_plan', title: 'Regenerate Plan' },
   { id: 'change_preference', title: 'Change Preferences' },
 ];
 

@@ -57,14 +57,14 @@ const WEEKLY_PLAN_OPTIONS: SuggestedAction[] = [
 ];
 const MORE_OPTIONS_BUTTONS: SuggestedAction[] = [
   { id: 'weekly_plan', label: 'Weekly Meal Plan' },
-  { id: 'weekly_grocery', label: 'View Weekly Grocery List' },
-  { id: 'change_preference', label: 'Change Meal Preference' },
+  { id: 'weekly_grocery', label: 'Weekly Grocery List' },
+  { id: 'change_preference', label: 'Change Preferences' },
   { id: 'change_cook_number', label: "Change Cook's Number" },
 ];
 
 const CHANGE_PLAN_OPTIONS: SuggestedAction[] = [
   { id: 'few_meals', label: 'Change a Few Meals' },
-  { id: 'entire_plan', label: 'Regenerate Entire Plan' },
+  { id: 'entire_plan', label: 'Regenerate Plan' },
   { id: 'change_preference', label: 'Change Preferences' },
 ];
 

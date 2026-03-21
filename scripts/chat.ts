@@ -20,7 +20,8 @@ import * as readline from 'readline';
 import * as path from 'path';
 import { mapWhatsAppToIntent } from '../src/intentMapper';
 import { processIntent } from '../src/core/botEngine';
-import { formatBotResponse, formatCookMessage } from '../src/messageFormatter';
+import { formatBotResponse, formatCookMessage, type FormattedMessage } from '../src/messageFormatter';
+import { resolveNumberedInput } from '../src/handlers/webhookHandler';
 import { JsonMealRepository } from '../src/adapters/jsonMealRepository';
 import { JsonMealComponentRepository } from '../src/adapters/jsonMealComponentRepository';
 import { JsonRulesRepository } from '../src/adapters/jsonRulesRepository';
@@ -77,86 +78,31 @@ async function handleInput(input: string): Promise<void> {
     return;
   }
 
-  // Determine if this is a button tap or free text
+  // Determine if this is a button tap or free text (same as webhook handler)
   const isButton = BUTTON_IDS.has(trimmed) || trimmed.startsWith('remove_dish_');
-  let buttonPayload = isButton ? trimmed : undefined;
+  const buttonPayload = isButton ? trimmed : undefined;
   const body = isButton ? '' : trimmed;
   const convState = userState?.conversationState ?? 'awaiting_cuisine';
 
-  // Resolve numbered input: if user typed a number and we have stored button IDs,
-  // map the number to the corresponding button payload (handles >3 button fallback)
-  // Also supports multi-select: "1,3" or "1 3" resolves to multiple IDs joined by commas
-  if (!buttonPayload && userState?.lastButtonIds?.length) {
-    const num = parseInt(trimmed, 10);
-    if (!isNaN(num) && num >= 1 && num <= userState.lastButtonIds.length && String(num) === trimmed) {
-      buttonPayload = userState.lastButtonIds[num - 1];
-    } else {
-      // Try multi-select: split by comma, space, or both
-      const parts = trimmed.split(/[\s,]+/).filter(p => p.length > 0);
-      if (parts.length > 1) {
-        const resolvedIds: string[] = [];
-        let valid = true;
-        for (const part of parts) {
-          const n = parseInt(part, 10);
-          if (isNaN(n) || n < 1 || n > userState.lastButtonIds.length || String(n) !== part) {
-            valid = false;
-            break;
-          }
-          resolvedIds.push(userState.lastButtonIds[n - 1]);
-        }
-        if (valid) {
-          const unique = [...new Set(resolvedIds)];
-          buttonPayload = unique.length > 1 ? unique.join(',') : unique[0];
-        }
-      }
-    }
-  }
-
-  // Also resolve bare IDs: if user typed something like "si-base-001",
-  // check if "remove_dish_{input}" matches a stored button ID
-  if (!buttonPayload && userState?.lastButtonIds?.length) {
-    const asRemove = `remove_dish_${trimmed}`;
-    if (userState.lastButtonIds.includes(asRemove)) {
-      buttonPayload = asRemove;
-    } else if (userState.lastButtonIds.includes(trimmed)) {
-      buttonPayload = trimmed;
-    }
-  }
+  // Use the same resolveNumberedInput as the webhook handler
+  const resolvedPayload = resolveNumberedInput(buttonPayload, body, userState?.lastButtonIds);
 
   // 1. Intent mapping (same as webhook handler)
-  const intent = mapWhatsAppToIntent(buttonPayload, body, convState);
+  const intent = mapWhatsAppToIntent(resolvedPayload, body, convState);
 
-  // 2. Process through BotEngine
-  const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, undefined, rulesRepo);
+  // 2. Process through BotEngine (pass PHONE just like webhook passes phoneNumber)
+  const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, PHONE, rulesRepo);
 
   // 3. Format for WhatsApp display
   const formatted = formatBotResponse(result.response);
 
-  // 4. Print the bot's response
-  console.log('\n' + '─'.repeat(50));
-  console.log('🤖 Bot:');
-  console.log(formatted.text);
-
-  let numberOffset = 0;
-  if (formatted.listItems && formatted.listItems.length > 0) {
-    console.log(`\n📋 [${formatted.listButtonLabel ?? 'Select'}]:`);
-    for (let i = 0; i < formatted.listItems.length; i++) {
-      const li = formatted.listItems[i];
-      console.log(`  ${i + 1}. [${li.id}] ${li.item}`);
+  // 4. Print the bot's response (primary + follow-ups, matching webhook send order)
+  const allMessages = [formatted, ...(formatted.followUp ?? [])];
+  printFormattedMessage(formatted);
+  if (formatted.followUp) {
+    for (const followUpMsg of formatted.followUp) {
+      printFormattedMessage(followUpMsg);
     }
-    numberOffset = formatted.listItems.length;
-  }
-
-  if (formatted.buttons && formatted.buttons.length > 0) {
-    console.log('\n📱 Buttons:');
-    for (let i = 0; i < formatted.buttons.length; i++) {
-      const btn = formatted.buttons[i];
-      console.log(`  ${numberOffset + i + 1}. [${btn.id}] ${btn.title}`);
-    }
-  }
-
-  if ((formatted.listItems && formatted.listItems.length > 0) || (formatted.buttons && formatted.buttons.length > 0)) {
-    console.log('\n💡 Type a number or the button/item ID to select.');
   }
 
   // 5. If cook message was sent, show what the cook would receive
@@ -171,16 +117,47 @@ async function handleInput(input: string): Promise<void> {
 
   console.log('─'.repeat(50));
 
-  // 6. Update state and store button IDs for numbered input resolution
+  // 6. Update state and store button IDs from ALL messages (same as webhook handler)
   userState = result.updatedState;
   const allIds: string[] = [];
-  if (formatted.listItems && formatted.listItems.length > 0) {
-    allIds.push(...formatted.listItems.map(li => li.id));
-  }
-  if (formatted.buttons && formatted.buttons.length > 0) {
-    allIds.push(...formatted.buttons.map(b => b.id));
+  for (const msg of allMessages) {
+    if (msg.listItems && msg.listItems.length > 0) {
+      allIds.push(...msg.listItems.map(li => li.id));
+    }
+    if (msg.buttons && msg.buttons.length > 0) {
+      allIds.push(...msg.buttons.map(b => b.id));
+    }
   }
   userState.lastButtonIds = allIds.length > 0 ? allIds : undefined;
+}
+
+/** Print a single FormattedMessage to the console */
+function printFormattedMessage(msg: FormattedMessage): void {
+  console.log('\n' + '─'.repeat(50));
+  console.log('🤖 Bot:');
+  console.log(msg.text);
+
+  let numberOffset = 0;
+  if (msg.listItems && msg.listItems.length > 0) {
+    console.log(`\n📋 [${msg.listButtonLabel ?? 'Select'}]:`);
+    for (let i = 0; i < msg.listItems.length; i++) {
+      const li = msg.listItems[i];
+      console.log(`  ${i + 1}. [${li.id}] ${li.item}`);
+    }
+    numberOffset = msg.listItems.length;
+  }
+
+  if (msg.buttons && msg.buttons.length > 0) {
+    console.log('\n📱 Buttons:');
+    for (let i = 0; i < msg.buttons.length; i++) {
+      const btn = msg.buttons[i];
+      console.log(`  ${numberOffset + i + 1}. [${btn.id}] ${btn.title}`);
+    }
+  }
+
+  if ((msg.listItems && msg.listItems.length > 0) || (msg.buttons && msg.buttons.length > 0)) {
+    console.log('\n💡 Type a number or the button/item ID to select.');
+  }
 }
 
 // --- REPL ---

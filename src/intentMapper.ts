@@ -107,6 +107,10 @@ export function mapWhatsAppToIntent(
         return { intent: Intent.CHANGE_MORE_MEALS };
       case 'done_changing':
         return { intent: Intent.DONE_CHANGING };
+      case 'change_preference':
+        return { intent: Intent.CHANGE_PREFERENCE };
+      case 'change_cook_number':
+        return { intent: Intent.CHANGE_COOK_NUMBER };
     }
 
     // --- Day selection payloads (day_0 through day_6) ---
