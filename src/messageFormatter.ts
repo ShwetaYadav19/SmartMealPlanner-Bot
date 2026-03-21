@@ -52,6 +52,7 @@ import {
   ENTIRE_PLAN_PREVIEW_HEADER,
   ADHOC_MENU_HEADER,
   FOOTER_HINT,
+  DAILY_REMINDER_HINT,
 } from './messages';
 
 export interface FormattedMessage {
@@ -88,12 +89,11 @@ const HAPPY_MENU_BUTTONS: ButtonOption[] = [
 ];
 
 const WEEKLY_GROCERY_BUTTONS: ButtonOption[] = [
-  { id: 'tomorrow_plan', title: "Tomorrow's Meals" },
-  { id: 'change_plan', title: 'Change Plan' },
+  { id: 'tomorrow_plan', title: "Tomorrow's Menu" },
 ];
 
 const TOMORROW_PLAN_BUTTONS: ButtonOption[] = [
-  { id: 'tomorrow_grocery', title: "Tomorrow's Grocery" },
+  { id: 'tomorrow_grocery', title: 'Get Grocery List' },
   { id: 'send_to_cook', title: 'Send to Cook' },
 ];
 
@@ -349,7 +349,11 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         ? `${TOMORROW_GROCERY_HEADER}${formatGroceryListBody(data.groceryList)}`
         : TOMORROW_GROCERY_HEADER;
       return {
-        text: `${tomorrowGroceryText}${FOOTER_HINT}`,
+        text: `${tomorrowGroceryText}${DAILY_REMINDER_HINT}`,
+        followUp: [{
+          text: 'Want to send this to your cook?',
+          buttons: [{ id: 'send_to_cook', title: 'Send to Cook' }],
+        }],
       };
     }
 
@@ -358,12 +362,13 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
 
     case ResponseType.COOK_NUMBER_SAVED:
       return {
-        text: `${COOK_NUMBER_SAVED}${FOOTER_HINT}`,
+        text: `${COOK_NUMBER_SAVED}${DAILY_REMINDER_HINT}`,
       };
 
     case ResponseType.COOK_MESSAGE_SENT:
       return {
-        text: `${COOK_MESSAGE_SENT}${FOOTER_HINT}`,
+        text: `${COOK_MESSAGE_SENT}${DAILY_REMINDER_HINT}`,
+        buttons: [{ id: 'tomorrow_grocery', title: 'Get Grocery List' }],
       };
 
     case ResponseType.SWAP_CONFIRMATION: {

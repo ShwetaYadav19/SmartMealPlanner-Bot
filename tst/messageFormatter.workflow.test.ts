@@ -176,7 +176,9 @@ describe('Footer hint on terminal messages (Task 5.3)', () => {
     it(`${label} includes footer hint`, () => {
       const res: BotResponse = { type, ...(data ? { data } : {}) };
       const fmt = formatBotResponse(res);
-      expect(fmt.text).toContain('Type "hi" to start a new conversation');
+      const hasFooterHint = fmt.text.includes('Type "hi" to start a new conversation');
+      const hasDailyHint = fmt.text.includes('say "hi" anytime');
+      expect(hasFooterHint || hasDailyHint).toBe(true);
     });
   }
 });

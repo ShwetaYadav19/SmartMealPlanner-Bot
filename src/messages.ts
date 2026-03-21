@@ -178,6 +178,9 @@ export const ADHOC_MENU_HEADER = `Hey! 👋 What would you like to do?`;
 // --- Footer Hint ---
 export const FOOTER_HINT = `\nType "hi" to start a new conversation`;
 
+// --- Terminal Flow Hint ---
+export const DAILY_REMINDER_HINT = `\n\n💡 I'll ping you every day at 8 PM with the next day's menu. Just say "hi" anytime if you want to chat or change things up!`;
+
 
 // --- Twilio WhatsApp Content Template SID Mapping ---
 
