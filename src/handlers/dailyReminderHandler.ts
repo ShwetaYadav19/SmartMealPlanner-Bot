@@ -58,10 +58,6 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
       const formatted = formatBotResponse(response);
 
       if (formatted.buttons && formatted.buttons.length > 0) {
-        // Daily reminders are out-of-session — pre-approved templates have
-        // static text that doesn't include the user's actual plan.
-        // Send the dynamic plan text as plain text, then buttons as a follow-up.
-        // The numbered-text fallback in sendButtonMessage handles out-of-session delivery.
         await messagingProvider.sendButtonMessage(
           user.phoneNumber,
           formatted.text,
@@ -69,6 +65,14 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         );
       } else {
         await messagingProvider.sendTextMessage(user.phoneNumber, formatted.text);
+      }
+
+      // Update conversation state so the next user reply enters the daily flow
+      if (response.type === ResponseType.DAILY_REMINDER) {
+        await userStateRepo.saveUser({
+          ...user,
+          conversationState: 'daily_grocery_prompt',
+        });
       }
     } catch (error) {
       console.error(`Failed to send daily reminder to ${user.phoneNumber}:`, error);

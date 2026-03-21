@@ -195,13 +195,8 @@ describe('dailyReminderHandler', () => {
       const [, , buttons] = mockSendButtonMessage.mock.calls[0];
       expect(buttons).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ title: 'View Grocery List' }),
-          expect.objectContaining({ title: 'Send to Cook' }),
-        ]),
-      );
-      expect(buttons).not.toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ title: 'Swap Lunch' }),
+          expect.objectContaining({ id: 'daily_grocery_yes' }),
+          expect.objectContaining({ id: 'daily_grocery_no' }),
         ]),
       );
     } finally {

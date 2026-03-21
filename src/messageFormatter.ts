@@ -314,7 +314,14 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         ? `${TOMORROW_GROCERY_HEADER}${formatGroceryListBody(data.groceryList)}`
         : TOMORROW_GROCERY_HEADER;
       return {
-        text: `${tomorrowGroceryText}${DAILY_REMINDER_HINT}`,
+        text: tomorrowGroceryText,
+        followUp: [{
+          text: 'Want to send tomorrow\'s menu to your cook? 👨‍🍳',
+          buttons: [
+            { id: 'daily_cook_yes', title: 'Yes 📤' },
+            { id: 'daily_cook_no', title: 'No ❌' },
+          ],
+        }],
       };
     }
 
@@ -380,10 +387,10 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         ? `${DAILY_REMINDER_HEADER(data.dayPlan.day)}\n${formatDayPlanBody(data.dayPlan)}`
         : DAILY_REMINDER_HEADER('');
       return {
-        text: `${reminderDayText}${FOOTER_HINT}`,
+        text: `${reminderDayText}\n\nWould you like to see tomorrow's grocery list? 🛒`,
         buttons: [
-          { id: 'tomorrow_grocery', title: 'View Grocery List' },
-          { id: 'send_to_cook', title: 'Send to Cook' },
+          { id: 'daily_grocery_yes', title: 'Yes 🛒' },
+          { id: 'daily_grocery_no', title: 'No ❌' },
         ],
       };
     }
@@ -552,6 +559,15 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: `${ADHOC_MENU_HEADER}${FOOTER_HINT}`,
         buttons: suggestedButtons ?? ADHOC_MENU_BUTTONS,
+      };
+
+    case ResponseType.DAILY_COOK_PROMPT:
+      return {
+        text: 'Would you like to send tomorrow\'s menu to your cook? 👨‍🍳',
+        buttons: [
+          { id: 'daily_cook_yes', title: 'Yes 📤' },
+          { id: 'daily_cook_no', title: 'No ❌' },
+        ],
       };
 
     case ResponseType.ERROR:

@@ -85,7 +85,9 @@ export type ConversationState =
   | 'few_meals_day_select'
   | 'few_meals_slot_select'
   | 'few_meals_alternatives'
-  | 'entire_plan_confirm';
+  | 'entire_plan_confirm'
+  | 'daily_grocery_prompt'
+  | 'daily_cook_prompt';
 
 export interface UserState {
   phoneNumber: string;
@@ -153,6 +155,10 @@ export enum Intent {
   RETRY_PLAN = 'RETRY_PLAN',
   HAPPY_WITH_MENU = 'HAPPY_WITH_MENU',
   ADHOC_MENU = 'ADHOC_MENU',
+  DAILY_GROCERY_YES = 'DAILY_GROCERY_YES',
+  DAILY_GROCERY_NO = 'DAILY_GROCERY_NO',
+  DAILY_COOK_YES = 'DAILY_COOK_YES',
+  DAILY_COOK_NO = 'DAILY_COOK_NO',
   UNKNOWN = 'UNKNOWN',
 }
 
@@ -195,6 +201,7 @@ export enum ResponseType {
   ENTIRE_PLAN_PREVIEW = 'ENTIRE_PLAN_PREVIEW',
   HAPPY_MENU = 'HAPPY_MENU',
   ADHOC_MENU = 'ADHOC_MENU',
+  DAILY_COOK_PROMPT = 'DAILY_COOK_PROMPT',
   ERROR = 'ERROR',
 }
 

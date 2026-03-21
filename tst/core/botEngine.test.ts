@@ -355,7 +355,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_PLAN', () => {
     vi.useRealTimers();
   });
 
-  it('returns TOMORROW_PLAN with day plan data when plan covers tomorrow', async () => {
+  it('returns DAILY_REMINDER with day plan data when plan covers tomorrow', async () => {
     const state = makeStateWithPlan();
     const result = await processIntent(
       { intent: Intent.VIEW_TOMORROW_PLAN },
@@ -364,9 +364,8 @@ describe('BotEngine — main menu: VIEW_TOMORROW_PLAN', () => {
       mockMealComponentRepo,
     );
 
-    expect(result.response.type).toBe(ResponseType.TOMORROW_PLAN);
+    expect(result.response.type).toBe(ResponseType.DAILY_REMINDER);
     expect(result.response.data?.dayPlan).toBeDefined();
-    expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
   });
 
   it('returns NO_PLAN_ERROR when no plan exists', async () => {
@@ -415,7 +414,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_GROCERY', () => {
     expect(result.response.type).toBe(ResponseType.TOMORROW_GROCERY_LIST);
     expect(result.response.data?.groceryList).toBeDefined();
     expect(result.response.data!.groceryList!.length).toBeGreaterThan(0);
-    expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
+    expect(result.updatedState.conversationState).toBe('daily_cook_prompt');
   });
 
   it('returns NO_PLAN_ERROR when no plan exists', async () => {
@@ -588,10 +587,10 @@ describe('BotEngine — main menu: state transitions after actions', () => {
     expect(result.updatedState.conversationState).toBe('main_menu');
   });
 
-  it('state is main_menu after VIEW_TOMORROW_PLAN', async () => {
+  it('state is daily_grocery_prompt after VIEW_TOMORROW_PLAN', async () => {
     const state = makeStateWithPlan();
     const result = await processIntent({ intent: Intent.VIEW_TOMORROW_PLAN }, state, mockMealRepo, mockMealComponentRepo);
-    expect(result.updatedState.conversationState).toBe('main_menu');
+    expect(result.updatedState.conversationState).toBe('daily_grocery_prompt');
   });
 });
 

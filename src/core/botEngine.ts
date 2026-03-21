@@ -748,13 +748,17 @@ async function handleMainMenu(
           updatedState: state,
         };
       }
+      // Enter the sequential daily flow: menu → grocery prompt → cook prompt
+      const updatedState: UserState = {
+        ...state,
+        conversationState: 'daily_grocery_prompt',
+      };
       return {
         response: {
-          type: ResponseType.TOMORROW_PLAN,
+          type: ResponseType.DAILY_REMINDER,
           data: { dayPlan },
-          suggestedActions: ADHOC_MENU_OPTIONS,
         },
-        updatedState: state,
+        updatedState,
       };
     }
 
@@ -793,9 +797,8 @@ async function handleMainMenu(
         response: {
           type: ResponseType.TOMORROW_GROCERY_LIST,
           data: { groceryList },
-          suggestedActions: ADHOC_MENU_OPTIONS,
         },
-        updatedState: state,
+        updatedState: { ...state, conversationState: 'daily_cook_prompt' },
       };
     }
 
@@ -1555,6 +1558,102 @@ async function handleAwaitingPreferenceStyle(
 }
 
 
+// --- Daily flow handlers ---
+
+function handleDailyGroceryPrompt(
+  intent: UserIntent,
+  state: UserState,
+): BotResult {
+  if (intent.intent === Intent.DAILY_GROCERY_YES) {
+    // Show grocery list, then move to cook prompt
+    if (!state.weeklyPlan || !state.weeklyPlanStartDate) {
+      return {
+        response: { type: ResponseType.NO_PLAN_ERROR, suggestedActions: ADHOC_MENU_OPTIONS },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    const tomorrowPlan = extractTomorrowPlan(state.weeklyPlan, state.weeklyPlanStartDate);
+    if (!tomorrowPlan) {
+      return {
+        response: { type: ResponseType.EXPIRED_PLAN_PROMPT, suggestedActions: ADHOC_MENU_OPTIONS },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    const tomorrowMeals: (Meal | ComposedMeal)[] = [tomorrowPlan.breakfast, tomorrowPlan.lunch, tomorrowPlan.dinner];
+    const groceryList = generateGroceryList(tomorrowMeals);
+    return {
+      response: {
+        type: ResponseType.TOMORROW_GROCERY_LIST,
+        data: { groceryList },
+      },
+      updatedState: { ...state, conversationState: 'daily_cook_prompt' },
+    };
+  }
+
+  if (intent.intent === Intent.DAILY_GROCERY_NO) {
+    // Skip grocery, go straight to cook prompt
+    return {
+      response: { type: ResponseType.DAILY_COOK_PROMPT },
+      updatedState: { ...state, conversationState: 'daily_cook_prompt' },
+    };
+  }
+
+  // Invalid input — re-prompt
+  return {
+    response: { type: ResponseType.INVALID_INPUT },
+    updatedState: state,
+  };
+}
+
+function handleDailyCookPrompt(
+  intent: UserIntent,
+  state: UserState,
+): BotResult {
+  if (intent.intent === Intent.DAILY_COOK_YES) {
+    // User wants to send to cook
+    if (!state.cookPhoneNumber) {
+      return {
+        response: { type: ResponseType.COOK_NUMBER_PROMPT },
+        updatedState: { ...state, conversationState: 'awaiting_cook_number' },
+      };
+    }
+    if (!state.weeklyPlan || !state.weeklyPlanStartDate) {
+      return {
+        response: { type: ResponseType.NO_PLAN_ERROR, suggestedActions: ADHOC_MENU_OPTIONS },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    const cookDayPlan = extractTomorrowPlan(state.weeklyPlan, state.weeklyPlanStartDate);
+    if (!cookDayPlan) {
+      return {
+        response: { type: ResponseType.EXPIRED_PLAN_PROMPT, suggestedActions: ADHOC_MENU_OPTIONS },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    return {
+      response: {
+        type: ResponseType.COOK_MESSAGE_SENT,
+        data: { dayPlan: cookDayPlan, cookNumber: state.cookPhoneNumber },
+      },
+      updatedState: { ...state, conversationState: 'main_menu' },
+    };
+  }
+
+  if (intent.intent === Intent.DAILY_COOK_NO) {
+    // Done — terminal
+    return {
+      response: { type: ResponseType.ADHOC_MENU, suggestedActions: ADHOC_MENU_OPTIONS },
+      updatedState: { ...state, conversationState: 'main_menu' },
+    };
+  }
+
+  // Invalid input — re-prompt
+  return {
+    response: { type: ResponseType.INVALID_INPUT },
+    updatedState: state,
+  };
+}
+
 // --- Main entry point ---
 
 export async function processIntent(
@@ -1640,6 +1739,12 @@ export async function processIntent(
 
     case 'entire_plan_confirm':
       return handleEntirePlanConfirm(intent, userState, mealRepository, mealComponentRepository);
+
+    case 'daily_grocery_prompt':
+      return handleDailyGroceryPrompt(intent, userState);
+
+    case 'daily_cook_prompt':
+      return handleDailyCookPrompt(intent, userState);
 
     case 'awaiting_cook_number': {
       if (intent.intent === Intent.PROVIDE_COOK_NUMBER && intent.payload) {
