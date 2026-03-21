@@ -73,6 +73,16 @@ const MORE_OPTIONS_BUTTONS: ButtonOption[] = [
   { id: 'change_cook_number', title: "Change Cook's Number" },
 ];
 
+const WEEKLY_GROCERY_BUTTONS: ButtonOption[] = [
+  { id: 'tomorrow_plan', title: "Tomorrow's Meals" },
+  { id: 'change_plan', title: 'Change Plan' },
+];
+
+const TOMORROW_GROCERY_BUTTONS: ButtonOption[] = [
+  { id: 'send_to_cook', title: 'Send to Cook' },
+  { id: 'tomorrow_plan', title: 'Back' },
+];
+
 const CUISINE_BUTTONS: ButtonOption[] = [
   { id: 'north_indian', title: 'North Indian' },
   { id: 'south_indian', title: 'South Indian' },
@@ -305,7 +315,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         : WEEKLY_GROCERY_HEADER;
       return {
         text: `${groceryText}${FOOTER_HINT}`,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: WEEKLY_GROCERY_BUTTONS,
       };
     }
 
@@ -323,7 +333,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         : TOMORROW_GROCERY_HEADER;
       return {
         text: `${tomorrowGroceryText}${FOOTER_HINT}`,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: TOMORROW_GROCERY_BUTTONS,
       };
     }
 

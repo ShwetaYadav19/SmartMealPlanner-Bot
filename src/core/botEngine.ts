@@ -1169,6 +1169,7 @@ async function handleChangePlanMenu(
 // --- Few Meals Day Select handler (Task 3.2) ---
 
 function handleFewMealsDaySelect(intent: UserIntent, state: UserState): BotResult {
+  const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   if (intent.intent === Intent.SELECT_DAY && intent.payload != null) {
     const day = parseInt(intent.payload, 10);
     if (day >= 0 && day <= 6) {
@@ -1180,6 +1181,7 @@ function handleFewMealsDaySelect(intent: UserIntent, state: UserState): BotResul
       return {
         response: {
           type: ResponseType.FEW_MEALS_SLOT_PROMPT,
+          data: { dayName: DAY_NAMES[day] },
           suggestedActions: SLOT_SELECT_OPTIONS,
         },
         updatedState,
@@ -1262,6 +1264,7 @@ async function handleFewMealsSlotSelect(
       };
     }
 
+    const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const altActions: SuggestedAction[] = alternatives.map((alt, i) => ({
       id: `alt_${i}`,
       label: alt.name,
@@ -1277,6 +1280,7 @@ async function handleFewMealsSlotSelect(
     return {
       response: {
         type: ResponseType.FEW_MEALS_ALTERNATIVES,
+        data: { dayName: DAY_NAMES[state.fewMealsSelectedDay], oldMeal: slot },
         suggestedActions: altActions,
       },
       updatedState,
@@ -1509,32 +1513,18 @@ async function handleAwaitingPreferenceDiet(
   mealSelector?: MealSelector,
 ): Promise<BotResult> {
   if (intent.intent === Intent.SELECT_DIET && intent.payload) {
-    const updatedDietState: UserState = {
+    const updatedState: UserState = {
       ...state,
       dietPreference: intent.payload as UserState['dietPreference'],
       excludedDishIds: [],
-    };
-
-    const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
-    const preferences = {
-      cuisine: updatedDietState.cuisinePreference ?? 'both',
-      diet: updatedDietState.dietPreference ?? 'veg',
-      style: updatedDietState.mealStyle ?? 'regular',
-    };
-
-    const candidateDishes = await generateCandidateDishes(deps, preferences, [], mealSelector);
-    const updatedState: UserState = {
-      ...updatedDietState,
-      candidateDishes,
-      conversationState: 'dish_preview',
-      previewStep: 'breakfast',
-      isPreferenceChange: false,
+      conversationState: 'awaiting_preference_style',
+      isPreferenceChange: true,
     };
 
     return {
       response: {
-        type: ResponseType.DISH_PREVIEW,
-        data: { candidateDishes, previewStep: 'breakfast' },
+        type: ResponseType.ONBOARDING_STYLE_PROMPT,
+        suggestedActions: STYLE_OPTIONS,
       },
       updatedState,
     };
@@ -1544,6 +1534,70 @@ async function handleAwaitingPreferenceDiet(
     response: {
       type: ResponseType.INVALID_INPUT,
       suggestedActions: DIET_OPTIONS,
+    },
+    updatedState: state,
+  };
+}
+
+
+// --- Handle preference style selection (change preferences flow) ---
+
+async function handleAwaitingPreferenceStyle(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
+): Promise<BotResult> {
+  if (intent.intent === Intent.SELECT_MEAL_STYLE && intent.payload) {
+    const style = intent.payload as UserState['mealStyle'];
+    const preferences = {
+      cuisine: state.cuisinePreference ?? 'both',
+      diet: state.dietPreference ?? 'veg',
+      style: style ?? 'regular',
+    };
+    console.log('[botEngine] handleAwaitingPreferenceStyle preferences:', JSON.stringify(preferences));
+
+    const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
+    const candidateDishes = await generateCandidateDishes(
+      deps,
+      preferences,
+      [],
+      mealSelector,
+    );
+
+    const weeklyPlan = buildPlanFromComponents(candidateDishes, {
+      cuisine: state.cuisinePreference ?? 'both',
+      diet: state.dietPreference ?? 'both',
+    });
+    const weeklyPlanStartDate = getCurrentWeekMondayISO();
+
+    const updatedState: UserState = {
+      ...state,
+      mealStyle: style,
+      weeklyPlan,
+      weeklyPlanStartDate,
+      excludedDishIds: [],
+      candidateDishes: undefined,
+      previewStep: undefined,
+      isPreferenceChange: false,
+      conversationState: 'main_menu',
+    };
+
+    return {
+      response: {
+        type: ResponseType.WEEKLY_PLAN,
+        data: { weeklyPlan },
+        suggestedActions: WEEKLY_PLAN_OPTIONS,
+      },
+      updatedState,
+    };
+  }
+
+  return {
+    response: {
+      type: ResponseType.INVALID_INPUT,
+      suggestedActions: STYLE_OPTIONS,
     },
     updatedState: state,
   };
@@ -1598,6 +1652,9 @@ export async function processIntent(
 
     case 'awaiting_preference_diet':
       return handleAwaitingPreferenceDiet(intent, userState, mealRepository, mealComponentRepository, mealSelector);
+
+    case 'awaiting_preference_style':
+      return handleAwaitingPreferenceStyle(intent, userState, mealRepository, mealComponentRepository, mealSelector);
 
     case 'change_plan_menu':
       return handleChangePlanMenu(intent, userState, mealRepository, mealComponentRepository);

@@ -81,6 +81,7 @@ export type ConversationState =
   | 'awaiting_cook_number'
   | 'awaiting_preference_cuisine'
   | 'awaiting_preference_diet'
+  | 'awaiting_preference_style'
   | 'change_plan_menu'
   | 'few_meals_day_select'
   | 'few_meals_slot_select'

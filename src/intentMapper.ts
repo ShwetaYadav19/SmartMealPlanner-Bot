@@ -17,25 +17,25 @@ export function mapWhatsAppToIntent(
 
   // --- Button payload mappings (state-dependent onboarding) ---
   if (buttonPayload) {
-    // Cuisine selection during onboarding
+    // Cuisine selection during onboarding or preference change
     if (
-      conversationState === 'awaiting_cuisine' &&
+      (conversationState === 'awaiting_cuisine' || conversationState === 'awaiting_preference_cuisine') &&
       (buttonPayload === 'north_indian' || buttonPayload === 'south_indian' || buttonPayload === 'both')
     ) {
       return { intent: Intent.SELECT_CUISINE, payload: buttonPayload };
     }
 
-    // Diet selection during onboarding
+    // Diet selection during onboarding or preference change
     if (
-      conversationState === 'awaiting_diet' &&
+      (conversationState === 'awaiting_diet' || conversationState === 'awaiting_preference_diet') &&
       (buttonPayload === 'veg' || buttonPayload === 'non_veg' || buttonPayload === 'both')
     ) {
       return { intent: Intent.SELECT_DIET, payload: buttonPayload };
     }
 
-    // Meal style selection during onboarding
+    // Meal style selection during onboarding or preference change
     if (
-      conversationState === 'awaiting_meal_style' &&
+      (conversationState === 'awaiting_meal_style' || conversationState === 'awaiting_preference_style') &&
       (buttonPayload === 'health' || buttonPayload === 'regular')
     ) {
       return { intent: Intent.SELECT_MEAL_STYLE, payload: buttonPayload };
@@ -153,21 +153,21 @@ export function mapWhatsAppToIntent(
   // --- Free text / number input handling (sandbox mode support) ---
 
   // Cuisine selection via text
-  if (conversationState === 'awaiting_cuisine') {
+  if (conversationState === 'awaiting_cuisine' || conversationState === 'awaiting_preference_cuisine') {
     if (text === '1' || text === 'north indian') return { intent: Intent.SELECT_CUISINE, payload: 'north_indian' };
     if (text === '2' || text === 'south indian') return { intent: Intent.SELECT_CUISINE, payload: 'south_indian' };
     if (text === '3' || text === 'both') return { intent: Intent.SELECT_CUISINE, payload: 'both' };
   }
 
   // Diet selection via text
-  if (conversationState === 'awaiting_diet') {
+  if (conversationState === 'awaiting_diet' || conversationState === 'awaiting_preference_diet') {
     if (text === '1' || text === 'veg') return { intent: Intent.SELECT_DIET, payload: 'veg' };
     if (text === '2' || text === 'non-veg' || text === 'non veg' || text === 'nonveg') return { intent: Intent.SELECT_DIET, payload: 'non_veg' };
     if (text === '3' || text === 'both') return { intent: Intent.SELECT_DIET, payload: 'both' };
   }
 
   // Meal style selection via text
-  if (conversationState === 'awaiting_meal_style') {
+  if (conversationState === 'awaiting_meal_style' || conversationState === 'awaiting_preference_style') {
     if (text === '1' || text === 'health') return { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' };
     if (text === '2' || text === 'regular' || text === 'regular home meals') return { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' };
   }

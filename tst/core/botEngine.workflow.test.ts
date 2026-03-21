@@ -239,7 +239,7 @@ describe('E2E: main menu → change plan → entire plan → accept', () => {
   });
 });
 
-describe('E2E: main menu → change plan → change preferences → dish preview → confirm', () => {
+describe('E2E: main menu → change plan → change preferences → new plan', () => {
   it('walks through onboarding, then changes preferences via change plan menu and gets a new plan', async () => {
     // --- Phase 1: Onboarding with north_indian / veg / regular ---
 
@@ -303,47 +303,32 @@ describe('E2E: main menu → change plan → change preferences → dish preview
     expect(rCuisine.updatedState.cuisinePreference).toBe('south_indian');
     expect(rCuisine.updatedState.isPreferenceChange).toBe(true);
 
-    // Select new diet: non_veg → transitions to dish_preview
+    // Select new diet: non_veg → transitions to awaiting_preference_style
     const rDiet = await processIntent(
       { intent: Intent.SELECT_DIET, payload: 'non_veg' },
       rCuisine.updatedState, mealRepo, mealComponentRepo,
     );
-    expect(rDiet.response.type).toBe(ResponseType.DISH_PREVIEW);
-    expect(rDiet.updatedState.conversationState).toBe('dish_preview');
+    expect(rDiet.response.type).toBe(ResponseType.ONBOARDING_STYLE_PROMPT);
+    expect(rDiet.updatedState.conversationState).toBe('awaiting_preference_style');
     expect(rDiet.updatedState.dietPreference).toBe('non_veg');
     expect(rDiet.updatedState.excludedDishIds).toEqual([]);
-    expect(rDiet.updatedState.candidateDishes).toBeDefined();
-    expect(rDiet.response.data?.previewStep).toBe('breakfast');
-    // isPreferenceChange should be cleared after entering dish_preview
-    expect(rDiet.updatedState.isPreferenceChange).toBe(false);
+    expect(rDiet.updatedState.isPreferenceChange).toBe(true);
 
-    // --- Phase 4: Walk through dish preview with new preferences ---
-
-    let currentState = rDiet.updatedState;
-    for (const step of PREVIEW_STEP_ORDER.slice(1)) {
-      const r = await processIntent(
-        { intent: Intent.NEXT_CATEGORY },
-        currentState, mealRepo, mealComponentRepo,
-      );
-      expect(r.response.type).toBe(ResponseType.DISH_PREVIEW);
-      expect(r.response.data?.previewStep).toBe(step);
-      currentState = r.updatedState;
-    }
-
-    expect(currentState.previewStep).toBe('confirm');
-
-    // Confirm dishes → new WEEKLY_PLAN, main_menu
-    const rConfirm2 = await processIntent(
-      { intent: Intent.CONFIRM_DISHES },
-      currentState, mealRepo, mealComponentRepo,
+    // Select new style: health → generates new plan directly (no dish preview)
+    const rStyle = await processIntent(
+      { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' },
+      rDiet.updatedState, mealRepo, mealComponentRepo,
     );
-    expect(rConfirm2.response.type).toBe(ResponseType.WEEKLY_PLAN);
-    expect(rConfirm2.updatedState.conversationState).toBe('main_menu');
-    expect(rConfirm2.updatedState.weeklyPlan).toBeDefined();
-    expect(rConfirm2.updatedState.weeklyPlan!.length).toBe(7);
-    expect(rConfirm2.response.data?.weeklyPlan).toBeDefined();
+    expect(rStyle.response.type).toBe(ResponseType.WEEKLY_PLAN);
+    expect(rStyle.updatedState.conversationState).toBe('main_menu');
+    expect(rStyle.updatedState.weeklyPlan).toBeDefined();
+    expect(rStyle.updatedState.weeklyPlan!.length).toBe(7);
+    expect(rStyle.response.data?.weeklyPlan).toBeDefined();
+    expect(rStyle.updatedState.isPreferenceChange).toBe(false);
+    expect(rStyle.updatedState.candidateDishes).toBeUndefined();
+    expect(rStyle.updatedState.previewStep).toBeUndefined();
 
-    const newPlan = rConfirm2.updatedState.weeklyPlan!;
+    const newPlan = rStyle.updatedState.weeklyPlan!;
 
     // --- Phase 5: Verify the new plan matches new preferences ---
 
@@ -359,8 +344,8 @@ describe('E2E: main menu → change plan → change preferences → dish preview
     }
 
     // Verify preferences are stored correctly
-    expect(rConfirm2.updatedState.cuisinePreference).toBe('south_indian');
-    expect(rConfirm2.updatedState.dietPreference).toBe('non_veg');
+    expect(rStyle.updatedState.cuisinePreference).toBe('south_indian');
+    expect(rStyle.updatedState.dietPreference).toBe('non_veg');
 
     // Verify the new plan differs from the original (preferences changed, so meals should differ)
     const originalBreakfastNames = originalPlan.map(d => d.breakfast.name);
@@ -373,11 +358,11 @@ describe('E2E: main menu → change plan → change preferences → dish preview
     expect(hasBreakfastDifference || hasLunchDifference).toBe(true);
 
     // Verify excludedDishIds is cleared (empty) after preference change
-    expect(rConfirm2.updatedState.excludedDishIds).toBeDefined();
-    // candidateDishes should be cleared after confirm
-    expect(rConfirm2.updatedState.candidateDishes).toBeUndefined();
-    // previewStep should be cleared after confirm
-    expect(rConfirm2.updatedState.previewStep).toBeUndefined();
+    expect(rStyle.updatedState.excludedDishIds).toEqual([]);
+    // candidateDishes should be cleared after preference change
+    expect(rStyle.updatedState.candidateDishes).toBeUndefined();
+    // previewStep should be cleared after preference change
+    expect(rStyle.updatedState.previewStep).toBeUndefined();
   });
 });
 
