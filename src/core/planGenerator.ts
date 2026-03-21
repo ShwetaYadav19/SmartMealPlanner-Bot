@@ -207,12 +207,14 @@ const PROTEIN_GROUPS: Record<string, string> = {
   mutton: 'red_meat',
   'mutton bones': 'red_meat',
   'mutton mince': 'red_meat',
+  'soya chunks': 'plant_protein',
+  'soya granules': 'plant_protein',
 };
 
 /**
  * Keywords that identify a component as a protein dish.
  */
-const PROTEIN_KEYWORDS: string[] = ['chicken', 'chicken mince', 'fish', 'prawns', 'eggs', 'paneer', 'tofu', 'mutton', 'mutton bones', 'mutton mince'];
+const PROTEIN_KEYWORDS: string[] = ['chicken', 'chicken mince', 'fish', 'prawns', 'eggs', 'paneer', 'tofu', 'mutton', 'mutton bones', 'mutton mince', 'soya chunks', 'soya granules'];
 
 /**
  * Check if a component is a protein dish by testing whether any of its
