@@ -149,13 +149,14 @@ describe('New ResponseType formatting (Task 5.2)', () => {
     );
   });
 
-  it('ADHOC_MENU produces non-empty text with menu buttons', () => {
+  it('ADHOC_MENU produces non-empty text with 2 menu buttons', () => {
     const res: BotResponse = { type: ResponseType.ADHOC_MENU };
     const fmt = formatBotResponse(res);
     expect(fmt.text.length).toBeGreaterThan(0);
     expect(fmt.buttons).toBeDefined();
+    expect(fmt.buttons!.length).toBe(2);
     expect(fmt.buttons!.map((b) => b.id)).toEqual(
-      expect.arrayContaining(['weekly_plan', 'tomorrow_plan', 'change_preference']),
+      expect.arrayContaining(['weekly_plan', 'tomorrow_plan']),
     );
   });
 });

@@ -94,7 +94,6 @@ const FEW_MEALS_DONE_OPTIONS: SuggestedAction[] = [
 const ADHOC_MENU_OPTIONS: SuggestedAction[] = [
   { id: 'weekly_plan', label: 'Weekly Meal Plan' },
   { id: 'tomorrow_plan', label: "Tomorrow's Plan" },
-  { id: 'change_preference', label: 'Change Preferences' },
 ];
 
 // --- Helper to create a default new-user state ---

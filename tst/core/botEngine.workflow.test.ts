@@ -424,7 +424,7 @@ describe('E2E: adhoc menu routing', () => {
     const actionIds = rAdhoc.response.suggestedActions!.map(a => a.id);
     expect(actionIds).toContain('weekly_plan');
     expect(actionIds).toContain('tomorrow_plan');
-    expect(actionIds).toContain('change_preference');
+    expect(actionIds).toHaveLength(2);
 
     // Verify state remains in main_menu (adhoc menu is informational, doesn't change state)
     expect(rAdhoc.updatedState.conversationState).toBe('main_menu');

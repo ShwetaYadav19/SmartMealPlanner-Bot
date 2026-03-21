@@ -139,7 +139,6 @@ const ENTIRE_PLAN_BUTTONS: ButtonOption[] = [
 const ADHOC_MENU_BUTTONS: ButtonOption[] = [
   { id: 'weekly_plan', title: 'Weekly Meal Plan' },
   { id: 'tomorrow_plan', title: "Tomorrow's Plan" },
-  { id: 'change_preference', title: 'Change Preferences' },
 ];
 
 export function formatWeeklyPlan(plan: WeeklyPlan): string {
