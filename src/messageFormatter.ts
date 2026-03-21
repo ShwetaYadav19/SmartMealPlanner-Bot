@@ -313,9 +313,15 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       const groceryText = data?.groceryList
         ? formatGroceryList(data.groceryList)
         : WEEKLY_GROCERY_HEADER;
+      // Grocery list for a full week easily exceeds WhatsApp's 1024-char
+      // button-message limit, triggering Twilio error 63013.
+      // Split into plain text + follow-up with buttons.
       return {
         text: `${groceryText}${FOOTER_HINT}`,
-        buttons: WEEKLY_GROCERY_BUTTONS,
+        followUp: [{
+          text: 'What would you like to do next?',
+          buttons: WEEKLY_GROCERY_BUTTONS,
+        }],
       };
     }
 
