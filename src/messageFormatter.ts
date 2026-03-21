@@ -75,15 +75,16 @@ const PLAN_APPROVAL_BUTTONS: ButtonOption[] = [
 
 const HAPPY_MENU_BUTTONS: ButtonOption[] = [
   { id: 'tomorrow_plan', title: "What's for tomorrow?" },
-  { id: 'weekly_grocery', title: 'Get the grocery list' },
+  { id: 'weekly_grocery', title: 'Get weekly grocery list' },
 ];
 
 const WEEKLY_GROCERY_BUTTONS: ButtonOption[] = [
   { id: 'tomorrow_plan', title: "Tomorrow's Menu" },
+  { id: 'send_to_cook', title: 'Send to Cook' },
 ];
 
 const TOMORROW_PLAN_BUTTONS: ButtonOption[] = [
-  { id: 'tomorrow_grocery', title: 'Get Grocery List' },
+  { id: 'tomorrow_grocery', title: "Tomorrow's Grocery List" },
   { id: 'send_to_cook', title: 'Send to Cook' },
 ];
 
@@ -320,7 +321,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: `${groceryText}${FOOTER_HINT}`,
         followUp: [{
-          text: 'What would you like to do next?',
+          text: "Want to send tomorrow's menu to your cook?",
           buttons: WEEKLY_GROCERY_BUTTONS,
         }],
       };
@@ -341,7 +342,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: `${tomorrowGroceryText}${DAILY_REMINDER_HINT}`,
         followUp: [{
-          text: 'Want to send this to your cook?',
+          text: "Want to send tomorrow's menu to your cook?",
           buttons: [{ id: 'send_to_cook', title: 'Send to Cook' }],
         }],
       };
