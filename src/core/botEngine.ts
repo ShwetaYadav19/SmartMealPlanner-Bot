@@ -1640,9 +1640,9 @@ function handleDailyCookPrompt(
   }
 
   if (intent.intent === Intent.DAILY_COOK_NO) {
-    // Done — terminal
+    // Done — terminal with daily reminder hint
     return {
-      response: { type: ResponseType.ADHOC_MENU, suggestedActions: ADHOC_MENU_OPTIONS },
+      response: { type: ResponseType.DAILY_FLOW_DONE },
       updatedState: { ...state, conversationState: 'main_menu' },
     };
   }

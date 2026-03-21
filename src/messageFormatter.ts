@@ -570,6 +570,11 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         ],
       };
 
+    case ResponseType.DAILY_FLOW_DONE:
+      return {
+        text: DAILY_REMINDER_HINT.trim(),
+      };
+
     case ResponseType.ERROR:
       return { text: GENERIC_ERROR, buttons: ADHOC_MENU_BUTTONS };
 
