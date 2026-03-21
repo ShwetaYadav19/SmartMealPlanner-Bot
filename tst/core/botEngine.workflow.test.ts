@@ -175,10 +175,18 @@ describe('E2E: main menu → change plan → entire plan → accept', () => {
     expect(r8.response.type).toBe(ResponseType.CHANGE_PLAN_MENU);
     expect(r8.updatedState.conversationState).toBe('change_plan_menu');
 
-    // 6. User selects CHANGE_ENTIRE_PLAN → ENTIRE_PLAN_PREVIEW with new plan
-    const r9 = await processIntent(
+    // 6. User selects CHANGE_ENTIRE_PLAN → REGENERATE_PLAN_MENU
+    const r9a = await processIntent(
       { intent: Intent.CHANGE_ENTIRE_PLAN },
       r8.updatedState, mealRepo, mealComponentRepo,
+    );
+    expect(r9a.response.type).toBe(ResponseType.REGENERATE_PLAN_MENU);
+    expect(r9a.updatedState.conversationState).toBe('regenerate_plan_menu');
+
+    // 6b. User selects KEEP_PREFERENCES → ENTIRE_PLAN_PREVIEW with new plan
+    const r9 = await processIntent(
+      { intent: Intent.KEEP_PREFERENCES },
+      r9a.updatedState, mealRepo, mealComponentRepo,
     );
     expect(r9.response.type).toBe(ResponseType.ENTIRE_PLAN_PREVIEW);
     expect(r9.updatedState.conversationState).toBe('entire_plan_confirm');
@@ -282,22 +290,30 @@ describe('E2E: main menu → change plan → change preferences → new plan', (
     expect(rCP.response.type).toBe(ResponseType.CHANGE_PLAN_MENU);
     expect(rCP.updatedState.conversationState).toBe('change_plan_menu');
 
-    // User selects CHANGE_PREFERENCE → awaiting_preference_cuisine
+    // User selects CHANGE_ENTIRE_PLAN → REGENERATE_PLAN_MENU
     const rPref = await processIntent(
-      { intent: Intent.CHANGE_PREFERENCE },
+      { intent: Intent.CHANGE_ENTIRE_PLAN },
       rCP.updatedState, mealRepo, mealComponentRepo,
     );
-    expect(rPref.response.type).toBe(ResponseType.ONBOARDING_CUISINE_PROMPT);
-    expect(rPref.updatedState.conversationState).toBe('awaiting_preference_cuisine');
-    expect(rPref.updatedState.isPreferenceChange).toBe(true);
-    expect(rPref.updatedState.excludedDishIds).toEqual([]);
+    expect(rPref.response.type).toBe(ResponseType.REGENERATE_PLAN_MENU);
+    expect(rPref.updatedState.conversationState).toBe('regenerate_plan_menu');
+
+    // User selects CHANGE_PREFERENCE from regenerate plan menu
+    const rPref2 = await processIntent(
+      { intent: Intent.CHANGE_PREFERENCE },
+      rPref.updatedState, mealRepo, mealComponentRepo,
+    );
+    expect(rPref2.response.type).toBe(ResponseType.ONBOARDING_CUISINE_PROMPT);
+    expect(rPref2.updatedState.conversationState).toBe('awaiting_preference_cuisine');
+    expect(rPref2.updatedState.isPreferenceChange).toBe(true);
+    expect(rPref2.updatedState.excludedDishIds).toEqual([]);
 
     // --- Phase 3: Select new preferences (south_indian / non_veg) ---
 
     // Select new cuisine: south_indian
     const rCuisine = await processIntent(
       { intent: Intent.SELECT_CUISINE, payload: 'south_indian' },
-      rPref.updatedState, mealRepo, mealComponentRepo,
+      rPref2.updatedState, mealRepo, mealComponentRepo,
     );
     expect(rCuisine.response.type).toBe(ResponseType.ONBOARDING_DIET_PROMPT);
     expect(rCuisine.updatedState.conversationState).toBe('awaiting_preference_diet');

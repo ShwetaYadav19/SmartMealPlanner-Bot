@@ -218,8 +218,8 @@ describe('(Feature: smart-meal-planner-workflow, Property 10: Few meals replacem
 
 describe('(Feature: smart-meal-planner-workflow, Property 15: Preference change clears exclusions)', () => {
   /** Arbitrary source state from which CHANGE_PREFERENCE can be triggered */
-  const sourceStateArb = fc.constantFrom<'change_plan_menu'>(
-    'change_plan_menu',
+  const sourceStateArb = fc.constantFrom<'regenerate_plan_menu'>(
+    'regenerate_plan_menu',
   );
 
   /** Arbitrary non-empty excludedDishIds array (1-10 random string IDs) */

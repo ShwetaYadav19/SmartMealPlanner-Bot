@@ -100,7 +100,6 @@ const GENERATE_PLAN_BUTTON: ButtonOption[] = [
 const CHANGE_PLAN_BUTTONS: ButtonOption[] = [
   { id: 'few_meals', title: 'Change a Few Meals' },
   { id: 'entire_plan', title: 'Regenerate Plan' },
-  { id: 'change_preference', title: 'Change Preferences' },
 ];
 
 const DAY_BUTTONS: ButtonOption[] = [
@@ -483,6 +482,15 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: CHANGE_PLAN_MENU_HEADER,
         buttons: suggestedButtons ?? CHANGE_PLAN_BUTTONS,
+      };
+
+    case ResponseType.REGENERATE_PLAN_MENU:
+      return {
+        text: 'Would you like to keep your current preferences or change them? 🔄',
+        buttons: [
+          { id: 'keep_preferences', title: 'Keep Preferences' },
+          { id: 'change_preference', title: 'Change Preferences' },
+        ],
       };
 
     case ResponseType.FEW_MEALS_DAY_PROMPT: {

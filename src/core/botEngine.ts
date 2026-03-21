@@ -57,7 +57,6 @@ const HAPPY_MENU_OPTIONS: SuggestedAction[] = [
 const CHANGE_PLAN_OPTIONS: SuggestedAction[] = [
   { id: 'few_meals', label: 'Change a Few Meals' },
   { id: 'entire_plan', label: 'Regenerate Plan' },
-  { id: 'change_preference', label: 'Change Preferences' },
 ];
 
 const DAY_SELECT_OPTIONS: SuggestedAction[] = [
@@ -1042,63 +1041,12 @@ async function handleChangePlanMenu(
     }
 
     case Intent.CHANGE_ENTIRE_PLAN: {
-      if (!state.weeklyPlan) {
-        return {
-          response: {
-            type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: ADHOC_MENU_OPTIONS,
-          },
-          updatedState: { ...state, conversationState: 'main_menu' },
-        };
-      }
-
-      const preferences = {
-        cuisine: state.cuisinePreference ?? 'both',
-        diet: state.dietPreference ?? 'veg',
-        style: state.mealStyle ?? 'regular',
-      };
-      const meals = await mealRepository.getMeals({
-        cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
-        diet: preferences.diet as 'veg' | 'non_veg' | 'both',
-        style: preferences.style as 'health' | 'regular',
-      });
-      const components = await mealComponentRepository.getComponents({
-        cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
-      });
-
-      const newPlan = regenerateWeeklyPlan(state.weeklyPlan, meals, components, preferences);
-      const weeklyPlanStartDate = getCurrentWeekMondayISO();
-
-      const updatedState: UserState = {
-        ...state,
-        previousWeeklyPlan: state.weeklyPlan,
-        weeklyPlan: newPlan,
-        weeklyPlanStartDate,
-        conversationState: 'entire_plan_confirm',
-      };
+      // Show sub-menu: keep preferences or change them
       return {
         response: {
-          type: ResponseType.ENTIRE_PLAN_PREVIEW,
-          data: { weeklyPlan: newPlan },
-          suggestedActions: ENTIRE_PLAN_OPTIONS,
+          type: ResponseType.REGENERATE_PLAN_MENU,
         },
-        updatedState,
-      };
-    }
-
-    case Intent.CHANGE_PREFERENCE: {
-      const updatedState: UserState = {
-        ...state,
-        excludedDishIds: [],
-        isPreferenceChange: true,
-        conversationState: 'awaiting_preference_cuisine',
-      };
-      return {
-        response: {
-          type: ResponseType.ONBOARDING_CUISINE_PROMPT,
-          suggestedActions: CUISINE_OPTIONS,
-        },
-        updatedState,
+        updatedState: { ...state, conversationState: 'regenerate_plan_menu' },
       };
     }
 
@@ -1111,6 +1059,75 @@ async function handleChangePlanMenu(
         updatedState: state,
       };
   }
+}
+
+// --- Regenerate Plan Menu handler ---
+
+async function handleRegeneratePlanMenu(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
+): Promise<BotResult> {
+  if (intent.intent === Intent.KEEP_PREFERENCES) {
+    // Regenerate with current preferences
+    if (!state.weeklyPlan) {
+      return {
+        response: { type: ResponseType.NO_PLAN_ERROR, suggestedActions: ADHOC_MENU_OPTIONS },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    const preferences = {
+      cuisine: state.cuisinePreference ?? 'both',
+      diet: state.dietPreference ?? 'veg',
+      style: state.mealStyle ?? 'regular',
+    };
+    const meals = await mealRepository.getMeals({
+      cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
+      diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+      style: preferences.style as 'health' | 'regular',
+    });
+    const components = await mealComponentRepository.getComponents({
+      cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
+    });
+    const newPlan = regenerateWeeklyPlan(state.weeklyPlan, meals, components, preferences);
+    const weeklyPlanStartDate = getCurrentWeekMondayISO();
+    return {
+      response: {
+        type: ResponseType.ENTIRE_PLAN_PREVIEW,
+        data: { weeklyPlan: newPlan },
+        suggestedActions: ENTIRE_PLAN_OPTIONS,
+      },
+      updatedState: {
+        ...state,
+        previousWeeklyPlan: state.weeklyPlan,
+        weeklyPlan: newPlan,
+        weeklyPlanStartDate,
+        conversationState: 'entire_plan_confirm',
+      },
+    };
+  }
+
+  if (intent.intent === Intent.CHANGE_PREFERENCE) {
+    return {
+      response: {
+        type: ResponseType.ONBOARDING_CUISINE_PROMPT,
+        suggestedActions: CUISINE_OPTIONS,
+      },
+      updatedState: {
+        ...state,
+        excludedDishIds: [],
+        isPreferenceChange: true,
+        conversationState: 'awaiting_preference_cuisine',
+      },
+    };
+  }
+
+  return {
+    response: { type: ResponseType.INVALID_INPUT },
+    updatedState: state,
+  };
 }
 
 // --- Few Meals Day Select handler (Task 3.2) ---
@@ -1829,6 +1846,9 @@ export async function processIntent(
 
     case 'entire_plan_confirm':
       return handleEntirePlanConfirm(intent, userState, mealRepository, mealComponentRepository);
+
+    case 'regenerate_plan_menu':
+      return handleRegeneratePlanMenu(intent, userState, mealRepository, mealComponentRepository, mealSelector);
 
     case 'daily_grocery_prompt':
       return handleDailyGroceryPrompt(intent, userState);

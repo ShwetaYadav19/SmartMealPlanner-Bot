@@ -110,6 +110,8 @@ export function mapWhatsAppToIntent(
         return { intent: Intent.HAPPY_DAILY_YES };
       case 'happy_daily_no':
         return { intent: Intent.HAPPY_DAILY_NO };
+      case 'keep_preferences':
+        return { intent: Intent.KEEP_PREFERENCES };
     }
 
     // --- Day selection payloads (day_0 through day_6) ---
@@ -212,6 +214,12 @@ export function mapWhatsAppToIntent(
   if (conversationState === 'happy_daily_prompt') {
     if (text === '1' || text === 'yes') return { intent: Intent.HAPPY_DAILY_YES };
     if (text === '2' || text === 'no') return { intent: Intent.HAPPY_DAILY_NO };
+  }
+
+  // Regenerate plan menu — keep/change via text
+  if (conversationState === 'regenerate_plan_menu') {
+    if (text === '1' || text === 'keep' || text === 'keep preferences') return { intent: Intent.KEEP_PREFERENCES };
+    if (text === '2' || text === 'change' || text === 'change preferences') return { intent: Intent.CHANGE_PREFERENCE };
   }
 
   // Daily grocery prompt — yes/no via text

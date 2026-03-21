@@ -63,14 +63,14 @@ function makeWeeklyPlan(): WeeklyPlan {
 // --- Tests ---
 
 describe('New ResponseType formatting (Task 5.2)', () => {
-  it('CHANGE_PLAN_MENU produces non-empty text with 3 buttons', () => {
+  it('CHANGE_PLAN_MENU produces non-empty text with 2 buttons', () => {
     const res: BotResponse = { type: ResponseType.CHANGE_PLAN_MENU };
     const fmt = formatBotResponse(res);
     expect(fmt.text.length).toBeGreaterThan(0);
     expect(fmt.buttons).toBeDefined();
-    expect(fmt.buttons!.length).toBe(3);
+    expect(fmt.buttons!.length).toBe(2);
     expect(fmt.buttons!.map((b) => b.id)).toEqual(
-      expect.arrayContaining(['few_meals', 'entire_plan', 'change_preference']),
+      expect.arrayContaining(['few_meals', 'entire_plan']),
     );
   });
 
