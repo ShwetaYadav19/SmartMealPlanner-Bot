@@ -45,11 +45,6 @@ const SKIP_COOK_NUMBER_OPTION: SuggestedAction[] = [
   { id: 'skip_cook', label: 'Skip' },
 ];
 
-const MAIN_MENU_OPTIONS: SuggestedAction[] = [
-  { id: 'tomorrow_plan', label: "Tomorrow's Meal Plan" },
-  { id: 'tomorrow_grocery', label: "Tomorrow's Grocery" },
-  { id: 'send_to_cook', label: 'Send Menu to Cook' },
-];
 const WEEKLY_PLAN_OPTIONS: SuggestedAction[] = [
   { id: 'happy_with_menu', label: 'Happy with the menu' },
   { id: 'change_plan', label: 'Want to change' },
@@ -695,7 +690,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -704,7 +699,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -718,7 +713,7 @@ async function handleMainMenu(
         response: {
           type: ResponseType.WEEKLY_GROCERY_LIST,
           data: { groceryList },
-          suggestedActions: MAIN_MENU_OPTIONS,
+          suggestedActions: ADHOC_MENU_OPTIONS,
         },
         updatedState: state,
       };
@@ -729,7 +724,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -738,7 +733,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -748,7 +743,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -757,7 +752,7 @@ async function handleMainMenu(
         response: {
           type: ResponseType.TOMORROW_PLAN,
           data: { dayPlan },
-          suggestedActions: MAIN_MENU_OPTIONS,
+          suggestedActions: ADHOC_MENU_OPTIONS,
         },
         updatedState: state,
       };
@@ -768,7 +763,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -777,7 +772,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -787,7 +782,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -798,7 +793,7 @@ async function handleMainMenu(
         response: {
           type: ResponseType.TOMORROW_GROCERY_LIST,
           data: { groceryList },
-          suggestedActions: MAIN_MENU_OPTIONS,
+          suggestedActions: ADHOC_MENU_OPTIONS,
         },
         updatedState: state,
       };
@@ -809,7 +804,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -818,7 +813,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -840,7 +835,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -849,7 +844,7 @@ async function handleMainMenu(
         response: {
           type: ResponseType.COOK_MESSAGE_SENT,
           data: { dayPlan: cookDayPlan, cookNumber: state.cookPhoneNumber },
-          suggestedActions: MAIN_MENU_OPTIONS,
+          suggestedActions: ADHOC_MENU_OPTIONS,
         },
         updatedState: state,
       };
@@ -860,7 +855,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -869,7 +864,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -884,7 +879,7 @@ async function handleMainMenu(
         return {
           response: {
             type: ResponseType.SWAP_NO_ALTERNATIVE,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: state,
         };
@@ -898,7 +893,7 @@ async function handleMainMenu(
         response: {
           type: ResponseType.SWAP_CONFIRMATION,
           data: { oldMeal: swapResult.oldMeal, newMeal: swapResult.newMeal },
-          suggestedActions: MAIN_MENU_OPTIONS,
+          suggestedActions: ADHOC_MENU_OPTIONS,
         },
         updatedState,
       };
@@ -976,7 +971,7 @@ async function handleMainMenu(
       return {
         response: {
           type: ResponseType.INVALID_INPUT,
-          suggestedActions: MAIN_MENU_OPTIONS,
+          suggestedActions: ADHOC_MENU_OPTIONS,
         },
         updatedState: state,
       };
@@ -998,7 +993,7 @@ async function handleChangePlanMenu(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: { ...state, conversationState: 'main_menu' },
         };
@@ -1007,7 +1002,7 @@ async function handleChangePlanMenu(
         return {
           response: {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: { ...state, conversationState: 'main_menu' },
         };
@@ -1048,7 +1043,7 @@ async function handleChangePlanMenu(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: { ...state, conversationState: 'main_menu' },
         };
@@ -1171,7 +1166,7 @@ async function handleFewMealsSlotSelect(
       return {
         response: {
           type: ResponseType.NO_PLAN_ERROR,
-          suggestedActions: MAIN_MENU_OPTIONS,
+          suggestedActions: ADHOC_MENU_OPTIONS,
         },
         updatedState: { ...state, conversationState: 'main_menu' },
       };
@@ -1382,7 +1377,7 @@ async function handleEntirePlanConfirm(
         return {
           response: {
             type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: MAIN_MENU_OPTIONS,
+            suggestedActions: ADHOC_MENU_OPTIONS,
           },
           updatedState: { ...state, conversationState: 'main_menu' },
         };
@@ -1700,7 +1695,7 @@ export async function processIntent(
       return {
         response: {
           type: ResponseType.INVALID_INPUT,
-          suggestedActions: MAIN_MENU_OPTIONS,
+          suggestedActions: ADHOC_MENU_OPTIONS,
         },
         updatedState: userState,
       };
@@ -1715,7 +1710,6 @@ export {
   CUISINE_OPTIONS,
   DIET_OPTIONS,
   STYLE_OPTIONS,
-  MAIN_MENU_OPTIONS,
   WEEKLY_PLAN_OPTIONS,
   HAPPY_MENU_OPTIONS,
   SKIP_COOK_NUMBER_OPTION,

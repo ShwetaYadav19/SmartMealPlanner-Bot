@@ -29,7 +29,7 @@ export class TwilioMessagingProvider implements MessagingProvider {
   }
 
   async sendTextMessage(to: string, body: string): Promise<void> {
-    const MAX_LEN = 1500; // Stay under Twilio's 1600-char concatenated limit
+    const MAX_LEN = 4000; // WhatsApp supports up to 4096 chars per message
     if (body.length <= MAX_LEN) {
       await this.client.messages.create({
         from: `whatsapp:${this.senderNumber}`,

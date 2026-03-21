@@ -11,7 +11,6 @@ import {
   ONBOARDING_DIET_PROMPT,
   ONBOARDING_STYLE_PROMPT,
   ONBOARDING_COMPLETE,
-  MAIN_MENU_HEADER,
   WEEKLY_PLAN_HEADER,
   DAY_PLAN_HEADER,
   NO_PLAN_PROMPT,
@@ -61,12 +60,6 @@ export interface FormattedMessage {
   /** Additional messages to send after the primary one (e.g. plan text + separate CTA) */
   followUp?: FormattedMessage[];
 }
-
-const MAIN_MENU_BUTTONS: ButtonOption[] = [
-  { id: 'tomorrow_plan', title: "Tomorrow's Meal Plan" },
-  { id: 'tomorrow_grocery', title: "Tomorrow's Grocery" },
-  { id: 'send_to_cook', title: 'Send Menu to Cook' },
-];
 
 const PLAN_APPROVAL_BUTTONS: ButtonOption[] = [
   { id: 'happy_with_menu', title: 'Happy with the menu' },
@@ -285,13 +278,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.ONBOARDING_COMPLETE:
       return {
         text: ONBOARDING_COMPLETE,
-        buttons: MAIN_MENU_BUTTONS,
-      };
-
-    case ResponseType.MAIN_MENU:
-      return {
-        text: MAIN_MENU_HEADER,
-        buttons: suggestedButtons ?? MAIN_MENU_BUTTONS,
+        buttons: ADHOC_MENU_BUTTONS,
       };
 
     case ResponseType.WEEKLY_PLAN: {
@@ -351,14 +338,14 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
           : SWAP_CONFIRMATION('', '');
       return {
         text: `${swapText}${FOOTER_HINT}`,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: ADHOC_MENU_BUTTONS,
       };
     }
 
     case ResponseType.SWAP_NO_ALTERNATIVE:
       return {
         text: SWAP_NO_ALTERNATIVE,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: ADHOC_MENU_BUTTONS,
       };
 
     case ResponseType.NO_PLAN_ERROR:
@@ -370,13 +357,13 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.NO_COOK_ERROR:
       return {
         text: NO_COOK_PROMPT,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: ADHOC_MENU_BUTTONS,
       };
 
     case ResponseType.INVALID_INPUT:
       return {
         text: INVALID_INPUT,
-        buttons: suggestedButtons ?? MAIN_MENU_BUTTONS,
+        buttons: suggestedButtons ?? ADHOC_MENU_BUTTONS,
       };
 
     case ResponseType.INVALID_PHONE:
@@ -568,7 +555,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       };
 
     case ResponseType.ERROR:
-      return { text: GENERIC_ERROR, buttons: MAIN_MENU_BUTTONS };
+      return { text: GENERIC_ERROR, buttons: ADHOC_MENU_BUTTONS };
 
     default:
       return { text: GENERIC_ERROR };

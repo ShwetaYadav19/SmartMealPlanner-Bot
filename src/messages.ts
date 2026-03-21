@@ -9,9 +9,6 @@ export const ONBOARDING_DIET_PROMPT = `Great choice! Now, what's your diet prefe
 export const ONBOARDING_STYLE_PROMPT = `Almost done! What style of meals do you like? 🏠`;
 export const ONBOARDING_COMPLETE = `You're all set! 🎉 Here's what you can do:`;
 
-// --- Main Menu ---
-export const MAIN_MENU_HEADER = `What would you like to do? 😊`;
-
 // --- Plan ---
 export const WEEKLY_PLAN_HEADER = `Here's your meal plan for the week 🍽️\n`;
 export const WEEKLY_PLAN_FIRST_TIME_HEADER = `Here's your first meal plan 🎉🍽️\n`;

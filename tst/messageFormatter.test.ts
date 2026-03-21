@@ -16,7 +16,6 @@ import {
   ONBOARDING_DIET_PROMPT,
   ONBOARDING_STYLE_PROMPT,
   ONBOARDING_COMPLETE,
-  MAIN_MENU_HEADER,
   NO_PLAN_PROMPT,
   COOK_NUMBER_PROMPT,
   COOK_NUMBER_SAVED,
@@ -216,13 +215,6 @@ describe('formatBotResponse', () => {
     const response: BotResponse = { type: ResponseType.ONBOARDING_COMPLETE };
     const result = formatBotResponse(response);
     expect(result.text).toBe(ONBOARDING_COMPLETE);
-    expect(result.buttons).toBeDefined();
-  });
-
-  it('should format MAIN_MENU with main menu header and buttons', () => {
-    const response: BotResponse = { type: ResponseType.MAIN_MENU };
-    const result = formatBotResponse(response);
-    expect(result.text).toBe(MAIN_MENU_HEADER);
     expect(result.buttons).toBeDefined();
   });
 

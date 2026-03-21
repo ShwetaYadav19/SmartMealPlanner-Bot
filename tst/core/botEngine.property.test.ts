@@ -5,7 +5,7 @@ import {
   CUISINE_OPTIONS,
   DIET_OPTIONS,
   STYLE_OPTIONS,
-  MAIN_MENU_OPTIONS,
+  ADHOC_MENU_OPTIONS,
   createDefaultState,
   getComingMondayISO,
 } from '../../src/core/botEngine';

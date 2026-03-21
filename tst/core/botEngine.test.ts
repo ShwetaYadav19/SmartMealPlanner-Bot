@@ -4,7 +4,7 @@ import {
   CUISINE_OPTIONS,
   DIET_OPTIONS,
   STYLE_OPTIONS,
-  MAIN_MENU_OPTIONS,
+  ADHOC_MENU_OPTIONS,
   SKIP_COOK_NUMBER_OPTION,
   getComingMondayISO,
 } from '../../src/core/botEngine';
@@ -329,7 +329,7 @@ describe('BotEngine — main menu: VIEW_WEEKLY_GROCERY', () => {
     expect(result.response.type).toBe(ResponseType.WEEKLY_GROCERY_LIST);
     expect(result.response.data?.groceryList).toBeDefined();
     expect(result.response.data!.groceryList!.length).toBeGreaterThan(0);
-    expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
+    expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
   });
 
   it('returns NO_PLAN_ERROR when no plan exists', async () => {
@@ -342,7 +342,7 @@ describe('BotEngine — main menu: VIEW_WEEKLY_GROCERY', () => {
     );
 
     expect(result.response.type).toBe(ResponseType.NO_PLAN_ERROR);
-    expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
+    expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
   });
 });
 
@@ -366,7 +366,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_PLAN', () => {
 
     expect(result.response.type).toBe(ResponseType.TOMORROW_PLAN);
     expect(result.response.data?.dayPlan).toBeDefined();
-    expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
+    expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
   });
 
   it('returns NO_PLAN_ERROR when no plan exists', async () => {
@@ -415,7 +415,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_GROCERY', () => {
     expect(result.response.type).toBe(ResponseType.TOMORROW_GROCERY_LIST);
     expect(result.response.data?.groceryList).toBeDefined();
     expect(result.response.data!.groceryList!.length).toBeGreaterThan(0);
-    expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
+    expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
   });
 
   it('returns NO_PLAN_ERROR when no plan exists', async () => {
@@ -464,7 +464,7 @@ describe('BotEngine — main menu: SEND_MENU_TO_COOK', () => {
     expect(result.response.type).toBe(ResponseType.COOK_MESSAGE_SENT);
     expect(result.response.data?.dayPlan).toBeDefined();
     expect(result.response.data?.cookNumber).toBe('+911234567890');
-    expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
+    expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
   });
 
   it('returns NO_PLAN_ERROR when no plan exists', async () => {
@@ -523,7 +523,7 @@ describe('BotEngine — main menu: SWAP_LUNCH', () => {
       expect(result.response.data?.oldMeal).toBeDefined();
       expect(result.response.data?.newMeal).toBeDefined();
       expect(result.updatedState.weeklyPlan).toBeDefined();
-      expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
+      expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
       expect(result.updatedState.conversationState).toBe('main_menu');
     } else {
       // If tomorrow is outside the plan range, we get SWAP_NO_ALTERNATIVE
@@ -570,7 +570,7 @@ describe('BotEngine — main menu: UNKNOWN intent', () => {
     );
 
     expect(result.response.type).toBe(ResponseType.INVALID_INPUT);
-    expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
+    expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
     expect(result.updatedState.conversationState).toBe('main_menu');
   });
 });
