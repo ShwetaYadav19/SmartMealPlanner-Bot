@@ -29,11 +29,54 @@ export class TwilioMessagingProvider implements MessagingProvider {
   }
 
   async sendTextMessage(to: string, body: string): Promise<void> {
-    await this.client.messages.create({
-      from: `whatsapp:${this.senderNumber}`,
-      to: `whatsapp:${to}`,
-      body,
-    });
+    const MAX_LEN = 1500; // Stay under Twilio's 1600-char concatenated limit
+    if (body.length <= MAX_LEN) {
+      await this.client.messages.create({
+        from: `whatsapp:${this.senderNumber}`,
+        to: `whatsapp:${to}`,
+        body,
+      });
+      return;
+    }
+
+    // Split on double-newline boundaries to keep logical sections together
+    const chunks = this.splitMessage(body, MAX_LEN);
+    for (const chunk of chunks) {
+      await this.client.messages.create({
+        from: `whatsapp:${this.senderNumber}`,
+        to: `whatsapp:${to}`,
+        body: chunk,
+      });
+    }
+  }
+
+  /**
+   * Splits a long message into chunks at paragraph boundaries (\n\n).
+   * Falls back to single-newline splits, then hard cuts if needed.
+   */
+  private splitMessage(text: string, maxLen: number): string[] {
+    const chunks: string[] = [];
+    let remaining = text;
+
+    while (remaining.length > maxLen) {
+      // Try to split at a double-newline within the limit
+      let splitIdx = remaining.lastIndexOf('\n\n', maxLen);
+      if (splitIdx <= 0) {
+        // Fall back to single newline
+        splitIdx = remaining.lastIndexOf('\n', maxLen);
+      }
+      if (splitIdx <= 0) {
+        // Hard cut as last resort
+        splitIdx = maxLen;
+      }
+      chunks.push(remaining.slice(0, splitIdx).trimEnd());
+      remaining = remaining.slice(splitIdx).trimStart();
+    }
+
+    if (remaining.length > 0) {
+      chunks.push(remaining);
+    }
+    return chunks;
   }
 
   async sendButtonMessage(
