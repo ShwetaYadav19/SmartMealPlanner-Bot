@@ -225,7 +225,7 @@ describe('Property 3: Onboarding flow completeness', () => {
 // **Validates: Requirements 11.2, 11.3**
 
 describe('Property 11: Action completion returns to main menu', () => {
-  it('after any action intent, state is main_menu (except SAVE_COOK_NUMBER → awaiting_cook_number, GENERATE_PLAN → dish_preview)', async () => {
+  it('after any action intent, state is main_menu (except SAVE_COOK_NUMBER → awaiting_cook_number)', async () => {
     const actionIntents = fc.constantFrom(
       Intent.GENERATE_PLAN,
       Intent.VIEW_WEEKLY_GROCERY,
@@ -246,8 +246,6 @@ describe('Property 11: Action completion returns to main menu', () => {
 
         if (intentType === Intent.SAVE_COOK_NUMBER) {
           expect(result.updatedState.conversationState).toBe('awaiting_cook_number');
-        } else if (intentType === Intent.GENERATE_PLAN) {
-          expect(result.updatedState.conversationState).toBe('dish_preview');
         } else {
           expect(result.updatedState.conversationState).toBe('main_menu');
         }
@@ -316,11 +314,11 @@ describe('Property 17: Suggested actions for all selection points', () => {
     expect(r4.response.suggestedActions!.length).toBeGreaterThan(0);
   });
 
-  it('main menu GENERATE_PLAN response is DISH_PREVIEW with candidate dishes', async () => {
+  it('main menu GENERATE_PLAN response shows existing plan when available', async () => {
     const state = makeStateWithPlan();
     const result = await processIntent({ intent: Intent.GENERATE_PLAN }, state, mockMealRepo, mockMealComponentRepo);
-    expect(result.response.type).toBe(ResponseType.DISH_PREVIEW);
-    expect(result.response.data?.candidateDishes).toBeDefined();
+    expect(result.response.type).toBe(ResponseType.WEEKLY_PLAN);
+    expect(result.response.data?.weeklyPlan).toBeDefined();
   });
 
   it('main menu INVALID_INPUT response has non-empty suggestedActions', async () => {

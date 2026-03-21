@@ -776,6 +776,18 @@ async function handleMainMenu(
 
   switch (intent.intent) {
     case Intent.GENERATE_PLAN: {
+      // If a valid plan already exists, show it
+      if (state.weeklyPlan && state.weeklyPlanStartDate && !isLegacyPlan(state.weeklyPlan)) {
+        return {
+          response: {
+            type: ResponseType.WEEKLY_PLAN,
+            data: { weeklyPlan: state.weeklyPlan },
+            suggestedActions: WEEKLY_PLAN_OPTIONS,
+          },
+          updatedState: state,
+        };
+      }
+      // No plan exists — generate one via dish preview
       const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
       const candidateDishes = await generateCandidateDishes(
         deps,
