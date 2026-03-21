@@ -1395,8 +1395,9 @@ function handleFewMealsAlternatives(intent: UserIntent, state: UserState): BotRe
       };
       return {
         response: {
-          type: ResponseType.MAIN_MENU,
-          suggestedActions: MAIN_MENU_OPTIONS,
+          type: ResponseType.WEEKLY_PLAN,
+          data: { weeklyPlan: updatedState.weeklyPlan },
+          suggestedActions: WEEKLY_PLAN_OPTIONS,
         },
         updatedState,
       };
@@ -1709,18 +1710,33 @@ export async function processIntent(
       if (intent.intent === Intent.PROVIDE_COOK_NUMBER && intent.payload) {
         const validation = validatePhoneNumber(intent.payload);
         if (validation.valid) {
-          const updatedState: UserState = {
+          const stateWithCook: UserState = {
             ...userState,
             cookPhoneNumber: validation.normalized,
             conversationState: 'main_menu',
           };
+
+          // If a plan exists, send the menu to the cook immediately
+          if (stateWithCook.weeklyPlan && stateWithCook.weeklyPlanStartDate && !isLegacyPlan(stateWithCook.weeklyPlan)) {
+            const cookDayPlan = extractTomorrowPlan(stateWithCook.weeklyPlan, stateWithCook.weeklyPlanStartDate);
+            if (cookDayPlan) {
+              return {
+                response: {
+                  type: ResponseType.COOK_MESSAGE_SENT,
+                  data: { dayPlan: cookDayPlan, cookNumber: validation.normalized },
+                },
+                updatedState: stateWithCook,
+              };
+            }
+          }
+
+          // No plan or expired — just confirm the number was saved
           return {
             response: {
               type: ResponseType.COOK_NUMBER_SAVED,
               data: { cookNumber: validation.normalized },
-              suggestedActions: MAIN_MENU_OPTIONS,
             },
-            updatedState,
+            updatedState: stateWithCook,
           };
         }
         // Invalid phone number

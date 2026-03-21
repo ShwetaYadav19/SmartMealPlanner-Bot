@@ -116,12 +116,13 @@ describe('E2E: onboarding → change plan → few meals → done', () => {
       const selectedAlt = r11.updatedState.fewMealsAlternatives![0];
       expect(updatedLunch.name).toBe(selectedAlt.name);
 
-      // 13. User selects DONE_CHANGING → returns to main_menu
+      // 13. User selects DONE_CHANGING → shows updated weekly plan
       const r13 = await processIntent(
         { intent: Intent.DONE_CHANGING },
         r12.updatedState, mealRepo, mealComponentRepo,
       );
-      expect(r13.response.type).toBe(ResponseType.MAIN_MENU);
+      expect(r13.response.type).toBe(ResponseType.WEEKLY_PLAN);
+      expect(r13.response.data?.weeklyPlan).toBeDefined();
       expect(r13.updatedState.conversationState).toBe('main_menu');
       expect(r13.updatedState.fewMealsSelectedDay).toBeUndefined();
       expect(r13.updatedState.fewMealsSelectedSlot).toBeUndefined();

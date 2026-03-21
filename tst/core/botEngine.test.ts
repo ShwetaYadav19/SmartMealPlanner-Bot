@@ -617,7 +617,6 @@ describe('BotEngine — awaiting_cook_number: PROVIDE_COOK_NUMBER', () => {
 
     expect(result.response.type).toBe(ResponseType.COOK_NUMBER_SAVED);
     expect(result.response.data?.cookNumber).toBe('+911234567890');
-    expect(result.response.suggestedActions).toEqual(MAIN_MENU_OPTIONS);
     expect(result.updatedState.cookPhoneNumber).toBe('+911234567890');
     expect(result.updatedState.conversationState).toBe('main_menu');
   });
