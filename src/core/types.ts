@@ -88,7 +88,8 @@ export type ConversationState =
   | 'entire_plan_confirm'
   | 'daily_grocery_prompt'
   | 'daily_cook_prompt'
-  | 'happy_grocery_prompt';
+  | 'happy_grocery_prompt'
+  | 'happy_daily_prompt';
 
 export interface UserState {
   phoneNumber: string;
@@ -162,6 +163,8 @@ export enum Intent {
   DAILY_COOK_NO = 'DAILY_COOK_NO',
   HAPPY_GROCERY_YES = 'HAPPY_GROCERY_YES',
   HAPPY_GROCERY_NO = 'HAPPY_GROCERY_NO',
+  HAPPY_DAILY_YES = 'HAPPY_DAILY_YES',
+  HAPPY_DAILY_NO = 'HAPPY_DAILY_NO',
   UNKNOWN = 'UNKNOWN',
 }
 
@@ -207,6 +210,7 @@ export enum ResponseType {
   DAILY_COOK_PROMPT = 'DAILY_COOK_PROMPT',
   DAILY_FLOW_DONE = 'DAILY_FLOW_DONE',
   HAPPY_GROCERY_PROMPT = 'HAPPY_GROCERY_PROMPT',
+  HAPPY_DAILY_PROMPT = 'HAPPY_DAILY_PROMPT',
   ERROR = 'ERROR',
 }
 

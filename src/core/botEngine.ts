@@ -1578,24 +1578,39 @@ function handleHappyGroceryPrompt(
     }
     const groceryList = generateGroceryList(allMeals);
 
-    // Also extract tomorrow's plan for the daily flow follow-up
-    let dayPlan = undefined;
-    if (state.weeklyPlanStartDate && !isLegacyPlan(state.weeklyPlan)) {
-      dayPlan = extractTomorrowPlan(state.weeklyPlan, state.weeklyPlanStartDate) ?? undefined;
-    }
-
     return {
       response: {
         type: ResponseType.WEEKLY_GROCERY_LIST,
-        data: { groceryList, dayPlan },
+        data: { groceryList },
       },
-      // After showing weekly grocery, enter the daily flow
-      updatedState: { ...state, conversationState: 'daily_grocery_prompt' },
+      // After showing weekly grocery, ask if user wants to continue to daily flow
+      updatedState: { ...state, conversationState: 'happy_daily_prompt' },
     };
   }
 
   if (intent.intent === Intent.HAPPY_GROCERY_NO) {
-    // Skip weekly grocery, go straight to daily flow
+    // Skip weekly grocery, ask if user wants to see tomorrow's plan
+    return {
+      response: { type: ResponseType.HAPPY_DAILY_PROMPT },
+      updatedState: { ...state, conversationState: 'happy_daily_prompt' },
+    };
+  }
+
+  // Invalid input — re-prompt
+  return {
+    response: { type: ResponseType.INVALID_INPUT },
+    updatedState: state,
+  };
+}
+
+// --- Happy daily prompt handler ---
+
+function handleHappyDailyPrompt(
+  intent: UserIntent,
+  state: UserState,
+): BotResult {
+  if (intent.intent === Intent.HAPPY_DAILY_YES) {
+    // Enter daily flow — show tomorrow's menu + grocery prompt
     if (!state.weeklyPlan || !state.weeklyPlanStartDate || isLegacyPlan(state.weeklyPlan)) {
       return {
         response: { type: ResponseType.DAILY_FLOW_DONE },
@@ -1615,6 +1630,14 @@ function handleHappyGroceryPrompt(
         data: { dayPlan },
       },
       updatedState: { ...state, conversationState: 'daily_grocery_prompt' },
+    };
+  }
+
+  if (intent.intent === Intent.HAPPY_DAILY_NO) {
+    // Terminal — done
+    return {
+      response: { type: ResponseType.DAILY_FLOW_DONE },
+      updatedState: { ...state, conversationState: 'main_menu' },
     };
   }
 
@@ -1815,6 +1838,9 @@ export async function processIntent(
 
     case 'happy_grocery_prompt':
       return handleHappyGroceryPrompt(intent, userState);
+
+    case 'happy_daily_prompt':
+      return handleHappyDailyPrompt(intent, userState);
 
     case 'awaiting_cook_number': {
       if (intent.intent === Intent.PROVIDE_COOK_NUMBER && intent.payload) {

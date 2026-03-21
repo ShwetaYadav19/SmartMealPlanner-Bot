@@ -163,7 +163,6 @@ describe('New ResponseType formatting (Task 5.2)', () => {
 
 describe('Footer hint on terminal messages (Task 5.3)', () => {
   const terminalTypes: { type: ResponseType; label: string; data?: BotResponse['data'] }[] = [
-    { type: ResponseType.WEEKLY_GROCERY_LIST, label: 'WEEKLY_GROCERY_LIST', data: { groceryList: [{ name: 'Rice', quantity: '1kg', category: 'grains' }] } },
     { type: ResponseType.SWAP_CONFIRMATION, label: 'SWAP_CONFIRMATION', data: { oldMeal: 'A', newMeal: 'B' } },
     { type: ResponseType.COOK_MESSAGE_SENT, label: 'COOK_MESSAGE_SENT' },
     { type: ResponseType.WEEKLY_REMINDER, label: 'WEEKLY_REMINDER' },

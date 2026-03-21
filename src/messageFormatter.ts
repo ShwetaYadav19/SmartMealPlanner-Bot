@@ -297,23 +297,15 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         ? formatGroceryList(data.groceryList)
         : WEEKLY_GROCERY_HEADER;
 
-      // If day plan is included, show daily flow follow-up instead of terminal hint
-      if (data?.dayPlan) {
-        const reminderDayText = `${DAILY_REMINDER_HEADER(data.dayPlan.day)}\n${formatDayPlanBody(data.dayPlan)}`;
-        return {
-          text: groceryText,
-          followUp: [{
-            text: `${reminderDayText}\n\nWould you like to see tomorrow's grocery list? 🛒`,
-            buttons: [
-              { id: 'daily_grocery_yes', title: 'Yes 🛒' },
-              { id: 'daily_grocery_no', title: 'No ❌' },
-            ],
-          }],
-        };
-      }
-
       return {
-        text: `${groceryText}${DAILY_REMINDER_HINT}`,
+        text: groceryText,
+        followUp: [{
+          text: 'Would you like to see tomorrow\'s plan? 🍽️',
+          buttons: [
+            { id: 'happy_daily_yes', title: 'Yes 🍽️' },
+            { id: 'happy_daily_no', title: 'No ❌' },
+          ],
+        }],
       };
     }
 
@@ -583,6 +575,15 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         buttons: [
           { id: 'happy_grocery_yes', title: 'Yes 🛒' },
           { id: 'happy_grocery_no', title: 'No ❌' },
+        ],
+      };
+
+    case ResponseType.HAPPY_DAILY_PROMPT:
+      return {
+        text: 'Would you like to see tomorrow\'s plan? 🍽️',
+        buttons: [
+          { id: 'happy_daily_yes', title: 'Yes 🍽️' },
+          { id: 'happy_daily_no', title: 'No ❌' },
         ],
       };
 

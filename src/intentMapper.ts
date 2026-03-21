@@ -106,6 +106,10 @@ export function mapWhatsAppToIntent(
         return { intent: Intent.HAPPY_GROCERY_YES };
       case 'happy_grocery_no':
         return { intent: Intent.HAPPY_GROCERY_NO };
+      case 'happy_daily_yes':
+        return { intent: Intent.HAPPY_DAILY_YES };
+      case 'happy_daily_no':
+        return { intent: Intent.HAPPY_DAILY_NO };
     }
 
     // --- Day selection payloads (day_0 through day_6) ---
@@ -202,6 +206,12 @@ export function mapWhatsAppToIntent(
   if (conversationState === 'happy_grocery_prompt') {
     if (text === '1' || text === 'yes') return { intent: Intent.HAPPY_GROCERY_YES };
     if (text === '2' || text === 'no') return { intent: Intent.HAPPY_GROCERY_NO };
+  }
+
+  // Happy daily prompt — yes/no via text
+  if (conversationState === 'happy_daily_prompt') {
+    if (text === '1' || text === 'yes') return { intent: Intent.HAPPY_DAILY_YES };
+    if (text === '2' || text === 'no') return { intent: Intent.HAPPY_DAILY_NO };
   }
 
   // Daily grocery prompt — yes/no via text
