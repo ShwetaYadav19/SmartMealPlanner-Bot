@@ -150,12 +150,6 @@ export const COMPONENT_REMOVED_CONFIRMATION = (name: string, category: string) =
 
 export const DISH_PREVIEW_EMPTY_ERROR = `You need at least one dish per meal slot to generate a plan 🍽️\nPlease keep at least one breakfast, one lunch, and one dinner.`;
 
-// --- More Options Menu ---
-export const MORE_OPTIONS_MENU_HEADER = `Here are more options for you 📋`;
-
-// --- Grocery Hint ---
-export const WEEKLY_PLAN_GROCERY_HINT = `💡 Tap 'More Options' to view the weekly grocery list`;
-
 // --- Plan Approval CTA ---
 export const PLAN_APPROVAL_PROMPT = `What do you think? 😊`;
 export const HAPPY_WITH_MENU_PROMPT = `Great! What would you like to do next? 🎉`;

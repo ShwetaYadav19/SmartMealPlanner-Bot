@@ -160,9 +160,9 @@ describe('intentMapper – workflow mappings', () => {
       expect(result).toEqual({ intent: Intent.GENERATE_PLAN });
     });
 
-    it('more_options button still maps to MORE_OPTIONS in main_menu', () => {
+    it('more_options button maps to UNKNOWN (removed)', () => {
       const result = mapWhatsAppToIntent('more_options', '', 'main_menu');
-      expect(result).toEqual({ intent: Intent.MORE_OPTIONS });
+      expect(result).toEqual({ intent: Intent.UNKNOWN });
     });
 
     it('free text "1" in main_menu still maps to GENERATE_PLAN', () => {

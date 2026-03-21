@@ -42,7 +42,6 @@ const conversationStateArb: fc.Arbitrary<ConversationState> = fc.constantFrom(
   'awaiting_cook_number_onboarding',
   'dish_preview',
   'main_menu',
-  'more_options',
   'awaiting_cook_number',
   'awaiting_preference_cuisine',
   'awaiting_preference_diet',

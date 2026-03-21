@@ -41,7 +41,6 @@ const activeFlowStateArb = fc.constantFrom<ConversationState>(
   'awaiting_diet',
   'awaiting_meal_style',
   'awaiting_cook_number_onboarding',
-  'more_options',
   'awaiting_cook_number',
   'awaiting_preference_cuisine',
   'awaiting_preference_diet',
@@ -219,9 +218,8 @@ describe('(Feature: smart-meal-planner-workflow, Property 10: Few meals replacem
 
 describe('(Feature: smart-meal-planner-workflow, Property 15: Preference change clears exclusions)', () => {
   /** Arbitrary source state from which CHANGE_PREFERENCE can be triggered */
-  const sourceStateArb = fc.constantFrom<'change_plan_menu' | 'more_options'>(
+  const sourceStateArb = fc.constantFrom<'change_plan_menu'>(
     'change_plan_menu',
-    'more_options',
   );
 
   /** Arbitrary non-empty excludedDishIds array (1-10 random string IDs) */

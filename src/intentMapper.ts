@@ -72,25 +72,6 @@ export function mapWhatsAppToIntent(
       }
     }
 
-    // More options from main menu
-    if (conversationState === 'main_menu' && buttonPayload === 'more_options') {
-      return { intent: Intent.MORE_OPTIONS };
-    }
-
-    // More options submenu actions
-    if (conversationState === 'more_options') {
-      switch (buttonPayload) {
-        case 'weekly_plan':
-          return { intent: Intent.GENERATE_PLAN };
-        case 'weekly_grocery':
-          return { intent: Intent.VIEW_WEEKLY_GROCERY };
-        case 'change_preference':
-          return { intent: Intent.CHANGE_PREFERENCE };
-        case 'change_cook_number':
-          return { intent: Intent.CHANGE_COOK_NUMBER };
-      }
-    }
-
     // --- Change Plan flow button payloads ---
     switch (buttonPayload) {
       case 'change_plan':
@@ -191,6 +172,7 @@ export function mapWhatsAppToIntent(
     if (text === '5' || text === 'send menu to cook' || text === 'send to cook') return { intent: Intent.SEND_MENU_TO_COOK };
     if (text === '6' || text === 'swap lunch') return { intent: Intent.SWAP_LUNCH };
     if (text === '7' || text === 'save cook' || text === "save cook's number") return { intent: Intent.SAVE_COOK_NUMBER };
+    if (text === 'change cook' || text === 'change cook number' || text === "change cook's number") return { intent: Intent.CHANGE_COOK_NUMBER };
   }
 
   // In awaiting_cook_number_onboarding, allow "skip" as free text (sandbox mode support)

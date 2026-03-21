@@ -35,7 +35,7 @@ const BUTTON_IDS = new Set([
   'weekly_plan', 'weekly_grocery',
   'tomorrow_plan', 'tomorrow_grocery',
   'send_to_cook', 'swap_lunch', 'save_cook',
-  'skip_cook', 'confirm_dishes', 'more_options',
+  'skip_cook', 'confirm_dishes',
   'change_preference', 'change_cook_number',
   'next_category',
   // Change Plan flow

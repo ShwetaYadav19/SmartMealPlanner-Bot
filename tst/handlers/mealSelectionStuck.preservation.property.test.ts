@@ -28,7 +28,6 @@ const NON_DISH_PREVIEW_STATES: ConversationState[] = [
   'awaiting_meal_style',
   'awaiting_cook_number_onboarding',
   'main_menu',
-  'more_options',
   'awaiting_cook_number',
   'awaiting_preference_cuisine',
   'awaiting_preference_diet',

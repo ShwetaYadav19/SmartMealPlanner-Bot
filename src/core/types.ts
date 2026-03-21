@@ -77,7 +77,6 @@ export type ConversationState =
   | 'awaiting_cook_number_onboarding'
   | 'dish_preview'
   | 'main_menu'
-  | 'more_options'
   | 'awaiting_cook_number'
   | 'awaiting_preference_cuisine'
   | 'awaiting_preference_diet'
@@ -139,7 +138,6 @@ export enum Intent {
   REMOVE_DISHES = 'REMOVE_DISHES',
   CONFIRM_DISHES = 'CONFIRM_DISHES',
   NEXT_CATEGORY = 'NEXT_CATEGORY',
-  MORE_OPTIONS = 'MORE_OPTIONS',
   CHANGE_PREFERENCE = 'CHANGE_PREFERENCE',
   CHANGE_COOK_NUMBER = 'CHANGE_COOK_NUMBER',
   CHANGE_PLAN = 'CHANGE_PLAN',
@@ -189,7 +187,6 @@ export enum ResponseType {
   DISH_PREVIEW = 'DISH_PREVIEW',
   DISH_REMOVED = 'DISH_REMOVED',
   DISH_PREVIEW_EMPTY_ERROR = 'DISH_PREVIEW_EMPTY_ERROR',
-  MORE_OPTIONS_MENU = 'MORE_OPTIONS_MENU',
   CHANGE_PLAN_MENU = 'CHANGE_PLAN_MENU',
   FEW_MEALS_DAY_PROMPT = 'FEW_MEALS_DAY_PROMPT',
   FEW_MEALS_SLOT_PROMPT = 'FEW_MEALS_SLOT_PROMPT',

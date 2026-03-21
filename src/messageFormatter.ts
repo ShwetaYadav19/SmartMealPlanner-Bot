@@ -38,8 +38,6 @@ import {
   DISH_REMOVED_CONFIRMATION,
   COMPONENT_REMOVED_CONFIRMATION,
   DISH_PREVIEW_EMPTY_ERROR,
-  MORE_OPTIONS_MENU_HEADER,
-  WEEKLY_PLAN_GROCERY_HINT,
   PLAN_APPROVAL_PROMPT,
   HAPPY_WITH_MENU_PROMPT,
   WEEKLY_PLAN_FIRST_TIME_HEADER,
@@ -68,14 +66,6 @@ const MAIN_MENU_BUTTONS: ButtonOption[] = [
   { id: 'tomorrow_plan', title: "Tomorrow's Meal Plan" },
   { id: 'tomorrow_grocery', title: "Tomorrow's Grocery" },
   { id: 'send_to_cook', title: 'Send Menu to Cook' },
-  { id: 'more_options', title: 'More Options' },
-];
-
-const MORE_OPTIONS_BUTTONS: ButtonOption[] = [
-  { id: 'weekly_plan', title: 'Weekly Meal Plan' },
-  { id: 'weekly_grocery', title: 'Weekly Grocery List' },
-  { id: 'change_preference', title: 'Change Preferences' },
-  { id: 'change_cook_number', title: "Change Cook's Number" },
 ];
 
 const PLAN_APPROVAL_BUTTONS: ButtonOption[] = [
@@ -503,12 +493,6 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         ...(errorListItems.length > 0 ? { listItems: errorListItems, listButtonLabel: '🗑️ Remove items' } : {}),
       };
     }
-
-    case ResponseType.MORE_OPTIONS_MENU:
-      return {
-        text: MORE_OPTIONS_MENU_HEADER,
-        buttons: MORE_OPTIONS_BUTTONS,
-      };
 
     case ResponseType.CHANGE_PLAN_MENU:
       return {
