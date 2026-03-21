@@ -36,6 +36,7 @@ export const SWAP_NO_ALTERNATIVE = `Sorry, no alternative lunch is available rig
 export const DAILY_REMINDER_HEADER = (dayName: string) =>
   `Hey! Here's your meal plan for tomorrow (${dayName}) 🍽️\n`;
 export const WEEKLY_REMINDER = `Hey! 🍽️ Time to plan your meals for the week ahead!`;
+export const WEEKLY_REMINDER_PLAN_HEADER = `Hey! Here's your meal plan for this week 🍽️\n`;
 export const EXPIRED_PLAN_PROMPT = `Your meal plan has expired. Let's generate a fresh one! 📋`;
 
 // --- Errors ---

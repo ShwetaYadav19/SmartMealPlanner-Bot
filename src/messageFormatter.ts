@@ -25,6 +25,7 @@ import {
   SWAP_NO_ALTERNATIVE,
   DAILY_REMINDER_HEADER,
   WEEKLY_REMINDER,
+  WEEKLY_REMINDER_PLAN_HEADER,
   EXPIRED_PLAN_PROMPT,
   INVALID_INPUT,
   GENERIC_ERROR,
@@ -407,17 +408,31 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         text: `${reminderDayText}${FOOTER_HINT}`,
         buttons: [
           { id: 'tomorrow_grocery', title: 'View Grocery List' },
-          { id: 'swap_lunch', title: 'Swap Lunch' },
           { id: 'send_to_cook', title: 'Send to Cook' },
         ],
       };
     }
 
-    case ResponseType.WEEKLY_REMINDER:
+    case ResponseType.WEEKLY_REMINDER: {
+      if (data?.weeklyPlan) {
+        const planText = formatWeeklyPlan(data.weeklyPlan);
+        const headerText = WEEKLY_REMINDER_PLAN_HEADER;
+        return {
+          text: `${headerText}\n${planText}`,
+          followUp: [{
+            text: WEEKLY_PLAN_GROCERY_HINT,
+            buttons: [
+              { id: 'weekly_grocery', title: 'View Grocery List' },
+              { id: 'change_plan', title: 'Change Plan' },
+            ],
+          }],
+        };
+      }
       return {
         text: `${WEEKLY_REMINDER}${FOOTER_HINT}`,
         buttons: GENERATE_PLAN_BUTTON,
       };
+    }
 
     case ResponseType.COOK_NUMBER_ONBOARDING_PROMPT:
       return {

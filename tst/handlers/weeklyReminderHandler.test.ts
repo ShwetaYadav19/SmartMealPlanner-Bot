@@ -98,26 +98,52 @@ describe('weeklyReminderHandler', () => {
 
     await weeklyReminderHandler(scheduledEvent);
 
-    // Both users should receive a message
+    // user1 (with plan): plan text (sendTextMessage) + follow-up buttons
+    // user2 (no plan): generate prompt with buttons
+    // Total sendButtonMessage calls: 1 follow-up for user1 + 1 for user2 = 2
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
+    expect(mockSendTextMessage.mock.calls[0][0]).toBe('+911111111111');
     expect(mockSendButtonMessage).toHaveBeenCalledTimes(2);
-    expect(mockSendButtonMessage.mock.calls[0][0]).toBe('+911111111111');
-    expect(mockSendButtonMessage.mock.calls[1][0]).toBe('+912222222222');
   });
 
-  it('sends regardless of plan status', async () => {
+  it('shows existing plan with grocery/change options for users with a plan', async () => {
     const userWithPlan = makeOnboardedUser('+911111111111', true);
-    const userWithoutPlan = makeOnboardedUser('+912222222222', false);
-    mockScanOnboardedUsers.mockResolvedValue([userWithPlan, userWithoutPlan]);
+    mockScanOnboardedUsers.mockResolvedValue([userWithPlan]);
 
     await weeklyReminderHandler(scheduledEvent);
 
-    // Both get the same WEEKLY_REMINDER message
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(2);
-    const [, text1] = mockSendButtonMessage.mock.calls[0];
-    const [, text2] = mockSendButtonMessage.mock.calls[1];
-    expect(text1).toBe(text2);
-    expect(text1).toContain('🍽️');
-    expect(text1).toContain('plan your meals');
+    // Primary message is plain text (plan is too long for button message body)
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
+    const [, planText] = mockSendTextMessage.mock.calls[0];
+    expect(planText).toContain('Monday');
+    expect(planText).toContain('meal plan');
+
+    // Follow-up has grocery + change buttons
+    expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
+    const [, , followUpButtons] = mockSendButtonMessage.mock.calls[0];
+    expect(followUpButtons).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: 'weekly_grocery', title: 'View Grocery List' }),
+        expect.objectContaining({ id: 'change_plan', title: 'Change Plan' }),
+      ]),
+    );
+  });
+
+  it('shows generate prompt for users without a plan', async () => {
+    const userWithoutPlan = makeOnboardedUser('+912222222222', false);
+    mockScanOnboardedUsers.mockResolvedValue([userWithoutPlan]);
+
+    await weeklyReminderHandler(scheduledEvent);
+
+    expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
+    const [, text, buttons] = mockSendButtonMessage.mock.calls[0];
+    expect(text).toContain('🍽️');
+    expect(text).toContain('plan your meals');
+    expect(buttons).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ title: 'Generate Weekly Plan' }),
+      ]),
+    );
   });
 
   it('handles empty user list gracefully', async () => {
@@ -130,8 +156,8 @@ describe('weeklyReminderHandler', () => {
   });
 
   it('continues processing other users when one fails', async () => {
-    const user1 = makeOnboardedUser('+911111111111', true);
-    const user2 = makeOnboardedUser('+912222222222', true);
+    const user1 = makeOnboardedUser('+911111111111', false);
+    const user2 = makeOnboardedUser('+912222222222', false);
     mockScanOnboardedUsers.mockResolvedValue([user1, user2]);
 
     mockSendButtonMessage
@@ -144,7 +170,7 @@ describe('weeklyReminderHandler', () => {
     expect(mockSendButtonMessage.mock.calls[1][0]).toBe('+912222222222');
   });
 
-  it('sends button message with "Generate Weekly Plan" option', async () => {
+  it('sends button message with "Generate Weekly Plan" option for no-plan user', async () => {
     const user = makeOnboardedUser('+919876543210', false);
     mockScanOnboardedUsers.mockResolvedValue([user]);
 

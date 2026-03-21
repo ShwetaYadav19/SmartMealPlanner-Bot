@@ -31,9 +31,20 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
 
   for (const user of onboardedUsers) {
     try {
-      const response: BotResponse = {
-        type: ResponseType.WEEKLY_REMINDER,
-      };
+      let response: BotResponse;
+
+      if (user.weeklyPlan) {
+        // Show existing plan with grocery/change options
+        response = {
+          type: ResponseType.WEEKLY_REMINDER,
+          data: { weeklyPlan: user.weeklyPlan },
+        };
+      } else {
+        // No plan — prompt to generate
+        response = {
+          type: ResponseType.WEEKLY_REMINDER,
+        };
+      }
 
       // Format and send
       const formatted = formatBotResponse(response);
@@ -46,6 +57,21 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
         );
       } else {
         await messagingProvider.sendTextMessage(user.phoneNumber, formatted.text);
+      }
+
+      // Send follow-up messages (e.g. grocery/change buttons after plan text)
+      if (formatted.followUp) {
+        for (const followUpMsg of formatted.followUp) {
+          if (followUpMsg.buttons && followUpMsg.buttons.length > 0) {
+            await messagingProvider.sendButtonMessage(
+              user.phoneNumber,
+              followUpMsg.text,
+              followUpMsg.buttons,
+            );
+          } else {
+            await messagingProvider.sendTextMessage(user.phoneNumber, followUpMsg.text);
+          }
+        }
       }
     } catch (error) {
       console.error(`Failed to send weekly reminder to ${user.phoneNumber}:`, error);
