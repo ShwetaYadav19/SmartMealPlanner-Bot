@@ -102,6 +102,10 @@ export function mapWhatsAppToIntent(
         return { intent: Intent.DAILY_COOK_YES };
       case 'daily_cook_no':
         return { intent: Intent.DAILY_COOK_NO };
+      case 'happy_grocery_yes':
+        return { intent: Intent.HAPPY_GROCERY_YES };
+      case 'happy_grocery_no':
+        return { intent: Intent.HAPPY_GROCERY_NO };
     }
 
     // --- Day selection payloads (day_0 through day_6) ---
@@ -192,6 +196,12 @@ export function mapWhatsAppToIntent(
   // In awaiting_cook_number state, free text is the cook's phone number
   if (conversationState === 'awaiting_cook_number') {
     return { intent: Intent.PROVIDE_COOK_NUMBER, payload: body };
+  }
+
+  // Happy grocery prompt — yes/no via text
+  if (conversationState === 'happy_grocery_prompt') {
+    if (text === '1' || text === 'yes') return { intent: Intent.HAPPY_GROCERY_YES };
+    if (text === '2' || text === 'no') return { intent: Intent.HAPPY_GROCERY_NO };
   }
 
   // Daily grocery prompt — yes/no via text

@@ -676,12 +676,12 @@ async function handleMainMenu(
     }
 
     case Intent.HAPPY_WITH_MENU: {
+      // Enter sequential happy flow: weekly grocery prompt → daily flow
       return {
         response: {
-          type: ResponseType.HAPPY_MENU,
-          suggestedActions: HAPPY_MENU_OPTIONS,
+          type: ResponseType.HAPPY_GROCERY_PROMPT,
         },
-        updatedState: state,
+        updatedState: { ...state, conversationState: 'happy_grocery_prompt' },
       };
     }
 
@@ -1558,6 +1558,73 @@ async function handleAwaitingPreferenceStyle(
 }
 
 
+// --- Happy menu flow handler ---
+
+function handleHappyGroceryPrompt(
+  intent: UserIntent,
+  state: UserState,
+): BotResult {
+  if (intent.intent === Intent.HAPPY_GROCERY_YES) {
+    // Show weekly grocery list, then transition to daily flow
+    if (!state.weeklyPlan) {
+      return {
+        response: { type: ResponseType.NO_PLAN_ERROR, suggestedActions: ADHOC_MENU_OPTIONS },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    const allMeals: (Meal | ComposedMeal)[] = [];
+    for (const day of state.weeklyPlan) {
+      allMeals.push(day.breakfast, day.lunch, day.dinner);
+    }
+    const groceryList = generateGroceryList(allMeals);
+
+    // Also extract tomorrow's plan for the daily flow follow-up
+    let dayPlan = undefined;
+    if (state.weeklyPlanStartDate && !isLegacyPlan(state.weeklyPlan)) {
+      dayPlan = extractTomorrowPlan(state.weeklyPlan, state.weeklyPlanStartDate) ?? undefined;
+    }
+
+    return {
+      response: {
+        type: ResponseType.WEEKLY_GROCERY_LIST,
+        data: { groceryList, dayPlan },
+      },
+      // After showing weekly grocery, enter the daily flow
+      updatedState: { ...state, conversationState: 'daily_grocery_prompt' },
+    };
+  }
+
+  if (intent.intent === Intent.HAPPY_GROCERY_NO) {
+    // Skip weekly grocery, go straight to daily flow
+    if (!state.weeklyPlan || !state.weeklyPlanStartDate || isLegacyPlan(state.weeklyPlan)) {
+      return {
+        response: { type: ResponseType.DAILY_FLOW_DONE },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    const dayPlan = extractTomorrowPlan(state.weeklyPlan, state.weeklyPlanStartDate);
+    if (!dayPlan) {
+      return {
+        response: { type: ResponseType.DAILY_FLOW_DONE },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    return {
+      response: {
+        type: ResponseType.DAILY_REMINDER,
+        data: { dayPlan },
+      },
+      updatedState: { ...state, conversationState: 'daily_grocery_prompt' },
+    };
+  }
+
+  // Invalid input — re-prompt
+  return {
+    response: { type: ResponseType.INVALID_INPUT },
+    updatedState: state,
+  };
+}
+
 // --- Daily flow handlers ---
 
 function handleDailyGroceryPrompt(
@@ -1745,6 +1812,9 @@ export async function processIntent(
 
     case 'daily_cook_prompt':
       return handleDailyCookPrompt(intent, userState);
+
+    case 'happy_grocery_prompt':
+      return handleHappyGroceryPrompt(intent, userState);
 
     case 'awaiting_cook_number': {
       if (intent.intent === Intent.PROVIDE_COOK_NUMBER && intent.payload) {

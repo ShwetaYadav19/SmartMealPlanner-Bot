@@ -296,6 +296,22 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       const groceryText = data?.groceryList
         ? formatGroceryList(data.groceryList)
         : WEEKLY_GROCERY_HEADER;
+
+      // If day plan is included, show daily flow follow-up instead of terminal hint
+      if (data?.dayPlan) {
+        const reminderDayText = `${DAILY_REMINDER_HEADER(data.dayPlan.day)}\n${formatDayPlanBody(data.dayPlan)}`;
+        return {
+          text: groceryText,
+          followUp: [{
+            text: `${reminderDayText}\n\nWould you like to see tomorrow's grocery list? 🛒`,
+            buttons: [
+              { id: 'daily_grocery_yes', title: 'Yes 🛒' },
+              { id: 'daily_grocery_no', title: 'No ❌' },
+            ],
+          }],
+        };
+      }
+
       return {
         text: `${groceryText}${DAILY_REMINDER_HINT}`,
       };
@@ -559,6 +575,15 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: `${ADHOC_MENU_HEADER}${FOOTER_HINT}`,
         buttons: suggestedButtons ?? ADHOC_MENU_BUTTONS,
+      };
+
+    case ResponseType.HAPPY_GROCERY_PROMPT:
+      return {
+        text: `${HAPPY_WITH_MENU_PROMPT}\n\nWould you like to see the weekly grocery list? 🛒`,
+        buttons: [
+          { id: 'happy_grocery_yes', title: 'Yes 🛒' },
+          { id: 'happy_grocery_no', title: 'No ❌' },
+        ],
       };
 
     case ResponseType.DAILY_COOK_PROMPT:
