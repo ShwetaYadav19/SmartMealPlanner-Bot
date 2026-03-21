@@ -1260,7 +1260,8 @@
     "id": "si-b-003",
     "name": "Pongal",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "regular",
@@ -1339,7 +1340,8 @@
     "id": "si-b-005",
     "name": "Pesarattu",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "health",
@@ -1378,7 +1380,8 @@
     "id": "si-b-006",
     "name": "Appam with Veg Stew",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "regular",
@@ -1537,7 +1540,8 @@
     "id": "si-b-010",
     "name": "Egg Appam",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "non_veg",
     "style": "health",
@@ -3624,7 +3628,8 @@
     "id": "si-b-011",
     "name": "Moong Sprouts Salad",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "health",
@@ -3741,7 +3746,8 @@
     "id": "si-b-012",
     "name": "Adai (Millet Lentil Crepe)",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "health",
@@ -3780,7 +3786,8 @@
     "id": "si-b-013",
     "name": "Kerala Puttu with Kadala Curry",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "regular",
@@ -3819,7 +3826,8 @@
     "id": "si-b-014",
     "name": "Khara Bhath (Rava Bhath)",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "regular",
@@ -3858,7 +3866,8 @@
     "id": "si-b-015",
     "name": "Masala Paniyaram",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "health",
@@ -3897,7 +3906,8 @@
     "id": "si-b-016",
     "name": "Lemon Sevai (Lemon Idiyappam)",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "health",
@@ -3936,7 +3946,8 @@
     "id": "si-b-017",
     "name": "Aval Upma (South Indian Poha)",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "health",
@@ -3975,7 +3986,8 @@
     "id": "si-b-018",
     "name": "Upma Kozhukattai",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "health",
@@ -4014,7 +4026,8 @@
     "id": "si-b-019",
     "name": "Egg Kothu Parotta",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "non_veg",
     "style": "regular",
@@ -4053,7 +4066,8 @@
     "id": "si-b-020",
     "name": "Oats Mor Kali (Buttermilk Porridge)",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "health",
@@ -4092,7 +4106,8 @@
     "id": "si-b-021",
     "name": "Coconut Sevai (Thengai Idiyappam)",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "veg",
     "style": "regular",
@@ -4131,7 +4146,8 @@
     "id": "si-b-022",
     "name": "Egg Idiyappam",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "non_veg",
     "style": "health",
@@ -4165,7 +4181,8 @@
     "id": "si-b-023",
     "name": "Egg Uttapam",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "non_veg",
     "style": "health",
@@ -4199,7 +4216,8 @@
     "id": "si-b-024",
     "name": "Egg Pongal",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "non_veg",
     "style": "health",
@@ -4238,7 +4256,8 @@
     "id": "si-b-025",
     "name": "Egg Parotta",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "non_veg",
     "style": "regular",
@@ -4267,7 +4286,8 @@
     "id": "si-b-026",
     "name": "Chicken Adai",
     "cuisine": [
-      "south_indian"
+      "south_indian",
+      "north_indian"
     ],
     "diet": "non_veg",
     "style": "regular",
