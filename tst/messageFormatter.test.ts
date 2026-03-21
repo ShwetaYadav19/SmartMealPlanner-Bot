@@ -302,7 +302,9 @@ describe('formatBotResponse', () => {
   it('should format COOK_NUMBER_SAVED', () => {
     const response: BotResponse = { type: ResponseType.COOK_NUMBER_SAVED };
     const result = formatBotResponse(response);
-    expect(result.text).toBe(COOK_NUMBER_SAVED);
+    expect(result.text).toContain(COOK_NUMBER_SAVED);
+    expect(result.text).toContain('hi');
+    expect(result.buttons).toBeUndefined();
   });
 
   it('should format COOK_MESSAGE_SENT', () => {

@@ -78,9 +78,9 @@ const WEEKLY_GROCERY_BUTTONS: ButtonOption[] = [
   { id: 'change_plan', title: 'Change Plan' },
 ];
 
-const TOMORROW_GROCERY_BUTTONS: ButtonOption[] = [
+const TOMORROW_PLAN_BUTTONS: ButtonOption[] = [
+  { id: 'tomorrow_grocery', title: "Tomorrow's Grocery" },
   { id: 'send_to_cook', title: 'Send to Cook' },
-  { id: 'tomorrow_plan', title: 'Back' },
 ];
 
 const CUISINE_BUTTONS: ButtonOption[] = [
@@ -329,7 +329,7 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       const dayText = data?.dayPlan ? formatDayPlan(data.dayPlan) : DAY_PLAN_HEADER('');
       return {
         text: dayText,
-        buttons: MAIN_MENU_BUTTONS,
+        buttons: TOMORROW_PLAN_BUTTONS,
       };
     }
 
@@ -339,7 +339,6 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         : TOMORROW_GROCERY_HEADER;
       return {
         text: `${tomorrowGroceryText}${FOOTER_HINT}`,
-        buttons: TOMORROW_GROCERY_BUTTONS,
       };
     }
 
@@ -348,14 +347,12 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
 
     case ResponseType.COOK_NUMBER_SAVED:
       return {
-        text: COOK_NUMBER_SAVED,
-        buttons: MAIN_MENU_BUTTONS,
+        text: `${COOK_NUMBER_SAVED}${FOOTER_HINT}`,
       };
 
     case ResponseType.COOK_MESSAGE_SENT:
       return {
         text: `${COOK_MESSAGE_SENT}${FOOTER_HINT}`,
-        buttons: MAIN_MENU_BUTTONS,
       };
 
     case ResponseType.SWAP_CONFIRMATION: {
