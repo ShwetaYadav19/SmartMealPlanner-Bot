@@ -78,11 +78,6 @@ const HAPPY_MENU_BUTTONS: ButtonOption[] = [
   { id: 'weekly_grocery', title: 'Get weekly grocery list' },
 ];
 
-const WEEKLY_GROCERY_BUTTONS: ButtonOption[] = [
-  { id: 'tomorrow_plan', title: "Tomorrow's Menu" },
-  { id: 'send_to_cook', title: 'Send to Cook' },
-];
-
 const TOMORROW_PLAN_BUTTONS: ButtonOption[] = [
   { id: 'tomorrow_grocery', title: "Tomorrow's Grocery List" },
   { id: 'send_to_cook', title: 'Send to Cook' },
@@ -315,15 +310,8 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       const groceryText = data?.groceryList
         ? formatGroceryList(data.groceryList)
         : WEEKLY_GROCERY_HEADER;
-      // Grocery list for a full week easily exceeds WhatsApp's 1024-char
-      // button-message limit, triggering Twilio error 63013.
-      // Split into plain text + follow-up with buttons.
       return {
-        text: `${groceryText}${FOOTER_HINT}`,
-        followUp: [{
-          text: "Want to send tomorrow's menu to your cook?",
-          buttons: WEEKLY_GROCERY_BUTTONS,
-        }],
+        text: `${groceryText}${DAILY_REMINDER_HINT}`,
       };
     }
 
@@ -341,10 +329,6 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         : TOMORROW_GROCERY_HEADER;
       return {
         text: `${tomorrowGroceryText}${DAILY_REMINDER_HINT}`,
-        followUp: [{
-          text: "Want to send tomorrow's menu to your cook?",
-          buttons: [{ id: 'send_to_cook', title: 'Send to Cook' }],
-        }],
       };
     }
 
@@ -359,7 +343,6 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.COOK_MESSAGE_SENT:
       return {
         text: `${COOK_MESSAGE_SENT}${DAILY_REMINDER_HINT}`,
-        buttons: [{ id: 'tomorrow_grocery', title: 'Get Grocery List' }],
       };
 
     case ResponseType.SWAP_CONFIRMATION: {
