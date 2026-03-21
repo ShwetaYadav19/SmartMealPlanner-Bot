@@ -134,7 +134,9 @@ describe('New ResponseType formatting (Task 5.2)', () => {
     };
     const fmt = formatBotResponse(res);
     expect(fmt.text).toContain('Monday');
-    expect(fmt.buttons!.map((b) => b.id)).toEqual(
+    // Buttons are on the follow-up message
+    expect(fmt.followUp).toBeDefined();
+    expect(fmt.followUp![0].buttons!.map((b) => b.id)).toEqual(
       expect.arrayContaining(['accept_plan', 'retry_plan']),
     );
   });

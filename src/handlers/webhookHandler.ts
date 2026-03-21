@@ -9,7 +9,7 @@ import { JsonRulesRepository } from '../adapters/jsonRulesRepository';
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
 import { mapWhatsAppToIntent } from '../intentMapper';
 import { processIntent } from '../core/botEngine';
-import { formatBotResponse } from '../messageFormatter';
+import { formatBotResponse, type FormattedMessage } from '../messageFormatter';
 import { formatCookMessage } from '../messageFormatter';
 import { loadConfig } from '../config';
 import { ResponseType } from '../core/types';
@@ -75,6 +75,35 @@ export function resolveNumberedInput(
   return undefined;
 }
 
+import type { MessagingProvider } from '../core/ports';
+
+/**
+ * Sends a single FormattedMessage via the MessagingProvider.
+ * Handles list items, buttons, and plain text.
+ */
+async function sendFormattedMessage(
+  provider: MessagingProvider,
+  to: string,
+  msg: FormattedMessage,
+): Promise<void> {
+  if (msg.listItems && msg.listItems.length > 0) {
+    const numberedItems = msg.listItems
+      .map((it, i) => `${i + 1}. ${it.item}`)
+      .join('\n');
+    const bodyWithItems = `${msg.text}\n\n${numberedItems}\n\n_Reply with numbers to remove (e.g. 1,3)_`;
+
+    if (msg.buttons && msg.buttons.length > 0) {
+      await provider.sendButtonMessage(to, bodyWithItems, msg.buttons, undefined, msg.listItems.length);
+    } else {
+      await provider.sendTextMessage(to, bodyWithItems);
+    }
+  } else if (msg.buttons && msg.buttons.length > 0) {
+    await provider.sendButtonMessage(to, msg.text, msg.buttons);
+  } else {
+    await provider.sendTextMessage(to, msg.text);
+  }
+}
+
 export async function webhookHandler(
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> {
@@ -136,46 +165,23 @@ export async function webhookHandler(
     const formatted = formatBotResponse(result.response);
 
     // 10b. Store button IDs on state so numbered text input can be resolved next turn
-    //      Include both list item IDs and button IDs for numbered input resolution
+    //      Use the LAST message's buttons (follow-up if present, otherwise primary)
+    const lastMsg = formatted.followUp?.length ? formatted.followUp[formatted.followUp.length - 1] : formatted;
     const allIds: string[] = [];
-    if (formatted.listItems && formatted.listItems.length > 0) {
-      allIds.push(...formatted.listItems.map(li => li.id));
+    if (lastMsg.listItems && lastMsg.listItems.length > 0) {
+      allIds.push(...lastMsg.listItems.map(li => li.id));
     }
-    if (formatted.buttons && formatted.buttons.length > 0) {
-      allIds.push(...formatted.buttons.map(b => b.id));
+    if (lastMsg.buttons && lastMsg.buttons.length > 0) {
+      allIds.push(...lastMsg.buttons.map(b => b.id));
     }
     result.updatedState.lastButtonIds = allIds.length > 0 ? allIds : undefined;
 
-    // 11. Send message via MessagingProvider
-    if (formatted.listItems && formatted.listItems.length > 0) {
-      // Render removable items as numbered text inline for multi-select support
-      // (WhatsApp list-pickers only allow single selection)
-      const numberedItems = formatted.listItems
-        .map((it, i) => `${i + 1}. ${it.item}`)
-        .join('\n');
-      const bodyWithItems = `${formatted.text}\n\n${numberedItems}\n\n_Reply with numbers to remove (e.g. 1,3)_`;
-
-      if (formatted.buttons && formatted.buttons.length > 0) {
-        await messagingProvider.sendButtonMessage(
-          phoneNumber,
-          bodyWithItems,
-          formatted.buttons,
-          undefined,
-          formatted.listItems?.length ?? 0,
-        );
-      } else {
-        await messagingProvider.sendTextMessage(phoneNumber, bodyWithItems);
+    // 11. Send message(s) via MessagingProvider
+    await sendFormattedMessage(messagingProvider, phoneNumber, formatted);
+    if (formatted.followUp) {
+      for (const followUpMsg of formatted.followUp) {
+        await sendFormattedMessage(messagingProvider, phoneNumber, followUpMsg);
       }
-    } else if (formatted.buttons && formatted.buttons.length > 0) {
-      await messagingProvider.sendButtonMessage(
-        phoneNumber,
-        formatted.text,
-        formatted.buttons,
-        undefined,
-        formatted.listItems?.length ?? 0,
-      );
-    } else {
-      await messagingProvider.sendTextMessage(phoneNumber, formatted.text);
     }
 
     // 11b. If cook message was sent, also send to cook

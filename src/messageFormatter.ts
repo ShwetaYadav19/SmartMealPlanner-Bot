@@ -55,6 +55,8 @@ export interface FormattedMessage {
   buttons?: ButtonOption[];
   listItems?: ListItem[];
   listButtonLabel?: string;
+  /** Additional messages to send after the primary one (e.g. plan text + separate CTA) */
+  followUp?: FormattedMessage[];
 }
 
 const MAIN_MENU_BUTTONS: ButtonOption[] = [
@@ -286,8 +288,14 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
     case ResponseType.WEEKLY_PLAN: {
       const planText = data?.weeklyPlan ? formatWeeklyPlan(data.weeklyPlan) : WEEKLY_PLAN_HEADER;
       return {
-        text: `${planText}\n\n${WEEKLY_PLAN_GROCERY_HINT}`,
-        buttons: suggestedButtons ?? MAIN_MENU_BUTTONS,
+        text: planText,
+        followUp: [{
+          text: WEEKLY_PLAN_GROCERY_HINT,
+          buttons: suggestedButtons ?? [
+            { id: 'weekly_grocery', title: 'View Grocery List' },
+            { id: 'change_plan', title: 'Change Plan' },
+          ],
+        }],
       };
     }
 
@@ -512,7 +520,10 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       const previewPlanText = data?.weeklyPlan ? formatWeeklyPlan(data.weeklyPlan) : WEEKLY_PLAN_HEADER;
       return {
         text: `${ENTIRE_PLAN_PREVIEW_HEADER}\n\n${previewPlanText}`,
-        buttons: suggestedButtons ?? ENTIRE_PLAN_BUTTONS,
+        followUp: [{
+          text: 'Would you like to accept this plan or try again?',
+          buttons: suggestedButtons ?? ENTIRE_PLAN_BUTTONS,
+        }],
       };
     }
 

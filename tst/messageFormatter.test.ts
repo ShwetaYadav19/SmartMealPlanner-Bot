@@ -235,7 +235,9 @@ describe('formatBotResponse', () => {
     const result = formatBotResponse(response);
     expect(result.text).toContain(WEEKLY_PLAN_HEADER);
     expect(result.text).toContain('Monday');
-    expect(result.buttons).toBeDefined();
+    // Buttons are on the follow-up message
+    expect(result.followUp).toBeDefined();
+    expect(result.followUp![0].buttons).toBeDefined();
   });
 
   it('should format TOMORROW_PLAN with day plan data', () => {
