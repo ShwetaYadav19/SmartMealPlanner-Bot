@@ -1123,13 +1123,19 @@ async function handleChangePlanMenu(
         };
       }
 
-      const meals = await mealRepository.getMeals({});
-      const components = await mealComponentRepository.getComponents({});
       const preferences = {
         cuisine: state.cuisinePreference ?? 'both',
         diet: state.dietPreference ?? 'veg',
         style: state.mealStyle ?? 'regular',
       };
+      const meals = await mealRepository.getMeals({
+        cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
+        diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+        style: preferences.style as 'health' | 'regular',
+      });
+      const components = await mealComponentRepository.getComponents({
+        cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
+      });
 
       const newPlan = regenerateWeeklyPlan(state.weeklyPlan, meals, components, preferences);
       const weeklyPlanStartDate = getCurrentWeekMondayISO();
@@ -1451,13 +1457,19 @@ async function handleEntirePlanConfirm(
         };
       }
 
-      const meals = await mealRepository.getMeals({});
-      const components = await mealComponentRepository.getComponents({});
       const preferences = {
         cuisine: state.cuisinePreference ?? 'both',
         diet: state.dietPreference ?? 'veg',
         style: state.mealStyle ?? 'regular',
       };
+      const meals = await mealRepository.getMeals({
+        cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
+        diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+        style: preferences.style as 'health' | 'regular',
+      });
+      const components = await mealComponentRepository.getComponents({
+        cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
+      });
 
       const newPlan = regenerateWeeklyPlan(currentPlan, meals, components, preferences);
       const weeklyPlanStartDate = getCurrentWeekMondayISO();

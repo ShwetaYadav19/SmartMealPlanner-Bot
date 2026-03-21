@@ -20,9 +20,13 @@ export class JsonMealRepository implements MealRepository {
     return this.meals.filter((meal) => {
       if (filter.cuisine) {
         if (filter.cuisine === 'both') {
+          // 'both' = NI + crossover items — include anything tagged north_indian
           if (!meal.cuisine.includes('north_indian')) return false;
         } else {
-          if (!meal.cuisine.includes(filter.cuisine)) return false;
+          // Strict match: only include meals exclusively tagged with the selected cuisine.
+          // Dual-tagged meals (e.g. ["south_indian","north_indian"]) are excluded
+          // so a "North Indian" user doesn't see Dosa, Medu Vada, etc.
+          if (meal.cuisine.length !== 1 || meal.cuisine[0] !== filter.cuisine) return false;
         }
       }
 

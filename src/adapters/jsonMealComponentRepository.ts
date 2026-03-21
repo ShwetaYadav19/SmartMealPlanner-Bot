@@ -70,8 +70,12 @@ export class JsonMealComponentRepository implements MealComponentRepository {
     return this.components.filter((component) => {
       if (filter.cuisine) {
         if (filter.cuisine === 'both') {
+          // 'both' = NI + crossover items — include anything tagged north_indian
           if (!component.cuisine.includes('north_indian')) return false;
         } else {
+          // Include any component tagged with the selected cuisine.
+          // Dual-tagged components (e.g. Sambar, Jeera Rice) are intentionally
+          // shared between cuisines and should appear for both.
           if (!component.cuisine.includes(filter.cuisine)) return false;
         }
       }

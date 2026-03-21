@@ -922,7 +922,8 @@ export function generateAlternatives(
       // Diet check: veg users must never see non_veg
       if (preferences.diet !== 'both' && preferences.diet !== 'non_veg' && m.diet !== preferences.diet) return false;
       // Cuisine check: north_indian users must never see south_indian and vice versa
-      if (preferences.cuisine !== 'both' && !m.cuisine.includes(preferences.cuisine as 'north_indian' | 'south_indian')) return false;
+      // Strict match: exclude dual-tagged meals (e.g. Dosa tagged ["south_indian","north_indian"])
+      if (preferences.cuisine !== 'both' && (m.cuisine.length !== 1 || m.cuisine[0] !== preferences.cuisine)) return false;
       // Style check
       if (preferences.style && m.style !== preferences.style) return false;
       return true;

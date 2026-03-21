@@ -10,7 +10,7 @@ const fixtureComponents: MealComponent[] = [
     id: 'si-base-001',
     name: 'Rice',
     category: 'base',
-    cuisine: 'south_indian',
+    cuisine: ['south_indian'],
     diet: 'veg',
     style: 'health',
     slots: ['lunch', 'dinner'],
@@ -20,7 +20,7 @@ const fixtureComponents: MealComponent[] = [
     id: 'ni-base-001',
     name: 'Roti',
     category: 'base',
-    cuisine: 'north_indian',
+    cuisine: ['north_indian'],
     diet: 'veg',
     style: 'regular',
     slots: ['lunch', 'dinner'],
@@ -30,7 +30,7 @@ const fixtureComponents: MealComponent[] = [
     id: 'si-gravy-001',
     name: 'Sambar',
     category: 'gravy',
-    cuisine: 'south_indian',
+    cuisine: ['south_indian'],
     diet: 'veg',
     style: 'health',
     slots: ['lunch', 'dinner'],
@@ -40,7 +40,7 @@ const fixtureComponents: MealComponent[] = [
     id: 'ni-gravy-001',
     name: 'Rajma',
     category: 'gravy',
-    cuisine: 'north_indian',
+    cuisine: ['north_indian'],
     diet: 'veg',
     style: 'regular',
     slots: ['lunch'],
@@ -50,7 +50,7 @@ const fixtureComponents: MealComponent[] = [
     id: 'si-dry_veggie-001',
     name: 'Beans Poriyal',
     category: 'dry_veggie',
-    cuisine: 'south_indian',
+    cuisine: ['south_indian'],
     diet: 'veg',
     style: 'health',
     slots: ['lunch', 'dinner'],
@@ -60,7 +60,7 @@ const fixtureComponents: MealComponent[] = [
     id: 'ni-side-001',
     name: 'Raita',
     category: 'side',
-    cuisine: 'north_indian',
+    cuisine: ['north_indian'],
     diet: 'veg',
     style: 'regular',
     slots: ['lunch', 'dinner'],
@@ -87,13 +87,13 @@ describe('JsonMealComponentRepository', () => {
   it('filters by cuisine south_indian', async () => {
     const components = await repo.getComponents({ cuisine: 'south_indian' });
     expect(components.length).toBeGreaterThan(0);
-    components.forEach((c) => expect(c.cuisine).toBe('south_indian'));
+    components.forEach((c) => expect(c.cuisine).toContain('south_indian'));
   });
 
   it('filters by cuisine north_indian', async () => {
     const components = await repo.getComponents({ cuisine: 'north_indian' });
     expect(components.length).toBeGreaterThan(0);
-    components.forEach((c) => expect(c.cuisine).toBe('north_indian'));
+    components.forEach((c) => expect(c.cuisine).toContain('north_indian'));
   });
 
   it('returns only north_indian-tagged items when cuisine filter is "both"', async () => {
