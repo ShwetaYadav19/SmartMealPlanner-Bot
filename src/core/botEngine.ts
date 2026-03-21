@@ -1636,6 +1636,28 @@ export async function processIntent(
     return handleNewUser(phoneNumber ?? 'unknown');
   }
 
+  // Global adhoc menu — "hi"/"menu" from any state resets to main_menu for onboarded users
+  if (intent.intent === Intent.ADHOC_MENU && userState.onboardingComplete) {
+    const mainMenuState: UserState = {
+      ...userState,
+      conversationState: 'main_menu',
+      candidateDishes: undefined,
+      previewStep: undefined,
+      fewMealsSelectedDay: undefined,
+      fewMealsSelectedSlot: undefined,
+      fewMealsAlternatives: undefined,
+      previousWeeklyPlan: undefined,
+    };
+    return {
+      response: {
+        type: ResponseType.ADHOC_MENU,
+        data: { weeklyPlan: userState.weeklyPlan },
+        suggestedActions: ADHOC_MENU_OPTIONS,
+      },
+      updatedState: mainMenuState,
+    };
+  }
+
   // Route by conversation state
   switch (userState.conversationState) {
     case 'awaiting_cuisine':

@@ -206,6 +206,11 @@ export function mapWhatsAppToIntent(
     }
   }
 
+  // Global adhoc menu trigger — "hi" or "menu" from any state (for onboarded users)
+  if (text === 'hi' || text === 'menu') {
+    return { intent: Intent.ADHOC_MENU };
+  }
+
   // Free text in any other state is unrecognized
   return { intent: Intent.UNKNOWN };
 }

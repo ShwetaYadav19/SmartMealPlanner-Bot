@@ -137,14 +137,14 @@ describe('intentMapper – workflow mappings', () => {
       expect(result).toEqual({ intent: Intent.ADHOC_MENU });
     });
 
-    it('does NOT map "hi" to ADHOC_MENU in awaiting_cuisine state (not onboarded)', () => {
+    it('maps "hi" to ADHOC_MENU in awaiting_cuisine state (botEngine decides behavior)', () => {
       const result = mapWhatsAppToIntent(undefined, 'hi', 'awaiting_cuisine');
-      expect(result).toEqual({ intent: Intent.UNKNOWN });
+      expect(result).toEqual({ intent: Intent.ADHOC_MENU });
     });
 
-    it('does NOT map "hi" to ADHOC_MENU in few_meals_day_select state', () => {
+    it('maps "hi" to ADHOC_MENU in few_meals_day_select state (botEngine decides behavior)', () => {
       const result = mapWhatsAppToIntent(undefined, 'hi', 'few_meals_day_select');
-      expect(result).toEqual({ intent: Intent.UNKNOWN });
+      expect(result).toEqual({ intent: Intent.ADHOC_MENU });
     });
 
     it('does NOT map "hello" to ADHOC_MENU (only "hi" and "menu")', () => {
