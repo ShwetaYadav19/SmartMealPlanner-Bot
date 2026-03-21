@@ -6,7 +6,6 @@ import { DynamoDBUserStateRepository } from '../adapters/dynamodbUserStateReposi
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
 import { formatBotResponse } from '../messageFormatter';
 import { loadConfig } from '../config';
-import { getTemplateSid } from '../messages';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
 
@@ -40,14 +39,10 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
       const formatted = formatBotResponse(response);
 
       if (formatted.buttons && formatted.buttons.length > 0) {
-        // Out-of-session: use pre-approved template SID for weekly reminder
-        const contentSid = getTemplateSid('weekly_reminder');
-
         await messagingProvider.sendButtonMessage(
           user.phoneNumber,
           formatted.text,
           formatted.buttons,
-          contentSid,
         );
       } else {
         await messagingProvider.sendTextMessage(user.phoneNumber, formatted.text);
