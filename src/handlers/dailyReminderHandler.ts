@@ -6,7 +6,6 @@ import { DynamoDBUserStateRepository } from '../adapters/dynamodbUserStateReposi
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
 import { formatBotResponse } from '../messageFormatter';
 import { loadConfig } from '../config';
-import { getTemplateSid } from '../messages';
 import { extractTomorrowPlan } from '../core/planGenerator';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
@@ -59,16 +58,14 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
       const formatted = formatBotResponse(response);
 
       if (formatted.buttons && formatted.buttons.length > 0) {
-        // Out-of-session: resolve pre-approved template SID for reminders
-        const contentSid = response.type === ResponseType.DAILY_REMINDER
-          ? getTemplateSid('daily_reminder')
-          : undefined;
-
+        // Daily reminders are out-of-session — pre-approved templates have
+        // static text that doesn't include the user's actual plan.
+        // Send the dynamic plan text as plain text, then buttons as a follow-up.
+        // The numbered-text fallback in sendButtonMessage handles out-of-session delivery.
         await messagingProvider.sendButtonMessage(
           user.phoneNumber,
           formatted.text,
           formatted.buttons,
-          contentSid,
         );
       } else {
         await messagingProvider.sendTextMessage(user.phoneNumber, formatted.text);
