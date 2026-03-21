@@ -81,7 +81,10 @@ export class JsonMealComponentRepository implements MealComponentRepository {
       }
 
       if (filter.diet && filter.diet !== 'both') {
-        if (component.diet !== filter.diet) return false;
+        // Non-veg users get the full pool (veg + non_veg) for variety.
+        // Bases and sides are inherently veg, so excluding them would break meal composition.
+        // Only veg users need strict diet filtering (must never see non_veg).
+        if (filter.diet !== 'non_veg' && component.diet !== filter.diet) return false;
       }
 
       if (filter.style) {
