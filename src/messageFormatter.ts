@@ -40,6 +40,9 @@ import {
   DISH_PREVIEW_EMPTY_ERROR,
   MORE_OPTIONS_MENU_HEADER,
   WEEKLY_PLAN_GROCERY_HINT,
+  PLAN_APPROVAL_PROMPT,
+  HAPPY_WITH_MENU_PROMPT,
+  WEEKLY_PLAN_FIRST_TIME_HEADER,
   CHANGE_PLAN_MENU_HEADER,
   FEW_MEALS_DAY_PROMPT,
   FEW_MEALS_SLOT_PROMPT,
@@ -72,6 +75,16 @@ const MORE_OPTIONS_BUTTONS: ButtonOption[] = [
   { id: 'weekly_grocery', title: 'Weekly Grocery List' },
   { id: 'change_preference', title: 'Change Preferences' },
   { id: 'change_cook_number', title: "Change Cook's Number" },
+];
+
+const PLAN_APPROVAL_BUTTONS: ButtonOption[] = [
+  { id: 'happy_with_menu', title: 'Happy with the menu' },
+  { id: 'change_plan', title: 'Want to change' },
+];
+
+const HAPPY_MENU_BUTTONS: ButtonOption[] = [
+  { id: 'tomorrow_plan', title: "What's for tomorrow?" },
+  { id: 'weekly_grocery', title: 'Get the grocery list' },
 ];
 
 const WEEKLY_GROCERY_BUTTONS: ButtonOption[] = [
@@ -301,11 +314,8 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: planText,
         followUp: [{
-          text: WEEKLY_PLAN_GROCERY_HINT,
-          buttons: suggestedButtons ?? [
-            { id: 'weekly_grocery', title: 'View Grocery List' },
-            { id: 'change_plan', title: 'Change Plan' },
-          ],
+          text: PLAN_APPROVAL_PROMPT,
+          buttons: PLAN_APPROVAL_BUTTONS,
         }],
       };
     }
@@ -420,11 +430,8 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         return {
           text: `${headerText}\n${planText}`,
           followUp: [{
-            text: WEEKLY_PLAN_GROCERY_HINT,
-            buttons: [
-              { id: 'weekly_grocery', title: 'View Grocery List' },
-              { id: 'change_plan', title: 'Change Plan' },
-            ],
+            text: PLAN_APPROVAL_PROMPT,
+            buttons: PLAN_APPROVAL_BUTTONS,
           }],
         };
       }
@@ -575,6 +582,12 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         }],
       };
     }
+
+    case ResponseType.HAPPY_MENU:
+      return {
+        text: HAPPY_WITH_MENU_PROMPT,
+        buttons: suggestedButtons ?? HAPPY_MENU_BUTTONS,
+      };
 
     case ResponseType.ADHOC_MENU:
       return {

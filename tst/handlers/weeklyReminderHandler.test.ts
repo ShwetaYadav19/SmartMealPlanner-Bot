@@ -123,8 +123,8 @@ describe('weeklyReminderHandler', () => {
     const [, , followUpButtons] = mockSendButtonMessage.mock.calls[0];
     expect(followUpButtons).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ id: 'weekly_grocery', title: 'View Grocery List' }),
-        expect.objectContaining({ id: 'change_plan', title: 'Change Plan' }),
+        expect.objectContaining({ id: 'happy_with_menu', title: 'Happy with the menu' }),
+        expect.objectContaining({ id: 'change_plan', title: 'Want to change' }),
       ]),
     );
   });

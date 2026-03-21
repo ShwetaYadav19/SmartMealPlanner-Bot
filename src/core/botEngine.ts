@@ -52,8 +52,13 @@ const MAIN_MENU_OPTIONS: SuggestedAction[] = [
   { id: 'more_options', label: 'More Options' },
 ];
 const WEEKLY_PLAN_OPTIONS: SuggestedAction[] = [
-  { id: 'weekly_grocery', label: 'View Grocery List' },
-  { id: 'change_plan', label: 'Change Plan' },
+  { id: 'happy_with_menu', label: 'Happy with the menu' },
+  { id: 'change_plan', label: 'Want to change' },
+];
+
+const HAPPY_MENU_OPTIONS: SuggestedAction[] = [
+  { id: 'tomorrow_plan', label: "What's for tomorrow?" },
+  { id: 'weekly_grocery', label: 'Get the grocery list' },
 ];
 const MORE_OPTIONS_BUTTONS: SuggestedAction[] = [
   { id: 'weekly_plan', label: 'Weekly Meal Plan' },
@@ -63,7 +68,8 @@ const MORE_OPTIONS_BUTTONS: SuggestedAction[] = [
 ];
 
 const CHANGE_PLAN_OPTIONS: SuggestedAction[] = [
-  { id: 'few_meals', label: 'Change a Few Meals' },
+  { id: 'tomorrow_meals', label: "Change Tomorrow's Meals" },
+  { id: 'few_meals', label: 'Change Another Day' },
   { id: 'entire_plan', label: 'Regenerate Plan' },
   { id: 'change_preference', label: 'Change Preferences' },
 ];
@@ -824,6 +830,16 @@ async function handleMainMenu(
       };
     }
 
+    case Intent.HAPPY_WITH_MENU: {
+      return {
+        response: {
+          type: ResponseType.HAPPY_MENU,
+          suggestedActions: HAPPY_MENU_OPTIONS,
+        },
+        updatedState: state,
+      };
+    }
+
     case Intent.VIEW_WEEKLY_GROCERY: {
       if (!state.weeklyPlan) {
         return {
@@ -1098,6 +1114,42 @@ async function handleChangePlanMenu(
   mealComponentRepository: MealComponentRepository,
 ): Promise<BotResult> {
   switch (intent.intent) {
+    case Intent.CHANGE_TOMORROW_MEALS: {
+      if (!state.weeklyPlan || !state.weeklyPlanStartDate) {
+        return {
+          response: {
+            type: ResponseType.NO_PLAN_ERROR,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: { ...state, conversationState: 'main_menu' },
+        };
+      }
+      if (isLegacyPlan(state.weeklyPlan)) {
+        return {
+          response: {
+            type: ResponseType.EXPIRED_PLAN_PROMPT,
+            suggestedActions: MAIN_MENU_OPTIONS,
+          },
+          updatedState: { ...state, conversationState: 'main_menu' },
+        };
+      }
+      const tomorrowDay = getTomorrowIndex(state.weeklyPlanStartDate);
+      const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const updatedState: UserState = {
+        ...state,
+        fewMealsSelectedDay: tomorrowDay,
+        conversationState: 'few_meals_slot_select',
+      };
+      return {
+        response: {
+          type: ResponseType.FEW_MEALS_SLOT_PROMPT,
+          data: { dayName: DAY_NAMES[tomorrowDay] },
+          suggestedActions: SLOT_SELECT_OPTIONS,
+        },
+        updatedState,
+      };
+    }
+
     case Intent.CHANGE_FEW_MEALS: {
       const updatedState: UserState = {
         ...state,
@@ -1789,6 +1841,7 @@ export {
   STYLE_OPTIONS,
   MAIN_MENU_OPTIONS,
   WEEKLY_PLAN_OPTIONS,
+  HAPPY_MENU_OPTIONS,
   MORE_OPTIONS_BUTTONS,
   SKIP_COOK_NUMBER_OPTION,
   CHANGE_PLAN_OPTIONS,

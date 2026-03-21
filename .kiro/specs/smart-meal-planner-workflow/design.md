@@ -98,9 +98,18 @@ On valid `SELECT_MEAL_STYLE`:
 WEEKLY_PLAN_VIEW:
   - Display full week
 
+  CTA:
+    - "Happy with the menu" → HAPPY_MENU
+    - "Want to change" → CHANGE_PLAN_FLOW
+```
+
+### Happy Menu (shared fork after plan approval)
+
+```
+HAPPY_MENU:
   OPTIONS:
-    - grocery_list
-    - change_plan
+    - "What's for tomorrow?" → TOMORROW_PLAN (Daily Flow)
+    - "Get the grocery list" → WEEKLY_GROCERY (Grocery Flow)
 ```
 
 The weekly plan shows 7 days (Monday–Sunday), each with breakfast, lunch, and dinner. Lunch and dinner are `ComposedMeal` objects assembled from 4 components: base, gravy, dry_veggie, side.
@@ -337,9 +346,11 @@ generateMeal(slot, context):
 LOOP:
   onboarding
     ↓
-  weekly_plan
-    ↓
-  grocery
+  weekly_plan → "Happy with the menu" / "Want to change"
+    ↓                                      ↓
+  happy_menu                          change_plan
+    ├─ "What's for tomorrow?" → daily_flow
+    └─ "Get the grocery list" → grocery_flow
     ↓
   daily_reminder
     ↓
@@ -347,7 +358,7 @@ LOOP:
     ↓
   cook / change
     ↓
-  repeat
+  repeat (weekly_reminder → weekly_plan → same flow)
 ```
 
 ## 16. Design Constraints
@@ -469,6 +480,9 @@ enum Intent {
   // Entire plan
   ACCEPT_PLAN, RETRY_PLAN,
 
+  // Plan approval
+  HAPPY_WITH_MENU,
+
   // Cook
   PROVIDE_COOK_NUMBER, SKIP_COOK_NUMBER,
 
@@ -501,6 +515,7 @@ enum ResponseType {
   FEW_MEALS_DAY_PROMPT, FEW_MEALS_SLOT_PROMPT,
   FEW_MEALS_ALTERNATIVES, FEW_MEALS_UPDATED, FEW_MEALS_NO_ALTERNATIVE,
   ENTIRE_PLAN_PREVIEW,
+  HAPPY_MENU,
 
   // Cook
   COOK_NUMBER_PROMPT, COOK_NUMBER_SAVED, COOK_MESSAGE_SENT,

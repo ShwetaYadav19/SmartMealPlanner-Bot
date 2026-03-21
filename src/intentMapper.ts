@@ -95,6 +95,8 @@ export function mapWhatsAppToIntent(
     switch (buttonPayload) {
       case 'change_plan':
         return { intent: Intent.CHANGE_PLAN };
+      case 'tomorrow_meals':
+        return { intent: Intent.CHANGE_TOMORROW_MEALS };
       case 'few_meals':
         return { intent: Intent.CHANGE_FEW_MEALS };
       case 'entire_plan':
@@ -137,6 +139,8 @@ export function mapWhatsAppToIntent(
 
     // --- State-independent button payloads (main menu actions) ---
     switch (buttonPayload) {
+      case 'happy_with_menu':
+        return { intent: Intent.HAPPY_WITH_MENU };
       case 'weekly_plan':
         return { intent: Intent.GENERATE_PLAN };
       case 'weekly_grocery':

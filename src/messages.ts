@@ -14,6 +14,7 @@ export const MAIN_MENU_HEADER = `What would you like to do? 😊`;
 
 // --- Plan ---
 export const WEEKLY_PLAN_HEADER = `Here's your meal plan for the week 🍽️\n`;
+export const WEEKLY_PLAN_FIRST_TIME_HEADER = `Here's your first meal plan 🎉🍽️\n`;
 export const DAY_PLAN_HEADER = (dayName: string) => `Tomorrow's meals (${dayName}) 🌅\n`;
 export const NO_PLAN_PROMPT = `You don't have a meal plan yet! Let's generate one first 📋`;
 
@@ -36,7 +37,7 @@ export const SWAP_NO_ALTERNATIVE = `Sorry, no alternative lunch is available rig
 export const DAILY_REMINDER_HEADER = (dayName: string) =>
   `Hey! Here's your meal plan for tomorrow (${dayName}) 🍽️\n`;
 export const WEEKLY_REMINDER = `Hey! 🍽️ Time to plan your meals for the week ahead!`;
-export const WEEKLY_REMINDER_PLAN_HEADER = `Hey! Here's your meal plan for this week 🍽️\n`;
+export const WEEKLY_REMINDER_PLAN_HEADER = `Hey! Here's your new plan for the week 🍽️\n`;
 export const EXPIRED_PLAN_PROMPT = `Your meal plan has expired. Let's generate a fresh one! 📋`;
 
 // --- Errors ---
@@ -154,6 +155,10 @@ export const MORE_OPTIONS_MENU_HEADER = `Here are more options for you 📋`;
 
 // --- Grocery Hint ---
 export const WEEKLY_PLAN_GROCERY_HINT = `💡 Tap 'More Options' to view the weekly grocery list`;
+
+// --- Plan Approval CTA ---
+export const PLAN_APPROVAL_PROMPT = `What do you think? 😊`;
+export const HAPPY_WITH_MENU_PROMPT = `Great! What would you like to do next? 🎉`;
 
 // --- Change Plan Flow ---
 export const CHANGE_PLAN_MENU_HEADER = `How would you like to change your plan? 🔄`;
