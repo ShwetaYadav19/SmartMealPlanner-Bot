@@ -168,15 +168,15 @@ describe('BotEngine — onboarding flow', () => {
     expect(result.updatedState.conversationState).toBe('awaiting_meal_style');
   });
 
-  it('stores "both" diet preference correctly', async () => {
+  it('stores "veg_with_eggs" diet preference correctly', async () => {
     const state = makeState({
       conversationState: 'awaiting_diet',
       cuisinePreference: 'north_indian',
     });
-    const intent: UserIntent = { intent: Intent.SELECT_DIET, payload: 'both' };
+    const intent: UserIntent = { intent: Intent.SELECT_DIET, payload: 'veg_with_eggs' };
     const result = await processIntent(intent, state, stubMealRepo, stubMealComponentRepo);
 
-    expect(result.updatedState.dietPreference).toBe('both');
+    expect(result.updatedState.dietPreference).toBe('veg_with_eggs');
     expect(result.updatedState.conversationState).toBe('awaiting_meal_style');
   });
 

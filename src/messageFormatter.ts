@@ -85,7 +85,7 @@ const CUISINE_BUTTONS: ButtonOption[] = [
 const DIET_BUTTONS: ButtonOption[] = [
   { id: 'veg', title: 'Veg' },
   { id: 'non_veg', title: 'Non-Veg' },
-  { id: 'both', title: 'Both' },
+  { id: 'veg_with_eggs', title: 'Veg + Eggs' },
 ];
 
 const STYLE_BUTTONS: ButtonOption[] = [

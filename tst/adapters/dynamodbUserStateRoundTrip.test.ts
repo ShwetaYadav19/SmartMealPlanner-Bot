@@ -89,7 +89,7 @@ const arbUserState: fc.Arbitrary<UserState> = fc.record(
     onboardingComplete: fc.boolean(),
     conversationState: arbConversationState,
     cuisinePreference: fc.constantFrom('north_indian' as const, 'south_indian' as const, 'both' as const),
-    dietPreference: fc.constantFrom('veg' as const, 'non_veg' as const),
+    dietPreference: fc.constantFrom('veg' as const, 'non_veg' as const, 'veg_with_eggs' as const),
     mealStyle: fc.constantFrom('health' as const, 'regular' as const),
     weeklyPlan: arbWeeklyPlan,
     weeklyPlanStartDate: fc.date({ min: new Date('2024-01-01'), max: new Date('2025-12-31') }).map(

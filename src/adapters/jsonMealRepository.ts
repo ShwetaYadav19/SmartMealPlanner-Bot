@@ -30,8 +30,18 @@ export class JsonMealRepository implements MealRepository {
         }
       }
 
-      if (filter.diet && filter.diet !== 'both') {
+      if (filter.diet && filter.diet !== 'veg_with_eggs') {
         if (meal.diet !== filter.diet) return false;
+      }
+      if (filter.diet === 'veg_with_eggs') {
+        // Allow veg meals + egg-only non_veg meals
+        if (meal.diet === 'non_veg') {
+          const hasEgg = meal.ingredients.some(i => i.name.toLowerCase().includes('egg'));
+          const hasMeat = meal.ingredients.some(i =>
+            i.category === 'protein' && !i.name.toLowerCase().includes('egg'),
+          );
+          if (!hasEgg || hasMeat) return false;
+        }
       }
 
       if (filter.style) {

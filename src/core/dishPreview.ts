@@ -106,7 +106,7 @@ async function fetchCategoryPool(
     allForCategory = [...nonVegComponents, ...vegComponents];
   } else {
     allForCategory = await deps.mealComponentRepository.getComponents({
-      cuisine, diet: preferences.diet as 'veg' | 'non_veg' | 'both', style, slot, category,
+      cuisine, diet: preferences.diet as 'veg' | 'non_veg' | 'veg_with_eggs', style, slot, category,
     });
   }
 
@@ -127,7 +127,7 @@ async function fetchCategoryPool(
         regularComponents = [...regNonVeg, ...regVeg];
       } else {
         regularComponents = await deps.mealComponentRepository.getComponents({
-          cuisine, diet: preferences.diet as 'veg' | 'non_veg' | 'both', style: 'regular', slot, category,
+          cuisine, diet: preferences.diet as 'veg' | 'non_veg' | 'veg_with_eggs', style: 'regular', slot, category,
         });
       }
 
@@ -199,7 +199,7 @@ export async function generateCandidateDishes(
   // --- Breakfasts (unchanged) ---
   const allBreakfasts = await deps.mealRepository.getMeals({
     cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
-    diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+    diet: preferences.diet as 'veg' | 'non_veg' | 'veg_with_eggs',
     style: preferences.style as 'health' | 'regular',
     slot: 'breakfast',
   });
@@ -249,7 +249,7 @@ async function generateCandidateDishesWithSelector(
   const baseContext: Omit<RuleEvaluationContext, 'slot'> = {
     userPreferences: {
       cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
-      diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+      diet: preferences.diet as 'veg' | 'non_veg' | 'veg_with_eggs',
       style: preferences.style as 'health' | 'regular',
     },
     excludedDishIds,
@@ -304,7 +304,7 @@ export async function removeBreakfast(
 
   const allBreakfasts = await deps.mealRepository.getMeals({
     cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
-    diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+    diet: preferences.diet as 'veg' | 'non_veg' | 'veg_with_eggs',
     style: preferences.style as 'health' | 'regular',
     slot: 'breakfast',
   });

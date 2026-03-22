@@ -464,9 +464,25 @@ export function composeMeal(
   // Bases and sides are inherently veg, so diet filtering doesn't apply to them.
   // Non-veg users keep the full pool (veg + non_veg) for variety.
   // HARD GUARDRAIL: veg users must NEVER see non-veg — no fallback to full pool.
-  if (diet && diet !== 'both' && diet !== 'non_veg') {
+  // veg_with_eggs users see veg + egg-only items.
+  if (diet && diet !== 'non_veg') {
     for (const cat of ['gravy', 'dry_veggie'] as ComponentCategory[]) {
-      byCategory[cat] = byCategory[cat].filter((c) => c.diet === diet);
+      if (diet === 'veg_with_eggs') {
+        byCategory[cat] = byCategory[cat].filter((c) => {
+          if (c.diet === 'veg') return true;
+          if (c.diet === 'non_veg' && c.keyIngredient === 'egg') return true;
+          if (c.diet === 'non_veg') {
+            const hasEgg = c.ingredients.some(i => i.name.toLowerCase().includes('egg'));
+            const hasMeat = c.ingredients.some(i =>
+              i.category === 'protein' && !i.name.toLowerCase().includes('egg'),
+            );
+            return hasEgg && !hasMeat;
+          }
+          return false;
+        });
+      } else {
+        byCategory[cat] = byCategory[cat].filter((c) => c.diet === diet);
+      }
     }
   }
 
@@ -627,7 +643,7 @@ function buildEvalContext(
   return {
     userPreferences: {
       cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
-      diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+      diet: preferences.diet as 'veg' | 'non_veg' | 'veg_with_eggs',
       style: preferences.style as 'health' | 'regular',
     },
     excludedDishIds: [],
@@ -656,30 +672,16 @@ export function generateWeeklyPlan(
   rules?: Rule[],
 ): WeeklyPlan {
   const isBothCuisine = preferences.cuisine === 'both';
-  const isBothDiet = preferences.diet === 'both';
-
-  // When diet is 'both', split meals into veg and non-veg pools per slot
-  // and assign one non-veg slot per day (rotating through slots)
-  const vegMeals = isBothDiet ? meals.filter(m => m.diet === 'veg') : meals;
-  const nonVegMeals = isBothDiet ? meals.filter(m => m.diet === 'non_veg') : [];
 
   // Group meals by slot and shuffle each pool (breakfast only now)
   const pools: Record<SlotName, Meal[]> = {
-    breakfast: fisherYatesShuffle(mealsForSlot(isBothDiet ? vegMeals : meals, 'breakfast')),
-    lunch: fisherYatesShuffle(mealsForSlot(isBothDiet ? vegMeals : meals, 'lunch')),
-    dinner: fisherYatesShuffle(mealsForSlot(isBothDiet ? vegMeals : meals, 'dinner')),
-  };
-
-  // Non-veg pools (only used when diet is 'both')
-  const nonVegPools: Record<SlotName, Meal[]> = {
-    breakfast: fisherYatesShuffle(mealsForSlot(nonVegMeals, 'breakfast')),
-    lunch: fisherYatesShuffle(mealsForSlot(nonVegMeals, 'lunch')),
-    dinner: fisherYatesShuffle(mealsForSlot(nonVegMeals, 'dinner')),
+    breakfast: fisherYatesShuffle(mealsForSlot(meals, 'breakfast')),
+    lunch: fisherYatesShuffle(mealsForSlot(meals, 'lunch')),
+    dinner: fisherYatesShuffle(mealsForSlot(meals, 'dinner')),
   };
 
   // Track a rotating cursor per slot so we consume through the shuffled pool
   const cursor: Record<SlotName, number> = { breakfast: 0, lunch: 0, dinner: 0 };
-  const nonVegCursor: Record<SlotName, number> = { breakfast: 0, lunch: 0, dinner: 0 };
 
   const cuisineSchedule = isBothCuisine ? buildCuisineSchedule() : null;
 
@@ -721,8 +723,22 @@ export function generateWeeklyPlan(
         ),
       );
       // Apply diet filtering consistent with composeMeal: only filter for strict veg
-      const dietFiltered = (preferences.diet && preferences.diet !== 'both' && preferences.diet !== 'non_veg')
-        ? eligible.filter(c => c.diet === preferences.diet)
+      const dietFiltered = (preferences.diet && preferences.diet !== 'non_veg')
+        ? eligible.filter(c => {
+            if (preferences.diet === 'veg_with_eggs') {
+              if (c.diet === 'veg') return true;
+              if (c.diet === 'non_veg' && c.keyIngredient === 'egg') return true;
+              if (c.diet === 'non_veg') {
+                const hasEgg = c.ingredients.some(i => i.name.toLowerCase().includes('egg'));
+                const hasMeat = c.ingredients.some(i =>
+                  i.category === 'protein' && !i.name.toLowerCase().includes('egg'),
+                );
+                return hasEgg && !hasMeat;
+              }
+              return false;
+            }
+            return c.diet === preferences.diet;
+          })
         : eligible;
       const pool = dietFiltered.length > 0 ? dietFiltered : eligible;
       poolSizes.set(`${cat}-${slot}`, pool.length);
@@ -747,15 +763,11 @@ export function generateWeeklyPlan(
     const usedToday = new Set<string>();
     const usedKeyIngredients = new Set<string>();
 
-    // When diet is 'both', assign one non-veg slot per day (rotating)
-    const nonVegSlot: SlotName | null = isBothDiet ? SLOTS[d % 3] : null;
-
     // --- Breakfast (unchanged logic using pickMealFromCursor) ---
     const breakfastSlot: SlotName = 'breakfast';
     const breakfastPreferredCuisine = cuisineSchedule ? cuisineSchedule[d][breakfastSlot] : null;
-    const isBreakfastNonVeg = breakfastSlot === nonVegSlot;
-    const breakfastPool = isBreakfastNonVeg ? nonVegPools[breakfastSlot] : pools[breakfastSlot];
-    const breakfastCursorMap = isBreakfastNonVeg ? nonVegCursor : cursor;
+    const breakfastPool = pools[breakfastSlot];
+    const breakfastCursorMap = cursor;
     const breakfastRecentIds = new Set<string>(allUsedBreakfastIds);
 
     // If all breakfasts in the pool have been used, reset to allow repeats
@@ -775,23 +787,10 @@ export function generateWeeklyPlan(
     );
 
     if (!breakfast) {
-      if (isBreakfastNonVeg) {
-        breakfast = pickMealFromCursor(
-          pools[breakfastSlot],
-          cursor,
-          breakfastSlot,
-          usedToday,
-          breakfastRecentIds,
-          breakfastPreferredCuisine,
-          usedKeyIngredients,
-        );
-      }
-      if (!breakfast) {
-        throw new Error(
-          `Not enough meals available for breakfast on ${DAYS[d]}. ` +
-          `Need at least enough unique meals per slot to fill 7 days.`,
-        );
-      }
+      throw new Error(
+        `Not enough meals available for breakfast on ${DAYS[d]}. ` +
+        `Need at least enough unique meals per slot to fill 7 days.`,
+      );
     }
 
     usedToday.add(breakfast.id);
@@ -925,7 +924,19 @@ export function generateAlternatives(
     // Hard guardrail: filter by diet and cuisine — non-negotiable
     const dietFiltered = breakfastMeals.filter((m) => {
       // Diet check: veg users must never see non_veg
-      if (preferences.diet !== 'both' && preferences.diet !== 'non_veg' && m.diet !== preferences.diet) return false;
+      if (preferences.diet !== 'non_veg') {
+        if (preferences.diet === 'veg_with_eggs') {
+          if (m.diet === 'non_veg') {
+            const hasEgg = m.ingredients.some(i => i.name.toLowerCase().includes('egg'));
+            const hasMeat = m.ingredients.some(i =>
+              i.category === 'protein' && !i.name.toLowerCase().includes('egg'),
+            );
+            if (!hasEgg || hasMeat) return false;
+          }
+        } else if (m.diet !== preferences.diet) {
+          return false;
+        }
+      }
       // Cuisine check: north_indian users must never see south_indian and vice versa
       // Strict match: exclude dual-tagged meals (e.g. Dosa tagged ["south_indian","north_indian"])
       if (preferences.cuisine !== 'both' && (m.cuisine.length !== 1 || m.cuisine[0] !== preferences.cuisine)) return false;

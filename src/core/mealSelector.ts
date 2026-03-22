@@ -128,7 +128,7 @@ export class MealSelector {
   }
 
   /**
-   * Diet filter: when preference is 'both', pass all through.
+   * Diet filter: for veg_with_eggs, include veg + egg-only items.
    * Otherwise keep only items matching the diet preference.
    */
   private applyDietFilter<T extends Meal | MealComponent>(
@@ -136,7 +136,22 @@ export class MealSelector {
     context: RuleEvaluationContext,
   ): T[] {
     const pref = context.userPreferences.diet;
-    if (pref === 'both') return pool;
+    if (pref === 'veg_with_eggs') {
+      return pool.filter((item) => {
+        const m = item as Meal | MealComponent;
+        if (m.diet === 'veg') return true;
+        // Allow egg-only non_veg items
+        if (m.diet === 'non_veg' && 'keyIngredient' in m && (m as MealComponent).keyIngredient === 'egg') return true;
+        if (m.diet === 'non_veg' && 'ingredients' in m) {
+          const hasEgg = m.ingredients.some(i => i.name.toLowerCase().includes('egg'));
+          const hasMeat = m.ingredients.some(i =>
+            i.category === 'protein' && !i.name.toLowerCase().includes('egg'),
+          );
+          if (hasEgg && !hasMeat) return true;
+        }
+        return false;
+      });
+    }
     return pool.filter((item) => (item as Meal | MealComponent).diet === pref);
   }
 
@@ -511,7 +526,6 @@ export class MealSelector {
           // If diet fallback is active for non_veg, skip strict diet filtering
           // (include both veg and non_veg)
           const pref = context.userPreferences.diet;
-          if (pref === 'both') break;
           if (pref === 'non_veg') {
             // Diet fallback: include both veg and non_veg
             break;
@@ -576,7 +590,6 @@ export class MealSelector {
 
         case 'diet-filter': {
           const pref = context.userPreferences.diet;
-          if (pref === 'both') break;
           if (pref === 'non_veg') {
             // Diet fallback: include both veg and non_veg
             break;

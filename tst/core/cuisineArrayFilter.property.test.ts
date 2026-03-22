@@ -161,7 +161,7 @@ describe('Property 1: Cuisine Array Inclusion — applyCuisineFilter includes it
         fc.array(arbMealComponent(), { minLength: 1, maxLength: 20 }),
         fc.constantFrom('north_indian' as const, 'south_indian' as const),
         (pool, cuisinePref) => {
-          const prefs = { cuisine: cuisinePref, diet: 'both' as const, style: 'health' as const };
+          const prefs = { cuisine: cuisinePref, diet: 'veg' as const, style: 'health' as const };
           const ctx = makeContext(prefs);
           const result = selector.filterPool(pool, [cuisineFilterRule], ctx);
           const resultIds = new Set(result.map((item) => item.id));
@@ -183,7 +183,7 @@ describe('Property 1: Cuisine Array Inclusion — applyCuisineFilter includes it
       fc.property(
         fc.array(arbMealComponent(), { minLength: 0, maxLength: 20 }),
         (pool) => {
-          const prefs = { cuisine: 'both' as const, diet: 'both' as const, style: 'health' as const };
+          const prefs = { cuisine: 'both' as const, diet: 'veg' as const, style: 'health' as const };
           const ctx = makeContext(prefs);
           const result = selector.filterPool(pool, [cuisineFilterRule], ctx);
 
@@ -210,16 +210,23 @@ describe('Property 2: Non-cuisine filter rules produce identical results regardl
     fc.assert(
       fc.property(
         fc.array(arbMealComponent(), { minLength: 1, maxLength: 20 }),
-        fc.constantFrom('veg' as const, 'non_veg' as const, 'both' as const),
+        fc.constantFrom('veg' as const, 'non_veg' as const, 'veg_with_eggs' as const),
         (pool, dietPref) => {
           const prefs = { cuisine: 'both' as const, diet: dietPref, style: 'health' as const };
           const ctx = makeContext(prefs);
           const result = selector.filterPool(pool, [dietFilterRule], ctx);
 
-          // Diet filter should only look at diet field, not cuisine
-          if (dietPref === 'both') {
-            expect(result.length).toBe(pool.length);
+          if (dietPref === 'veg_with_eggs') {
+            // veg_with_eggs includes veg items + egg-only non_veg items
+            for (const item of result) {
+              expect(item.diet === 'veg' || item.diet === 'non_veg').toBe(true);
+            }
+            // All veg items should be included
+            const vegItems = pool.filter((item) => item.diet === 'veg');
+            const resultVeg = result.filter((item) => item.diet === 'veg');
+            expect(resultVeg.length).toBe(vegItems.length);
           } else {
+            // Diet filter should only look at diet field, not cuisine
             for (const item of result) {
               expect(item.diet).toBe(dietPref);
             }
@@ -241,7 +248,7 @@ describe('Property 2: Non-cuisine filter rules produce identical results regardl
         fc.array(arbMealComponent(), { minLength: 1, maxLength: 20 }),
         fc.constantFrom('health' as const, 'regular' as const),
         (pool, stylePref) => {
-          const prefs = { cuisine: 'both' as const, diet: 'both' as const, style: stylePref };
+          const prefs = { cuisine: 'both' as const, diet: 'veg' as const, style: stylePref };
           const ctx = makeContext(prefs);
           const result = selector.filterPool(pool, [styleFilterRule], ctx);
 
@@ -268,7 +275,7 @@ describe('Property 2: Non-cuisine filter rules produce identical results regardl
           const excludedIds = pool.slice(0, excludeCount).map((i) => i.id);
           const excludedSet = new Set(excludedIds);
 
-          const prefs = { cuisine: 'both' as const, diet: 'both' as const, style: 'health' as const };
+          const prefs = { cuisine: 'both' as const, diet: 'veg' as const, style: 'health' as const };
           const ctx = makeContext(prefs, excludedIds);
           const result = selector.filterPool(pool, [excludedDishesRule], ctx);
 
@@ -295,7 +302,7 @@ describe('Property 2: Non-cuisine filter rules produce identical results regardl
           const historyIds = pool.slice(0, Math.min(2, pool.length - 1)).map((c) => c.id);
           const windowSet = new Set(historyIds);
 
-          const prefs = { cuisine: 'both' as const, diet: 'both' as const, style: 'health' as const };
+          const prefs = { cuisine: 'both' as const, diet: 'veg' as const, style: 'health' as const };
           const ctx = makeContext(prefs);
           ctx.history = { base: historyIds };
 
@@ -332,7 +339,7 @@ describe('Property 2: Non-cuisine filter rules produce identical results regardl
           const sameDaySet = new Set(sameDayIds);
           const nonSameDayCount = pool.filter((c) => !sameDaySet.has(c.id)).length;
 
-          const prefs = { cuisine: 'both' as const, diet: 'both' as const, style: 'health' as const };
+          const prefs = { cuisine: 'both' as const, diet: 'veg' as const, style: 'health' as const };
           const ctx = makeContext(prefs);
           ctx.sameDaySelections = { gravy: sameDayIds };
 

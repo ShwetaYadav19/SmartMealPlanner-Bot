@@ -80,11 +80,25 @@ export class JsonMealComponentRepository implements MealComponentRepository {
         }
       }
 
-      if (filter.diet && filter.diet !== 'both') {
+      if (filter.diet && filter.diet !== 'veg_with_eggs') {
         // Non-veg users get the full pool (veg + non_veg) for variety.
         // Bases and sides are inherently veg, so excluding them would break meal composition.
         // Only veg users need strict diet filtering (must never see non_veg).
         if (filter.diet !== 'non_veg' && component.diet !== filter.diet) return false;
+      }
+      if (filter.diet === 'veg_with_eggs') {
+        // Allow veg components + egg-only non_veg components
+        if (component.diet === 'non_veg') {
+          if (component.keyIngredient === 'egg') {
+            // egg-only item, allow
+          } else {
+            const hasEgg = component.ingredients.some(i => i.name.toLowerCase().includes('egg'));
+            const hasMeat = component.ingredients.some(i =>
+              i.category === 'protein' && !i.name.toLowerCase().includes('egg'),
+            );
+            if (!hasEgg || hasMeat) return false;
+          }
+        }
       }
 
       if (filter.style) {

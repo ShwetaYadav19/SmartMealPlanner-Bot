@@ -59,7 +59,7 @@ function arbMeal(): fc.Arbitrary<Meal> {
 function arbUserPreferences(): fc.Arbitrary<RuleEvaluationContext['userPreferences']> {
   return fc.record({
     cuisine: fc.constantFrom('north_indian' as const, 'south_indian' as const, 'both' as const),
-    diet: fc.constantFrom('veg' as const, 'non_veg' as const, 'both' as const),
+    diet: fc.constantFrom('veg' as const, 'non_veg' as const, 'veg_with_eggs' as const),
     style: fc.constantFrom('health' as const, 'regular' as const),
   });
 }
@@ -171,7 +171,7 @@ describe('Property 5: Filter rules produce only matching items', () => {
     );
   });
 
-  it('diet filter: every result item matches the user diet preference; "both" passes all', () => {
+  it('diet filter: every result item matches the user diet preference', () => {
     const selector = makeSelector();
     fc.assert(
       fc.property(
@@ -182,8 +182,11 @@ describe('Property 5: Filter rules produce only matching items', () => {
           // Use diet-filter alone (no fallback)
           const result = selector.filterPool(pool, [dietFilterRule], ctx);
 
-          if (prefs.diet === 'both') {
-            expect(result.length).toBe(pool.length);
+          if (prefs.diet === 'veg_with_eggs') {
+            // veg_with_eggs includes veg items + egg-only non_veg items
+            for (const item of result) {
+              expect(item.diet === 'veg' || item.diet === 'non_veg').toBe(true);
+            }
           } else {
             for (const item of result) {
               expect(item.diet).toBe(prefs.diet);
@@ -315,7 +318,7 @@ describe('Property 8: Style fallback adds labeled regular items below threshold'
 
     fc.assert(
       fc.property(arbPoolBelowThreshold, (pool) => {
-        const prefs = { cuisine: 'both' as const, diet: 'both' as const, style: 'health' as const };
+        const prefs = { cuisine: 'both' as const, diet: 'veg' as const, style: 'health' as const };
         const ctx = makeContext(prefs);
         // style-filter first narrows to health only, then style-fallback adds regular with suffix
         const rules = [styleFilterRule, styleFallbackRule];
@@ -349,7 +352,7 @@ describe('Property 9: Regular style users don\'t get style fallback', () => {
       fc.property(
         fc.array(arbMealComponent(), { minLength: 0, maxLength: 20 }),
         (pool) => {
-          const prefs = { cuisine: 'both' as const, diet: 'both' as const, style: 'regular' as const };
+          const prefs = { cuisine: 'both' as const, diet: 'veg' as const, style: 'regular' as const };
           const ctx = makeContext(prefs);
           const rules = [styleFilterRule, styleFallbackRule];
           const result = selector.filterPool(pool, rules, ctx);
@@ -381,7 +384,7 @@ describe('Property 15: Excluded dishes are removed from all pools', () => {
           const excludedIds = allIds.slice(0, excludeCount);
           const excludedSet = new Set(excludedIds);
 
-          const prefs = { cuisine: 'both' as const, diet: 'both' as const, style: 'health' as const };
+          const prefs = { cuisine: 'both' as const, diet: 'veg' as const, style: 'health' as const };
           const ctx = makeContext(prefs, excludedIds);
           const result = selector.filterPool(pool, [excludedDishesRule], ctx);
 
@@ -462,7 +465,7 @@ describe('Property 10: Sliding window deprioritizes recent items', () => {
           const windowSet = new Set(historyIds);
 
           const ctx = makeContext(
-            { cuisine: 'both', diet: 'both', style: 'health' },
+            { cuisine: 'both', diet: 'veg', style: 'health' },
           );
           ctx.history = { base: historyIds };
 
@@ -498,7 +501,7 @@ describe('Property 10: Sliding window deprioritizes recent items', () => {
           const allIds = pool.map((c) => c.id);
 
           const ctx = makeContext(
-            { cuisine: 'both', diet: 'both', style: 'health' },
+            { cuisine: 'both', diet: 'veg', style: 'health' },
           );
           ctx.history = { base: allIds };
 
@@ -529,7 +532,7 @@ describe('Property 11: Progressive relaxation ensures selection always succeeds'
         (pool) => {
           // All items in window — forces relaxation
           const allIds = pool.map((c) => c.id);
-          const ctx = makeContext({ cuisine: 'both', diet: 'both', style: 'health' });
+          const ctx = makeContext({ cuisine: 'both', diet: 'veg', style: 'health' });
           ctx.history = { base: allIds };
 
           const result = selector.applySlidingWindow(pool, slidingWindowRule, ctx);
@@ -548,7 +551,7 @@ describe('Property 11: Progressive relaxation ensures selection always succeeds'
         (pool) => {
           // All items in sameDaySelections — forces relaxation
           const allIds = pool.map((c) => c.id);
-          const ctx = makeContext({ cuisine: 'both', diet: 'both', style: 'health' });
+          const ctx = makeContext({ cuisine: 'both', diet: 'veg', style: 'health' });
           ctx.sameDaySelections = { base: allIds };
 
           const result = selector.applySameDayDedup(pool, ctx);
@@ -591,7 +594,7 @@ describe('Property 12: Same-day dedup excludes lunch selections from dinner', ()
           const sameDaySet = new Set(sameDayIds);
           const nonSameDayCount = pool.filter((c) => !sameDaySet.has(c.id)).length;
 
-          const ctx = makeContext({ cuisine: 'both', diet: 'both', style: 'health' });
+          const ctx = makeContext({ cuisine: 'both', diet: 'veg', style: 'health' });
           ctx.sameDaySelections = { gravy: sameDayIds };
 
           const result = selector.applySameDayDedup(pool, ctx);
@@ -717,7 +720,7 @@ describe('Property 14: Cuisine assignment matches preference pattern', () => {
       fc.property(
         fc.integer({ min: 0, max: 6 }),
         (startDay) => {
-          const prefs = { cuisine: 'both' as const, diet: 'both' as const, style: 'health' as const };
+          const prefs = { cuisine: 'both' as const, diet: 'veg' as const, style: 'health' as const };
           const ctx = makeContext(prefs);
           const rules = [cuisineAlternationRule];
 
@@ -737,7 +740,7 @@ describe('Property 14: Cuisine assignment matches preference pattern', () => {
         fc.constantFrom('north_indian' as const, 'south_indian' as const),
         fc.integer({ min: 0, max: 6 }),
         (singleCuisine, startDay) => {
-          const prefs = { cuisine: singleCuisine, diet: 'both' as const, style: 'health' as const };
+          const prefs = { cuisine: singleCuisine, diet: 'veg' as const, style: 'health' as const };
           const ctx = makeContext(prefs);
           const rules = [cuisineAlternationRule];
 

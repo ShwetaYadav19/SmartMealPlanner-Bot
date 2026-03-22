@@ -21,7 +21,7 @@ const componentRepo = new JsonMealComponentRepository(
 );
 
 const CUISINES = ['north_indian', 'south_indian', 'both'] as const;
-const DIETS = ['veg', 'non_veg', 'both'] as const;
+const DIETS = ['veg', 'non_veg', 'veg_with_eggs'] as const;
 const STYLES = ['health', 'regular'] as const;
 
 type Cuisine = (typeof CUISINES)[number];

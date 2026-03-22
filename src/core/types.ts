@@ -18,7 +18,7 @@ export interface Meal {
 
 export interface MealFilter {
   cuisine?: 'north_indian' | 'south_indian' | 'both';
-  diet?: 'veg' | 'non_veg' | 'both';
+  diet?: 'veg' | 'non_veg' | 'veg_with_eggs';
   style?: 'health' | 'regular';
   slot?: 'breakfast' | 'lunch' | 'dinner';
 }
@@ -45,7 +45,7 @@ export interface ComposedMeal {
 
 export interface MealComponentFilter {
   cuisine?: 'north_indian' | 'south_indian' | 'both';
-  diet?: 'veg' | 'non_veg' | 'both';
+  diet?: 'veg' | 'non_veg' | 'veg_with_eggs';
   style?: 'health' | 'regular';
   slot?: 'lunch' | 'dinner';
   category?: ComponentCategory;
@@ -97,7 +97,7 @@ export interface UserState {
   onboardingComplete: boolean;
   conversationState: ConversationState;
   cuisinePreference?: 'north_indian' | 'south_indian' | 'both';
-  dietPreference?: 'veg' | 'non_veg' | 'both';
+  dietPreference?: 'veg' | 'non_veg' | 'veg_with_eggs';
   mealStyle?: 'health' | 'regular';
   weeklyPlan?: WeeklyPlan;
   weeklyPlanStartDate?: string;
@@ -270,7 +270,7 @@ export interface RuleConditions {
 export interface RuleEvaluationContext {
   userPreferences: {
     cuisine: 'north_indian' | 'south_indian' | 'both';
-    diet: 'veg' | 'non_veg' | 'both';
+    diet: 'veg' | 'non_veg' | 'veg_with_eggs';
     style: 'health' | 'regular';
   };
   excludedDishIds: string[];

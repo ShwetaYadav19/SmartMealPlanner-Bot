@@ -86,7 +86,7 @@ const userStateArb: fc.Arbitrary<UserState> = fc.record({
   onboardingComplete: fc.boolean(),
   conversationState: conversationStateArb,
   cuisinePreference: fc.option(fc.constantFrom('north_indian' as const, 'south_indian' as const, 'both' as const), { nil: undefined }),
-  dietPreference: fc.option(fc.constantFrom('veg' as const, 'non_veg' as const), { nil: undefined }),
+  dietPreference: fc.option(fc.constantFrom('veg' as const, 'non_veg' as const, 'veg_with_eggs' as const), { nil: undefined }),
   mealStyle: fc.option(fc.constantFrom('health' as const, 'regular' as const), { nil: undefined }),
   weeklyPlan: fc.option(fc.constant(makeWeeklyPlan()), { nil: undefined }),
   weeklyPlanStartDate: fc.option(fc.oneof(validStartDateArb, expiredStartDateArb), { nil: undefined }),

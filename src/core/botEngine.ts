@@ -33,7 +33,7 @@ const CUISINE_OPTIONS: SuggestedAction[] = [
 const DIET_OPTIONS: SuggestedAction[] = [
   { id: 'veg', label: 'Veg' },
   { id: 'non_veg', label: 'Non-Veg' },
-  { id: 'both', label: 'Both' },
+  { id: 'veg_with_eggs', label: 'Veg + Eggs' },
 ];
 
 const STYLE_OPTIONS: SuggestedAction[] = [
@@ -194,7 +194,7 @@ async function handleAwaitingMealStyle(
     // Build weekly plan directly from candidates — no dish review step
     const weeklyPlan = buildPlanFromComponents(candidateDishes, {
       cuisine: state.cuisinePreference ?? 'both',
-      diet: state.dietPreference ?? 'both',
+      diet: state.dietPreference ?? 'veg',
     });
     const weeklyPlanStartDate = getCurrentWeekMondayISO();
 
@@ -525,7 +525,7 @@ async function handleDishPreview(
   if (intent.intent === Intent.CONFIRM_DISHES) {
     const weeklyPlan = buildPlanFromComponents(state.candidateDishes, {
       cuisine: state.cuisinePreference ?? 'both',
-      diet: state.dietPreference ?? 'both',
+      diet: state.dietPreference ?? 'veg',
     });
     const weeklyPlanStartDate = getCurrentWeekMondayISO();
     const updatedState: UserState = {
@@ -1085,7 +1085,7 @@ async function handleRegeneratePlanMenu(
     };
     const meals = await mealRepository.getMeals({
       cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
-      diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+      diet: preferences.diet as 'veg' | 'non_veg' | 'veg_with_eggs',
       style: preferences.style as 'health' | 'regular',
     });
     const components = await mealComponentRepository.getComponents({
@@ -1410,7 +1410,7 @@ async function handleEntirePlanConfirm(
       };
       const meals = await mealRepository.getMeals({
         cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
-        diet: preferences.diet as 'veg' | 'non_veg' | 'both',
+        diet: preferences.diet as 'veg' | 'non_veg' | 'veg_with_eggs',
         style: preferences.style as 'health' | 'regular',
       });
       const components = await mealComponentRepository.getComponents({
@@ -1539,7 +1539,7 @@ async function handleAwaitingPreferenceStyle(
 
     const weeklyPlan = buildPlanFromComponents(candidateDishes, {
       cuisine: state.cuisinePreference ?? 'both',
-      diet: state.dietPreference ?? 'both',
+      diet: state.dietPreference ?? 'veg',
     });
     const weeklyPlanStartDate = getCurrentWeekMondayISO();
 

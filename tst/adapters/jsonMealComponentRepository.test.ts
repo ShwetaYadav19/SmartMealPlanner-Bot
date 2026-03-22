@@ -112,9 +112,11 @@ describe('JsonMealComponentRepository', () => {
     veg.forEach((c) => expect(c.diet).toBe('veg'));
   });
 
-  it('returns all diets when diet filter is "both"', async () => {
-    const components = await repo.getComponents({ diet: 'both' });
-    expect(components).toHaveLength(fixtureComponents.length);
+  it('returns veg and egg components when diet filter is "veg_with_eggs"', async () => {
+    const components = await repo.getComponents({ diet: 'veg_with_eggs' });
+    for (const c of components) {
+      expect(c.diet === 'veg' || c.keyIngredient === 'egg').toBe(true);
+    }
   });
 
   it('filters by style', async () => {

@@ -20,8 +20,8 @@ const cuisineArb = fc.constantFrom<'north_indian' | 'south_indian' | 'both'>(
   'north_indian', 'south_indian', 'both',
 );
 
-const dietArb = fc.constantFrom<'veg' | 'non_veg' | 'both'>(
-  'veg', 'non_veg', 'both',
+const dietArb = fc.constantFrom<'veg' | 'non_veg' | 'veg_with_eggs'>(
+  'veg', 'non_veg', 'veg_with_eggs',
 );
 
 const styleArb = fc.constantFrom<'health' | 'regular'>(
@@ -295,13 +295,17 @@ describe('(Feature: smart-meal-planner-workflow, Property 23: Same-day deduplica
         // Compute pool sizes per category for each slot to determine the exception.
         // This mirrors the filtering logic inside composeMeal:
         //   1. Filter by slot and cuisine
-        //   2. Apply diet filtering (only for strict veg, not 'both' or 'non_veg')
+        //   2. Apply diet filtering (only for strict veg or veg_with_eggs, not 'non_veg')
         const getPoolSize = (slot: 'lunch' | 'dinner', category: 'gravy' | 'dry_veggie'): number => {
           const slotCuisineFiltered = components.filter(
             c => c.category === category && c.slots.includes(slot) && c.cuisine.includes(resolvedCuisine),
           );
-          // Diet filtering: only applied for strict veg (not 'both', not 'non_veg')
-          if (diet && diet !== 'both' && diet !== 'non_veg') {
+          // Diet filtering: only applied for strict veg (not 'non_veg')
+          if (diet && diet !== 'non_veg') {
+            if (diet === 'veg_with_eggs') {
+              const dietFiltered = slotCuisineFiltered.filter(c => c.diet === 'veg' || c.keyIngredient === 'egg');
+              return dietFiltered.length > 0 ? dietFiltered.length : slotCuisineFiltered.length;
+            }
             const dietFiltered = slotCuisineFiltered.filter(c => c.diet === diet);
             return dietFiltered.length > 0 ? dietFiltered.length : slotCuisineFiltered.length;
           }

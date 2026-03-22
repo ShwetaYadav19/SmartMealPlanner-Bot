@@ -128,7 +128,7 @@ const alternativesArb: fc.Arbitrary<(Meal | ComposedMeal)[]> = fc.array(
 );
 
 const cuisinePrefArb = fc.constantFrom<'north_indian' | 'south_indian' | 'both'>('north_indian', 'south_indian', 'both');
-const dietPrefArb = fc.constantFrom<'veg' | 'non_veg' | 'both'>('veg', 'non_veg', 'both');
+const dietPrefArb = fc.constantFrom<'veg' | 'non_veg' | 'veg_with_eggs'>('veg', 'non_veg', 'veg_with_eggs');
 const previewStepArb: fc.Arbitrary<PreviewStep> = fc.constantFrom('breakfast', 'base', 'gravy', 'dry_veggie', 'side', 'confirm');
 
 const isoDateArb = fc.date({ min: new Date('2024-01-01'), max: new Date('2025-12-31') }).map(

@@ -12,7 +12,7 @@
   {
     "id": "diet-filter",
     "name": "Diet Preference Filter",
-    "description": "Only include meals and components that match the user's diet preference. When the user likes both diets, all items are included.",
+    "description": "Only include meals and components that match the user's diet preference. Veg+Eggs users see veg items plus egg-only items.",
     "scope": "all_slots",
     "action": "filter",
     "conditions": {
