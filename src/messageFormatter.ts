@@ -50,6 +50,9 @@ import {
   ADHOC_MENU_HEADER,
   FOOTER_HINT,
   DAILY_REMINDER_HINT,
+  PAYMENT_PROMPT,
+  PAYMENT_PENDING_MSG,
+  PAYMENT_SUCCESS_MSG,
 } from './messages';
 
 export interface FormattedMessage {
@@ -611,6 +614,32 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
 
     case ResponseType.ERROR:
       return { text: GENERIC_ERROR, buttons: ADHOC_MENU_BUTTONS };
+
+    case ResponseType.PAYMENT_PROMPT: {
+      const paymentLink = data?.paymentLink;
+      return {
+        text: PAYMENT_PROMPT(paymentLink),
+        buttons: [{ id: 'check_payment', title: "I've Paid ✅" }],
+      };
+    }
+
+    case ResponseType.PAYMENT_PENDING:
+      return {
+        text: PAYMENT_PENDING_MSG,
+        buttons: [{ id: 'check_payment', title: "I've Paid ✅" }],
+      };
+
+    case ResponseType.PAYMENT_SUCCESS:
+      return {
+        text: PAYMENT_SUCCESS_MSG,
+        buttons: ADHOC_MENU_BUTTONS,
+      };
+
+    case ResponseType.SUBSCRIPTION_EXPIRED:
+      return {
+        text: '⚠️ Your subscription has expired. Please renew to continue using SmartMealPlanner.\n\nSubscribe for just *₹49/month* with UPI AutoPay.',
+        buttons: [{ id: 'check_payment', title: 'Renew ✅' }],
+      };
 
     default:
       return { text: GENERIC_ERROR };

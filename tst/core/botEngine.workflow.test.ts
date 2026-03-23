@@ -36,20 +36,36 @@ describe('E2E: onboarding → change plan → few meals → done', () => {
     expect(r3.updatedState.conversationState).toBe('awaiting_meal_style');
     expect(r3.updatedState.dietPreference).toBe('veg');
 
-    // 4. User selects style (regular) → gets WEEKLY_PLAN directly
+    // 4. User selects style (regular) → gets PAYMENT_PROMPT
     const r4 = await processIntent(
       { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' },
       r3.updatedState, mealRepo, mealComponentRepo,
     );
-    expect(r4.response.type).toBe(ResponseType.WEEKLY_PLAN);
-    expect(r4.updatedState.conversationState).toBe('main_menu');
-    expect(r4.updatedState.onboardingComplete).toBe(true);
+    expect(r4.response.type).toBe(ResponseType.PAYMENT_PROMPT);
+    expect(r4.updatedState.conversationState).toBe('awaiting_payment');
     expect(r4.updatedState.mealStyle).toBe('regular');
-    expect(r4.updatedState.weeklyPlan).toBeDefined();
-    expect(r4.updatedState.weeklyPlan!.length).toBe(7);
-    expect(r4.response.data?.weeklyPlan).toBeDefined();
+
+    // 4b. Simulate payment success — give active subscription and re-select style
+    const stateWithSub = {
+      ...r3.updatedState,
+      subscription: {
+        status: 'active' as const,
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    };
+    const r4b = await processIntent(
+      { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' },
+      stateWithSub, mealRepo, mealComponentRepo,
+    );
+    expect(r4b.response.type).toBe(ResponseType.WEEKLY_PLAN);
+    expect(r4b.updatedState.conversationState).toBe('main_menu');
+    expect(r4b.updatedState.onboardingComplete).toBe(true);
+    expect(r4b.updatedState.mealStyle).toBe('regular');
+    expect(r4b.updatedState.weeklyPlan).toBeDefined();
+    expect(r4b.updatedState.weeklyPlan!.length).toBe(7);
+    expect(r4b.response.data?.weeklyPlan).toBeDefined();
     // Verify each day has breakfast, lunch, dinner
-    for (const day of r4.updatedState.weeklyPlan!) {
+    for (const day of r4b.updatedState.weeklyPlan!) {
       expect(day.breakfast).toBeDefined();
       expect(day.lunch).toBeDefined();
       expect(day.dinner).toBeDefined();
@@ -58,7 +74,7 @@ describe('E2E: onboarding → change plan → few meals → done', () => {
     // 5. User selects CHANGE_PLAN → gets CHANGE_PLAN_MENU
     const r8 = await processIntent(
       { intent: Intent.CHANGE_PLAN },
-      r4.updatedState, mealRepo, mealComponentRepo,
+      r4b.updatedState, mealRepo, mealComponentRepo,
     );
     expect(r8.response.type).toBe(ResponseType.CHANGE_PLAN_MENU);
     expect(r8.updatedState.conversationState).toBe('change_plan_menu');
@@ -153,24 +169,39 @@ describe('E2E: main menu → change plan → entire plan → accept', () => {
     );
     expect(r3.response.type).toBe(ResponseType.ONBOARDING_STYLE_PROMPT);
 
-    // 4. Select style → WEEKLY_PLAN directly (no dish preview)
+    // 4. Select style → PAYMENT_PROMPT (paywall)
     const r4 = await processIntent(
       { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' },
       r3.updatedState, mealRepo, mealComponentRepo,
     );
-    expect(r4.response.type).toBe(ResponseType.WEEKLY_PLAN);
-    expect(r4.updatedState.conversationState).toBe('main_menu');
-    expect(r4.updatedState.weeklyPlan).toBeDefined();
-    expect(r4.updatedState.weeklyPlan!.length).toBe(7);
+    expect(r4.response.type).toBe(ResponseType.PAYMENT_PROMPT);
+    expect(r4.updatedState.conversationState).toBe('awaiting_payment');
 
-    const originalPlan = r4.updatedState.weeklyPlan!;
+    // 4b. Simulate active subscription and re-select style
+    const stateWithSub = {
+      ...r3.updatedState,
+      subscription: {
+        status: 'active' as const,
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    };
+    const r4b = await processIntent(
+      { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' },
+      stateWithSub, mealRepo, mealComponentRepo,
+    );
+    expect(r4b.response.type).toBe(ResponseType.WEEKLY_PLAN);
+    expect(r4b.updatedState.conversationState).toBe('main_menu');
+    expect(r4b.updatedState.weeklyPlan).toBeDefined();
+    expect(r4b.updatedState.weeklyPlan!.length).toBe(7);
+
+    const originalPlan = r4b.updatedState.weeklyPlan!;
 
     // --- Change Plan → Entire Plan flow ---
 
     // 5. User selects CHANGE_PLAN → CHANGE_PLAN_MENU
     const r8 = await processIntent(
       { intent: Intent.CHANGE_PLAN },
-      r4.updatedState, mealRepo, mealComponentRepo,
+      r4b.updatedState, mealRepo, mealComponentRepo,
     );
     expect(r8.response.type).toBe(ResponseType.CHANGE_PLAN_MENU);
     expect(r8.updatedState.conversationState).toBe('change_plan_menu');
@@ -271,21 +302,35 @@ describe('E2E: main menu → change plan → change preferences → new plan', (
       { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' },
       r3.updatedState, mealRepo, mealComponentRepo,
     );
-    expect(r4.response.type).toBe(ResponseType.WEEKLY_PLAN);
-    expect(r4.updatedState.conversationState).toBe('main_menu');
-    expect(r4.updatedState.weeklyPlan).toBeDefined();
-    expect(r4.updatedState.weeklyPlan!.length).toBe(7);
-    expect(r4.updatedState.cuisinePreference).toBe('north_indian');
-    expect(r4.updatedState.dietPreference).toBe('veg');
+    expect(r4.response.type).toBe(ResponseType.PAYMENT_PROMPT);
 
-    const originalPlan = r4.updatedState.weeklyPlan!;
+    // Simulate active subscription
+    const stateWithSub = {
+      ...r3.updatedState,
+      subscription: {
+        status: 'active' as const,
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    };
+    const r4b = await processIntent(
+      { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' },
+      stateWithSub, mealRepo, mealComponentRepo,
+    );
+    expect(r4b.response.type).toBe(ResponseType.WEEKLY_PLAN);
+    expect(r4b.updatedState.conversationState).toBe('main_menu');
+    expect(r4b.updatedState.weeklyPlan).toBeDefined();
+    expect(r4b.updatedState.weeklyPlan!.length).toBe(7);
+    expect(r4b.updatedState.cuisinePreference).toBe('north_indian');
+    expect(r4b.updatedState.dietPreference).toBe('veg');
+
+    const originalPlan = r4b.updatedState.weeklyPlan!;
 
     // --- Phase 2: Change Plan → Change Preferences ---
 
     // User selects CHANGE_PLAN → CHANGE_PLAN_MENU
     const rCP = await processIntent(
       { intent: Intent.CHANGE_PLAN },
-      r4.updatedState, mealRepo, mealComponentRepo,
+      r4b.updatedState, mealRepo, mealComponentRepo,
     );
     expect(rCP.response.type).toBe(ResponseType.CHANGE_PLAN_MENU);
     expect(rCP.updatedState.conversationState).toBe('change_plan_menu');
@@ -406,12 +451,26 @@ describe('E2E: adhoc menu routing', () => {
       { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' },
       r3.updatedState, mealRepo, mealComponentRepo,
     );
-    expect(r4.response.type).toBe(ResponseType.WEEKLY_PLAN);
-    expect(r4.updatedState.conversationState).toBe('main_menu');
-    expect(r4.updatedState.weeklyPlan).toBeDefined();
-    expect(r4.updatedState.weeklyPlan!.length).toBe(7);
+    expect(r4.response.type).toBe(ResponseType.PAYMENT_PROMPT);
 
-    const mainMenuState = r4.updatedState;
+    // Simulate active subscription
+    const stateWithSub2 = {
+      ...r3.updatedState,
+      subscription: {
+        status: 'active' as const,
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    };
+    const r4b = await processIntent(
+      { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' },
+      stateWithSub2, mealRepo, mealComponentRepo,
+    );
+    expect(r4b.response.type).toBe(ResponseType.WEEKLY_PLAN);
+    expect(r4b.updatedState.conversationState).toBe('main_menu');
+    expect(r4b.updatedState.weeklyPlan).toBeDefined();
+    expect(r4b.updatedState.weeklyPlan!.length).toBe(7);
+
+    const mainMenuState = r4b.updatedState;
 
     // --- Phase 2: Send ADHOC_MENU intent ---
 

@@ -7,6 +7,7 @@ import { JsonMealRepository } from '../adapters/jsonMealRepository';
 import { JsonMealComponentRepository } from '../adapters/jsonMealComponentRepository';
 import { JsonRulesRepository } from '../adapters/jsonRulesRepository';
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
+import { RazorpayPaymentProvider } from '../adapters/razorpayPaymentProvider';
 import { mapWhatsAppToIntent } from '../intentMapper';
 import { processIntent } from '../core/botEngine';
 import { formatBotResponse, type FormattedMessage } from '../messageFormatter';
@@ -136,6 +137,11 @@ export async function webhookHandler(
     const mealRepo = new JsonMealRepository();
     const mealComponentRepo = new JsonMealComponentRepository();
     const rulesRepo = new JsonRulesRepository();
+    const paymentProvider = new RazorpayPaymentProvider(
+      config.razorpayKeyId,
+      config.razorpayKeySecret,
+      config.razorpayPlanId,
+    );
     const messagingProvider = new TwilioMessagingProvider(
       config.twilioAccountSid,
       config.twilioAuthToken,
@@ -157,7 +163,7 @@ export async function webhookHandler(
     console.log('[webhook]', phoneNumber, 'state:', conversationState, 'intent:', intent.intent, 'payload:', intent.payload ?? '-');
 
     // 9. Process intent through BotEngine
-    const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, phoneNumber, rulesRepo);
+    const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, phoneNumber, rulesRepo, paymentProvider);
 
     console.log('[webhook]', phoneNumber, 'response:', result.response.type, 'newState:', result.updatedState.conversationState);
 

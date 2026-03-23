@@ -28,7 +28,28 @@ export class TwilioMessagingProvider implements MessagingProvider {
     this.senderNumber = senderNumber;
   }
 
-  async sendTextMessage(to: string, body: string): Promise<void> {
+  async sendTextMessage(to: string, body: string, contentSid?: string, contentVariables?: Record<string, string>): Promise<void> {
+    // For out-of-session messages, use a pre-approved template if provided
+    if (contentSid) {
+      try {
+        const params: Record<string, unknown> = {
+          from: `whatsapp:${this.senderNumber}`,
+          to: `whatsapp:${to}`,
+          contentSid,
+        };
+        if (contentVariables && Object.keys(contentVariables).length > 0) {
+          params.contentVariables = JSON.stringify(contentVariables);
+        }
+        await this.client.messages.create(params as any);
+        return;
+      } catch (error: unknown) {
+        const errMsg = error instanceof Error ? error.message : String(error);
+        console.warn(
+          `Template send failed contentSid="${contentSid}" to="whatsapp:${to}": ${errMsg}. Falling back to freeform.`,
+        );
+      }
+    }
+
     const MAX_LEN = 1500; // Twilio WhatsApp enforces 1600-char limit per message
     if (body.length <= MAX_LEN) {
       await this.client.messages.create({
@@ -85,6 +106,7 @@ export class TwilioMessagingProvider implements MessagingProvider {
     buttons: ButtonOption[],
     contentSid?: string,
     listItemCount?: number,
+    contentVariables?: Record<string, string>,
   ): Promise<void> {
     const from = `whatsapp:${this.senderNumber}`;
     const toWhatsApp = `whatsapp:${to}`;
@@ -92,11 +114,15 @@ export class TwilioMessagingProvider implements MessagingProvider {
     // If a pre-approved contentSid is provided (e.g. for out-of-session reminders), use it directly
     if (contentSid) {
       try {
-        await this.client.messages.create({
+        const params: Record<string, unknown> = {
           from,
           to: toWhatsApp,
           contentSid,
-        });
+        };
+        if (contentVariables && Object.keys(contentVariables).length > 0) {
+          params.contentVariables = JSON.stringify(contentVariables);
+        }
+        await this.client.messages.create(params as any);
         return;
       } catch (error: unknown) {
         const errMsg = error instanceof Error ? error.message : String(error);

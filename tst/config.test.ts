@@ -10,6 +10,9 @@ describe('loadConfig', () => {
     TWILIO_ACCOUNT_SID: 'AC_test_sid',
     TWILIO_AUTH_TOKEN: 'test_auth_token',
     TWILIO_SENDER_NUMBER: '+17655483740',
+    RAZORPAY_KEY_ID: 'rzp_test_key',
+    RAZORPAY_KEY_SECRET: 'rzp_test_secret',
+    RAZORPAY_PLAN_ID: 'plan_test_49',
   };
 
   beforeEach(() => {

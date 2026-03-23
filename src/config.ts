@@ -8,6 +8,9 @@ export interface Config {
   twilioSenderNumber: string;
   awsAccountId: string;
   templateSidOverrides: Record<string, string>;
+  razorpayKeyId: string;
+  razorpayKeySecret: string;
+  razorpayPlanId: string;
 }
 
 const REQUIRED_VARS = [
@@ -16,6 +19,9 @@ const REQUIRED_VARS = [
   'TWILIO_ACCOUNT_SID',
   'TWILIO_AUTH_TOKEN',
   'TWILIO_SENDER_NUMBER',
+  'RAZORPAY_KEY_ID',
+  'RAZORPAY_KEY_SECRET',
+  'RAZORPAY_PLAN_ID',
 ] as const;
 
 const TEMPLATE_SID_PREFIX = 'TWILIO_TEMPLATE_SID_';
@@ -46,5 +52,8 @@ export function loadConfig(): Config {
     twilioSenderNumber: process.env.TWILIO_SENDER_NUMBER!,
     awsAccountId: process.env.AWS_ACCOUNT_ID || '713170882602',
     templateSidOverrides: loadTemplateSidOverrides(),
+    razorpayKeyId: process.env.RAZORPAY_KEY_ID!,
+    razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET!,
+    razorpayPlanId: process.env.RAZORPAY_PLAN_ID!,
   };
 }

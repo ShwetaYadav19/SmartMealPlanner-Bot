@@ -10,6 +10,7 @@
  *
  * Required env vars for Lambda config:
  *   TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SENDER_NUMBER
+ *   RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, RAZORPAY_PLAN_ID
  * Optional: TWILIO_TEMPLATE_SID_* overrides
  */
 
@@ -60,6 +61,7 @@ const TABLE_NAME = `MealPlannerUsers-${stage}`;
 const WEBHOOK_FN = `MealPlannerWebhook-${stage}`;
 const DAILY_FN = `MealPlannerDailyReminder-${stage}`;
 const WEEKLY_FN = `MealPlannerWeeklyReminder-${stage}`;
+const PAYMENT_WEBHOOK_FN = `MealPlannerPaymentWebhook-${stage}`;
 const API_NAME = `MealPlannerAPI-${stage}`;
 const ROLE_NAME = `MealPlannerLambdaRole-${stage}`;
 const DAILY_RULE = `MealPlannerDailyReminder-${stage}`;
@@ -70,6 +72,7 @@ const LAMBDA_DEFS = [
   { name: WEBHOOK_FN, handler: 'handlers/webhookHandler.webhookHandler', src: 'webhookHandler.js' },
   { name: DAILY_FN, handler: 'handlers/dailyReminderHandler.dailyReminderHandler', src: 'dailyReminderHandler.js' },
   { name: WEEKLY_FN, handler: 'handlers/weeklyReminderHandler.weeklyReminderHandler', src: 'weeklyReminderHandler.js' },
+  { name: PAYMENT_WEBHOOK_FN, handler: 'handlers/paymentWebhookHandler.paymentWebhookHandler', src: 'paymentWebhookHandler.js' },
 ];
 
 // AWS clients
@@ -95,6 +98,9 @@ function getLambdaEnvVars() {
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID || '',
     TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN || '',
     TWILIO_SENDER_NUMBER: process.env.TWILIO_SENDER_NUMBER || '',
+    RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID || '',
+    RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET || '',
+    RAZORPAY_PLAN_ID: process.env.RAZORPAY_PLAN_ID || '',
   };
   // Pass through all TWILIO_TEMPLATE_SID_* overrides
   for (const [key, value] of Object.entries(process.env)) {
@@ -392,6 +398,72 @@ async function ensureApiGateway() {
     }
   }
 
+  // --- /payment-webhook resource ---
+  let paymentResource = resources.items.find((r) => r.path === '/payment-webhook');
+  if (!paymentResource) {
+    const resp = await apigw.send(new CreateResourceCommand({
+      restApiId: apiId,
+      parentId: rootResource.id,
+      pathPart: 'payment-webhook',
+    }));
+    paymentResource = resp;
+    log('Created /payment-webhook resource.');
+  }
+
+  // Create POST method on /payment-webhook
+  try {
+    await apigw.send(new PutMethodCommand({
+      restApiId: apiId,
+      resourceId: paymentResource.id,
+      httpMethod: 'POST',
+      authorizationType: 'NONE',
+    }));
+  } catch (err) {
+    if (err.name !== 'ConflictException') throw err;
+  }
+
+  // Integrate with payment webhook Lambda
+  const paymentLambdaArn = `arn:aws:lambda:${REGION}:${AWS_ACCOUNT_ID}:function:${PAYMENT_WEBHOOK_FN}`;
+  const paymentIntegrationUri = `arn:aws:apigateway:${REGION}:lambda:path/2015-03-31/functions/${paymentLambdaArn}/invocations`;
+
+  await apigw.send(new PutIntegrationCommand({
+    restApiId: apiId,
+    resourceId: paymentResource.id,
+    httpMethod: 'POST',
+    type: 'AWS_PROXY',
+    integrationHttpMethod: 'POST',
+    uri: paymentIntegrationUri,
+  }));
+
+  // Grant API Gateway permission to invoke the payment Lambda
+  const paymentStatementId = `apigateway-payment-invoke-${stage}`;
+  try {
+    await lambdaClient.send(new GetPolicyCommand({ FunctionName: PAYMENT_WEBHOOK_FN }));
+    try {
+      await lambdaClient.send(new AddPermissionCommand({
+        FunctionName: PAYMENT_WEBHOOK_FN,
+        StatementId: paymentStatementId,
+        Action: 'lambda:InvokeFunction',
+        Principal: 'apigateway.amazonaws.com',
+        SourceArn: `arn:aws:execute-api:${REGION}:${AWS_ACCOUNT_ID}:${apiId}/*/*/payment-webhook`,
+      }));
+    } catch (permErr) {
+      if (permErr.name !== 'ResourceConflictException') throw permErr;
+    }
+  } catch (err) {
+    if (err.name === 'ResourceNotFoundException') {
+      await lambdaClient.send(new AddPermissionCommand({
+        FunctionName: PAYMENT_WEBHOOK_FN,
+        StatementId: paymentStatementId,
+        Action: 'lambda:InvokeFunction',
+        Principal: 'apigateway.amazonaws.com',
+        SourceArn: `arn:aws:execute-api:${REGION}:${AWS_ACCOUNT_ID}:${apiId}/*/*/payment-webhook`,
+      }));
+    } else {
+      throw err;
+    }
+  }
+
   // Deploy to stage
   await apigw.send(new CreateDeploymentCommand({
     restApiId: apiId,
@@ -400,7 +472,9 @@ async function ensureApiGateway() {
   }));
 
   const endpoint = `https://${apiId}.execute-api.${REGION}.amazonaws.com/${stage}/webhook`;
+  const paymentEndpoint = `https://${apiId}.execute-api.${REGION}.amazonaws.com/${stage}/payment-webhook`;
   log(`API Gateway deployed: ${endpoint}`);
+  log(`Payment webhook: ${paymentEndpoint}`);
   return endpoint;
 }
 

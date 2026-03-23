@@ -42,6 +42,18 @@ export const INVALID_INPUT = `Please select one of the options below 👇`;
 export const GENERIC_ERROR = `Something went wrong, please try again 🙏`;
 export const INVALID_PHONE = `Please enter a valid WhatsApp number with country code (e.g., +91XXXXXXXXXX) 📱`;
 
+// --- Payment ---
+export const PAYMENT_PROMPT = (paymentLink?: string) => {
+  let text = `🎉 Great, your preferences are saved!\n\nTo unlock your personalized weekly meal plans, subscribe for just *₹49/month* with UPI AutoPay.\n`;
+  if (paymentLink) {
+    text += `\n👉 Pay here: ${paymentLink}\n`;
+  }
+  text += `\nAfter payment, tap *"I've Paid"* to get your first meal plan! 🍽️`;
+  return text;
+};
+export const PAYMENT_PENDING_MSG = `⏳ Payment not received yet.\n\nPlease complete the payment using the link above, then tap *"I've Paid"* to continue.`;
+export const PAYMENT_SUCCESS_MSG = `✅ Payment successful! Your subscription is now active.\nLet's generate your first meal plan! 🎉`;
+
 // --- Cook Number Onboarding ---
 export const COOK_NUMBER_ONBOARDING_PROMPT = `Would you like to add your cook's WhatsApp number? 👨‍🍳\nThis lets you send meal plans directly to your cook.\n\nEnter the number with country code (e.g., +91XXXXXXXXXX) or tap Skip to continue.`;
 export const COOK_NUMBER_SKIP_BUTTON = `Skip`;

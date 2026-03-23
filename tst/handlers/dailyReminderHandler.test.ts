@@ -101,11 +101,21 @@ describe('dailyReminderHandler', () => {
 
       await dailyReminderHandler(scheduledEvent);
 
-      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-      const [to, text] = mockSendButtonMessage.mock.calls[0];
+      // Template message sent via sendTextMessage with contentSid + contentVariables
+      expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
+      const [to, , contentSid, contentVars] = mockSendTextMessage.mock.calls[0];
       expect(to).toBe('+919876543210');
-      // Daily reminder text should contain emoji formatting
-      expect(text).toMatch(/🍽️/);
+      expect(contentSid).toBe('HX708fce9ebb60de686f73731e071aa8cb');
+      expect(contentVars).toEqual({
+        '1': 'Thursday Breakfast',
+        '2': 'Thursday Lunch',
+        '3': 'Thursday Dinner',
+      });
+
+      // Follow-up grocery prompt sent as in-session button message
+      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
+      const [, groceryText] = mockSendButtonMessage.mock.calls[0];
+      expect(groceryText).toMatch(/grocery/i);
     } finally {
       vi.useRealTimers();
     }
@@ -164,22 +174,22 @@ describe('dailyReminderHandler', () => {
       const user2 = makeOnboardedUser('+912222222222', true);
       mockScanOnboardedUsers.mockResolvedValue([user1, user2]);
 
-      // First call fails, second succeeds
-      mockSendButtonMessage
+      // First template send fails, second succeeds
+      mockSendTextMessage
         .mockRejectedValueOnce(new Error('Twilio error'))
         .mockResolvedValueOnce(undefined);
 
       await dailyReminderHandler(scheduledEvent);
 
-      // Should have attempted both users
-      expect(mockSendButtonMessage).toHaveBeenCalledTimes(2);
-      expect(mockSendButtonMessage.mock.calls[1][0]).toBe('+912222222222');
+      // Should have attempted both users (template send)
+      expect(mockSendTextMessage).toHaveBeenCalledTimes(2);
+      expect(mockSendTextMessage.mock.calls[1][0]).toBe('+912222222222');
     } finally {
       vi.useRealTimers();
     }
   });
 
-  it('sends button messages (not text) for DAILY_REMINDER', async () => {
+  it('sends template then grocery buttons for DAILY_REMINDER', async () => {
     // Set to Wednesday so tomorrow (Thursday) = index 3, within plan
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
@@ -189,9 +199,11 @@ describe('dailyReminderHandler', () => {
 
       await dailyReminderHandler(scheduledEvent);
 
-      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-      expect(mockSendTextMessage).not.toHaveBeenCalled();
+      // Template sent via sendTextMessage
+      expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
 
+      // Grocery prompt sent as in-session button message
+      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
       const [, , buttons] = mockSendButtonMessage.mock.calls[0];
       expect(buttons).toEqual(
         expect.arrayContaining([

@@ -9,6 +9,7 @@ import { loadConfig } from '../config';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
 import { getCurrentWeekMondayISO } from '../core/botEngine';
+import { getTemplateSid } from '../messages';
 
 // Minimal EventBridge scheduled event type
 interface ScheduledEvent {
@@ -47,17 +48,23 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
         };
       }
 
-      // Format and send
+      // Format and send using pre-approved template (out-of-session)
       const formatted = formatBotResponse(response);
+      const templateSid = getTemplateSid('weekly_reminder');
 
       if (formatted.buttons && formatted.buttons.length > 0) {
         await messagingProvider.sendButtonMessage(
           user.phoneNumber,
           formatted.text,
           formatted.buttons,
+          templateSid,
         );
       } else {
-        await messagingProvider.sendTextMessage(user.phoneNumber, formatted.text);
+        await messagingProvider.sendTextMessage(
+          user.phoneNumber,
+          formatted.text,
+          templateSid,
+        );
       }
 
       // Send follow-up messages (e.g. grocery/change buttons after plan text)
@@ -68,9 +75,14 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
               user.phoneNumber,
               followUpMsg.text,
               followUpMsg.buttons,
+              templateSid,
             );
           } else {
-            await messagingProvider.sendTextMessage(user.phoneNumber, followUpMsg.text);
+            await messagingProvider.sendTextMessage(
+              user.phoneNumber,
+              followUpMsg.text,
+              templateSid,
+            );
           }
         }
       }

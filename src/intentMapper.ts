@@ -98,6 +98,8 @@ export function mapWhatsAppToIntent(
         return { intent: Intent.DAILY_GROCERY_YES };
       case 'daily_grocery_no':
         return { intent: Intent.DAILY_GROCERY_NO };
+      case 'check_payment':
+        return { intent: Intent.CHECK_PAYMENT_STATUS };
       case 'daily_cook_yes':
         return { intent: Intent.DAILY_COOK_YES };
       case 'daily_cook_no':
@@ -220,6 +222,13 @@ export function mapWhatsAppToIntent(
   if (conversationState === 'regenerate_plan_menu') {
     if (text === '1' || text === 'keep' || text === 'keep preferences') return { intent: Intent.KEEP_PREFERENCES };
     if (text === '2' || text === 'change' || text === 'change preferences') return { intent: Intent.CHANGE_PREFERENCE };
+  }
+
+  // Payment status check via text
+  if (conversationState === 'awaiting_payment') {
+    if (text === '1' || text === 'done' || text === 'paid' || text === 'check' || text === 'check payment' || text === 'i have paid') {
+      return { intent: Intent.CHECK_PAYMENT_STATUS };
+    }
   }
 
   // Daily grocery prompt — yes/no via text

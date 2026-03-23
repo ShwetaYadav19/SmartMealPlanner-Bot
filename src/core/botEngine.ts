@@ -1,7 +1,7 @@
 // BotEngine — intent-based conversation engine
 // Zero imports from adapters, WhatsApp, Twilio, or AWS modules
 
-import type { MealRepository, MealComponentRepository, RulesRepository } from './ports';
+import type { MealRepository, MealComponentRepository, RulesRepository, PaymentProvider } from './ports';
 import {
   Intent,
   ResponseType,
@@ -15,6 +15,7 @@ import {
   type Meal,
   type ComposedMeal,
   type DayPlan,
+  type SubscriptionInfo,
 } from './types';
 import { generateWeeklyPlan, extractTomorrowPlan, swapTomorrowLunch, generateAlternatives, regenerateWeeklyPlan } from './planGenerator';
 import { generateGroceryList } from './groceryListGenerator';
@@ -170,50 +171,47 @@ async function handleAwaitingMealStyle(
   mealRepository: MealRepository,
   mealComponentRepository: MealComponentRepository,
   mealSelector?: MealSelector,
+  paymentProvider?: PaymentProvider,
 ): Promise<BotResult> {
   if (intent.intent === Intent.SELECT_MEAL_STYLE && intent.payload) {
-    const preferences = {
-      cuisine: state.cuisinePreference ?? 'both',
-      diet: state.dietPreference ?? 'veg',
-      style: intent.payload as string,
-    };
-    console.log('[botEngine] handleAwaitingMealStyle preferences:', JSON.stringify(preferences));
-    const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
-    const candidateDishes = await generateCandidateDishes(
-      deps,
-      preferences,
-      state.excludedDishIds ?? [],
-      mealSelector,
-    );
-    console.log('[botEngine] candidateDishes: breakfasts=%d, lunchCats=%s, dinnerCats=%s',
-      candidateDishes.breakfasts.length,
-      Object.entries(candidateDishes.lunchComponents).map(([k, v]) => `${k}:${(v as any[]).length}`).join(','),
-      Object.entries(candidateDishes.dinnerComponents).map(([k, v]) => `${k}:${(v as any[]).length}`).join(','),
-    );
-
-    // Build weekly plan directly from candidates — no dish review step
-    const weeklyPlan = buildPlanFromComponents(candidateDishes, {
-      cuisine: state.cuisinePreference ?? 'both',
-      diet: state.dietPreference ?? 'veg',
-    });
-    const weeklyPlanStartDate = getCurrentWeekMondayISO();
-
     const updatedState: UserState = {
       ...state,
       mealStyle: intent.payload as UserState['mealStyle'],
-      onboardingComplete: true,
-      conversationState: 'main_menu',
-      weeklyPlan,
-      weeklyPlanStartDate,
-      candidateDishes: undefined,
-      previewStep: undefined,
+      conversationState: 'awaiting_payment',
     };
 
+    // If user already has an active subscription, skip payment
+    if (hasActiveSubscription(state)) {
+      return generatePlanAfterPayment(updatedState, mealRepository, mealComponentRepository, mealSelector);
+    }
+
+    // Create a Razorpay subscription and send payment link
+    if (paymentProvider) {
+      try {
+        const { subscriptionId, paymentLink } = await paymentProvider.createSubscription(state.phoneNumber);
+        updatedState.subscription = {
+          status: 'pending',
+          razorpaySubscriptionId: subscriptionId,
+          createdAt: new Date().toISOString(),
+        };
+        return {
+          response: {
+            type: ResponseType.PAYMENT_PROMPT,
+            data: { paymentLink, subscriptionAmount: '₹49/month' },
+          },
+          updatedState,
+        };
+      } catch (err) {
+        console.error('[botEngine] Failed to create subscription:', err);
+        // Fall through to payment prompt without link
+      }
+    }
+
+    // No payment provider or creation failed — prompt with generic message
     return {
       response: {
-        type: ResponseType.WEEKLY_PLAN,
-        data: { weeklyPlan },
-        suggestedActions: WEEKLY_PLAN_OPTIONS,
+        type: ResponseType.PAYMENT_PROMPT,
+        data: { subscriptionAmount: '₹49/month' },
       },
       updatedState,
     };
@@ -227,6 +225,107 @@ async function handleAwaitingMealStyle(
     updatedState: state,
   };
 }
+// --- Subscription helpers ---
+
+function hasActiveSubscription(state: UserState): boolean {
+  if (!state.subscription) return false;
+  if (state.subscription.status !== 'active') return false;
+  if (state.subscription.currentPeriodEnd) {
+    return new Date(state.subscription.currentPeriodEnd) > new Date();
+  }
+  return true;
+}
+
+async function generatePlanAfterPayment(
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
+): Promise<BotResult> {
+  const preferences = {
+    cuisine: state.cuisinePreference ?? 'both',
+    diet: state.dietPreference ?? 'veg',
+    style: state.mealStyle ?? 'regular',
+  };
+  const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
+  const candidateDishes = await generateCandidateDishes(
+    deps,
+    preferences,
+    state.excludedDishIds ?? [],
+    mealSelector,
+  );
+
+  const weeklyPlan = buildPlanFromComponents(candidateDishes, {
+    cuisine: state.cuisinePreference ?? 'both',
+    diet: state.dietPreference ?? 'veg',
+  });
+  const weeklyPlanStartDate = getCurrentWeekMondayISO();
+
+  const updatedState: UserState = {
+    ...state,
+    onboardingComplete: true,
+    conversationState: 'main_menu',
+    weeklyPlan,
+    weeklyPlanStartDate,
+    candidateDishes: undefined,
+    previewStep: undefined,
+  };
+
+  return {
+    response: {
+      type: ResponseType.WEEKLY_PLAN,
+      data: { weeklyPlan },
+      suggestedActions: WEEKLY_PLAN_OPTIONS,
+    },
+    updatedState,
+  };
+}
+
+async function handleAwaitingPayment(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
+  paymentProvider?: PaymentProvider,
+): Promise<BotResult> {
+  // User taps "Check Payment Status" or sends any message while awaiting payment
+  if (intent.intent === Intent.CHECK_PAYMENT_STATUS && paymentProvider && state.subscription?.razorpaySubscriptionId) {
+    try {
+      const subStatus = await paymentProvider.getSubscriptionStatus(state.subscription.razorpaySubscriptionId);
+      if (subStatus.status === 'active') {
+        const updatedState: UserState = {
+          ...state,
+          subscription: {
+            ...state.subscription,
+            status: 'active',
+            currentPeriodEnd: subStatus.currentPeriodEnd,
+          },
+        };
+        return generatePlanAfterPayment(updatedState, mealRepository, mealComponentRepository, mealSelector);
+      }
+
+      // Still pending
+      return {
+        response: {
+          type: ResponseType.PAYMENT_PENDING,
+        },
+        updatedState: state,
+      };
+    } catch (err) {
+      console.error('[botEngine] Failed to check subscription status:', err);
+    }
+  }
+
+  // Re-prompt with payment info
+  return {
+    response: {
+      type: ResponseType.PAYMENT_PENDING,
+    },
+    updatedState: state,
+  };
+}
+
 async function handleAwaitingCookNumberOnboarding(
   intent: UserIntent,
   state: UserState,
@@ -1770,6 +1869,7 @@ export async function processIntent(
   mealComponentRepository: MealComponentRepository,
   phoneNumber?: string,
   rulesRepository?: RulesRepository,
+  paymentProvider?: PaymentProvider,
 ): Promise<BotResult> {
   // Create MealSelector when a RulesRepository is provided
   const mealSelector = rulesRepository
@@ -1812,7 +1912,10 @@ export async function processIntent(
       return handleAwaitingDiet(intent, userState);
 
     case 'awaiting_meal_style':
-      return handleAwaitingMealStyle(intent, userState, mealRepository, mealComponentRepository, mealSelector);
+      return handleAwaitingMealStyle(intent, userState, mealRepository, mealComponentRepository, mealSelector, paymentProvider);
+
+    case 'awaiting_payment':
+      return handleAwaitingPayment(intent, userState, mealRepository, mealComponentRepository, mealSelector, paymentProvider);
 
     case 'awaiting_cook_number_onboarding':
       return handleAwaitingCookNumberOnboarding(intent, userState, mealRepository, mealComponentRepository, mealSelector);

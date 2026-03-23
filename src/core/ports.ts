@@ -1,5 +1,5 @@
 // Port interfaces — zero imports from adapters, WhatsApp, Twilio, or AWS modules
-import type { Meal, MealFilter, MealComponent, MealComponentFilter, UserState, Rule } from './types';
+import type { Meal, MealFilter, MealComponent, MealComponentFilter, UserState, Rule, SubscriptionInfo } from './types';
 
 export interface ButtonOption {
   id: string;
@@ -13,13 +13,14 @@ export interface ListItem {
 }
 
 export interface MessagingProvider {
-  sendTextMessage(to: string, body: string): Promise<void>;
+  sendTextMessage(to: string, body: string, contentSid?: string, contentVariables?: Record<string, string>): Promise<void>;
   sendButtonMessage(
     to: string,
     body: string,
     buttons: ButtonOption[],
     contentSid?: string,
     listItemCount?: number,
+    contentVariables?: Record<string, string>,
   ): Promise<void>;
   sendListMessage(
     to: string,
@@ -46,4 +47,10 @@ export interface UserStateRepository {
 
 export interface RulesRepository {
   getRules(): Promise<Rule[]>;
+}
+
+export interface PaymentProvider {
+  createSubscription(phoneNumber: string): Promise<{ subscriptionId: string; paymentLink: string }>;
+  getSubscriptionStatus(subscriptionId: string): Promise<{ status: 'active' | 'pending' | 'expired' | 'cancelled'; paymentId?: string; currentPeriodEnd?: string }>;
+  verifyWebhookSignature(body: string, signature: string): boolean;
 }

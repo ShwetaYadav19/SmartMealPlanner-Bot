@@ -180,7 +180,7 @@ describe('BotEngine — onboarding flow', () => {
     expect(result.updatedState.conversationState).toBe('awaiting_meal_style');
   });
 
-  it('stores meal style and generates weekly plan directly', async () => {
+  it('stores meal style and transitions to payment prompt', async () => {
     const state = makeState({
       conversationState: 'awaiting_meal_style',
       cuisinePreference: 'north_indian',
@@ -189,14 +189,31 @@ describe('BotEngine — onboarding flow', () => {
     const intent: UserIntent = { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' };
     const result = await processIntent(intent, state, mockMealRepo, mockMealComponentRepo);
 
-    expect(result.response.type).toBe(ResponseType.WEEKLY_PLAN);
+    expect(result.response.type).toBe(ResponseType.PAYMENT_PROMPT);
     expect(result.updatedState.mealStyle).toBe('health');
+    expect(result.updatedState.conversationState).toBe('awaiting_payment');
+  });
+
+  it('skips payment for users with active subscription', async () => {
+    const state = makeState({
+      conversationState: 'awaiting_meal_style',
+      cuisinePreference: 'north_indian',
+      dietPreference: 'veg',
+      subscription: {
+        status: 'active',
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    });
+    const intent: UserIntent = { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' };
+    const result = await processIntent(intent, state, mockMealRepo, mockMealComponentRepo);
+
+    expect(result.response.type).toBe(ResponseType.WEEKLY_PLAN);
     expect(result.updatedState.onboardingComplete).toBe(true);
     expect(result.updatedState.conversationState).toBe('main_menu');
     expect(result.updatedState.weeklyPlan).toBeDefined();
   });
 
-  it('completes full onboarding flow end-to-end (no cook number step)', async () => {
+  it('completes full onboarding flow end-to-end with payment step', async () => {
     // Step 1: New user
     const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, mockMealRepo, mockMealComponentRepo);
     expect(r1.response.type).toBe(ResponseType.ONBOARDING_CUISINE_PROMPT);
@@ -217,19 +234,31 @@ describe('BotEngine — onboarding flow', () => {
     );
     expect(r3.response.type).toBe(ResponseType.ONBOARDING_STYLE_PROMPT);
 
-    // Step 4: Select meal style — generates weekly plan directly
+    // Step 4: Select meal style — now goes to payment
     const r4 = await processIntent(
       { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' },
       r3.updatedState,
       mockMealRepo, mockMealComponentRepo
     );
-    expect(r4.response.type).toBe(ResponseType.WEEKLY_PLAN);
-    expect(r4.updatedState.onboardingComplete).toBe(true);
-    expect(r4.updatedState.conversationState).toBe('main_menu');
-    expect(r4.updatedState.weeklyPlan).toBeDefined();
-    expect(r4.updatedState.cuisinePreference).toBe('north_indian');
-    expect(r4.updatedState.dietPreference).toBe('veg');
+    expect(r4.response.type).toBe(ResponseType.PAYMENT_PROMPT);
+    expect(r4.updatedState.conversationState).toBe('awaiting_payment');
     expect(r4.updatedState.mealStyle).toBe('health');
+
+    // Step 5: Simulate payment success — set active subscription and check
+    const stateWithPayment: typeof r4.updatedState = {
+      ...r4.updatedState,
+      subscription: {
+        status: 'active',
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    };
+    const r5 = await processIntent(
+      { intent: Intent.CHECK_PAYMENT_STATUS },
+      stateWithPayment,
+      mockMealRepo, mockMealComponentRepo
+    );
+    // Without a payment provider, it returns PAYMENT_PENDING
+    expect(r5.response.type).toBe(ResponseType.PAYMENT_PENDING);
   });
 });
 

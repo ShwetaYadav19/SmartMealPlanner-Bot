@@ -70,10 +70,23 @@ export type PreviewStep = 'breakfast' | 'base' | 'gravy' | 'dry_veggie' | 'side'
 
 export const PREVIEW_STEP_ORDER: PreviewStep[] = ['breakfast', 'base', 'gravy', 'dry_veggie', 'side', 'confirm'];
 
+export type SubscriptionStatus = 'none' | 'pending' | 'active' | 'expired' | 'cancelled';
+
+export interface SubscriptionInfo {
+  status: SubscriptionStatus;
+  razorpaySubscriptionId?: string;
+  razorpayPaymentId?: string;
+  planId?: string;
+  currentPeriodStart?: string;  // ISO date
+  currentPeriodEnd?: string;    // ISO date
+  createdAt?: string;           // ISO date
+}
+
 export type ConversationState =
   | 'awaiting_cuisine'
   | 'awaiting_diet'
   | 'awaiting_meal_style'
+  | 'awaiting_payment'
   | 'awaiting_cook_number_onboarding'
   | 'dish_preview'
   | 'main_menu'
@@ -111,6 +124,7 @@ export interface UserState {
   fewMealsSelectedSlot?: 'breakfast' | 'lunch' | 'dinner';
   fewMealsAlternatives?: (Meal | ComposedMeal)[];
   previousWeeklyPlan?: WeeklyPlan;
+  subscription?: SubscriptionInfo;
 }
 
 export interface ComponentsByCategory {
@@ -167,6 +181,7 @@ export enum Intent {
   HAPPY_DAILY_YES = 'HAPPY_DAILY_YES',
   HAPPY_DAILY_NO = 'HAPPY_DAILY_NO',
   KEEP_PREFERENCES = 'KEEP_PREFERENCES',
+  CHECK_PAYMENT_STATUS = 'CHECK_PAYMENT_STATUS',
   UNKNOWN = 'UNKNOWN',
 }
 
@@ -214,6 +229,10 @@ export enum ResponseType {
   HAPPY_GROCERY_PROMPT = 'HAPPY_GROCERY_PROMPT',
   HAPPY_DAILY_PROMPT = 'HAPPY_DAILY_PROMPT',
   REGENERATE_PLAN_MENU = 'REGENERATE_PLAN_MENU',
+  PAYMENT_PROMPT = 'PAYMENT_PROMPT',
+  PAYMENT_SUCCESS = 'PAYMENT_SUCCESS',
+  PAYMENT_PENDING = 'PAYMENT_PENDING',
+  SUBSCRIPTION_EXPIRED = 'SUBSCRIPTION_EXPIRED',
   ERROR = 'ERROR',
 }
 
@@ -238,6 +257,8 @@ export interface BotResponse {
     removedComponentName?: string;
     removedComponentCategory?: string;
     previewStep?: PreviewStep;
+    paymentLink?: string;
+    subscriptionAmount?: string;
   };
   suggestedActions?: SuggestedAction[];
 }

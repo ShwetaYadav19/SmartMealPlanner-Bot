@@ -26,11 +26,33 @@ import { JsonMealRepository } from '../src/adapters/jsonMealRepository';
 import { JsonMealComponentRepository } from '../src/adapters/jsonMealComponentRepository';
 import { JsonRulesRepository } from '../src/adapters/jsonRulesRepository';
 import { UserState, ResponseType } from '../src/core/types';
+import type { PaymentProvider } from '../src/core/ports';
+
+// Mock payment provider for local testing — auto-approves all payments
+class MockPaymentProvider implements PaymentProvider {
+  async createSubscription(phoneNumber: string) {
+    return {
+      subscriptionId: `mock_sub_${Date.now()}`,
+      paymentLink: 'https://rzp.io/mock-payment-link',
+    };
+  }
+  async getSubscriptionStatus(_subscriptionId: string) {
+    // Always return active — simulates successful payment
+    return {
+      status: 'active' as const,
+      paymentId: `mock_pay_${Date.now()}`,
+      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    };
+  }
+  verifyWebhookSignature() { return true; }
+}
+
+const mockPaymentProvider = new MockPaymentProvider();
 
 // Known button IDs — if the user types one of these, treat it as a button tap
 const BUTTON_IDS = new Set([
   'north_indian', 'south_indian', 'both',
-  'veg', 'non_veg',
+  'veg', 'non_veg', 'veg_with_eggs',
   'health', 'regular',
   'weekly_plan', 'weekly_grocery',
   'tomorrow_plan', 'tomorrow_grocery',
@@ -38,6 +60,7 @@ const BUTTON_IDS = new Set([
   'skip_cook', 'confirm_dishes',
   'change_preference', 'change_cook_number',
   'next_category',
+  'check_payment',
   // Change Plan flow
   'change_plan', 'few_meals', 'entire_plan',
   'accept_plan', 'retry_plan', 'change_more', 'done_changing',
@@ -91,7 +114,7 @@ async function handleInput(input: string): Promise<void> {
   const intent = mapWhatsAppToIntent(resolvedPayload, body, convState);
 
   // 2. Process through BotEngine (pass PHONE just like webhook passes phoneNumber)
-  const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, PHONE, rulesRepo);
+  const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, PHONE, rulesRepo, mockPaymentProvider);
 
   // 3. Format for WhatsApp display
   const formatted = formatBotResponse(result.response);

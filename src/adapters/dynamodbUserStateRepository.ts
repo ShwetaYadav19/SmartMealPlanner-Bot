@@ -124,6 +124,9 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     if (state.previousWeeklyPlan !== undefined) {
       item.previousWeeklyPlan = state.previousWeeklyPlan;
     }
+    if (state.subscription !== undefined) {
+      item.subscription = state.subscription;
+    }
 
     return item;
   }
@@ -179,6 +182,9 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     }
     if (item.previousWeeklyPlan !== undefined) {
       state.previousWeeklyPlan = item.previousWeeklyPlan as UserState['previousWeeklyPlan'];
+    }
+    if (item.subscription !== undefined) {
+      state.subscription = item.subscription as UserState['subscription'];
     }
 
     return state;
