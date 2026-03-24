@@ -3,6 +3,11 @@ import { dailyReminderHandler } from '../../src/handlers/dailyReminderHandler';
 import { getComingMondayISO } from '../../src/core/botEngine';
 import type { UserState, DayPlan, Meal } from '../../src/core/types';
 
+// Mock the delay to resolve immediately in tests
+vi.mock('../../src/utils', () => ({
+  delay: vi.fn().mockResolvedValue(undefined),
+}));
+
 // Mock config
 vi.mock('../../src/config', () => ({
   loadConfig: () => ({
