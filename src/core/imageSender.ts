@@ -13,7 +13,7 @@ export async function sendWeeklyPlanImage(
   plan: WeeklyPlan,
 ): Promise<void> {
   try {
-    const png = renderWeeklyPlanImage(plan);
+    const png = await renderWeeklyPlanImage(plan);
     const key = `plans/${to}/${Date.now()}.png`;
     const url = await uploadImage(key, png);
     await provider.sendImageMessage(to, url, 'Your weekly meal plan 🍽️');
@@ -30,7 +30,7 @@ export async function sendGroceryListImage(
   title?: string,
 ): Promise<void> {
   try {
-    const png = renderGroceryListImage(items, title);
+    const png = await renderGroceryListImage(items, title);
     const key = `grocery/${to}/${Date.now()}.png`;
     const url = await uploadImage(key, png);
     await provider.sendImageMessage(to, url, title ?? 'Your grocery list 🛒');
