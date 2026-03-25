@@ -211,58 +211,63 @@ async function ensureDynamoDBTable() {
 async function ensureS3Bucket() {
   log(`Ensuring S3 bucket: ${IMAGE_BUCKET}`);
   try {
-    await s3Client.send(new HeadBucketCommand({ Bucket: IMAGE_BUCKET }));
-    log(`Bucket ${IMAGE_BUCKET} already exists.`);
-  } catch (err) {
-    if (err.name === 'NotFound' || err['$metadata']?.httpStatusCode === 404) {
-      log(`Creating bucket ${IMAGE_BUCKET}...`);
-      await s3Client.send(new CreateBucketCommand({ Bucket: IMAGE_BUCKET }));
-      log(`Bucket ${IMAGE_BUCKET} created.`);
-    } else {
-      throw err;
+    try {
+      await s3Client.send(new HeadBucketCommand({ Bucket: IMAGE_BUCKET }));
+      log(`Bucket ${IMAGE_BUCKET} already exists.`);
+    } catch (err) {
+      if (err.name === 'NotFound' || err['$metadata']?.httpStatusCode === 404) {
+        log(`Creating bucket ${IMAGE_BUCKET}...`);
+        await s3Client.send(new CreateBucketCommand({ Bucket: IMAGE_BUCKET }));
+        log(`Bucket ${IMAGE_BUCKET} created.`);
+      } else {
+        throw err;
+      }
     }
-  }
 
-  // Allow public read so Twilio can fetch the images
-  await s3Client.send(new PutPublicAccessBlockCommand({
-    Bucket: IMAGE_BUCKET,
-    PublicAccessBlockConfiguration: {
-      BlockPublicAcls: false,
-      IgnorePublicAcls: false,
-      BlockPublicPolicy: false,
-      RestrictPublicBuckets: false,
-    },
-  }));
+    // Allow public read so Twilio can fetch the images
+    await s3Client.send(new PutPublicAccessBlockCommand({
+      Bucket: IMAGE_BUCKET,
+      PublicAccessBlockConfiguration: {
+        BlockPublicAcls: false,
+        IgnorePublicAcls: false,
+        BlockPublicPolicy: false,
+        RestrictPublicBuckets: false,
+      },
+    }));
 
-  const bucketPolicy = JSON.stringify({
-    Version: '2012-10-17',
-    Statement: [{
-      Sid: 'PublicReadImages',
-      Effect: 'Allow',
-      Principal: '*',
-      Action: 's3:GetObject',
-      Resource: `arn:aws:s3:::${IMAGE_BUCKET}/*`,
-    }],
-  });
-  await s3Client.send(new PutBucketPolicyCommand({
-    Bucket: IMAGE_BUCKET,
-    Policy: bucketPolicy,
-  }));
-
-  // Lifecycle rule: auto-delete objects after 7 days
-  await s3Client.send(new PutBucketLifecycleConfigurationCommand({
-    Bucket: IMAGE_BUCKET,
-    LifecycleConfiguration: {
-      Rules: [{
-        ID: 'AutoDeleteAfter7Days',
-        Status: 'Enabled',
-        Filter: { Prefix: '' },
-        Expiration: { Days: 7 },
+    const bucketPolicy = JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [{
+        Sid: 'PublicReadImages',
+        Effect: 'Allow',
+        Principal: '*',
+        Action: 's3:GetObject',
+        Resource: `arn:aws:s3:::${IMAGE_BUCKET}/*`,
       }],
-    },
-  }));
+    });
+    await s3Client.send(new PutBucketPolicyCommand({
+      Bucket: IMAGE_BUCKET,
+      Policy: bucketPolicy,
+    }));
 
-  log(`Bucket ${IMAGE_BUCKET} configured with public read + 7-day lifecycle.`);
+    // Lifecycle rule: auto-delete objects after 7 days
+    await s3Client.send(new PutBucketLifecycleConfigurationCommand({
+      Bucket: IMAGE_BUCKET,
+      LifecycleConfiguration: {
+        Rules: [{
+          ID: 'AutoDeleteAfter7Days',
+          Status: 'Enabled',
+          Filter: { Prefix: '' },
+          Expiration: { Days: 7 },
+        }],
+      },
+    }));
+
+    log(`Bucket ${IMAGE_BUCKET} configured with public read + 7-day lifecycle.`);
+  } catch (err) {
+    log(`⚠️  S3 bucket setup skipped (missing IAM permissions). Run bootstrap-ci-permissions.js with admin creds to fix.`);
+    log(`   Error: ${err.message}`);
+  }
 }
 
 // --- Step 3: IAM role ---
