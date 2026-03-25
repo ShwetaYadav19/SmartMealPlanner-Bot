@@ -376,8 +376,8 @@ async function deployLambdaFunction(fnDef, roleArn) {
       FunctionName: name,
       ZipFile: zipBuffer,
     }));
-    // Wait briefly for code update to propagate
-    await sleep(2000);
+    // Wait for code update to finish before updating config
+    await waitForLambdaReady(name);
     await lambdaClient.send(new UpdateFunctionConfigurationCommand({
       FunctionName: name,
       Handler: handler,
@@ -387,6 +387,7 @@ async function deployLambdaFunction(fnDef, roleArn) {
       MemorySize: 256,
       Environment: { Variables: envVars },
     }));
+    await waitForLambdaReady(name);
     log(`Updated ${name}.`);
   } catch (err) {
     if (err.name === 'ResourceNotFoundException') {
@@ -402,11 +403,23 @@ async function deployLambdaFunction(fnDef, roleArn) {
         Environment: { Variables: envVars },
         Description: `MealPlanner ${name}`,
       }));
+      await waitForLambdaReady(name);
       log(`Created ${name}.`);
     } else {
       throw err;
     }
   }
+}
+
+async function waitForLambdaReady(functionName, maxAttempts = 30) {
+  for (let i = 0; i < maxAttempts; i++) {
+    const resp = await lambdaClient.send(new GetFunctionCommand({ FunctionName: functionName }));
+    const status = resp.Configuration?.LastUpdateStatus;
+    if (!status || status === 'Successful') return;
+    if (status === 'Failed') throw new Error(`Lambda ${functionName} update failed`);
+    await sleep(2000);
+  }
+  throw new Error(`Lambda ${functionName} still updating after ${maxAttempts * 2}s`);
 }
 
 async function deployAllLambdas(roleArn) {
