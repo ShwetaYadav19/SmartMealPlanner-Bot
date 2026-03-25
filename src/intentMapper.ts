@@ -185,13 +185,13 @@ export function mapWhatsAppToIntent(
   if (conversationState === 'main_menu') {
     // Adhoc menu trigger for onboarded users
     if (text === 'hi' || text === 'menu') return { intent: Intent.ADHOC_MENU };
-    if (text === '1' || text === 'weekly meal plan' || text === 'weekly plan') return { intent: Intent.GENERATE_PLAN };
-    if (text === '2' || text === 'weekly grocery list' || text === 'weekly grocery') return { intent: Intent.VIEW_WEEKLY_GROCERY };
-    if (text === '3' || text === "tomorrow's plan" || text === 'tomorrow plan') return { intent: Intent.VIEW_TOMORROW_PLAN };
-    if (text === '4' || text === "tomorrow's grocery" || text === 'tomorrow grocery') return { intent: Intent.VIEW_TOMORROW_GROCERY };
-    if (text === '5' || text === 'send menu to cook' || text === 'send to cook') return { intent: Intent.SEND_MENU_TO_COOK };
-    if (text === '6' || text === 'swap lunch') return { intent: Intent.SWAP_LUNCH };
-    if (text === '7' || text === 'save cook' || text === "save cook's number") return { intent: Intent.SAVE_COOK_NUMBER };
+    if (text === '1' || text === 'weekly meal plan' || text === 'weekly plan' || text.endsWith('weekly meal plan')) return { intent: Intent.GENERATE_PLAN };
+    if (text === '2' || text === 'weekly grocery list' || text === 'weekly grocery' || text.endsWith('weekly grocery list')) return { intent: Intent.VIEW_WEEKLY_GROCERY };
+    if (text === '3' || text === "tomorrow's plan" || text === 'tomorrow plan' || text.endsWith("tomorrow's plan")) return { intent: Intent.VIEW_TOMORROW_PLAN };
+    if (text === '4' || text === "tomorrow's grocery" || text === 'tomorrow grocery' || text.endsWith("tomorrow's grocery")) return { intent: Intent.VIEW_TOMORROW_GROCERY };
+    if (text === '5' || text === 'send menu to cook' || text === 'send to cook' || text.endsWith('send menu to cook')) return { intent: Intent.SEND_MENU_TO_COOK };
+    if (text === '6' || text === 'swap lunch' || text.endsWith('swap lunch')) return { intent: Intent.SWAP_LUNCH };
+    if (text === '7' || text === 'save cook' || text === "save cook's number" || text.endsWith("save cook's number")) return { intent: Intent.SAVE_COOK_NUMBER };
     if (text === 'change cook' || text === 'change cook number' || text === "change cook's number") return { intent: Intent.CHANGE_COOK_NUMBER };
   }
 
