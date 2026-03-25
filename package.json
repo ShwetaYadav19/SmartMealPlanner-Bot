@@ -4,7 +4,7 @@
   "description": "WhatsApp Meal Planner Bot with delivery-channel-agnostic core",
   "main": "dist/handlers/webhookHandler.js",
   "scripts": {
-    "build": "esbuild src/handlers/*.ts --bundle --platform=node --target=node18 --outdir=dist/handlers --external:@aws-sdk",
+    "build": "esbuild src/handlers/*.ts --bundle --platform=node --target=node18 --outdir=dist/handlers --external:@aws-sdk --external:@napi-rs/canvas",
     "test": "vitest run",
     "test:watch": "vitest",
     "chat": "npx tsx scripts/chat.ts",
@@ -30,7 +30,9 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.600.0",
+    "@aws-sdk/client-s3": "^3.1016.0",
     "@aws-sdk/lib-dynamodb": "^3.600.0",
+    "@napi-rs/canvas": "^0.1.97",
     "twilio": "^5.0.0"
   }
 }

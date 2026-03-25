@@ -10,6 +10,7 @@ import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
 import { getCurrentWeekMondayISO } from '../core/botEngine';
 import { getTemplateSid } from '../messages';
+import { sendWeeklyPlanImage } from '../core/imageSender';
 
 // Minimal EventBridge scheduled event type
 interface ScheduledEvent {
@@ -89,6 +90,7 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
 
       // Reset weeklyPlanStartDate to the new week so daily reminders work correctly
       if (user.weeklyPlan) {
+        await sendWeeklyPlanImage(messagingProvider, user.phoneNumber, user.weeklyPlan);
         await userStateRepo.saveUser({
           ...user,
           weeklyPlanStartDate: getCurrentWeekMondayISO(),

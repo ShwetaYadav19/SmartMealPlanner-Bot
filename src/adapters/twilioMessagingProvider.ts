@@ -100,6 +100,16 @@ export class TwilioMessagingProvider implements MessagingProvider {
     return chunks;
   }
 
+  async sendImageMessage(to: string, imageUrl: string, caption?: string): Promise<void> {
+    const params: Record<string, unknown> = {
+      from: `whatsapp:${this.senderNumber}`,
+      to: `whatsapp:${to}`,
+      mediaUrl: [imageUrl],
+    };
+    if (caption) params.body = caption;
+    await this.client.messages.create(params as any);
+  }
+
   async sendButtonMessage(
     to: string,
     body: string,

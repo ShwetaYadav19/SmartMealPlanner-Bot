@@ -11,6 +11,7 @@ export interface Config {
   razorpayKeyId: string;
   razorpayKeySecret: string;
   razorpayPlanId: string;
+  imageBucket: string;
 }
 
 const REQUIRED_VARS = [
@@ -55,5 +56,6 @@ export function loadConfig(): Config {
     razorpayKeyId: process.env.RAZORPAY_KEY_ID!,
     razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET!,
     razorpayPlanId: process.env.RAZORPAY_PLAN_ID!,
+    imageBucket: process.env.IMAGE_BUCKET || `smartmealplanner-images-${process.env.STAGE || 'dev'}`,
   };
 }

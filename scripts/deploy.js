@@ -51,6 +51,14 @@ const {
   PutRuleCommand,
   PutTargetsCommand,
 } = require('@aws-sdk/client-eventbridge');
+const {
+  S3Client,
+  CreateBucketCommand,
+  HeadBucketCommand,
+  PutPublicAccessBlockCommand,
+  PutBucketPolicyCommand,
+  PutBucketLifecycleConfigurationCommand,
+} = require('@aws-sdk/client-s3');
 
 // --- Constants ---
 const REGION = 'ap-south-1';
@@ -66,6 +74,7 @@ const API_NAME = `MealPlannerAPI-${stage}`;
 const ROLE_NAME = `MealPlannerLambdaRole-${stage}`;
 const DAILY_RULE = `MealPlannerDailyReminder-${stage}`;
 const WEEKLY_RULE = `MealPlannerWeeklyReminder-${stage}`;
+const IMAGE_BUCKET = `smartmealplanner-images-${stage}`;
 const RUNTIME = 'nodejs18.x';
 
 const LAMBDA_DEFS = [
@@ -81,6 +90,7 @@ const lambdaClient = new LambdaClient({ region: REGION });
 const iamClient = new IAMClient({ region: REGION });
 const apigw = new APIGatewayClient({ region: REGION });
 const eb = new EventBridgeClient({ region: REGION });
+const s3Client = new S3Client({ region: REGION });
 
 function log(msg) {
   console.log(`[${stage}] ${msg}`);
@@ -101,6 +111,7 @@ function getLambdaEnvVars() {
     RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID || '',
     RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET || '',
     RAZORPAY_PLAN_ID: process.env.RAZORPAY_PLAN_ID || '',
+    IMAGE_BUCKET: IMAGE_BUCKET,
   };
   // Pass through all TWILIO_TEMPLATE_SID_* overrides
   for (const [key, value] of Object.entries(process.env)) {
@@ -147,6 +158,22 @@ function createZipBuffer(handlerFileName) {
       archive.file(rulesPath, { name: 'data/meal-selection-rules.json' });
     }
 
+    // Include @napi-rs/canvas native bindings (externalized from esbuild)
+    const canvasDir = path.join(__dirname, '..', 'node_modules', '@napi-rs', 'canvas');
+    if (fs.existsSync(canvasDir)) {
+      archive.directory(canvasDir, 'node_modules/@napi-rs/canvas');
+    }
+    // Include the platform-specific binary package (e.g. canvas-linux-x64-gnu)
+    const nmDir = path.join(__dirname, '..', 'node_modules', '@napi-rs');
+    if (fs.existsSync(nmDir)) {
+      for (const entry of fs.readdirSync(nmDir)) {
+        if (entry.startsWith('canvas-') && entry !== 'canvas') {
+          const platformDir = path.join(nmDir, entry);
+          archive.directory(platformDir, `node_modules/@napi-rs/${entry}`);
+        }
+      }
+    }
+
     archive.finalize();
   });
 }
@@ -178,6 +205,64 @@ async function ensureDynamoDBTable() {
       throw err;
     }
   }
+}
+
+// --- Step 2b: S3 image bucket ---
+async function ensureS3Bucket() {
+  log(`Ensuring S3 bucket: ${IMAGE_BUCKET}`);
+  try {
+    await s3Client.send(new HeadBucketCommand({ Bucket: IMAGE_BUCKET }));
+    log(`Bucket ${IMAGE_BUCKET} already exists.`);
+  } catch (err) {
+    if (err.name === 'NotFound' || err['$metadata']?.httpStatusCode === 404) {
+      log(`Creating bucket ${IMAGE_BUCKET}...`);
+      await s3Client.send(new CreateBucketCommand({ Bucket: IMAGE_BUCKET }));
+      log(`Bucket ${IMAGE_BUCKET} created.`);
+    } else {
+      throw err;
+    }
+  }
+
+  // Allow public read so Twilio can fetch the images
+  await s3Client.send(new PutPublicAccessBlockCommand({
+    Bucket: IMAGE_BUCKET,
+    PublicAccessBlockConfiguration: {
+      BlockPublicAcls: false,
+      IgnorePublicAcls: false,
+      BlockPublicPolicy: false,
+      RestrictPublicBuckets: false,
+    },
+  }));
+
+  const bucketPolicy = JSON.stringify({
+    Version: '2012-10-17',
+    Statement: [{
+      Sid: 'PublicReadImages',
+      Effect: 'Allow',
+      Principal: '*',
+      Action: 's3:GetObject',
+      Resource: `arn:aws:s3:::${IMAGE_BUCKET}/*`,
+    }],
+  });
+  await s3Client.send(new PutBucketPolicyCommand({
+    Bucket: IMAGE_BUCKET,
+    Policy: bucketPolicy,
+  }));
+
+  // Lifecycle rule: auto-delete objects after 7 days
+  await s3Client.send(new PutBucketLifecycleConfigurationCommand({
+    Bucket: IMAGE_BUCKET,
+    LifecycleConfiguration: {
+      Rules: [{
+        ID: 'AutoDeleteAfter7Days',
+        Status: 'Enabled',
+        Filter: { Prefix: '' },
+        Expiration: { Days: 7 },
+      }],
+    },
+  }));
+
+  log(`Bucket ${IMAGE_BUCKET} configured with public read + 7-day lifecycle.`);
 }
 
 // --- Step 3: IAM role ---
@@ -244,6 +329,26 @@ async function ensureIAMRole() {
     RoleName: ROLE_NAME,
     PolicyName: `MealPlannerDynamoAccess-${stage}`,
     PolicyDocument: dynamoPolicy,
+  }));
+
+  // Inline policy for S3 image bucket access
+  const s3Policy = JSON.stringify({
+    Version: '2012-10-17',
+    Statement: [{
+      Effect: 'Allow',
+      Action: [
+        's3:PutObject',
+        's3:GetObject',
+        's3:DeleteObject',
+      ],
+      Resource: `arn:aws:s3:::${IMAGE_BUCKET}/*`,
+    }],
+  });
+
+  await iamClient.send(new PutRolePolicyCommand({
+    RoleName: ROLE_NAME,
+    PolicyName: `MealPlannerS3ImageAccess-${stage}`,
+    PolicyDocument: s3Policy,
   }));
 
   log(`IAM role configured: ${roleArn}`);
@@ -559,6 +664,9 @@ async function main() {
     // Step 2: DynamoDB
     await ensureDynamoDBTable();
 
+    // Step 2b: S3 image bucket
+    await ensureS3Bucket();
+
     // Step 3: IAM Role
     const roleArn = await ensureIAMRole();
 
@@ -578,6 +686,7 @@ async function main() {
     console.log('');
     log(`Webhook endpoint: ${endpoint}`);
     log(`DynamoDB table:   ${TABLE_NAME}`);
+    log(`Image bucket:     ${IMAGE_BUCKET}`);
     log(`EventBridge:      ${stage === 'prod' ? 'ENABLED' : 'DISABLED'}`);
     console.log('='.repeat(60));
   } catch (err) {

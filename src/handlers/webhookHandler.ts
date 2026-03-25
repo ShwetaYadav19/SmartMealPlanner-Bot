@@ -14,6 +14,7 @@ import { formatBotResponse, type FormattedMessage } from '../messageFormatter';
 import { formatCookMessage } from '../messageFormatter';
 import { loadConfig } from '../config';
 import { ResponseType } from '../core/types';
+import { sendWeeklyPlanImage, sendGroceryListImage } from '../core/imageSender';
 
 // Minimal API Gateway types (avoids @types/aws-lambda dependency)
 interface APIGatewayProxyEvent {
@@ -204,6 +205,26 @@ export async function webhookHandler(
         result.response.data.cookNumber,
         cookMessage,
       );
+    }
+
+    // 11c. Send images for plan and grocery responses
+    const rtype = result.response.type;
+    const rdata = result.response.data;
+
+    if (rtype === ResponseType.WEEKLY_PLAN && rdata?.weeklyPlan) {
+      await sendWeeklyPlanImage(messagingProvider, phoneNumber, rdata.weeklyPlan);
+    }
+    if (rtype === ResponseType.WEEKLY_REMINDER && rdata?.weeklyPlan) {
+      await sendWeeklyPlanImage(messagingProvider, phoneNumber, rdata.weeklyPlan);
+    }
+    if (rtype === ResponseType.ENTIRE_PLAN_PREVIEW && rdata?.weeklyPlan) {
+      await sendWeeklyPlanImage(messagingProvider, phoneNumber, rdata.weeklyPlan);
+    }
+    if (
+      (rtype === ResponseType.WEEKLY_GROCERY_LIST || rtype === ResponseType.TOMORROW_GROCERY_LIST)
+      && rdata?.groceryList
+    ) {
+      await sendGroceryListImage(messagingProvider, phoneNumber, rdata.groceryList);
     }
 
     // 12. Save updated state
