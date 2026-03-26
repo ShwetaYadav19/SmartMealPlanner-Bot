@@ -157,7 +157,7 @@ export async function renderGroceryListImage(items: GroceryItem[], title?: strin
 
   for (const [category, catItems] of grouped) {
     const itemLines = catItems.map((it) => {
-      const text = `•  ${it.name} — ${it.quantity}`;
+      const text = `•  ${it.name}`;
       return { text, wrapped: wrapText(tmpCtx, text, contentW - 24) };
     });
     catData.push({ name: category.charAt(0).toUpperCase() + category.slice(1), items: itemLines });

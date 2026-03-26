@@ -165,7 +165,7 @@ export function formatGroceryList(items: GroceryItem[]): string {
   for (const [category, categoryItems] of grouped) {
     text += `\n*${category.charAt(0).toUpperCase() + category.slice(1)}*`;
     for (const item of categoryItems) {
-      text += `\n  • ${item.name} — ${item.quantity}`;
+      text += `\n  • ${item.name}`;
     }
     text += '\n';
   }
@@ -660,7 +660,7 @@ function formatGroceryListBody(items: GroceryItem[]): string {
   for (const [category, categoryItems] of grouped) {
     text += `\n*${category.charAt(0).toUpperCase() + category.slice(1)}*`;
     for (const item of categoryItems) {
-      text += `\n  • ${item.name} — ${item.quantity}`;
+      text += `\n  • ${item.name}`;
     }
     text += '\n';
   }
