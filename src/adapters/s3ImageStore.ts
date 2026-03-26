@@ -1,8 +1,10 @@
 /**
- * Uploads PNG buffers to S3 and returns a public URL.
- * Uses a dedicated bucket with public-read objects (or pre-signed URLs).
+ * Uploads PNG buffers to S3 and returns a pre-signed URL.
+ * Pre-signed URLs work without public bucket access — Twilio fetches
+ * the image once and caches it, so a short expiry is fine.
  */
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const REGION = process.env.AWS_REGION || 'ap-south-1';
 const BUCKET = process.env.IMAGE_BUCKET || `smartmealplanner-images-${process.env.STAGE || 'dev'}`;
@@ -18,6 +20,11 @@ export async function uploadImage(key: string, png: Buffer): Promise<string> {
     CacheControl: 'max-age=86400',
   }));
 
-  // Return the public S3 URL — bucket must have public access or CloudFront in front
-  return `https://${BUCKET}.s3.${REGION}.amazonaws.com/${key}`;
+  // Return a pre-signed URL valid for 1 hour — Twilio fetches immediately
+  const url = await getSignedUrl(s3, new GetObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+  }), { expiresIn: 3600 });
+
+  return url;
 }
