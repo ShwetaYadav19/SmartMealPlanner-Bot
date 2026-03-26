@@ -10,7 +10,8 @@
     "diet": "veg",
     "style": "health",
     "slots": [
-      "lunch"
+      "lunch",
+      "dinner"
     ],
     "ingredients": [
       {
@@ -98,7 +99,8 @@
     "diet": "veg",
     "style": "health",
     "slots": [
-      "lunch"
+      "lunch",
+      "dinner"
     ],
     "ingredients": [
       {
@@ -108,5 +110,34 @@
       }
     ],
     "keyIngredient": "curd"
+  },
+  {
+    "id": "si-side-008",
+    "name": "Raita",
+    "category": "side",
+    "cuisine": ["south_indian", "north_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Yogurt", "quantity": "150g", "category": "dairy" },
+      { "name": "Cumin Powder", "quantity": "1 tsp", "category": "spices" }
+    ],
+    "keyIngredient": "curd"
+  },
+  {
+    "id": "si-side-009",
+    "name": "Tomato Onion Salad",
+    "category": "side",
+    "cuisine": ["south_indian", "north_indian"],
+    "diet": "veg",
+    "style": "health",
+    "slots": ["lunch", "dinner"],
+    "ingredients": [
+      { "name": "Tomato", "quantity": "1 medium", "category": "vegetables" },
+      { "name": "Onion", "quantity": "1 small", "category": "vegetables" },
+      { "name": "Lemon", "quantity": "1", "category": "fruits" }
+    ],
+    "keyIngredient": "tomato"
   }
 ]
