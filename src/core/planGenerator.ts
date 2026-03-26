@@ -1050,25 +1050,34 @@ export function regenerateWeeklyPlan(
   // the minimum IDs needed to restore it, preserving as many exclusions as possible.
   const isBoth = preferences.cuisine === 'both';
   const targetCuisine: 'north_indian' | 'south_indian' = isBoth ? 'north_indian' : preferences.cuisine as 'north_indian' | 'south_indian';
+  const cuisines: ('north_indian' | 'south_indian')[] = isBoth
+    ? ['north_indian', 'south_indian']
+    : [targetCuisine];
   const REQUIRED_CATEGORIES: ComponentCategory[] = ['base', 'gravy', 'dry_veggie', 'side'];
+  const MIN_PER_CATEGORY = 2; // minimum variety to avoid empty-category crash
 
-  for (const slot of ['lunch', 'dinner'] as const) {
-    for (const cat of REQUIRED_CATEGORIES) {
-      const hasAny = filteredComponents.some(c =>
-        c.category === cat && c.slots.includes(slot) && c.cuisine.includes(targetCuisine),
-      );
-      if (!hasAny) {
-        // Find excluded components that would fill this gap and un-exclude them
-        for (const c of components) {
-          if (
-            excludedIds.has(c.id) &&
-            c.category === cat &&
-            c.slots.includes(slot) &&
-            c.cuisine.includes(targetCuisine)
-          ) {
-            excludedIds.delete(c.id);
-            filteredComponents.push(c);
-            break; // one is enough
+  for (const cuisine of cuisines) {
+    for (const slot of ['lunch', 'dinner'] as const) {
+      for (const cat of REQUIRED_CATEGORIES) {
+        const available = filteredComponents.filter(c =>
+          c.category === cat && c.slots.includes(slot) && c.cuisine.includes(cuisine),
+        );
+        if (available.length < MIN_PER_CATEGORY) {
+          // Un-exclude components to fill the gap
+          const needed = MIN_PER_CATEGORY - available.length;
+          let restored = 0;
+          for (const c of components) {
+            if (restored >= needed) break;
+            if (
+              excludedIds.has(c.id) &&
+              c.category === cat &&
+              c.slots.includes(slot) &&
+              c.cuisine.includes(cuisine)
+            ) {
+              excludedIds.delete(c.id);
+              filteredComponents.push(c);
+              restored++;
+            }
           }
         }
       }
