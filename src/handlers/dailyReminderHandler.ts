@@ -10,6 +10,7 @@ import { extractTomorrowPlan } from '../core/planGenerator';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
 import { getTemplateSid, DAILY_REMINDER_HEADER } from '../messages';
+import { delay } from '../utils';
 
 // Minimal EventBridge scheduled event type
 interface ScheduledEvent {
@@ -77,10 +78,15 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
           contentVariables,
         );
 
-        // Wait for template message to be sent before sending follow-up
+        // Wait for template message to be delivered before sending follow-up.
+        // waitForSent only waits for 'sent' status, but WhatsApp can still
+        // deliver a lighter follow-up message before the template arrives on
+        // the user's device.  Add a buffer delay so the grocery prompt never
+        // overtakes the meal plan in the chat.
         if (msgSid) {
           await messagingProvider.waitForSent(msgSid);
         }
+        await delay(2000);
 
         // Template opens the 24h session window, so follow up with
         // the grocery prompt as an in-session quick-reply message

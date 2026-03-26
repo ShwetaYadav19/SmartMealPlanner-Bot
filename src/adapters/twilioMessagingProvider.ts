@@ -117,14 +117,19 @@ export class TwilioMessagingProvider implements MessagingProvider {
   /**
    * Polls a message's status until it progresses past 'queued'/'accepted'.
    * Twilio statuses: queued → accepted → sending → sent → delivered / failed / undelivered
-   * We wait for 'sent' or beyond so the next API call queues after this one.
+   * We wait for 'delivered' or a terminal failure so the next message arrives
+   * in order on WhatsApp.  Falls back to 'sent' if delivery confirmation
+   * doesn't arrive within the first pass, to avoid blocking indefinitely.
    */
-  async waitForSent(messageSid: string, maxAttempts = 10): Promise<void> {
-    const terminalStatuses = new Set(['sent', 'delivered', 'read', 'failed', 'undelivered']);
+  async waitForSent(messageSid: string, maxAttempts = 15): Promise<void> {
+    const deliveredStatuses = new Set(['delivered', 'read', 'failed', 'undelivered']);
+    const sentOrBeyond = new Set(['sent', 'delivered', 'read', 'failed', 'undelivered']);
     for (let i = 0; i < maxAttempts; i++) {
       try {
         const msg = await this.client.messages(messageSid).fetch();
-        if (terminalStatuses.has(msg.status)) return;
+        if (deliveredStatuses.has(msg.status)) return;
+        // After 10 attempts, accept 'sent' to avoid blocking too long
+        if (i >= 10 && sentOrBeyond.has(msg.status)) return;
       } catch {
         // Fetch failed — don't block, just proceed
         return;
