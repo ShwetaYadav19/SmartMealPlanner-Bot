@@ -10,7 +10,6 @@ import { extractTomorrowPlan } from '../core/planGenerator';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
 import { getTemplateSid, DAILY_REMINDER_HEADER } from '../messages';
-import { delay } from '../utils';
 
 // Minimal EventBridge scheduled event type
 interface ScheduledEvent {
@@ -71,16 +70,17 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         // Build a freeform fallback body in case the template send fails
         const fallbackBody = `${DAILY_REMINDER_HEADER(dayPlan.day)}\n🥣 Breakfast: ${dayPlan.breakfast.name}\n🍛 Lunch: ${dayPlan.lunch.name}\n🍽️ Dinner: ${dayPlan.dinner.name}\n\nReply SWAP if you'd like a different lunch.`;
 
-        await messagingProvider.sendTextMessage(
+        const msgSid = await messagingProvider.sendTextMessage(
           user.phoneNumber,
           fallbackBody,
           templateSid,
           contentVariables,
         );
 
-        // Brief pause so Twilio queues the template before the follow-up;
-        // prevents the grocery prompt from arriving before the meal plan.
-        await delay(1000);
+        // Wait for template message to be sent before sending follow-up
+        if (msgSid) {
+          await messagingProvider.waitForSent(msgSid);
+        }
 
         // Template opens the 24h session window, so follow up with
         // the grocery prompt as an in-session quick-reply message

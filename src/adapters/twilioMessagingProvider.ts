@@ -28,7 +28,7 @@ export class TwilioMessagingProvider implements MessagingProvider {
     this.senderNumber = senderNumber;
   }
 
-  async sendTextMessage(to: string, body: string, contentSid?: string, contentVariables?: Record<string, string>): Promise<void> {
+  async sendTextMessage(to: string, body: string, contentSid?: string, contentVariables?: Record<string, string>): Promise<string | void> {
     // For out-of-session messages, use a pre-approved template if provided
     if (contentSid) {
       try {
@@ -40,8 +40,8 @@ export class TwilioMessagingProvider implements MessagingProvider {
         if (contentVariables && Object.keys(contentVariables).length > 0) {
           params.contentVariables = JSON.stringify(contentVariables);
         }
-        await this.client.messages.create(params as any);
-        return;
+        const msg = await this.client.messages.create(params as any);
+        return msg.sid;
       } catch (error: unknown) {
         const errMsg = error instanceof Error ? error.message : String(error);
         console.warn(
@@ -107,7 +107,31 @@ export class TwilioMessagingProvider implements MessagingProvider {
       mediaUrl: [imageUrl],
     };
     if (caption) params.body = caption;
-    await this.client.messages.create(params as any);
+    const msg = await this.client.messages.create(params as any);
+
+    // Poll until Twilio confirms the message left the queue
+    // so the next message arrives in order on WhatsApp
+    await this.waitForSent(msg.sid);
+  }
+
+  /**
+   * Polls a message's status until it progresses past 'queued'/'accepted'.
+   * Twilio statuses: queued → accepted → sending → sent → delivered / failed / undelivered
+   * We wait for 'sent' or beyond so the next API call queues after this one.
+   */
+  async waitForSent(messageSid: string, maxAttempts = 10): Promise<void> {
+    const terminalStatuses = new Set(['sent', 'delivered', 'read', 'failed', 'undelivered']);
+    for (let i = 0; i < maxAttempts; i++) {
+      try {
+        const msg = await this.client.messages(messageSid).fetch();
+        if (terminalStatuses.has(msg.status)) return;
+      } catch {
+        // Fetch failed — don't block, just proceed
+        return;
+      }
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+    // Timed out — proceed anyway
   }
 
   async sendButtonMessage(
