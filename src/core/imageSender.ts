@@ -13,6 +13,7 @@ export async function sendWeeklyPlanImage(
   provider: MessagingProvider,
   to: string,
   plan: WeeklyPlan,
+  caption?: string,
 ): Promise<void> {
   console.log(`[imageSender] Rendering weekly plan image for ${to}...`);
   const png = await renderWeeklyPlanImage(plan);
@@ -22,7 +23,7 @@ export async function sendWeeklyPlanImage(
   const url = await uploadImage(key, png);
   console.log(`[imageSender] Uploaded to S3`);
 
-  await provider.sendImageMessage(to, url, 'Your weekly meal plan 🍽️');
+  await provider.sendImageMessage(to, url, caption ?? 'Your weekly meal plan 🍽️');
   console.log(`[imageSender] Image message sent to ${to}`);
 }
 
@@ -30,16 +31,16 @@ export async function sendGroceryListImage(
   provider: MessagingProvider,
   to: string,
   items: GroceryItem[],
-  title?: string,
+  caption?: string,
 ): Promise<void> {
   console.log(`[imageSender] Rendering grocery list image for ${to}...`);
-  const png = await renderGroceryListImage(items, title);
+  const png = await renderGroceryListImage(items);
   console.log(`[imageSender] Rendered PNG: ${png.length} bytes`);
 
   const key = `grocery/${to}/${Date.now()}.png`;
   const url = await uploadImage(key, png);
   console.log(`[imageSender] Uploaded to S3`);
 
-  await provider.sendImageMessage(to, url, title ?? 'Your grocery list 🛒');
+  await provider.sendImageMessage(to, url, caption ?? 'Your grocery list 🛒');
   console.log(`[imageSender] Image message sent to ${to}`);
 }

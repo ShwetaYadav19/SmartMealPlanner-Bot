@@ -200,30 +200,39 @@ export async function webhookHandler(
     let imageSent = false;
 
     if (shouldSendImage) {
+      // Build a caption from follow-up texts so everything arrives in one message
+      const followUpTexts = (formatted.followUp ?? []).map((f) => f.text).filter(Boolean);
+      const caption = followUpTexts.length > 0 ? followUpTexts.join('\n\n') : undefined;
+
       try {
         if ((rtype === ResponseType.WEEKLY_PLAN || rtype === ResponseType.WEEKLY_REMINDER || rtype === ResponseType.ENTIRE_PLAN_PREVIEW) && rdata?.weeklyPlan) {
-          await sendWeeklyPlanImage(messagingProvider, phoneNumber, rdata.weeklyPlan);
+          await sendWeeklyPlanImage(messagingProvider, phoneNumber, rdata.weeklyPlan, caption);
           imageSent = true;
         }
         if ((rtype === ResponseType.WEEKLY_GROCERY_LIST || rtype === ResponseType.TOMORROW_GROCERY_LIST) && rdata?.groceryList) {
-          await sendGroceryListImage(messagingProvider, phoneNumber, rdata.groceryList);
+          await sendGroceryListImage(messagingProvider, phoneNumber, rdata.groceryList, caption);
           imageSent = true;
         }
       } catch (imgErr) {
         console.error(`[imageSender] Image failed, falling back to text:`, imgErr);
-        // Fall through to send text instead
       }
     }
 
-    // Send text message only if image wasn't sent (or not an image response type)
+    // Send text + follow-ups only if image wasn't sent
     if (!imageSent) {
       await sendFormattedMessage(messagingProvider, phoneNumber, formatted);
-    }
-
-    // Always send follow-ups (buttons like "What do you think?", grocery prompts, etc.)
-    if (formatted.followUp) {
+      if (formatted.followUp) {
+        for (const followUpMsg of formatted.followUp) {
+          await sendFormattedMessage(messagingProvider, phoneNumber, followUpMsg);
+        }
+      }
+    } else if (formatted.followUp) {
+      // Image was sent with caption for text-only follow-ups,
+      // but still send follow-ups that have buttons (caption can't have buttons)
       for (const followUpMsg of formatted.followUp) {
-        await sendFormattedMessage(messagingProvider, phoneNumber, followUpMsg);
+        if (followUpMsg.buttons && followUpMsg.buttons.length > 0) {
+          await sendFormattedMessage(messagingProvider, phoneNumber, followUpMsg);
+        }
       }
     }
 
