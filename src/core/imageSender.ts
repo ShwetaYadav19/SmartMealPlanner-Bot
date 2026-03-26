@@ -1,6 +1,8 @@
 /**
  * Generates and sends plan/grocery images alongside text messages.
  * Thin orchestration layer: render → upload → send via WhatsApp.
+ *
+ * These functions throw on failure so callers can fall back to text.
  */
 import { renderWeeklyPlanImage, renderGroceryListImage } from './imageRenderer';
 import { uploadImage } from '../adapters/s3ImageStore';
@@ -12,20 +14,16 @@ export async function sendWeeklyPlanImage(
   to: string,
   plan: WeeklyPlan,
 ): Promise<void> {
-  try {
-    console.log(`[imageSender] Rendering weekly plan image for ${to}...`);
-    const png = await renderWeeklyPlanImage(plan);
-    console.log(`[imageSender] Rendered PNG: ${png.length} bytes`);
+  console.log(`[imageSender] Rendering weekly plan image for ${to}...`);
+  const png = await renderWeeklyPlanImage(plan);
+  console.log(`[imageSender] Rendered PNG: ${png.length} bytes`);
 
-    const key = `plans/${to}/${Date.now()}.png`;
-    const url = await uploadImage(key, png);
-    console.log(`[imageSender] Uploaded to S3: ${url.substring(0, 100)}...`);
+  const key = `plans/${to}/${Date.now()}.png`;
+  const url = await uploadImage(key, png);
+  console.log(`[imageSender] Uploaded to S3`);
 
-    await provider.sendImageMessage(to, url, 'Your weekly meal plan 🍽️');
-    console.log(`[imageSender] Image message sent to ${to}`);
-  } catch (err) {
-    console.error(`[imageSender] Failed to send weekly plan image to ${to}:`, err);
-  }
+  await provider.sendImageMessage(to, url, 'Your weekly meal plan 🍽️');
+  console.log(`[imageSender] Image message sent to ${to}`);
 }
 
 export async function sendGroceryListImage(
@@ -34,18 +32,14 @@ export async function sendGroceryListImage(
   items: GroceryItem[],
   title?: string,
 ): Promise<void> {
-  try {
-    console.log(`[imageSender] Rendering grocery list image for ${to}...`);
-    const png = await renderGroceryListImage(items, title);
-    console.log(`[imageSender] Rendered PNG: ${png.length} bytes`);
+  console.log(`[imageSender] Rendering grocery list image for ${to}...`);
+  const png = await renderGroceryListImage(items, title);
+  console.log(`[imageSender] Rendered PNG: ${png.length} bytes`);
 
-    const key = `grocery/${to}/${Date.now()}.png`;
-    const url = await uploadImage(key, png);
-    console.log(`[imageSender] Uploaded to S3: ${url.substring(0, 100)}...`);
+  const key = `grocery/${to}/${Date.now()}.png`;
+  const url = await uploadImage(key, png);
+  console.log(`[imageSender] Uploaded to S3`);
 
-    await provider.sendImageMessage(to, url, title ?? 'Your grocery list 🛒');
-    console.log(`[imageSender] Image message sent to ${to}`);
-  } catch (err) {
-    console.error(`[imageSender] Failed to send grocery list image to ${to}:`, err);
-  }
+  await provider.sendImageMessage(to, url, title ?? 'Your grocery list 🛒');
+  console.log(`[imageSender] Image message sent to ${to}`);
 }

@@ -186,8 +186,41 @@ export async function webhookHandler(
     }
     result.updatedState.lastButtonIds = allIds.length > 0 ? allIds : undefined;
 
-    // 11. Send message(s) via MessagingProvider
-    await sendFormattedMessage(messagingProvider, phoneNumber, formatted);
+    // 11. Determine if this response type gets an image instead of text
+    const rtype = result.response.type;
+    const rdata = result.response.data;
+    const imageResponseTypes = new Set([
+      ResponseType.WEEKLY_PLAN,
+      ResponseType.WEEKLY_REMINDER,
+      ResponseType.ENTIRE_PLAN_PREVIEW,
+      ResponseType.WEEKLY_GROCERY_LIST,
+      ResponseType.TOMORROW_GROCERY_LIST,
+    ]);
+    const shouldSendImage = imageResponseTypes.has(rtype);
+    let imageSent = false;
+
+    if (shouldSendImage) {
+      try {
+        if ((rtype === ResponseType.WEEKLY_PLAN || rtype === ResponseType.WEEKLY_REMINDER || rtype === ResponseType.ENTIRE_PLAN_PREVIEW) && rdata?.weeklyPlan) {
+          await sendWeeklyPlanImage(messagingProvider, phoneNumber, rdata.weeklyPlan);
+          imageSent = true;
+        }
+        if ((rtype === ResponseType.WEEKLY_GROCERY_LIST || rtype === ResponseType.TOMORROW_GROCERY_LIST) && rdata?.groceryList) {
+          await sendGroceryListImage(messagingProvider, phoneNumber, rdata.groceryList);
+          imageSent = true;
+        }
+      } catch (imgErr) {
+        console.error(`[imageSender] Image failed, falling back to text:`, imgErr);
+        // Fall through to send text instead
+      }
+    }
+
+    // Send text message only if image wasn't sent (or not an image response type)
+    if (!imageSent) {
+      await sendFormattedMessage(messagingProvider, phoneNumber, formatted);
+    }
+
+    // Always send follow-ups (buttons like "What do you think?", grocery prompts, etc.)
     if (formatted.followUp) {
       for (const followUpMsg of formatted.followUp) {
         await sendFormattedMessage(messagingProvider, phoneNumber, followUpMsg);
@@ -205,26 +238,6 @@ export async function webhookHandler(
         result.response.data.cookNumber,
         cookMessage,
       );
-    }
-
-    // 11c. Send images for plan and grocery responses
-    const rtype = result.response.type;
-    const rdata = result.response.data;
-
-    if (rtype === ResponseType.WEEKLY_PLAN && rdata?.weeklyPlan) {
-      await sendWeeklyPlanImage(messagingProvider, phoneNumber, rdata.weeklyPlan);
-    }
-    if (rtype === ResponseType.WEEKLY_REMINDER && rdata?.weeklyPlan) {
-      await sendWeeklyPlanImage(messagingProvider, phoneNumber, rdata.weeklyPlan);
-    }
-    if (rtype === ResponseType.ENTIRE_PLAN_PREVIEW && rdata?.weeklyPlan) {
-      await sendWeeklyPlanImage(messagingProvider, phoneNumber, rdata.weeklyPlan);
-    }
-    if (
-      (rtype === ResponseType.WEEKLY_GROCERY_LIST || rtype === ResponseType.TOMORROW_GROCERY_LIST)
-      && rdata?.groceryList
-    ) {
-      await sendGroceryListImage(messagingProvider, phoneNumber, rdata.groceryList);
     }
 
     // 12. Save updated state

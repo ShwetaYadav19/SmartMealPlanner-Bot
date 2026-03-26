@@ -90,7 +90,11 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
 
       // Reset weeklyPlanStartDate to the new week so daily reminders work correctly
       if (user.weeklyPlan) {
-        await sendWeeklyPlanImage(messagingProvider, user.phoneNumber, user.weeklyPlan);
+        try {
+          await sendWeeklyPlanImage(messagingProvider, user.phoneNumber, user.weeklyPlan);
+        } catch (imgErr) {
+          console.error(`[weeklyReminder] Image failed for ${user.phoneNumber}:`, imgErr);
+        }
         await userStateRepo.saveUser({
           ...user,
           weeklyPlanStartDate: getCurrentWeekMondayISO(),
