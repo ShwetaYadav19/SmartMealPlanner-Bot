@@ -10,6 +10,9 @@ import {
   ONBOARDING_CUISINE_PROMPT,
   ONBOARDING_DIET_PROMPT,
   ONBOARDING_STYLE_PROMPT,
+  ONBOARDING_MEAL_FORMAT_PROMPT,
+  ONBOARDING_LUNCH_FORMAT_PROMPT,
+  ONBOARDING_DINNER_FORMAT_PROMPT,
   ONBOARDING_COMPLETE,
   WEEKLY_PLAN_HEADER,
   DAY_PLAN_HEADER,
@@ -94,6 +97,22 @@ const DIET_BUTTONS: ButtonOption[] = [
 const STYLE_BUTTONS: ButtonOption[] = [
   { id: 'health', title: 'Health' },
   { id: 'regular', title: 'Regular Home Meals' },
+];
+
+const MEAL_FORMAT_BUTTONS: ButtonOption[] = [
+  { id: 'light', title: '🍚 Light' },
+  { id: 'regular_format', title: '🏠 Regular' },
+  { id: 'hearty', title: '🍛 Hearty' },
+];
+
+const MEAL_FORMAT_BUTTONS_2: ButtonOption[] = [
+  { id: 'full_spread', title: '🍽️ Full Spread' },
+];
+
+const SLOT_FORMAT_BUTTONS: ButtonOption[] = [
+  { id: 'quick_meal', title: '🍚 Quick Meal' },
+  { id: 'home_meal', title: '🏠 Home Meal' },
+  { id: 'full_thali', title: '🍛 Full Thali' },
 ];
 
 const GENERATE_PLAN_BUTTON: ButtonOption[] = [
@@ -275,6 +294,28 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: ONBOARDING_STYLE_PROMPT,
         buttons: suggestedButtons ?? STYLE_BUTTONS,
+      };
+
+    case ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT:
+      return {
+        text: ONBOARDING_MEAL_FORMAT_PROMPT,
+        buttons: suggestedButtons ?? MEAL_FORMAT_BUTTONS,
+        followUp: [{
+          text: '👆 Or pick:',
+          buttons: MEAL_FORMAT_BUTTONS_2,
+        }],
+      };
+
+    case ResponseType.ONBOARDING_LUNCH_FORMAT_PROMPT:
+      return {
+        text: ONBOARDING_LUNCH_FORMAT_PROMPT,
+        buttons: suggestedButtons ?? SLOT_FORMAT_BUTTONS,
+      };
+
+    case ResponseType.ONBOARDING_DINNER_FORMAT_PROMPT:
+      return {
+        text: ONBOARDING_DINNER_FORMAT_PROMPT,
+        buttons: suggestedButtons ?? SLOT_FORMAT_BUTTONS,
       };
 
     case ResponseType.ONBOARDING_COMPLETE:

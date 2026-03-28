@@ -11,8 +11,10 @@ import type {
   DayPlan,
   WeeklyPlan,
   ComponentCategory,
+  MealFormat,
   RuleEvaluationContext,
 } from './types';
+import { MEAL_FORMAT_CATEGORIES } from './types';
 import { composeMeal, type ComposeMealConstraints } from './planGenerator';
 import type { MealSelector } from './mealSelector';
 
@@ -448,16 +450,23 @@ function flattenWithHealthFirst(components: ComponentsByCategory): MealComponent
  */
 export function buildPlanFromComponents(
   candidates: CandidateDishes,
-  preferences: { cuisine: string; diet: string },
+  preferences: { cuisine: string; diet: string; lunchFormat?: MealFormat; dinnerFormat?: MealFormat },
 ): WeeklyPlan {
+  const lunchFormat = preferences.lunchFormat ?? 'full_thali';
+  const dinnerFormat = preferences.dinnerFormat ?? 'full_thali';
+  const lunchCategories = MEAL_FORMAT_CATEGORIES[lunchFormat];
+  const dinnerCategories = MEAL_FORMAT_CATEGORIES[dinnerFormat];
+
   if (candidates.breakfasts.length === 0) {
     console.error('[buildPlanFromComponents] EMPTY breakfasts pool — cannot build plan. preferences:', JSON.stringify(preferences));
     throw new Error('No breakfast options available for the selected preferences');
   }
-  console.log('[buildPlanFromComponents] building plan: breakfasts=%d, lunchPool=%d, dinnerPool=%d, prefs=%s',
+  console.log('[buildPlanFromComponents] building plan: breakfasts=%d, lunchPool=%d, dinnerPool=%d, lunchFormat=%s, dinnerFormat=%s, prefs=%s',
     candidates.breakfasts.length,
     Object.values(candidates.lunchComponents).reduce((s, a) => s + a.length, 0),
     Object.values(candidates.dinnerComponents).reduce((s, a) => s + a.length, 0),
+    lunchFormat,
+    dinnerFormat,
     JSON.stringify(preferences),
   );
   const plan: WeeklyPlan = [];
@@ -506,7 +515,7 @@ export function buildPlanFromComponents(
       side:       { recentIds: new Set<string>(lunchHistory.side),       sameDayIds: new Set<string>() },
     };
 
-    const lunch = composeMeal(lunchPool, 'lunch', cuisine, lunchConstraints, preferences.diet);
+    const lunch = composeMeal(lunchPool, 'lunch', cuisine, lunchConstraints, preferences.diet, undefined, undefined, undefined, undefined, lunchCategories);
 
     // Record lunch picks in cumulative history
     for (const comp of lunch.components) {
@@ -536,6 +545,7 @@ export function buildPlanFromComponents(
     const dinner = composeMeal(dinnerPool, 'dinner', cuisine, dinnerConstraints, preferences.diet,
       undefined, undefined, undefined,
       lunch.components.filter(c => c.category === 'gravy' || c.category === 'dry_veggie'),
+      dinnerCategories,
     );
 
     // Record dinner picks in cumulative history

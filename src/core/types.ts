@@ -66,6 +66,25 @@ export interface GroceryItem {
   category: string;
 }
 
+export type MealFormat = 'quick_meal' | 'home_meal' | 'full_thali';
+
+export type MealFormatPreset = 'light' | 'regular_format' | 'hearty' | 'full_spread';
+
+/** Maps a MealFormat to the component categories included in a composed meal */
+export const MEAL_FORMAT_CATEGORIES: Record<MealFormat, ComponentCategory[]> = {
+  quick_meal: ['base', 'gravy'],
+  home_meal: ['base', 'gravy', 'dry_veggie'],
+  full_thali: ['base', 'gravy', 'dry_veggie', 'side'],
+};
+
+/** Maps a preset to lunch/dinner format pair */
+export const MEAL_FORMAT_PRESETS: Record<MealFormatPreset, { lunch: MealFormat; dinner: MealFormat }> = {
+  light:          { lunch: 'quick_meal', dinner: 'quick_meal' },
+  regular_format: { lunch: 'home_meal',  dinner: 'quick_meal' },
+  hearty:         { lunch: 'home_meal',  dinner: 'home_meal' },
+  full_spread:    { lunch: 'full_thali', dinner: 'full_thali' },
+};
+
 export type PreviewStep = 'breakfast' | 'base' | 'gravy' | 'dry_veggie' | 'side' | 'confirm';
 
 export const PREVIEW_STEP_ORDER: PreviewStep[] = ['breakfast', 'base', 'gravy', 'dry_veggie', 'side', 'confirm'];
@@ -86,6 +105,9 @@ export type ConversationState =
   | 'awaiting_cuisine'
   | 'awaiting_diet'
   | 'awaiting_meal_style'
+  | 'awaiting_meal_format'
+  | 'awaiting_preference_lunch_format'
+  | 'awaiting_preference_dinner_format'
   | 'awaiting_payment'
   | 'awaiting_cook_number_onboarding'
   | 'dish_preview'
@@ -112,6 +134,8 @@ export interface UserState {
   cuisinePreference?: 'north_indian' | 'south_indian' | 'both';
   dietPreference?: 'veg' | 'non_veg' | 'veg_with_eggs';
   mealStyle?: 'health' | 'regular';
+  lunchFormat?: MealFormat;
+  dinnerFormat?: MealFormat;
   weeklyPlan?: WeeklyPlan;
   weeklyPlanStartDate?: string;
   cookPhoneNumber?: string;
@@ -144,6 +168,9 @@ export enum Intent {
   SELECT_CUISINE = 'SELECT_CUISINE',
   SELECT_DIET = 'SELECT_DIET',
   SELECT_MEAL_STYLE = 'SELECT_MEAL_STYLE',
+  SELECT_MEAL_FORMAT = 'SELECT_MEAL_FORMAT',
+  SELECT_LUNCH_FORMAT = 'SELECT_LUNCH_FORMAT',
+  SELECT_DINNER_FORMAT = 'SELECT_DINNER_FORMAT',
   GENERATE_PLAN = 'GENERATE_PLAN',
   VIEW_WEEKLY_GROCERY = 'VIEW_WEEKLY_GROCERY',
   VIEW_TOMORROW_PLAN = 'VIEW_TOMORROW_PLAN',
@@ -194,6 +221,9 @@ export enum ResponseType {
   ONBOARDING_CUISINE_PROMPT = 'ONBOARDING_CUISINE_PROMPT',
   ONBOARDING_DIET_PROMPT = 'ONBOARDING_DIET_PROMPT',
   ONBOARDING_STYLE_PROMPT = 'ONBOARDING_STYLE_PROMPT',
+  ONBOARDING_MEAL_FORMAT_PROMPT = 'ONBOARDING_MEAL_FORMAT_PROMPT',
+  ONBOARDING_LUNCH_FORMAT_PROMPT = 'ONBOARDING_LUNCH_FORMAT_PROMPT',
+  ONBOARDING_DINNER_FORMAT_PROMPT = 'ONBOARDING_DINNER_FORMAT_PROMPT',
   ONBOARDING_COMPLETE = 'ONBOARDING_COMPLETE',
   WEEKLY_PLAN = 'WEEKLY_PLAN',
   WEEKLY_GROCERY_LIST = 'WEEKLY_GROCERY_LIST',

@@ -41,6 +41,30 @@ export function mapWhatsAppToIntent(
       return { intent: Intent.SELECT_MEAL_STYLE, payload: buttonPayload };
     }
 
+    // Meal format preset selection during onboarding
+    if (
+      conversationState === 'awaiting_meal_format' &&
+      (buttonPayload === 'light' || buttonPayload === 'regular_format' || buttonPayload === 'hearty' || buttonPayload === 'full_spread')
+    ) {
+      return { intent: Intent.SELECT_MEAL_FORMAT, payload: buttonPayload };
+    }
+
+    // Lunch format selection during preference change
+    if (
+      conversationState === 'awaiting_preference_lunch_format' &&
+      (buttonPayload === 'quick_meal' || buttonPayload === 'home_meal' || buttonPayload === 'full_thali')
+    ) {
+      return { intent: Intent.SELECT_LUNCH_FORMAT, payload: buttonPayload };
+    }
+
+    // Dinner format selection during preference change
+    if (
+      conversationState === 'awaiting_preference_dinner_format' &&
+      (buttonPayload === 'quick_meal' || buttonPayload === 'home_meal' || buttonPayload === 'full_thali')
+    ) {
+      return { intent: Intent.SELECT_DINNER_FORMAT, payload: buttonPayload };
+    }
+
     // Skip cook number during onboarding
     if (conversationState === 'awaiting_cook_number_onboarding' && buttonPayload === 'skip_cook') {
       return { intent: Intent.SKIP_COOK_NUMBER };
@@ -179,6 +203,28 @@ export function mapWhatsAppToIntent(
   if (conversationState === 'awaiting_meal_style' || conversationState === 'awaiting_preference_style') {
     if (text === '1' || text === 'health') return { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' };
     if (text === '2' || text === 'regular' || text === 'regular home meals') return { intent: Intent.SELECT_MEAL_STYLE, payload: 'regular' };
+  }
+
+  // Meal format preset selection via text (onboarding)
+  if (conversationState === 'awaiting_meal_format') {
+    if (text === '1' || text === 'light') return { intent: Intent.SELECT_MEAL_FORMAT, payload: 'light' };
+    if (text === '2' || text === 'regular') return { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' };
+    if (text === '3' || text === 'hearty') return { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' };
+    if (text === '4' || text === 'full spread' || text === 'full thali') return { intent: Intent.SELECT_MEAL_FORMAT, payload: 'full_spread' };
+  }
+
+  // Lunch format selection via text (preference change)
+  if (conversationState === 'awaiting_preference_lunch_format') {
+    if (text === '1' || text === 'quick meal' || text === 'quick') return { intent: Intent.SELECT_LUNCH_FORMAT, payload: 'quick_meal' };
+    if (text === '2' || text === 'home meal' || text === 'home') return { intent: Intent.SELECT_LUNCH_FORMAT, payload: 'home_meal' };
+    if (text === '3' || text === 'full thali' || text === 'full') return { intent: Intent.SELECT_LUNCH_FORMAT, payload: 'full_thali' };
+  }
+
+  // Dinner format selection via text (preference change)
+  if (conversationState === 'awaiting_preference_dinner_format') {
+    if (text === '1' || text === 'quick meal' || text === 'quick') return { intent: Intent.SELECT_DINNER_FORMAT, payload: 'quick_meal' };
+    if (text === '2' || text === 'home meal' || text === 'home') return { intent: Intent.SELECT_DINNER_FORMAT, payload: 'home_meal' };
+    if (text === '3' || text === 'full thali' || text === 'full') return { intent: Intent.SELECT_DINNER_FORMAT, payload: 'full_thali' };
   }
 
   // Main menu actions via text

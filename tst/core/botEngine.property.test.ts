@@ -199,7 +199,7 @@ describe('Property 2: Invalid input rejection during button-expected states', ()
 // **Validates: Requirements 1.1, 1.2, 2.1, 2.2, 3.1, 3.2, 3.3**
 
 describe('Property 3: Onboarding flow completeness', () => {
-  it('after cuisine, diet, and style, transitions to awaiting_payment', async () => {
+  it('after cuisine, diet, style, and meal format, transitions to awaiting_payment', async () => {
     // Use fixed preferences matching test data since plan is now built during onboarding
     const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, mockMealRepo, mockMealComponentRepo);
     const r2 = await processIntent(
@@ -214,9 +214,18 @@ describe('Property 3: Onboarding flow completeness', () => {
       { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' },
       r3.updatedState, mockMealRepo, mockMealComponentRepo,
     );
-    expect(r4.updatedState.conversationState).toBe('awaiting_payment');
-    expect(r4.response.type).toBe(ResponseType.PAYMENT_PROMPT);
+    expect(r4.updatedState.conversationState).toBe('awaiting_meal_format');
+    expect(r4.response.type).toBe(ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT);
     expect(r4.updatedState.mealStyle).toBe('health');
+
+    const r5 = await processIntent(
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      r4.updatedState, mockMealRepo, mockMealComponentRepo,
+    );
+    expect(r5.updatedState.conversationState).toBe('awaiting_payment');
+    expect(r5.response.type).toBe(ResponseType.PAYMENT_PROMPT);
+    expect(r5.updatedState.lunchFormat).toBe('home_meal');
+    expect(r5.updatedState.dinnerFormat).toBe('home_meal');
   });
 
   it('skips payment and completes onboarding when subscription is active', async () => {
@@ -241,10 +250,25 @@ describe('Property 3: Onboarding flow completeness', () => {
       { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' },
       stateWithSub, mockMealRepo, mockMealComponentRepo,
     );
-    expect(r4.updatedState.onboardingComplete).toBe(true);
-    expect(r4.updatedState.conversationState).toBe('main_menu');
-    expect(r4.response.type).toBe(ResponseType.WEEKLY_PLAN);
-    expect(r4.updatedState.weeklyPlan).toBeDefined();
+    // Style now goes to meal format, not directly to payment
+    expect(r4.updatedState.conversationState).toBe('awaiting_meal_format');
+
+    // Give user an active subscription before format selection
+    const stateWithSub2 = {
+      ...r4.updatedState,
+      subscription: {
+        status: 'active' as const,
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    };
+    const r5 = await processIntent(
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      stateWithSub2, mockMealRepo, mockMealComponentRepo,
+    );
+    expect(r5.updatedState.onboardingComplete).toBe(true);
+    expect(r5.updatedState.conversationState).toBe('main_menu');
+    expect(r5.response.type).toBe(ResponseType.WEEKLY_PLAN);
+    expect(r5.updatedState.weeklyPlan).toBeDefined();
   });
 });
 
@@ -336,8 +360,10 @@ describe('Property 17: Suggested actions for all selection points', () => {
       { intent: Intent.SELECT_MEAL_STYLE, payload: 'health' },
       r3.updatedState, mockMealRepo, mockMealComponentRepo,
     );
-    // After meal style, user goes to payment prompt (no suggestedActions, uses buttons in formatter)
-    expect(r4.response.type).toBe(ResponseType.PAYMENT_PROMPT);
+    // After meal style, user goes to meal format prompt
+    expect(r4.response.type).toBe(ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT);
+    expect(r4.response.suggestedActions).toBeDefined();
+    expect(r4.response.suggestedActions!.length).toBeGreaterThan(0);
   });
 
   it('main menu GENERATE_PLAN response shows existing plan when available', async () => {

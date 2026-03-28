@@ -6,6 +6,9 @@ import {
   Intent,
   ResponseType,
   PREVIEW_STEP_ORDER,
+  MEAL_FORMAT_PRESETS,
+  type MealFormatPreset,
+  type MealFormat,
   type PreviewStep,
   type UserIntent,
   type UserState,
@@ -40,6 +43,25 @@ const DIET_OPTIONS: SuggestedAction[] = [
 const STYLE_OPTIONS: SuggestedAction[] = [
   { id: 'health', label: 'Health' },
   { id: 'regular', label: 'Regular Home Meals' },
+];
+
+const MEAL_FORMAT_OPTIONS: SuggestedAction[] = [
+  { id: 'light', label: '🍚 Light' },
+  { id: 'regular_format', label: '🏠 Regular' },
+  { id: 'hearty', label: '🍛 Hearty' },
+  { id: 'full_spread', label: '🍽️ Full Spread' },
+];
+
+const LUNCH_FORMAT_OPTIONS: SuggestedAction[] = [
+  { id: 'quick_meal', label: '🍚 Quick Meal' },
+  { id: 'home_meal', label: '🏠 Home Meal' },
+  { id: 'full_thali', label: '🍛 Full Thali' },
+];
+
+const DINNER_FORMAT_OPTIONS: SuggestedAction[] = [
+  { id: 'quick_meal', label: '🍚 Quick Meal' },
+  { id: 'home_meal', label: '🏠 Home Meal' },
+  { id: 'full_thali', label: '🍛 Full Thali' },
 ];
 
 const SKIP_COOK_NUMBER_OPTION: SuggestedAction[] = [
@@ -177,6 +199,54 @@ async function handleAwaitingMealStyle(
     const updatedState: UserState = {
       ...state,
       mealStyle: intent.payload as UserState['mealStyle'],
+      conversationState: 'awaiting_meal_format',
+    };
+
+    return {
+      response: {
+        type: ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT,
+        suggestedActions: MEAL_FORMAT_OPTIONS,
+      },
+      updatedState,
+    };
+  }
+
+  return {
+    response: {
+      type: ResponseType.INVALID_INPUT,
+      suggestedActions: STYLE_OPTIONS,
+    },
+    updatedState: state,
+  };
+}
+
+// --- Meal format onboarding handler ---
+
+async function handleAwaitingMealFormat(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
+  paymentProvider?: PaymentProvider,
+): Promise<BotResult> {
+  if (intent.intent === Intent.SELECT_MEAL_FORMAT && intent.payload) {
+    const preset = intent.payload as MealFormatPreset;
+    const formats = MEAL_FORMAT_PRESETS[preset];
+    if (!formats) {
+      return {
+        response: {
+          type: ResponseType.INVALID_INPUT,
+          suggestedActions: MEAL_FORMAT_OPTIONS,
+        },
+        updatedState: state,
+      };
+    }
+
+    const updatedState: UserState = {
+      ...state,
+      lunchFormat: formats.lunch,
+      dinnerFormat: formats.dinner,
       conversationState: 'awaiting_payment',
     };
 
@@ -203,7 +273,6 @@ async function handleAwaitingMealStyle(
         };
       } catch (err) {
         console.error('[botEngine] Failed to create subscription:', err);
-        // Fall through to payment prompt without link
       }
     }
 
@@ -220,7 +289,7 @@ async function handleAwaitingMealStyle(
   return {
     response: {
       type: ResponseType.INVALID_INPUT,
-      suggestedActions: STYLE_OPTIONS,
+      suggestedActions: MEAL_FORMAT_OPTIONS,
     },
     updatedState: state,
   };
@@ -258,6 +327,8 @@ async function generatePlanAfterPayment(
   const weeklyPlan = buildPlanFromComponents(candidateDishes, {
     cuisine: state.cuisinePreference ?? 'both',
     diet: state.dietPreference ?? 'veg',
+    lunchFormat: state.lunchFormat ?? 'home_meal',
+    dinnerFormat: state.dinnerFormat ?? 'home_meal',
   });
   const weeklyPlanStartDate = getCurrentWeekMondayISO();
 
@@ -625,6 +696,8 @@ async function handleDishPreview(
     const weeklyPlan = buildPlanFromComponents(state.candidateDishes, {
       cuisine: state.cuisinePreference ?? 'both',
       diet: state.dietPreference ?? 'veg',
+      lunchFormat: state.lunchFormat ?? 'home_meal',
+      dinnerFormat: state.dinnerFormat ?? 'home_meal',
     });
     const weeklyPlanStartDate = getCurrentWeekMondayISO();
     const updatedState: UserState = {
@@ -1621,12 +1694,81 @@ async function handleAwaitingPreferenceStyle(
 ): Promise<BotResult> {
   if (intent.intent === Intent.SELECT_MEAL_STYLE && intent.payload) {
     const style = intent.payload as UserState['mealStyle'];
+    const updatedState: UserState = {
+      ...state,
+      mealStyle: style,
+      conversationState: 'awaiting_preference_lunch_format',
+      isPreferenceChange: true,
+    };
+
+    return {
+      response: {
+        type: ResponseType.ONBOARDING_LUNCH_FORMAT_PROMPT,
+        suggestedActions: LUNCH_FORMAT_OPTIONS,
+      },
+      updatedState,
+    };
+  }
+
+  return {
+    response: {
+      type: ResponseType.INVALID_INPUT,
+      suggestedActions: STYLE_OPTIONS,
+    },
+    updatedState: state,
+  };
+}
+
+// --- Preference change: lunch format selection ---
+
+async function handleAwaitingPreferenceLunchFormat(
+  intent: UserIntent,
+  state: UserState,
+): Promise<BotResult> {
+  if (intent.intent === Intent.SELECT_LUNCH_FORMAT && intent.payload) {
+    const lunchFormat = intent.payload as MealFormat;
+    const updatedState: UserState = {
+      ...state,
+      lunchFormat,
+      conversationState: 'awaiting_preference_dinner_format',
+      isPreferenceChange: true,
+    };
+
+    return {
+      response: {
+        type: ResponseType.ONBOARDING_DINNER_FORMAT_PROMPT,
+        suggestedActions: DINNER_FORMAT_OPTIONS,
+      },
+      updatedState,
+    };
+  }
+
+  return {
+    response: {
+      type: ResponseType.INVALID_INPUT,
+      suggestedActions: LUNCH_FORMAT_OPTIONS,
+    },
+    updatedState: state,
+  };
+}
+
+// --- Preference change: dinner format selection → regenerate plan ---
+
+async function handleAwaitingPreferenceDinnerFormat(
+  intent: UserIntent,
+  state: UserState,
+  mealRepository: MealRepository,
+  mealComponentRepository: MealComponentRepository,
+  mealSelector?: MealSelector,
+): Promise<BotResult> {
+  if (intent.intent === Intent.SELECT_DINNER_FORMAT && intent.payload) {
+    const dinnerFormat = intent.payload as MealFormat;
     const preferences = {
       cuisine: state.cuisinePreference ?? 'both',
       diet: state.dietPreference ?? 'veg',
-      style: style ?? 'regular',
+      style: state.mealStyle ?? 'regular',
     };
-    console.log('[botEngine] handleAwaitingPreferenceStyle preferences:', JSON.stringify(preferences));
+    console.log('[botEngine] handleAwaitingPreferenceDinnerFormat preferences:', JSON.stringify(preferences));
 
     const deps: DishPreviewDeps = { mealRepository, mealComponentRepository };
     const candidateDishes = await generateCandidateDishes(
@@ -1639,12 +1781,14 @@ async function handleAwaitingPreferenceStyle(
     const weeklyPlan = buildPlanFromComponents(candidateDishes, {
       cuisine: state.cuisinePreference ?? 'both',
       diet: state.dietPreference ?? 'veg',
+      lunchFormat: state.lunchFormat ?? 'home_meal',
+      dinnerFormat: dinnerFormat,
     });
     const weeklyPlanStartDate = getCurrentWeekMondayISO();
 
     const updatedState: UserState = {
       ...state,
-      mealStyle: style,
+      dinnerFormat,
       weeklyPlan,
       weeklyPlanStartDate,
       excludedDishIds: [],
@@ -1667,7 +1811,7 @@ async function handleAwaitingPreferenceStyle(
   return {
     response: {
       type: ResponseType.INVALID_INPUT,
-      suggestedActions: STYLE_OPTIONS,
+      suggestedActions: DINNER_FORMAT_OPTIONS,
     },
     updatedState: state,
   };
@@ -1914,6 +2058,9 @@ export async function processIntent(
     case 'awaiting_meal_style':
       return handleAwaitingMealStyle(intent, userState, mealRepository, mealComponentRepository, mealSelector, paymentProvider);
 
+    case 'awaiting_meal_format':
+      return handleAwaitingMealFormat(intent, userState, mealRepository, mealComponentRepository, mealSelector, paymentProvider);
+
     case 'awaiting_payment':
       return handleAwaitingPayment(intent, userState, mealRepository, mealComponentRepository, mealSelector, paymentProvider);
 
@@ -1934,6 +2081,12 @@ export async function processIntent(
 
     case 'awaiting_preference_style':
       return handleAwaitingPreferenceStyle(intent, userState, mealRepository, mealComponentRepository, mealSelector);
+
+    case 'awaiting_preference_lunch_format':
+      return handleAwaitingPreferenceLunchFormat(intent, userState);
+
+    case 'awaiting_preference_dinner_format':
+      return handleAwaitingPreferenceDinnerFormat(intent, userState, mealRepository, mealComponentRepository, mealSelector);
 
     case 'change_plan_menu':
       return handleChangePlanMenu(intent, userState, mealRepository, mealComponentRepository);
@@ -2034,6 +2187,9 @@ export {
   CUISINE_OPTIONS,
   DIET_OPTIONS,
   STYLE_OPTIONS,
+  MEAL_FORMAT_OPTIONS,
+  LUNCH_FORMAT_OPTIONS,
+  DINNER_FORMAT_OPTIONS,
   WEEKLY_PLAN_OPTIONS,
   HAPPY_MENU_OPTIONS,
   SKIP_COOK_NUMBER_OPTION,
