@@ -8,8 +8,6 @@ import type {
   MealComponent,
   CandidateDishes,
   ComponentsByCategory,
-  CuratedPool,
-  CuratedPoolComponentsByCategory,
   DayPlan,
   WeeklyPlan,
   ComponentCategory,
@@ -571,43 +569,3 @@ export function buildPlanFromComponents(
   return plan;
 }
 
-
-/**
- * Resolve a CuratedPool (IDs + names) into a full CandidateDishes object
- * by looking up each ID in the meal/component repositories.
- *
- * Items that can't be found (e.g. deleted from data) are silently skipped.
- */
-export async function resolveCuratedPool(
-  pool: CuratedPool,
-  deps: DishPreviewDeps,
-): Promise<CandidateDishes> {
-  // Resolve breakfasts
-  const breakfasts: Meal[] = [];
-  for (const entry of pool.breakfasts) {
-    const meal = await deps.mealRepository.getMealById(entry.id);
-    if (meal) breakfasts.push(meal);
-  }
-
-  // Resolve components for a slot
-  async function resolveSlot(
-    slotPool: CuratedPoolComponentsByCategory,
-  ): Promise<ComponentsByCategory> {
-    const allComponents = await deps.mealComponentRepository.getComponents({});
-    const componentMap = new Map(allComponents.map(c => [c.id, c]));
-
-    const result: ComponentsByCategory = { base: [], gravy: [], dry_veggie: [], side: [] };
-    for (const cat of ['base', 'gravy', 'dry_veggie', 'side'] as ComponentCategory[]) {
-      for (const entry of slotPool[cat]) {
-        const comp = componentMap.get(entry.id);
-        if (comp) result[cat].push(comp);
-      }
-    }
-    return result;
-  }
-
-  const lunchComponents = await resolveSlot(pool.lunch);
-  const dinnerComponents = await resolveSlot(pool.dinner);
-
-  return { breakfasts, lunchComponents, dinnerComponents };
-}

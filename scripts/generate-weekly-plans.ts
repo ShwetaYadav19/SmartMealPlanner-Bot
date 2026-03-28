@@ -3,14 +3,12 @@
  * Generate candidate weekly plans for review and approval.
  *
  * Usage:
- *   npx tsx scripts/generate-weekly-plans.ts                          # generate for all combos
+ *   npx tsx scripts/generate-weekly-plans.ts                          # all combos
  *   npx tsx scripts/generate-weekly-plans.ts --combo north_indian-veg-health
  *   npx tsx scripts/generate-weekly-plans.ts --combo north_indian-veg-health --count 3
- *   npx tsx scripts/generate-weekly-plans.ts --format home_meal       # lunch format
- *   npx tsx scripts/generate-weekly-plans.ts --dinner-format quick_meal
+ *   npx tsx scripts/generate-weekly-plans.ts --format home_meal --dinner-format quick_meal
  *
- * Output goes to data/candidate-plans/{combo}/plan-{N}.json
- * Review, edit, then approve with the approve script.
+ * Output: data/candidate-plans/{combo}/{planId}.json (lightweight, no ingredients)
  */
 
 import * as fs from 'fs';
@@ -18,11 +16,10 @@ import * as path from 'path';
 import { JsonMealRepository } from '../src/adapters/jsonMealRepository';
 import { JsonMealComponentRepository } from '../src/adapters/jsonMealComponentRepository';
 import { generateCandidateDishes, buildPlanFromComponents, type DishPreviewDeps } from '../src/core/dishPreview';
-import type { WeeklyPlan, DayPlan, MealFormat, ComposedMeal, Meal } from '../src/core/types';
+import type { WeeklyPlan, MealFormat, ComposedMeal } from '../src/core/types';
 
 const DATA_DIR = path.resolve(__dirname, '../data');
 const OUTPUT_DIR = path.join(DATA_DIR, 'candidate-plans');
-
 const CUISINES = ['north_indian', 'south_indian', 'both'] as const;
 const DIETS = ['veg', 'non_veg'] as const;
 const STYLES = ['health', 'regular'] as const;
@@ -30,22 +27,12 @@ const STYLES = ['health', 'regular'] as const;
 const mealRepo = new JsonMealRepository(path.join(DATA_DIR, 'meals.json'));
 const componentRepo = new JsonMealComponentRepository(path.join(DATA_DIR, 'meal-components'));
 
-// --- Human-readable plan formatting ---
-
-function formatMealName(meal: Meal | ComposedMeal): string {
-  return meal.name;
-}
-
-function formatDayPlan(day: DayPlan): string {
-  return [
-    `  🥣 ${day.breakfast.name}`,
-    `  🍛 ${day.lunch.name}`,
-    `  🍽️ ${day.dinner.name}`,
-  ].join('\n');
-}
-
-function formatPlanReadable(plan: WeeklyPlan): string {
-  return plan.map(day => `${day.day}\n${formatDayPlan(day)}`).join('\n\n');
+// Lightweight day plan — just IDs and names, no ingredients
+interface LightDayPlan {
+  day: string;
+  breakfast: { id: string; name: string };
+  lunch: { componentIds: string[]; name: string };
+  dinner: { componentIds: string[]; name: string };
 }
 
 interface StoredPlan {
@@ -55,67 +42,63 @@ interface StoredPlan {
   dinnerFormat: string;
   status: 'candidate' | 'approved' | 'archived';
   createdAt: string;
-  weeklyPlan: WeeklyPlan;
-  readable: string;
+  days: LightDayPlan[];
+}
+
+function toLightPlan(plan: WeeklyPlan): LightDayPlan[] {
+  return plan.map(day => ({
+    day: day.day,
+    breakfast: { id: day.breakfast.id, name: day.breakfast.name },
+    lunch: {
+      componentIds: (day.lunch as ComposedMeal).components.map(c => c.id),
+      name: day.lunch.name,
+    },
+    dinner: {
+      componentIds: (day.dinner as ComposedMeal).components.map(c => c.id),
+      name: day.dinner.name,
+    },
+  }));
 }
 
 async function generatePlansForCombo(
-  cuisine: string,
-  diet: string,
-  style: string,
-  count: number,
-  lunchFormat: MealFormat,
-  dinnerFormat: MealFormat,
+  cuisine: string, diet: string, style: string,
+  count: number, lunchFormat: MealFormat, dinnerFormat: MealFormat,
 ): Promise<void> {
   const combo = `${cuisine}-${diet}-${style}`;
   const comboDir = path.join(OUTPUT_DIR, combo);
-
-  if (!fs.existsSync(comboDir)) {
-    fs.mkdirSync(comboDir, { recursive: true });
-  }
+  if (!fs.existsSync(comboDir)) fs.mkdirSync(comboDir, { recursive: true });
 
   const deps: DishPreviewDeps = { mealRepository: mealRepo, mealComponentRepository: componentRepo };
-  const preferences = { cuisine, diet, style };
 
   console.log(`\n📋 ${combo} (lunch: ${lunchFormat}, dinner: ${dinnerFormat})`);
 
   for (let i = 0; i < count; i++) {
     try {
-      const candidates = await generateCandidateDishes(deps, preferences, []);
-      const plan = buildPlanFromComponents(candidates, {
-        cuisine,
-        diet,
-        lunchFormat,
-        dinnerFormat,
-      });
-
+      const candidates = await generateCandidateDishes(deps, { cuisine, diet, style }, []);
+      const plan = buildPlanFromComponents(candidates, { cuisine, diet, lunchFormat, dinnerFormat });
       const planId = `${combo}-${lunchFormat}-${dinnerFormat}-${String(i + 1).padStart(2, '0')}`;
-      const readable = formatPlanReadable(plan);
 
       const stored: StoredPlan = {
-        planId,
-        combo,
-        lunchFormat,
-        dinnerFormat,
+        planId, combo, lunchFormat, dinnerFormat,
         status: 'candidate',
         createdAt: new Date().toISOString().split('T')[0],
-        weeklyPlan: plan,
-        readable,
+        days: toLightPlan(plan),
       };
 
       const filePath = path.join(comboDir, `${planId}.json`);
       fs.writeFileSync(filePath, JSON.stringify(stored, null, 2) + '\n');
 
-      console.log(`\n  --- Plan ${i + 1} (${planId}) ---`);
-      console.log(readable);
-      console.log(`  ✅ Saved to ${path.relative(process.cwd(), filePath)}`);
+      // Print readable summary
+      console.log(`\n  --- Plan ${i + 1} ---`);
+      for (const d of stored.days) {
+        console.log(`  ${d.day}: ${d.breakfast.name} | ${d.lunch.name} | ${d.dinner.name}`);
+      }
+      console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
     } catch (err) {
-      console.error(`  ❌ Failed to generate plan ${i + 1}:`, err);
+      console.error(`  ❌ Plan ${i + 1} failed:`, err);
     }
   }
 }
-
-// --- CLI argument parsing ---
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -123,56 +106,32 @@ function parseArgs() {
   let count = 3;
   let lunchFormat: MealFormat = 'home_meal';
   let dinnerFormat: MealFormat = 'quick_meal';
-
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--combo' && args[i + 1]) {
-      combo = args[++i];
-    } else if (args[i] === '--count' && args[i + 1]) {
-      count = parseInt(args[++i], 10);
-    } else if (args[i] === '--format' && args[i + 1]) {
-      lunchFormat = args[++i] as MealFormat;
-    } else if (args[i] === '--dinner-format' && args[i + 1]) {
-      dinnerFormat = args[++i] as MealFormat;
-    }
+    if (args[i] === '--combo' && args[i + 1]) combo = args[++i];
+    else if (args[i] === '--count' && args[i + 1]) count = parseInt(args[++i], 10);
+    else if (args[i] === '--format' && args[i + 1]) lunchFormat = args[++i] as MealFormat;
+    else if (args[i] === '--dinner-format' && args[i + 1]) dinnerFormat = args[++i] as MealFormat;
   }
-
   return { combo, count, lunchFormat, dinnerFormat };
 }
 
 async function main() {
   const { combo, count, lunchFormat, dinnerFormat } = parseArgs();
-
   console.log('🍽️  Generating candidate weekly plans...');
-  console.log(`   Count per combo: ${count}`);
-  console.log(`   Lunch format: ${lunchFormat}, Dinner format: ${dinnerFormat}`);
-
-  if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-  }
+  if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
   if (combo) {
-    const [cuisine, diet, style] = combo.split('-');
-    if (!cuisine || !diet || !style) {
-      console.error('Invalid combo format. Use: cuisine-diet-style (e.g. north_indian-veg-health)');
-      process.exit(1);
-    }
+    const parts = combo.split('-');
+    // Handle cuisine names with underscores: north_indian-veg-health
+    const style = parts.pop()!;
+    const diet = parts.pop()!;
+    const cuisine = parts.join('-');
     await generatePlansForCombo(cuisine, diet, style, count, lunchFormat, dinnerFormat);
   } else {
-    for (const cuisine of CUISINES) {
-      for (const diet of DIETS) {
-        for (const style of STYLES) {
-          await generatePlansForCombo(cuisine, diet, style, count, lunchFormat, dinnerFormat);
-        }
-      }
-    }
+    for (const c of CUISINES) for (const d of DIETS) for (const s of STYLES)
+      await generatePlansForCombo(c, d, s, count, lunchFormat, dinnerFormat);
   }
-
-  console.log(`\n✅ Done! Plans in ${path.relative(process.cwd(), OUTPUT_DIR)}`);
-  console.log('\nNext steps:');
-  console.log('  1. Review the generated plans in data/candidate-plans/');
-  console.log('  2. Edit any plan JSON — change the "readable" field to see your edits');
-  console.log('  3. Change "status" from "candidate" to "approved" for plans you like');
-  console.log('  4. Approved plans will be served to users\n');
+  console.log(`\n✅ Done! Now run: npx tsx scripts/preview-plans.ts`);
 }
 
 main().catch(console.error);

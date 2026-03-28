@@ -1,5 +1,5 @@
 // Port interfaces — zero imports from adapters, WhatsApp, Twilio, or AWS modules
-import type { Meal, MealFilter, MealComponent, MealComponentFilter, UserState, Rule, CuratedPool } from './types';
+import type { Meal, MealFilter, MealComponent, MealComponentFilter, UserState, Rule } from './types';
 
 export interface ButtonOption {
   id: string;
@@ -48,10 +48,6 @@ export interface UserStateRepository {
 
 export interface RulesRepository {
   getRules(): Promise<Rule[]>;
-}
-
-export interface CuratedPoolRepository {
-  getPool(cuisine: string, diet: string, style: string): CuratedPool | null;
 }
 
 export interface PaymentProvider {

@@ -66,26 +66,6 @@ export interface GroceryItem {
   category: string;
 }
 
-// --- Curated Pool Types ---
-
-export interface CuratedPoolEntry {
-  id: string;
-  name: string;
-}
-
-export interface CuratedPoolComponentsByCategory {
-  base: CuratedPoolEntry[];
-  gravy: CuratedPoolEntry[];
-  dry_veggie: CuratedPoolEntry[];
-  side: CuratedPoolEntry[];
-}
-
-export interface CuratedPool {
-  breakfasts: CuratedPoolEntry[];
-  lunch: CuratedPoolComponentsByCategory;
-  dinner: CuratedPoolComponentsByCategory;
-}
-
 export type MealFormat = 'quick_meal' | 'home_meal' | 'full_thali';
 
 export type MealFormatPreset = 'light' | 'regular_format' | 'full_thali_preset';
