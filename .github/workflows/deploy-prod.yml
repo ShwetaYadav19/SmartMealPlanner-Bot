@@ -33,6 +33,9 @@ jobs:
           TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_PROD }}
           TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN_PROD }}
           TWILIO_SENDER_NUMBER: ${{ secrets.TWILIO_SENDER_NUMBER_PROD }}
+          RAZORPAY_KEY_ID: ${{ secrets.RAZORPAY_KEY_ID_PROD }}
+          RAZORPAY_KEY_SECRET: ${{ secrets.RAZORPAY_KEY_SECRET_PROD }}
+          RAZORPAY_PLAN_ID: ${{ secrets.RAZORPAY_PLAN_ID_PROD }}
         run: |
           npm run build
           node scripts/deploy.js
