@@ -293,19 +293,11 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         buttons: suggestedButtons ?? STYLE_BUTTONS,
       };
 
-    case ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT: {
-      const formatListItems: ListItem[] = [
-        { id: 'light', item: '🍚 Light', description: 'Dal/curry + rice/roti' },
-        { id: 'regular_format', item: '🏠 Regular', description: 'Lunch with sabzi, lighter dinner' },
-        { id: 'hearty', item: '🍛 Hearty', description: 'Sabzi with every meal' },
-        { id: 'full_spread', item: '🍽️ Full Spread', description: 'Full thali with sides' },
-      ];
+    case ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT:
       return {
         text: ONBOARDING_MEAL_FORMAT_PROMPT,
-        listItems: formatListItems,
-        listButtonLabel: 'Pick your style',
+        buttons: suggestedButtons ?? MEAL_FORMAT_BUTTONS,
       };
-    }
 
     case ResponseType.ONBOARDING_LUNCH_FORMAT_PROMPT:
       return {
