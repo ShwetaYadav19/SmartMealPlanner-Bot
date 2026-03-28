@@ -255,6 +255,15 @@ async function handleAwaitingMealFormat(
       return generatePlanAfterPayment(updatedState, mealRepository, mealComponentRepository, mealSelector);
     }
 
+    // Skip payment when SKIP_PAYMENT env var is set (for testing)
+    if (process.env.SKIP_PAYMENT === 'true') {
+      updatedState.subscription = {
+        status: 'active',
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      };
+      return generatePlanAfterPayment(updatedState, mealRepository, mealComponentRepository, mealSelector);
+    }
+
     // Create a Razorpay subscription and send payment link
     if (paymentProvider) {
       try {
