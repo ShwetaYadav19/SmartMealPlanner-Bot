@@ -55,3 +55,15 @@ export interface PaymentProvider {
   getSubscriptionStatus(subscriptionId: string): Promise<{ status: 'active' | 'pending' | 'expired' | 'cancelled'; paymentId?: string; currentPeriodEnd?: string }>;
   verifyWebhookSignature(body: string, signature: string): boolean;
 }
+
+export interface MetricDatum {
+  name: string;
+  value: number;
+  unit: 'Count' | 'Milliseconds' | 'None';
+  dimensions?: Record<string, string>;
+}
+
+export interface MetricsPort {
+  publishMetric(name: string, value: number, unit: 'Count' | 'Milliseconds' | 'None', dimensions?: Record<string, string>): Promise<void>;
+  publishMetrics(metrics: MetricDatum[]): Promise<void>;
+}

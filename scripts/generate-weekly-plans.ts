@@ -27,12 +27,12 @@ const STYLES = ['health', 'regular'] as const;
 const mealRepo = new JsonMealRepository(path.join(DATA_DIR, 'meals.json'));
 const componentRepo = new JsonMealComponentRepository(path.join(DATA_DIR, 'meal-components'));
 
-// Lightweight day plan — just IDs and names, no ingredients
+// Lightweight day plan — just names, no IDs or ingredients
 interface LightDayPlan {
   day: string;
-  breakfast: { id: string; name: string };
-  lunch: { componentIds: string[]; name: string };
-  dinner: { componentIds: string[]; name: string };
+  breakfast: string;
+  lunch: string;
+  dinner: string;
 }
 
 interface StoredPlan {
@@ -48,15 +48,9 @@ interface StoredPlan {
 function toLightPlan(plan: WeeklyPlan): LightDayPlan[] {
   return plan.map(day => ({
     day: day.day,
-    breakfast: { id: day.breakfast.id, name: day.breakfast.name },
-    lunch: {
-      componentIds: (day.lunch as ComposedMeal).components.map(c => c.id),
-      name: day.lunch.name,
-    },
-    dinner: {
-      componentIds: (day.dinner as ComposedMeal).components.map(c => c.id),
-      name: day.dinner.name,
-    },
+    breakfast: day.breakfast.name,
+    lunch: day.lunch.name,
+    dinner: day.dinner.name,
   }));
 }
 
@@ -91,7 +85,7 @@ async function generatePlansForCombo(
       // Print readable summary
       console.log(`\n  --- Plan ${i + 1} ---`);
       for (const d of stored.days) {
-        console.log(`  ${d.day}: ${d.breakfast.name} | ${d.lunch.name} | ${d.dinner.name}`);
+        console.log(`  ${d.day}: ${d.breakfast} | ${d.lunch} | ${d.dinner}`);
       }
       console.log(`  ✅ ${path.relative(process.cwd(), filePath)}`);
     } catch (err) {

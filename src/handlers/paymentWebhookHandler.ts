@@ -7,11 +7,12 @@ import { JsonMealComponentRepository } from '../adapters/jsonMealComponentReposi
 import { JsonRulesRepository } from '../adapters/jsonRulesRepository';
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
 import { RazorpayPaymentProvider } from '../adapters/razorpayPaymentProvider';
+import { CloudWatchMetricsAdapter } from '../adapters/cloudwatchMetricsAdapter';
 import { processIntent } from '../core/botEngine';
 import { formatBotResponse } from '../messageFormatter';
 import { loadConfig } from '../config';
 import { Intent, type UserState } from '../core/types';
-import type { MessagingProvider } from '../core/ports';
+import type { MessagingProvider, MetricsPort } from '../core/ports';
 
 interface APIGatewayProxyEvent {
   body: string | null;
@@ -68,6 +69,8 @@ async function sendFormattedResponse(
 export async function paymentWebhookHandler(
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> {
+  const metricsPort: MetricsPort = new CloudWatchMetricsAdapter();
+
   try {
     let rawBody = event.body ?? '';
     if (event.isBase64Encoded && rawBody) {
@@ -85,6 +88,7 @@ export async function paymentWebhookHandler(
     const signature = event.headers['x-razorpay-signature'] ?? '';
     if (!paymentProvider.verifyWebhookSignature(rawBody, signature)) {
       console.error('[paymentWebhook] Invalid signature');
+      try { await metricsPort.publishMetric('InvalidPaymentSignature', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
       return { statusCode: 400, body: 'Invalid signature' };
     }
 
@@ -94,6 +98,14 @@ export async function paymentWebhookHandler(
     // We care about subscription.activated and payment.captured events
     if (payload.event !== 'subscription.activated' && payload.event !== 'payment.captured') {
       return { statusCode: 200, body: 'OK' };
+    }
+
+    // --- Metrics: SubscriptionActivated / PaymentCaptured ---
+    if (payload.event === 'subscription.activated') {
+      try { await metricsPort.publishMetric('SubscriptionActivated', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
+    }
+    if (payload.event === 'payment.captured') {
+      try { await metricsPort.publishMetric('PaymentCaptured', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
     }
 
     // Extract phone number from notes
@@ -172,6 +184,7 @@ export async function paymentWebhookHandler(
     return { statusCode: 200, body: 'OK' };
   } catch (error) {
     console.error('[paymentWebhook] Error:', error);
+    try { await metricsPort.publishMetric('PaymentWebhookError', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
     return { statusCode: 500, body: 'Internal error' };
   }
 }

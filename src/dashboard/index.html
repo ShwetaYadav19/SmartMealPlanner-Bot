@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Meal Planner — Metrics Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1a1a2e; }
+  header { background: #1a1a2e; color: #fff; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
+  header h1 { font-size: 1.25rem; font-weight: 600; }
+  .header-right { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .range-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: background 0.2s; }
+  .range-btn:hover { background: rgba(255,255,255,0.2); }
+  .range-btn.active { background: #4361ee; border-color: #4361ee; }
+  .meta { font-size: 0.8rem; opacity: 0.7; }
+  .settings-btn { background: none; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 0.4rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+  .settings-btn:hover { background: rgba(255,255,255,0.1); }
+  main { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.25rem; }
+  .card { background: #fff; border-radius: 10px; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .card h2 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #333; }
+  .card canvas { width: 100% !important; max-height: 280px; }
+  /* Spinner */
+  .spinner-overlay { position: fixed; inset: 0; background: rgba(240,242,245,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .spinner { width: 40px; height: 40px; border: 4px solid #e0e0e0; border-top-color: #4361ee; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  /* Error banner */
+  .error-banner { background: #fee2e2; color: #991b1b; padding: 0.75rem 1.25rem; border-radius: 8px; margin-bottom: 1rem; display: none; font-size: 0.9rem; }
+  /* Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 200; }
+  .modal { background: #fff; border-radius: 12px; padding: 2rem; width: 90%; max-width: 420px; }
+  .modal h2 { margin-bottom: 1rem; font-size: 1.1rem; }
+  .modal label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.3rem; color: #555; }
+  .modal input { width: 100%; padding: 0.6rem 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; margin-bottom: 1rem; }
+  .modal input:focus { outline: none; border-color: #4361ee; box-shadow: 0 0 0 2px rgba(67,97,238,0.15); }
+  .modal button { background: #4361ee; color: #fff; border: none; padding: 0.6rem 1.5rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+  .modal button:hover { background: #3a56d4; }
+  .hidden { display: none !important; }
+  @media (max-width: 500px) {
+    header { padding: 0.75rem 1rem; }
+    main { padding: 1rem; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal-overlay hidden">
+  <div class="modal">
+    <h2>Dashboard Settings</h2>
+    <label for="inputEndpoint">API Endpoint URL</label>
+    <input id="inputEndpoint" type="url" placeholder="https://abc123.execute-api.region.amazonaws.com/prod/metrics">
+    <label for="inputApiKey">API Key</label>
+    <input id="inputApiKey" type="password" placeholder="Enter your API key">
+    <button id="saveSettingsBtn">Save &amp; Load</button>
+  </div>
+</div>
+
+<!-- Loading Spinner -->
+<div id="spinner" class="spinner-overlay hidden"><div class="spinner"></div></div>
+
+<header>
+  <h1>🍽️ Smart Meal Planner Metrics</h1>
+  <div class="header-right">
+    <div>
+      <button class="range-btn active" data-range="today">Today</button>
+      <button class="range-btn" data-range="7d">Last 7 Days</button>
+      <button class="range-btn" data-range="30d">Last 30 Days</button>
+    </div>
+    <span class="meta" id="refreshTimer">Next refresh in 5:00</span>
+    <button class="settings-btn" id="openSettings">⚙ Settings</button>
+  </div>
+</header>
+
+<main>
+  <div class="error-banner" id="errorBanner"></div>
+  <div class="grid">
+    <div class="card"><h2>User Acquisition</h2><canvas id="chartAcquisition"></canvas></div>
+    <div class="card"><h2>Engagement</h2><canvas id="chartEngagement"></canvas></div>
+    <div class="card"><h2>Feature Usage</h2><canvas id="chartFeature"></canvas></div>
+    <div class="card"><h2>Errors</h2><canvas id="chartErrors"></canvas></div>
+    <div class="card"><h2>Payments</h2><canvas id="chartPayments"></canvas></div>
+    <div class="card"><h2>Reminders</h2><canvas id="chartReminders"></canvas></div>
+    <div class="card"><h2>Webhook Latency (ms)</h2><canvas id="chartLatency"></canvas></div>
+  </div>
+</main>
+
+<script>
+
+(function () {
+  // ── State ──
+  let currentRange = 'today';
+  let charts = {};
+  let refreshInterval = null;
+  let countdownSec = 300; // 5 minutes
+
+  // ── LocalStorage helpers ──
+  const getEndpoint = () => localStorage.getItem('metrics_endpoint') || '';
+  const getApiKey  = () => localStorage.getItem('metrics_api_key') || '';
+  const setEndpoint = (v) => localStorage.setItem('metrics_endpoint', v);
+  const setApiKey  = (v) => localStorage.setItem('metrics_api_key', v);
+
+  // ── DOM refs ──
+  const settingsModal = document.getElementById('settingsModal');
+  const inputEndpoint = document.getElementById('inputEndpoint');
+  const inputApiKey   = document.getElementById('inputApiKey');
+  const saveBtn       = document.getElementById('saveSettingsBtn');
+  const openBtn       = document.getElementById('openSettings');
+  const spinner       = document.getElementById('spinner');
+  const errorBanner   = document.getElementById('errorBanner');
+  const timerEl       = document.getElementById('refreshTimer');
+
+  // ── Settings modal ──
+  function showSettings() {
+    inputEndpoint.value = getEndpoint();
+    inputApiKey.value = getApiKey();
+    settingsModal.classList.remove('hidden');
+  }
+  function hideSettings() { settingsModal.classList.add('hidden'); }
+
+  openBtn.addEventListener('click', showSettings);
+  saveBtn.addEventListener('click', () => {
+    const ep = inputEndpoint.value.trim();
+    const key = inputApiKey.value.trim();
+    if (!ep || !key) return;
+    setEndpoint(ep);
+    setApiKey(key);
+    hideSettings();
+    fetchAndRender();
+  });
+
+  // Prompt on first visit
+  if (!getEndpoint() || !getApiKey()) showSettings();
+
+  // ── Range buttons ──
+  document.querySelectorAll('.range-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentRange = btn.dataset.range;
+      fetchAndRender();
+    });
+  });
+
+  // ── Countdown timer ──
+  function startCountdown() {
+    countdownSec = 300;
+    clearInterval(refreshInterval);
+    refreshInterval = setInterval(() => {
+      countdownSec--;
+      if (countdownSec <= 0) { countdownSec = 300; fetchAndRender(); }
+      const m = Math.floor(countdownSec / 60);
+      const s = String(countdownSec % 60).padStart(2, '0');
+      timerEl.textContent = `Next refresh in ${m}:${s}`;
+    }, 1000);
+  }
+
+  // ── Fetch data ──
+  async function fetchAndRender() {
+    const endpoint = getEndpoint();
+    const key = getApiKey();
+    if (!endpoint || !key) { showSettings(); return; }
+
+    spinner.classList.remove('hidden');
+    errorBanner.style.display = 'none';
+    startCountdown();
+
+    try {
+      const sep = endpoint.includes('?') ? '&' : '?';
+      const url = `${endpoint}${sep}range=${currentRange}&apiKey=${encodeURIComponent(key)}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      renderCharts(data);
+    } catch (err) {
+      errorBanner.textContent = `Failed to load metrics: ${err.message}`;
+      errorBanner.style.display = 'block';
+    } finally {
+      spinner.classList.add('hidden');
+    }
+  }
+
+  // ── Chart colors ──
+  const PALETTE = [
+    '#4361ee','#3a0ca3','#7209b7','#f72585','#4cc9f0',
+    '#06d6a0','#ffd166','#ef476f','#118ab2','#073b4c'
+  ];
+
+  function makeDatasets(group, type) {
+    return Object.entries(group || {}).map(([name, series], i) => ({
+      label: name,
+      data: (series.timestamps || []).map((t, idx) => ({ x: t, y: series.values[idx] })),
+      borderColor: PALETTE[i % PALETTE.length],
+      backgroundColor: type === 'bar'
+        ? PALETTE[i % PALETTE.length] + '99'
+        : PALETTE[i % PALETTE.length] + '18',
+      fill: type === 'line',
+      tension: 0.3,
+      borderWidth: 2,
+      pointRadius: 2,
+    }));
+  }
+
+  function createOrUpdate(canvasId, datasets, type) {
+    const ctx = document.getElementById(canvasId);
+    if (charts[canvasId]) { charts[canvasId].destroy(); }
+    charts[canvasId] = new Chart(ctx, {
+      type,
+      data: { datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: { type: 'time', time: { tooltipFormat: 'MMM d, HH:mm' }, grid: { display: false } },
+          y: { beginAtZero: true, grid: { color: '#f0f0f0' } }
+        },
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10, font: { size: 11 } } } }
+      }
+    });
+  }
+
+  // ── Render all charts ──
+  function renderCharts(data) {
+    const m = data.metrics || {};
+    createOrUpdate('chartAcquisition', makeDatasets(m.userAcquisition, 'bar'), 'bar');
+    createOrUpdate('chartEngagement',  makeDatasets(m.engagement, 'bar'), 'bar');
+    createOrUpdate('chartFeature',     makeDatasets(m.featureUsage, 'bar'), 'bar');
+    createOrUpdate('chartErrors',      makeDatasets(m.errors, 'bar'), 'bar');
+    createOrUpdate('chartPayments',    makeDatasets(m.payments, 'bar'), 'bar');
+    createOrUpdate('chartReminders',   makeDatasets(m.reminders, 'bar'), 'bar');
+    createOrUpdate('chartLatency',     makeDatasets(m.latency, 'line'), 'line');
+  }
+
+  // ── Initial load ──
+  if (getEndpoint() && getApiKey()) fetchAndRender();
+})();
+</script>
+</body>
+</html>

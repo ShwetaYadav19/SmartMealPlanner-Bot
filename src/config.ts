@@ -3,6 +3,7 @@
 export interface Config {
   stage: string;
   dynamodbTable: string;
+  dailyActivityTable: string;
   twilioAccountSid: string;
   twilioAuthToken: string;
   twilioSenderNumber: string;
@@ -12,6 +13,7 @@ export interface Config {
   razorpayKeySecret: string;
   razorpayPlanId: string;
   imageBucket: string;
+  metricsApiKey: string;
 }
 
 const REQUIRED_VARS = [
@@ -48,6 +50,7 @@ export function loadConfig(): Config {
   return {
     stage: process.env.STAGE!,
     dynamodbTable: process.env.DYNAMODB_TABLE!,
+    dailyActivityTable: process.env.DAILY_ACTIVITY_TABLE || `MealPlannerDailyActivity-${process.env.STAGE || 'dev'}`,
     twilioAccountSid: process.env.TWILIO_ACCOUNT_SID!,
     twilioAuthToken: process.env.TWILIO_AUTH_TOKEN!,
     twilioSenderNumber: process.env.TWILIO_SENDER_NUMBER!,
@@ -57,5 +60,6 @@ export function loadConfig(): Config {
     razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET!,
     razorpayPlanId: process.env.RAZORPAY_PLAN_ID!,
     imageBucket: process.env.IMAGE_BUCKET || `smartmealplanner-images-${process.env.STAGE || 'dev'}`,
+    metricsApiKey: process.env.METRICS_API_KEY || '',
   };
 }

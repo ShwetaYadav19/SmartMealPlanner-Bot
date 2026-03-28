@@ -4,6 +4,7 @@
 
 import { DynamoDBUserStateRepository } from '../adapters/dynamodbUserStateRepository';
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
+import { CloudWatchMetricsAdapter } from '../adapters/cloudwatchMetricsAdapter';
 import { formatBotResponse } from '../messageFormatter';
 import { loadConfig } from '../config';
 import { ResponseType } from '../core/types';
@@ -28,6 +29,7 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
     config.twilioAuthToken,
     config.twilioSenderNumber,
   );
+  const metricsPort = new CloudWatchMetricsAdapter();
 
   // Scan all users with onboardingComplete: true
   const onboardedUsers = await userStateRepo.scanOnboardedUsers();
@@ -101,8 +103,11 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
           conversationState: 'main_menu',
         });
       }
+
+      try { await metricsPort.publishMetric('WeeklyReminderSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
     } catch (error) {
       console.error(`Failed to send weekly reminder to ${user.phoneNumber}:`, error);
+      try { await metricsPort.publishMetric('WeeklyReminderFailure', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
     }
   }
 }

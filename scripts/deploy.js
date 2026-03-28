@@ -19,7 +19,7 @@ const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 
-const { DynamoDBClient, CreateTableCommand, DescribeTableCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient, CreateTableCommand, DescribeTableCommand, UpdateTimeToLiveCommand } = require('@aws-sdk/client-dynamodb');
 const {
   LambdaClient,
   CreateFunctionCommand,
@@ -58,7 +58,12 @@ const {
   PutPublicAccessBlockCommand,
   PutBucketPolicyCommand,
   PutBucketLifecycleConfigurationCommand,
+  PutObjectCommand,
 } = require('@aws-sdk/client-s3');
+const {
+  CloudWatchClient: CWClient,
+  PutDashboardCommand,
+} = require('@aws-sdk/client-cloudwatch');
 
 // --- Constants ---
 const REGION = 'ap-south-1';
@@ -75,6 +80,10 @@ const ROLE_NAME = `MealPlannerLambdaRole-${stage}`;
 const DAILY_RULE = `MealPlannerDailyReminder-${stage}`;
 const WEEKLY_RULE = `MealPlannerWeeklyReminder-${stage}`;
 const IMAGE_BUCKET = `smartmealplanner-images-${stage}`;
+const DAILY_ACTIVITY_TABLE = `MealPlannerDailyActivity-${stage}`;
+const METRICS_API_FN = `MealPlannerMetricsApi-${stage}`;
+const DASHBOARD_NAME = `SmartMealPlanner-${stage}`;
+const DASHBOARD_BUCKET = `smartmealplanner-dashboard-${stage}`;
 const RUNTIME = 'nodejs18.x';
 
 const LAMBDA_DEFS = [
@@ -82,6 +91,7 @@ const LAMBDA_DEFS = [
   { name: DAILY_FN, handler: 'handlers/dailyReminderHandler.dailyReminderHandler', src: 'dailyReminderHandler.js' },
   { name: WEEKLY_FN, handler: 'handlers/weeklyReminderHandler.weeklyReminderHandler', src: 'weeklyReminderHandler.js' },
   { name: PAYMENT_WEBHOOK_FN, handler: 'handlers/paymentWebhookHandler.paymentWebhookHandler', src: 'paymentWebhookHandler.js' },
+  { name: METRICS_API_FN, handler: 'handlers/metricsApiHandler.metricsApiHandler', src: 'metricsApiHandler.js' },
 ];
 
 // AWS clients
@@ -91,6 +101,7 @@ const iamClient = new IAMClient({ region: REGION });
 const apigw = new APIGatewayClient({ region: REGION });
 const eb = new EventBridgeClient({ region: REGION });
 const s3Client = new S3Client({ region: REGION });
+const cwClient = new CWClient({ region: REGION });
 
 function log(msg) {
   console.log(`[${stage}] ${msg}`);
@@ -112,6 +123,8 @@ function getLambdaEnvVars() {
     RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET || '',
     RAZORPAY_PLAN_ID: process.env.RAZORPAY_PLAN_ID || '',
     IMAGE_BUCKET: IMAGE_BUCKET,
+    DAILY_ACTIVITY_TABLE: DAILY_ACTIVITY_TABLE,
+    METRICS_API_KEY: process.env.METRICS_API_KEY || '',
   };
   // Pass through all TWILIO_TEMPLATE_SID_* overrides
   for (const [key, value] of Object.entries(process.env)) {
@@ -201,6 +214,46 @@ async function ensureDynamoDBTable() {
         BillingMode: 'PAY_PER_REQUEST',
       }));
       log(`Table ${TABLE_NAME} created.`);
+    } else {
+      throw err;
+    }
+  }
+}
+
+// --- Step 2a: Daily Activity DynamoDB table ---
+async function ensureDailyActivityTable() {
+  log(`Ensuring DynamoDB table: ${DAILY_ACTIVITY_TABLE}`);
+  try {
+    await dynamodb.send(new DescribeTableCommand({ TableName: DAILY_ACTIVITY_TABLE }));
+    log(`Table ${DAILY_ACTIVITY_TABLE} already exists.`);
+  } catch (err) {
+    if (err.name === 'ResourceNotFoundException') {
+      log(`Creating table ${DAILY_ACTIVITY_TABLE}...`);
+      await dynamodb.send(new CreateTableCommand({
+        TableName: DAILY_ACTIVITY_TABLE,
+        KeySchema: [{ AttributeName: 'pk', KeyType: 'HASH' }],
+        AttributeDefinitions: [{ AttributeName: 'pk', AttributeType: 'S' }],
+        BillingMode: 'PAY_PER_REQUEST',
+      }));
+      log(`Table ${DAILY_ACTIVITY_TABLE} created.`);
+    } else {
+      throw err;
+    }
+  }
+
+  // Enable TTL on the ttl attribute
+  try {
+    await dynamodb.send(new UpdateTimeToLiveCommand({
+      TableName: DAILY_ACTIVITY_TABLE,
+      TimeToLiveSpecification: {
+        Enabled: true,
+        AttributeName: 'ttl',
+      },
+    }));
+    log(`TTL enabled on ${DAILY_ACTIVITY_TABLE}.`);
+  } catch (err) {
+    if (err.name === 'ValidationException' && err.message?.includes('already enabled')) {
+      log(`TTL already enabled on ${DAILY_ACTIVITY_TABLE}.`);
     } else {
       throw err;
     }
@@ -354,6 +407,47 @@ async function ensureIAMRole() {
     RoleName: ROLE_NAME,
     PolicyName: `MealPlannerS3ImageAccess-${stage}`,
     PolicyDocument: s3Policy,
+  }));
+
+  // Inline policy for DynamoDB Daily Activity Table access
+  const dailyActivityPolicy = JSON.stringify({
+    Version: '2012-10-17',
+    Statement: [{
+      Effect: 'Allow',
+      Action: [
+        'dynamodb:PutItem',
+      ],
+      Resource: `arn:aws:dynamodb:${REGION}:${AWS_ACCOUNT_ID}:table/${DAILY_ACTIVITY_TABLE}`,
+    }],
+  });
+
+  await iamClient.send(new PutRolePolicyCommand({
+    RoleName: ROLE_NAME,
+    PolicyName: `MealPlannerDailyActivityAccess-${stage}`,
+    PolicyDocument: dailyActivityPolicy,
+  }));
+
+  // Inline policy for CloudWatch metrics access (all handlers)
+  const cloudwatchPolicy = JSON.stringify({
+    Version: '2012-10-17',
+    Statement: [
+      {
+        Effect: 'Allow',
+        Action: ['cloudwatch:PutMetricData'],
+        Resource: '*',
+      },
+      {
+        Effect: 'Allow',
+        Action: ['cloudwatch:GetMetricData'],
+        Resource: '*',
+      },
+    ],
+  });
+
+  await iamClient.send(new PutRolePolicyCommand({
+    RoleName: ROLE_NAME,
+    PolicyName: `MealPlannerCloudWatchAccess-${stage}`,
+    PolicyDocument: cloudwatchPolicy,
   }));
 
   log(`IAM role configured: ${roleArn}`);
@@ -587,6 +681,93 @@ async function ensureApiGateway() {
     }
   }
 
+  // --- /metrics resource ---
+  let metricsResource = resources.items.find((r) => r.path === '/metrics');
+  if (!metricsResource) {
+    const resp = await apigw.send(new CreateResourceCommand({
+      restApiId: apiId,
+      parentId: rootResource.id,
+      pathPart: 'metrics',
+    }));
+    metricsResource = resp;
+    log('Created /metrics resource.');
+  }
+
+  // Create GET method on /metrics
+  try {
+    await apigw.send(new PutMethodCommand({
+      restApiId: apiId,
+      resourceId: metricsResource.id,
+      httpMethod: 'GET',
+      authorizationType: 'NONE',
+    }));
+  } catch (err) {
+    if (err.name !== 'ConflictException') throw err;
+  }
+
+  // Integrate with Metrics API Lambda
+  const metricsLambdaArn = `arn:aws:lambda:${REGION}:${AWS_ACCOUNT_ID}:function:${METRICS_API_FN}`;
+  const metricsIntegrationUri = `arn:aws:apigateway:${REGION}:lambda:path/2015-03-31/functions/${metricsLambdaArn}/invocations`;
+
+  await apigw.send(new PutIntegrationCommand({
+    restApiId: apiId,
+    resourceId: metricsResource.id,
+    httpMethod: 'GET',
+    type: 'AWS_PROXY',
+    integrationHttpMethod: 'POST',
+    uri: metricsIntegrationUri,
+  }));
+
+  // Grant API Gateway permission to invoke the Metrics API Lambda
+  const metricsStatementId = `apigateway-metrics-invoke-${stage}`;
+  try {
+    await lambdaClient.send(new GetPolicyCommand({ FunctionName: METRICS_API_FN }));
+    try {
+      await lambdaClient.send(new AddPermissionCommand({
+        FunctionName: METRICS_API_FN,
+        StatementId: metricsStatementId,
+        Action: 'lambda:InvokeFunction',
+        Principal: 'apigateway.amazonaws.com',
+        SourceArn: `arn:aws:execute-api:${REGION}:${AWS_ACCOUNT_ID}:${apiId}/*/*/metrics`,
+      }));
+    } catch (permErr) {
+      if (permErr.name !== 'ResourceConflictException') throw permErr;
+    }
+  } catch (err) {
+    if (err.name === 'ResourceNotFoundException') {
+      await lambdaClient.send(new AddPermissionCommand({
+        FunctionName: METRICS_API_FN,
+        StatementId: metricsStatementId,
+        Action: 'lambda:InvokeFunction',
+        Principal: 'apigateway.amazonaws.com',
+        SourceArn: `arn:aws:execute-api:${REGION}:${AWS_ACCOUNT_ID}:${apiId}/*/*/metrics`,
+      }));
+    } else {
+      throw err;
+    }
+  }
+
+  // Create OPTIONS method on /metrics for CORS preflight
+  try {
+    await apigw.send(new PutMethodCommand({
+      restApiId: apiId,
+      resourceId: metricsResource.id,
+      httpMethod: 'OPTIONS',
+      authorizationType: 'NONE',
+    }));
+  } catch (err) {
+    if (err.name !== 'ConflictException') throw err;
+  }
+
+  // Mock integration for OPTIONS (CORS preflight)
+  await apigw.send(new PutIntegrationCommand({
+    restApiId: apiId,
+    resourceId: metricsResource.id,
+    httpMethod: 'OPTIONS',
+    type: 'MOCK',
+    requestTemplates: { 'application/json': '{"statusCode": 200}' },
+  }));
+
   // Deploy to stage
   await apigw.send(new CreateDeploymentCommand({
     restApiId: apiId,
@@ -596,9 +777,11 @@ async function ensureApiGateway() {
 
   const endpoint = `https://${apiId}.execute-api.${REGION}.amazonaws.com/${stage}/webhook`;
   const paymentEndpoint = `https://${apiId}.execute-api.${REGION}.amazonaws.com/${stage}/payment-webhook`;
+  const metricsEndpoint = `https://${apiId}.execute-api.${REGION}.amazonaws.com/${stage}/metrics`;
   log(`API Gateway deployed: ${endpoint}`);
   log(`Payment webhook: ${paymentEndpoint}`);
-  return endpoint;
+  log(`Metrics API: ${metricsEndpoint}`);
+  return { endpoint, metricsEndpoint };
 }
 
 // --- Step 6: EventBridge rules ---
@@ -665,6 +848,207 @@ async function configureEventBridgeRules() {
   log(`Weekly rule ${WEEKLY_RULE} configured.`);
 }
 
+// --- Step 7: S3 dashboard bucket ---
+async function ensureDashboardBucket() {
+  log(`Ensuring S3 dashboard bucket: ${DASHBOARD_BUCKET}`);
+  try {
+    try {
+      await s3Client.send(new HeadBucketCommand({ Bucket: DASHBOARD_BUCKET }));
+      log(`Bucket ${DASHBOARD_BUCKET} already exists.`);
+    } catch (err) {
+      if (err.name === 'NotFound' || err['$metadata']?.httpStatusCode === 404) {
+        log(`Creating bucket ${DASHBOARD_BUCKET}...`);
+        await s3Client.send(new CreateBucketCommand({ Bucket: DASHBOARD_BUCKET }));
+        log(`Bucket ${DASHBOARD_BUCKET} created.`);
+      } else {
+        throw err;
+      }
+    }
+
+    // Allow public read for the dashboard
+    await s3Client.send(new PutPublicAccessBlockCommand({
+      Bucket: DASHBOARD_BUCKET,
+      PublicAccessBlockConfiguration: {
+        BlockPublicAcls: false,
+        IgnorePublicAcls: false,
+        BlockPublicPolicy: false,
+        RestrictPublicBuckets: false,
+      },
+    }));
+
+    const bucketPolicy = JSON.stringify({
+      Version: '2012-10-17',
+      Statement: [{
+        Sid: 'PublicReadDashboard',
+        Effect: 'Allow',
+        Principal: '*',
+        Action: 's3:GetObject',
+        Resource: `arn:aws:s3:::${DASHBOARD_BUCKET}/*`,
+      }],
+    });
+    await s3Client.send(new PutBucketPolicyCommand({
+      Bucket: DASHBOARD_BUCKET,
+      Policy: bucketPolicy,
+    }));
+
+    // Upload index.html
+    const htmlPath = path.join(__dirname, '..', 'src', 'dashboard', 'index.html');
+    const htmlContent = fs.readFileSync(htmlPath, 'utf-8');
+    await s3Client.send(new PutObjectCommand({
+      Bucket: DASHBOARD_BUCKET,
+      Key: 'index.html',
+      Body: htmlContent,
+      ContentType: 'text/html',
+    }));
+
+    const dashboardUrl = `http://${DASHBOARD_BUCKET}.s3.${REGION}.amazonaws.com/index.html`;
+    log(`Dashboard uploaded: ${dashboardUrl}`);
+    return dashboardUrl;
+  } catch (err) {
+    log(`⚠️  Dashboard bucket setup skipped (missing IAM permissions).`);
+    log(`   Error: ${err.message}`);
+    return null;
+  }
+}
+
+// --- Step 8: CloudWatch Dashboard ---
+async function ensureCloudWatchDashboard() {
+  log(`Provisioning CloudWatch Dashboard: ${DASHBOARD_NAME}`);
+
+  const dashboardBody = {
+    widgets: [
+      {
+        type: 'metric',
+        x: 0, y: 0, width: 12, height: 6,
+        properties: {
+          title: 'User Acquisition',
+          metrics: [
+            ['SmartMealPlanner', 'NewUser', { stat: 'Sum', label: 'NewUser' }],
+            ['SmartMealPlanner', 'OnboardingComplete', { stat: 'Sum', label: 'OnboardingComplete' }],
+            ['SmartMealPlanner', 'OnboardingStep', { stat: 'Sum', label: 'OnboardingStep' }],
+            ['SmartMealPlanner', 'ReachedPayment', { stat: 'Sum', label: 'ReachedPayment' }],
+          ],
+          region: REGION,
+          period: 86400,
+          view: 'timeSeries',
+          stacked: false,
+        },
+      },
+      {
+        type: 'metric',
+        x: 12, y: 0, width: 12, height: 6,
+        properties: {
+          title: 'Engagement',
+          metrics: [
+            ['SmartMealPlanner', 'MessageReceived', { stat: 'Sum', label: 'MessageReceived' }],
+            ['SmartMealPlanner', 'DailyActiveUser', { stat: 'Sum', label: 'DailyActiveUser' }],
+          ],
+          region: REGION,
+          period: 86400,
+          view: 'timeSeries',
+          stacked: false,
+        },
+      },
+      {
+        type: 'metric',
+        x: 0, y: 6, width: 12, height: 6,
+        properties: {
+          title: 'Feature Usage',
+          metrics: [
+            ['SmartMealPlanner', 'PlanGenerated', { stat: 'Sum', label: 'PlanGenerated' }],
+            ['SmartMealPlanner', 'GroceryListViewed', { stat: 'Sum', label: 'GroceryListViewed' }],
+            ['SmartMealPlanner', 'CookMenuSent', { stat: 'Sum', label: 'CookMenuSent' }],
+            ['SmartMealPlanner', 'PlanModified', { stat: 'Sum', label: 'PlanModified' }],
+            ['SmartMealPlanner', 'MealSwapped', { stat: 'Sum', label: 'MealSwapped' }],
+          ],
+          region: REGION,
+          period: 86400,
+          view: 'timeSeries',
+          stacked: false,
+        },
+      },
+      {
+        type: 'metric',
+        x: 12, y: 6, width: 12, height: 6,
+        properties: {
+          title: 'Errors',
+          metrics: [
+            ['SmartMealPlanner', 'WebhookError', { stat: 'Sum', label: 'WebhookError' }],
+            ['SmartMealPlanner', 'PaymentWebhookError', { stat: 'Sum', label: 'PaymentWebhookError' }],
+            ['SmartMealPlanner', 'DailyReminderFailure', { stat: 'Sum', label: 'DailyReminderFailure' }],
+            ['SmartMealPlanner', 'WeeklyReminderFailure', { stat: 'Sum', label: 'WeeklyReminderFailure' }],
+            ['SmartMealPlanner', 'InvalidPaymentSignature', { stat: 'Sum', label: 'InvalidPaymentSignature' }],
+            ['SmartMealPlanner', 'InvalidInput', { stat: 'Sum', label: 'InvalidInput' }],
+          ],
+          region: REGION,
+          period: 86400,
+          view: 'timeSeries',
+          stacked: false,
+        },
+      },
+      {
+        type: 'metric',
+        x: 0, y: 12, width: 12, height: 6,
+        properties: {
+          title: 'Payments',
+          metrics: [
+            ['SmartMealPlanner', 'SubscriptionActivated', { stat: 'Sum', label: 'SubscriptionActivated' }],
+            ['SmartMealPlanner', 'PaymentCaptured', { stat: 'Sum', label: 'PaymentCaptured' }],
+          ],
+          region: REGION,
+          period: 86400,
+          view: 'timeSeries',
+          stacked: false,
+        },
+      },
+      {
+        type: 'metric',
+        x: 12, y: 12, width: 12, height: 6,
+        properties: {
+          title: 'Reminders',
+          metrics: [
+            ['SmartMealPlanner', 'DailyReminderSent', { stat: 'Sum', label: 'DailyReminderSent' }],
+            ['SmartMealPlanner', 'WeeklyReminderSent', { stat: 'Sum', label: 'WeeklyReminderSent' }],
+            ['SmartMealPlanner', 'ExpiredPlanPromptSent', { stat: 'Sum', label: 'ExpiredPlanPromptSent' }],
+          ],
+          region: REGION,
+          period: 86400,
+          view: 'timeSeries',
+          stacked: false,
+        },
+      },
+      {
+        type: 'metric',
+        x: 0, y: 18, width: 24, height: 6,
+        properties: {
+          title: 'Webhook Latency (p50 / p90 / p99)',
+          metrics: [
+            ['SmartMealPlanner', 'WebhookLatency', { stat: 'p50', label: 'p50' }],
+            ['SmartMealPlanner', 'WebhookLatency', { stat: 'p90', label: 'p90' }],
+            ['SmartMealPlanner', 'WebhookLatency', { stat: 'p99', label: 'p99' }],
+          ],
+          region: REGION,
+          period: 300,
+          view: 'timeSeries',
+          stacked: false,
+          yAxis: { left: { label: 'ms', showUnits: false } },
+        },
+      },
+    ],
+  };
+
+  try {
+    await cwClient.send(new PutDashboardCommand({
+      DashboardName: DASHBOARD_NAME,
+      DashboardBody: JSON.stringify(dashboardBody),
+    }));
+    log(`CloudWatch Dashboard ${DASHBOARD_NAME} provisioned.`);
+  } catch (err) {
+    log(`⚠️  CloudWatch Dashboard setup skipped.`);
+    log(`   Error: ${err.message}`);
+  }
+}
+
 // --- Main ---
 async function main() {
   console.log('');
@@ -682,6 +1066,9 @@ async function main() {
     // Step 2: DynamoDB
     await ensureDynamoDBTable();
 
+    // Step 2a: Daily Activity DynamoDB table
+    await ensureDailyActivityTable();
+
     // Step 2b: S3 image bucket
     await ensureS3Bucket();
 
@@ -692,10 +1079,16 @@ async function main() {
     await deployAllLambdas(roleArn);
 
     // Step 5: API Gateway
-    const endpoint = await ensureApiGateway();
+    const { endpoint, metricsEndpoint } = await ensureApiGateway();
 
     // Step 6: EventBridge
     await configureEventBridgeRules();
+
+    // Step 7: S3 dashboard bucket
+    const dashboardUrl = await ensureDashboardBucket();
+
+    // Step 8: CloudWatch Dashboard
+    await ensureCloudWatchDashboard();
 
     // Done
     console.log('');
@@ -703,8 +1096,11 @@ async function main() {
     log('Deployment complete!');
     console.log('');
     log(`Webhook endpoint: ${endpoint}`);
+    log(`Metrics API:      ${metricsEndpoint}`);
     log(`DynamoDB table:   ${TABLE_NAME}`);
     log(`Image bucket:     ${IMAGE_BUCKET}`);
+    if (dashboardUrl) log(`Dashboard:        ${dashboardUrl}`);
+    log(`CW Dashboard:     ${DASHBOARD_NAME}`);
     log(`EventBridge:      ${stage === 'prod' ? 'ENABLED' : 'DISABLED'}`);
     console.log('='.repeat(60));
   } catch (err) {

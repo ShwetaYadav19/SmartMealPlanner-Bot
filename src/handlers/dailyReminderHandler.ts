@@ -4,6 +4,7 @@
 
 import { DynamoDBUserStateRepository } from '../adapters/dynamodbUserStateRepository';
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
+import { CloudWatchMetricsAdapter } from '../adapters/cloudwatchMetricsAdapter';
 import { formatBotResponse } from '../messageFormatter';
 import { loadConfig } from '../config';
 import { extractTomorrowPlan } from '../core/planGenerator';
@@ -28,6 +29,7 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
     config.twilioAuthToken,
     config.twilioSenderNumber,
   );
+  const metricsPort = new CloudWatchMetricsAdapter();
 
   // Scan all users with onboardingComplete: true
   const onboardedUsers = await userStateRepo.scanOnboardedUsers();
@@ -98,6 +100,8 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
             { id: 'daily_grocery_no', title: 'No ❌' },
           ],
         );
+
+        try { await metricsPort.publishMetric('DailyReminderSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
       } else {
         // Expired plan — use template if available, otherwise freeform
         const expiredSid = getTemplateSid('expired_plan');
@@ -117,6 +121,8 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
             expiredSid,
           );
         }
+
+        try { await metricsPort.publishMetric('ExpiredPlanPromptSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
       }
 
       // Update conversation state so the next user reply enters the daily flow
@@ -128,6 +134,7 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
       }
     } catch (error) {
       console.error(`Failed to send daily reminder to ${user.phoneNumber}:`, error);
+      try { await metricsPort.publishMetric('DailyReminderFailure', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
     }
   }
 }

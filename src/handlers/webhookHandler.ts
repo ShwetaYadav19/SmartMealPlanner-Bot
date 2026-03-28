@@ -8,13 +8,58 @@ import { JsonMealComponentRepository } from '../adapters/jsonMealComponentReposi
 import { JsonRulesRepository } from '../adapters/jsonRulesRepository';
 import { TwilioMessagingProvider } from '../adapters/twilioMessagingProvider';
 import { RazorpayPaymentProvider } from '../adapters/razorpayPaymentProvider';
+import { CloudWatchMetricsAdapter } from '../adapters/cloudwatchMetricsAdapter';
+import { DailyActivityRepository } from '../adapters/dailyActivityRepository';
 import { mapWhatsAppToIntent } from '../intentMapper';
 import { processIntent } from '../core/botEngine';
 import { formatBotResponse, type FormattedMessage } from '../messageFormatter';
 import { formatCookMessage } from '../messageFormatter';
 import { loadConfig } from '../config';
-import { ResponseType } from '../core/types';
+import { Intent, ResponseType } from '../core/types';
+import type { ConversationState } from '../core/types';
+import type { MetricDatum, MetricsPort } from '../core/ports';
 import { sendWeeklyPlanImage, sendGroceryListImage } from '../core/imageSender';
+
+/** Onboarding states used for OnboardingStep metric emission */
+const ONBOARDING_STATES: ReadonlySet<ConversationState> = new Set([
+  'awaiting_cuisine',
+  'awaiting_diet',
+  'awaiting_meal_style',
+  'awaiting_meal_format',
+  'awaiting_preference_lunch_format',
+  'awaiting_preference_dinner_format',
+  'awaiting_payment',
+]);
+
+/** Intent-to-feature-metric mapping */
+const INTENT_FEATURE_METRICS: Partial<Record<Intent, string>> = {
+  [Intent.GENERATE_PLAN]: 'PlanGenerated',
+  [Intent.VIEW_WEEKLY_GROCERY]: 'GroceryListViewed',
+  [Intent.VIEW_TOMORROW_GROCERY]: 'GroceryListViewed',
+  [Intent.SEND_MENU_TO_COOK]: 'CookMenuSent',
+  [Intent.CHANGE_FEW_MEALS]: 'PlanModified',
+  [Intent.CHANGE_ENTIRE_PLAN]: 'PlanModified',
+  [Intent.SWAP_LUNCH]: 'MealSwapped',
+};
+
+/** Safe metric emit — never throws */
+async function safePublishMetric(
+  metricsPort: MetricsPort,
+  name: string,
+  value: number,
+  unit: 'Count' | 'Milliseconds' | 'None',
+  dimensions?: Record<string, string>,
+): Promise<void> {
+  try { await metricsPort.publishMetric(name, value, unit, dimensions); } catch (e) { console.error('[metrics]', e); }
+}
+
+/** Safe batch metric emit — never throws */
+async function safePublishMetrics(
+  metricsPort: MetricsPort,
+  metrics: MetricDatum[],
+): Promise<void> {
+  try { await metricsPort.publishMetrics(metrics); } catch (e) { console.error('[metrics]', e); }
+}
 
 // Minimal API Gateway types (avoids @types/aws-lambda dependency)
 interface APIGatewayProxyEvent {
@@ -109,6 +154,11 @@ async function sendFormattedMessage(
 export async function webhookHandler(
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> {
+  const startTime = Date.now();
+  const config = loadConfig();
+  const metricsPort: MetricsPort = new CloudWatchMetricsAdapter();
+  const dailyActivityRepo = new DailyActivityRepository(config.dailyActivityTable);
+
   try {
     // 1. Decode body (API Gateway may base64-encode it)
     let rawBody = event.body ?? '';
@@ -133,7 +183,6 @@ export async function webhookHandler(
     const phoneNumber = from.replace(/^whatsapp:/, '');
 
     // 5. Load config and instantiate adapters
-    const config = loadConfig();
     const userStateRepo = new DynamoDBUserStateRepository(config.dynamodbTable);
     const mealRepo = new JsonMealRepository();
     const mealComponentRepo = new JsonMealComponentRepository();
@@ -152,6 +201,11 @@ export async function webhookHandler(
     // 6. Load user state
     const userState = await userStateRepo.getUser(phoneNumber);
 
+    // --- Metrics: NewUser (emit before any processing) ---
+    if (!userState) {
+      await safePublishMetric(metricsPort, 'NewUser', 1, 'Count');
+    }
+
     // 7. Determine conversation state
     const conversationState = userState?.conversationState ?? 'awaiting_cuisine';
 
@@ -163,10 +217,60 @@ export async function webhookHandler(
 
     console.log('[webhook]', phoneNumber, 'state:', conversationState, 'intent:', intent.intent, 'payload:', intent.payload ?? '-');
 
+    // --- Metrics: MessageReceived + IntentProcessed (every message) ---
+    await safePublishMetrics(metricsPort, [
+      { name: 'MessageReceived', value: 1, unit: 'Count' },
+      { name: 'IntentProcessed', value: 1, unit: 'Count', dimensions: { IntentName: intent.intent } },
+    ]);
+
+    // --- Metrics: DailyActiveUser ---
+    try {
+      const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      const isFirstToday = await dailyActivityRepo.recordActivity(phoneNumber, today);
+      if (isFirstToday) {
+        await safePublishMetric(metricsPort, 'DailyActiveUser', 1, 'Count');
+      }
+    } catch (e) {
+      console.error('[metrics] daily activity check failed', e);
+    }
+
     // 9. Process intent through BotEngine
     const result = await processIntent(intent, userState, mealRepo, mealComponentRepo, phoneNumber, rulesRepo, paymentProvider);
 
     console.log('[webhook]', phoneNumber, 'response:', result.response.type, 'newState:', result.updatedState.conversationState);
+
+    // --- Metrics: User acquisition (onboarding) ---
+    const batchMetrics: MetricDatum[] = [];
+
+    if (result.response.type === ResponseType.ONBOARDING_COMPLETE) {
+      batchMetrics.push({ name: 'OnboardingComplete', value: 1, unit: 'Count' });
+    }
+
+    // OnboardingStep: emit when the new conversationState is an onboarding step AND differs from previous
+    const newConvState = result.updatedState.conversationState;
+    if (ONBOARDING_STATES.has(newConvState) && newConvState !== conversationState) {
+      batchMetrics.push({ name: 'OnboardingStep', value: 1, unit: 'Count', dimensions: { Step: newConvState } });
+    }
+
+    // ReachedPayment: emit when transitioning to awaiting_payment
+    if (newConvState === 'awaiting_payment' && conversationState !== 'awaiting_payment') {
+      batchMetrics.push({ name: 'ReachedPayment', value: 1, unit: 'Count' });
+    }
+
+    // --- Metrics: Feature usage based on intent ---
+    const featureMetric = INTENT_FEATURE_METRICS[intent.intent];
+    if (featureMetric) {
+      batchMetrics.push({ name: featureMetric, value: 1, unit: 'Count' });
+    }
+
+    // --- Metrics: InvalidInput ---
+    if (result.response.type === ResponseType.INVALID_INPUT) {
+      batchMetrics.push({ name: 'InvalidInput', value: 1, unit: 'Count' });
+    }
+
+    if (batchMetrics.length > 0) {
+      await safePublishMetrics(metricsPort, batchMetrics);
+    }
 
     // 10. Format structured response for WhatsApp
     const formatted = formatBotResponse(result.response);
@@ -250,6 +354,9 @@ export async function webhookHandler(
     // 12. Save updated state
     await userStateRepo.saveUser(result.updatedState);
 
+    // --- Metrics: WebhookLatency (success path) ---
+    await safePublishMetric(metricsPort, 'WebhookLatency', Date.now() - startTime, 'Milliseconds');
+
     // 13. Return 200 to Twilio
     return { statusCode: 200, body: '' };
   } catch (error) {
@@ -258,6 +365,13 @@ export async function webhookHandler(
     if (error instanceof Error) {
       console.error('[webhook] stack:', error.stack);
     }
+
+    // --- Metrics: WebhookError + WebhookLatency (error path) ---
+    await safePublishMetrics(metricsPort, [
+      { name: 'WebhookError', value: 1, unit: 'Count' },
+      { name: 'WebhookLatency', value: Date.now() - startTime, unit: 'Milliseconds' },
+    ]);
+
     return { statusCode: 500, body: '' };
   }
 }
