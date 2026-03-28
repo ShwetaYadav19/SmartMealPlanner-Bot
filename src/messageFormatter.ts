@@ -558,12 +558,16 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       const altDayName = data?.dayName ?? '';
       const altSlot = data?.oldMeal ?? '';
       const alternatives = response.suggestedActions ?? [];
-      const altButtons: ButtonOption[] = alternatives.map((a) => ({
+      // Show full meal names as numbered list in the message body
+      const altList = alternatives.map((a, i) => `${i + 1}. ${a.label}`).join('\n');
+      const altText = `${FEW_MEALS_ALTERNATIVES_HEADER(altDayName, altSlot)}\n\n${altList}`;
+      // Use short "Option N" labels for quick reply buttons (WhatsApp 20-char limit)
+      const altButtons: ButtonOption[] = alternatives.map((a, i) => ({
         id: a.id,
-        title: a.label,
+        title: `Option ${i + 1}`,
       }));
       return {
-        text: FEW_MEALS_ALTERNATIVES_HEADER(altDayName, altSlot),
+        text: altText,
         buttons: altButtons.length > 0 ? altButtons : suggestedButtons,
       };
     }
