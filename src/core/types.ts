@@ -80,7 +80,7 @@ export const MEAL_FORMAT_CATEGORIES: Record<MealFormat, ComponentCategory[]> = {
 /** Maps a preset to lunch/dinner format pair */
 export const MEAL_FORMAT_PRESETS: Record<MealFormatPreset, { lunch: MealFormat; dinner: MealFormat }> = {
   light:             { lunch: 'quick_meal', dinner: 'quick_meal' },
-  regular_format:    { lunch: 'home_meal',  dinner: 'home_meal' },
+  regular_format:    { lunch: 'home_meal',  dinner: 'quick_meal' },
   full_thali_preset: { lunch: 'full_thali', dinner: 'full_thali' },
 };
 

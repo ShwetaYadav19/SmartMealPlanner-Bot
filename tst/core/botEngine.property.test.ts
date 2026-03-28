@@ -225,7 +225,7 @@ describe('Property 3: Onboarding flow completeness', () => {
     expect(r5.updatedState.conversationState).toBe('awaiting_payment');
     expect(r5.response.type).toBe(ResponseType.PAYMENT_PROMPT);
     expect(r5.updatedState.lunchFormat).toBe('home_meal');
-    expect(r5.updatedState.dinnerFormat).toBe('home_meal');
+    expect(r5.updatedState.dinnerFormat).toBe('quick_meal');
   });
 
   it('skips payment and completes onboarding when subscription is active', async () => {

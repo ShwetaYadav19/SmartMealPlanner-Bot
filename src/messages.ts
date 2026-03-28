@@ -10,7 +10,7 @@ export const ONBOARDING_STYLE_PROMPT = `Almost done! What style of meals do you 
 export const ONBOARDING_MEAL_FORMAT_PROMPT = `How much would you like on your plate? 🍽️
 
 🍚 *Light* — Dal/curry + rice/roti
-🏠 *Regular* — Curry + sabzi with rice/roti
+🏠 *Regular* — Lunch with sabzi, lighter dinner
 🍛 *Full Thali* — Curry, sabzi, side & rice/roti`;
 export const ONBOARDING_LUNCH_FORMAT_PROMPT = `What would you like for lunch? 🍽️`;
 export const ONBOARDING_DINNER_FORMAT_PROMPT = `And for dinner? 🌙`;

@@ -213,7 +213,7 @@ describe('BotEngine — onboarding flow', () => {
     expect(result.updatedState.conversationState).toBe('main_menu');
     expect(result.updatedState.weeklyPlan).toBeDefined();
     expect(result.updatedState.lunchFormat).toBe('home_meal');
-    expect(result.updatedState.dinnerFormat).toBe('home_meal');
+    expect(result.updatedState.dinnerFormat).toBe('quick_meal');
   });
 
   it('completes full onboarding flow end-to-end with payment step', async () => {
@@ -256,7 +256,7 @@ describe('BotEngine — onboarding flow', () => {
     expect(r5.response.type).toBe(ResponseType.PAYMENT_PROMPT);
     expect(r5.updatedState.conversationState).toBe('awaiting_payment');
     expect(r5.updatedState.lunchFormat).toBe('home_meal');
-    expect(r5.updatedState.dinnerFormat).toBe('home_meal');
+    expect(r5.updatedState.dinnerFormat).toBe('quick_meal');
 
     // Step 6: Simulate payment success — set active subscription and check
     const stateWithPayment: typeof r5.updatedState = {
