@@ -254,8 +254,8 @@ async function handleAwaitingMealFormat(
       return generatePlanAfterPayment(updatedState, mealRepository, mealComponentRepository, mealSelector);
     }
 
-    // Skip payment when SKIP_PAYMENT env var is set (for testing)
-    if (process.env.SKIP_PAYMENT === 'true') {
+    // Skip payment when SKIP_PAYMENT env var is set or stage is not prod
+    if (process.env.SKIP_PAYMENT === 'true' || (process.env.STAGE && process.env.STAGE !== 'prod')) {
       updatedState.subscription = {
         status: 'active',
         currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
