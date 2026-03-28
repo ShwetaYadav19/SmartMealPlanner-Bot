@@ -88,6 +88,12 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     if (state.mealStyle !== undefined) {
       item.mealStyle = state.mealStyle;
     }
+    if (state.lunchFormat !== undefined) {
+      item.lunchFormat = state.lunchFormat;
+    }
+    if (state.dinnerFormat !== undefined) {
+      item.dinnerFormat = state.dinnerFormat;
+    }
     if (state.weeklyPlan !== undefined) {
       item.weeklyPlan = state.weeklyPlan;
     }
@@ -146,6 +152,12 @@ export class DynamoDBUserStateRepository implements UserStateRepository {
     }
     if (item.mealStyle !== undefined) {
       state.mealStyle = item.mealStyle as UserState['mealStyle'];
+    }
+    if (item.lunchFormat !== undefined) {
+      state.lunchFormat = item.lunchFormat as UserState['lunchFormat'];
+    }
+    if (item.dinnerFormat !== undefined) {
+      state.dinnerFormat = item.dinnerFormat as UserState['dinnerFormat'];
     }
     if (item.weeklyPlan !== undefined) {
       state.weeklyPlan = item.weeklyPlan as UserState['weeklyPlan'];
