@@ -197,7 +197,7 @@ export type TemplatePurpose =
   | 'expired_plan';
 
 const DEFAULT_TEMPLATE_SIDS: Record<TemplatePurpose, string> = {
-  daily_reminder: 'HX708fce9ebb60de686f73731e071aa8cb',
+  daily_reminder: 'HX0d01883256a89f9f413508b579a56436',
   weekly_reminder: '',  // Set via env var after WhatsApp approval
   expired_plan: '',     // Set via env var after WhatsApp approval
 };
