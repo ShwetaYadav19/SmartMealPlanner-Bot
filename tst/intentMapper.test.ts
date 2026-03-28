@@ -83,10 +83,6 @@ describe('mapWhatsAppToIntent', () => {
       expect(mapWhatsAppToIntent('send_to_cook', '', state)).toEqual({ intent: Intent.SEND_MENU_TO_COOK });
     });
 
-    it('maps "swap_lunch" to SWAP_LUNCH', () => {
-      expect(mapWhatsAppToIntent('swap_lunch', '', state)).toEqual({ intent: Intent.SWAP_LUNCH });
-    });
-
     it('maps "save_cook" to SAVE_COOK_NUMBER', () => {
       expect(mapWhatsAppToIntent('save_cook', '', state)).toEqual({ intent: Intent.SAVE_COOK_NUMBER });
     });

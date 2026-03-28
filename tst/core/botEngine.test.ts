@@ -550,42 +550,6 @@ describe('BotEngine — main menu: SEND_MENU_TO_COOK', () => {
   });
 });
 
-describe('BotEngine — main menu: SWAP_LUNCH', () => {
-  it('returns SWAP_CONFIRMATION with old/new meal when swap succeeds', async () => {
-    const state = makeStateWithPlan();
-    const result = await processIntent(
-      { intent: Intent.SWAP_LUNCH },
-      state,
-      mockMealRepo,
-      mockMealComponentRepo,
-    );
-
-    // Swap may succeed or return SWAP_NO_ALTERNATIVE depending on tomorrow index
-    if (result.response.type === ResponseType.SWAP_CONFIRMATION) {
-      expect(result.response.data?.oldMeal).toBeDefined();
-      expect(result.response.data?.newMeal).toBeDefined();
-      expect(result.updatedState.weeklyPlan).toBeDefined();
-      expect(result.response.suggestedActions).toEqual(ADHOC_MENU_OPTIONS);
-      expect(result.updatedState.conversationState).toBe('main_menu');
-    } else {
-      // If tomorrow is outside the plan range, we get SWAP_NO_ALTERNATIVE
-      expect(result.response.type).toBe(ResponseType.SWAP_NO_ALTERNATIVE);
-    }
-  });
-
-  it('returns NO_PLAN_ERROR when no plan exists', async () => {
-    const state = makeMainMenuState();
-    const result = await processIntent(
-      { intent: Intent.SWAP_LUNCH },
-      state,
-      mockMealRepo,
-      mockMealComponentRepo,
-    );
-
-    expect(result.response.type).toBe(ResponseType.NO_PLAN_ERROR);
-  });
-});
-
 describe('BotEngine — main menu: SAVE_COOK_NUMBER', () => {
   it('transitions to awaiting_cook_number and returns COOK_NUMBER_PROMPT', async () => {
     const state = makeMainMenuState();

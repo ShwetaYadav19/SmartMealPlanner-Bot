@@ -176,8 +176,6 @@ export function mapWhatsAppToIntent(
         return { intent: Intent.VIEW_TOMORROW_GROCERY };
       case 'send_to_cook':
         return { intent: Intent.SEND_MENU_TO_COOK };
-      case 'swap_lunch':
-        return { intent: Intent.SWAP_LUNCH };
       case 'save_cook':
         return { intent: Intent.SAVE_COOK_NUMBER };
     }
@@ -235,8 +233,7 @@ export function mapWhatsAppToIntent(
     if (text === '3' || text === "tomorrow's plan" || text === 'tomorrow plan' || text.endsWith("tomorrow's plan")) return { intent: Intent.VIEW_TOMORROW_PLAN };
     if (text === '4' || text === "tomorrow's grocery" || text === 'tomorrow grocery' || text.endsWith("tomorrow's grocery")) return { intent: Intent.VIEW_TOMORROW_GROCERY };
     if (text === '5' || text === 'send menu to cook' || text === 'send to cook' || text.endsWith('send menu to cook')) return { intent: Intent.SEND_MENU_TO_COOK };
-    if (text === '6' || text === 'swap lunch' || text.endsWith('swap lunch')) return { intent: Intent.SWAP_LUNCH };
-    if (text === '7' || text === 'save cook' || text === "save cook's number" || text.endsWith("save cook's number")) return { intent: Intent.SAVE_COOK_NUMBER };
+    if (text === '6' || text === 'save cook' || text === "save cook's number" || text.endsWith("save cook's number")) return { intent: Intent.SAVE_COOK_NUMBER };
     if (text === 'change cook' || text === 'change cook number' || text === "change cook's number") return { intent: Intent.CHANGE_COOK_NUMBER };
   }
 

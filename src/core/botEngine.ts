@@ -20,7 +20,7 @@ import {
   type DayPlan,
   type SubscriptionInfo,
 } from './types';
-import { generateWeeklyPlan, extractTomorrowPlan, swapTomorrowLunch, generateAlternatives, regenerateWeeklyPlan } from './planGenerator';
+import { generateWeeklyPlan, extractTomorrowPlan, generateAlternatives, regenerateWeeklyPlan } from './planGenerator';
 import { generateGroceryList } from './groceryListGenerator';
 import { validatePhoneNumber } from './phoneValidation';
 import { generateCandidateDishes, removeBreakfast, removeComponent, buildPlanFromComponents, hasMinimumComponents, type DishPreviewDeps } from './dishPreview';
@@ -1032,55 +1032,6 @@ async function handleMainMenu(
       };
     }
 
-    case Intent.SWAP_LUNCH: {
-      if (!state.weeklyPlan || !state.weeklyPlanStartDate) {
-        return {
-          response: {
-            type: ResponseType.NO_PLAN_ERROR,
-            suggestedActions: ADHOC_MENU_OPTIONS,
-          },
-          updatedState: state,
-        };
-      }
-      if (isLegacyPlan(state.weeklyPlan)) {
-        return {
-          response: {
-            type: ResponseType.EXPIRED_PLAN_PROMPT,
-            suggestedActions: ADHOC_MENU_OPTIONS,
-          },
-          updatedState: state,
-        };
-      }
-      const tomorrowIdx = getTomorrowIndex(state.weeklyPlanStartDate);
-      const components = await mealComponentRepository.getComponents({
-        cuisine: state.cuisinePreference,
-        style: state.mealStyle,
-      });
-      const swapResult = swapTomorrowLunch(state.weeklyPlan, tomorrowIdx, components, preferences);
-      if (!swapResult) {
-        return {
-          response: {
-            type: ResponseType.SWAP_NO_ALTERNATIVE,
-            suggestedActions: ADHOC_MENU_OPTIONS,
-          },
-          updatedState: state,
-        };
-      }
-      const updatedState: UserState = {
-        ...state,
-        weeklyPlan: swapResult.updatedPlan,
-        conversationState: 'main_menu',
-      };
-      return {
-        response: {
-          type: ResponseType.SWAP_CONFIRMATION,
-          data: { oldMeal: swapResult.oldMeal, newMeal: swapResult.newMeal },
-          suggestedActions: ADHOC_MENU_OPTIONS,
-        },
-        updatedState,
-      };
-    }
-
     case Intent.SAVE_COOK_NUMBER: {
       const updatedState: UserState = {
         ...state,
@@ -1271,7 +1222,8 @@ async function handleRegeneratePlanMenu(
     const components = await mealComponentRepository.getComponents({
       cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
     });
-    const newPlan = regenerateWeeklyPlan(state.weeklyPlan, meals, components, preferences);
+    const newPlan = regenerateWeeklyPlan(state.weeklyPlan, meals, components, preferences,
+      undefined, undefined, state.lunchFormat, state.dinnerFormat);
     const weeklyPlanStartDate = getCurrentWeekMondayISO();
     return {
       response: {
@@ -1388,6 +1340,7 @@ async function handleFewMealsSlotSelect(
       style: state.mealStyle ?? 'regular',
     };
 
+    const slotFormat = slot === 'lunch' ? state.lunchFormat : slot === 'dinner' ? state.dinnerFormat : undefined;
     const alternatives = generateAlternatives(
       state.weeklyPlan,
       state.fewMealsSelectedDay,
@@ -1396,6 +1349,7 @@ async function handleFewMealsSlotSelect(
       components,
       preferences,
       3,
+      slotFormat,
     );
 
     if (alternatives.length === 0) {
@@ -1597,7 +1551,8 @@ async function handleEntirePlanConfirm(
         cuisine: preferences.cuisine as 'north_indian' | 'south_indian' | 'both',
       });
 
-      const newPlan = regenerateWeeklyPlan(currentPlan, meals, components, preferences);
+      const newPlan = regenerateWeeklyPlan(currentPlan, meals, components, preferences,
+        undefined, undefined, state.lunchFormat, state.dinnerFormat);
       const weeklyPlanStartDate = getCurrentWeekMondayISO();
 
       const updatedState: UserState = {

@@ -1,5 +1,6 @@
 // Plan generation — zero imports from adapters, WhatsApp, or AWS modules
-import type { Meal, DayPlan, WeeklyPlan, MealComponent, ComposedMeal, ComponentCategory, Rule, RuleEvaluationContext } from './types';
+import type { Meal, DayPlan, WeeklyPlan, MealComponent, ComposedMeal, ComponentCategory, MealFormat, Rule, RuleEvaluationContext } from './types';
+import { MEAL_FORMAT_CATEGORIES } from './types';
 import type { MealSelector } from './mealSelector';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const;
@@ -684,6 +685,8 @@ export function generateWeeklyPlan(
   preferences: { cuisine: string; diet: string; style: string },
   mealSelector?: MealSelector,
   rules?: Rule[],
+  lunchFormat?: MealFormat,
+  dinnerFormat?: MealFormat,
 ): WeeklyPlan {
   const isBothCuisine = preferences.cuisine === 'both';
 
@@ -831,11 +834,14 @@ export function generateWeeklyPlan(
     const lunchEvalContext = useMealSelector
       ? buildEvalContext(d, 'lunch', preferences, history, {})
       : undefined;
+    const lunchCategories = lunchFormat ? MEAL_FORMAT_CATEGORIES[lunchFormat] : undefined;
     const lunch = composeMeal(
       components, 'lunch', lunchCuisine, lunchConstraints, preferences.diet,
       useMealSelector ? mealSelector : undefined,
       useMealSelector ? allConstraintRules : undefined,
       lunchEvalContext,
+      undefined,
+      lunchCategories,
     );
 
     // Collect lunch component IDs for same-day dedup
@@ -879,12 +885,14 @@ export function generateWeeklyPlan(
     const dinnerEvalContext = useMealSelector
       ? buildEvalContext(d, 'dinner', preferences, history, sameDaySelections)
       : undefined;
+    const dinnerCategories = dinnerFormat ? MEAL_FORMAT_CATEGORIES[dinnerFormat] : undefined;
     const dinner = composeMeal(
       components, 'dinner', dinnerCuisine, dinnerConstraints, preferences.diet,
       useMealSelector ? mealSelector : undefined,
       useMealSelector ? allConstraintRules : undefined,
       dinnerEvalContext,
       lunchComponentRefs,
+      dinnerCategories,
     );
 
     plan.push({ day: DAYS[d], breakfast, lunch, dinner });
@@ -927,6 +935,7 @@ export function generateAlternatives(
   components: MealComponent[],
   preferences: { cuisine: string; diet: string; style: string },
   count: number,
+  slotFormat?: MealFormat,
 ): (Meal | ComposedMeal)[] {
   if (dayIndex < 0 || dayIndex > 6 || !weeklyPlan[dayIndex]) return [];
 
@@ -1004,7 +1013,9 @@ export function generateAlternatives(
     };
 
     try {
-      const alt = composeMeal(components, slot as 'lunch' | 'dinner', cuisine, constraints, preferences.diet);
+      const formatCategories = slotFormat ? MEAL_FORMAT_CATEGORIES[slotFormat] : undefined;
+      const alt = composeMeal(components, slot as 'lunch' | 'dinner', cuisine, constraints, preferences.diet,
+        undefined, undefined, undefined, undefined, formatCategories);
       // Only add if it differs from the current meal (check gravy ID as primary differentiator)
       const altGravy = alt.components.find((c) => c.category === 'gravy');
       const currentGravy = currentMeal.components.find((c) => c.category === 'gravy');
@@ -1035,6 +1046,8 @@ export function regenerateWeeklyPlan(
   preferences: { cuisine: string; diet: string; style: string },
   mealSelector?: MealSelector,
   rules?: Rule[],
+  lunchFormat?: MealFormat,
+  dinnerFormat?: MealFormat,
 ): WeeklyPlan {
   // Collect all meal/component IDs from the current plan
   const allIds = new Set<string>();
@@ -1100,7 +1113,7 @@ export function regenerateWeeklyPlan(
 
   const safeComponents = filteredComponents;
 
-  return generateWeeklyPlan(safeMeals, safeComponents, preferences, mealSelector, rules);
+  return generateWeeklyPlan(safeMeals, safeComponents, preferences, mealSelector, rules, lunchFormat, dinnerFormat);
 }
 
 /**
