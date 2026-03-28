@@ -68,7 +68,7 @@ export interface GroceryItem {
 
 export type MealFormat = 'quick_meal' | 'home_meal' | 'full_thali';
 
-export type MealFormatPreset = 'light' | 'regular_format' | 'hearty' | 'full_spread';
+export type MealFormatPreset = 'light' | 'regular_format' | 'full_thali_preset';
 
 /** Maps a MealFormat to the component categories included in a composed meal */
 export const MEAL_FORMAT_CATEGORIES: Record<MealFormat, ComponentCategory[]> = {
@@ -79,10 +79,9 @@ export const MEAL_FORMAT_CATEGORIES: Record<MealFormat, ComponentCategory[]> = {
 
 /** Maps a preset to lunch/dinner format pair */
 export const MEAL_FORMAT_PRESETS: Record<MealFormatPreset, { lunch: MealFormat; dinner: MealFormat }> = {
-  light:          { lunch: 'quick_meal', dinner: 'quick_meal' },
-  regular_format: { lunch: 'home_meal',  dinner: 'quick_meal' },
-  hearty:         { lunch: 'home_meal',  dinner: 'home_meal' },
-  full_spread:    { lunch: 'full_thali', dinner: 'full_thali' },
+  light:             { lunch: 'quick_meal', dinner: 'quick_meal' },
+  regular_format:    { lunch: 'home_meal',  dinner: 'home_meal' },
+  full_thali_preset: { lunch: 'full_thali', dinner: 'full_thali' },
 };
 
 export type PreviewStep = 'breakfast' | 'base' | 'gravy' | 'dry_veggie' | 'side' | 'confirm';

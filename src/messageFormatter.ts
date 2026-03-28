@@ -102,8 +102,7 @@ const STYLE_BUTTONS: ButtonOption[] = [
 const MEAL_FORMAT_BUTTONS: ButtonOption[] = [
   { id: 'light', title: '🍚 Light' },
   { id: 'regular_format', title: '🏠 Regular' },
-  { id: 'hearty', title: '🍛 Hearty' },
-  { id: 'full_spread', title: '🍽️ Full Spread' },
+  { id: 'full_thali_preset', title: '🍛 Full Thali' },
 ];
 
 const SLOT_FORMAT_BUTTONS: ButtonOption[] = [

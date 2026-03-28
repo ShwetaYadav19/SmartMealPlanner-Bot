@@ -48,8 +48,7 @@ const STYLE_OPTIONS: SuggestedAction[] = [
 const MEAL_FORMAT_OPTIONS: SuggestedAction[] = [
   { id: 'light', label: '🍚 Light' },
   { id: 'regular_format', label: '🏠 Regular' },
-  { id: 'hearty', label: '🍛 Hearty' },
-  { id: 'full_spread', label: '🍽️ Full Spread' },
+  { id: 'full_thali_preset', label: '🍛 Full Thali' },
 ];
 
 const LUNCH_FORMAT_OPTIONS: SuggestedAction[] = [

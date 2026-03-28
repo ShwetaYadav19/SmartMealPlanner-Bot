@@ -44,7 +44,7 @@ export function mapWhatsAppToIntent(
     // Meal format preset selection during onboarding
     if (
       conversationState === 'awaiting_meal_format' &&
-      (buttonPayload === 'light' || buttonPayload === 'regular_format' || buttonPayload === 'hearty' || buttonPayload === 'full_spread')
+      (buttonPayload === 'light' || buttonPayload === 'regular_format' || buttonPayload === 'full_thali_preset')
     ) {
       return { intent: Intent.SELECT_MEAL_FORMAT, payload: buttonPayload };
     }
@@ -209,8 +209,7 @@ export function mapWhatsAppToIntent(
   if (conversationState === 'awaiting_meal_format') {
     if (text === '1' || text === 'light') return { intent: Intent.SELECT_MEAL_FORMAT, payload: 'light' };
     if (text === '2' || text === 'regular') return { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' };
-    if (text === '3' || text === 'hearty') return { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' };
-    if (text === '4' || text === 'full spread' || text === 'full thali') return { intent: Intent.SELECT_MEAL_FORMAT, payload: 'full_spread' };
+    if (text === '3' || text === 'full thali' || text === 'full') return { intent: Intent.SELECT_MEAL_FORMAT, payload: 'full_thali_preset' };
   }
 
   // Lunch format selection via text (preference change)

@@ -205,7 +205,7 @@ describe('BotEngine — onboarding flow', () => {
         currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       },
     });
-    const intent: UserIntent = { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' };
+    const intent: UserIntent = { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' };
     const result = await processIntent(intent, state, mockMealRepo, mockMealComponentRepo);
 
     expect(result.response.type).toBe(ResponseType.WEEKLY_PLAN);
@@ -256,7 +256,7 @@ describe('BotEngine — onboarding flow', () => {
     expect(r5.response.type).toBe(ResponseType.PAYMENT_PROMPT);
     expect(r5.updatedState.conversationState).toBe('awaiting_payment');
     expect(r5.updatedState.lunchFormat).toBe('home_meal');
-    expect(r5.updatedState.dinnerFormat).toBe('quick_meal');
+    expect(r5.updatedState.dinnerFormat).toBe('home_meal');
 
     // Step 6: Simulate payment success — set active subscription and check
     const stateWithPayment: typeof r5.updatedState = {

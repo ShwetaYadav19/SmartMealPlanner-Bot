@@ -47,7 +47,7 @@ describe('E2E: onboarding → change plan → few meals → done', () => {
 
     // 4a. User selects meal format (hearty) → gets PAYMENT_PROMPT
     const r4a = await processIntent(
-      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       r4.updatedState, mealRepo, mealComponentRepo,
     );
     expect(r4a.response.type).toBe(ResponseType.PAYMENT_PROMPT);
@@ -62,7 +62,7 @@ describe('E2E: onboarding → change plan → few meals → done', () => {
       },
     };
     const r4b = await processIntent(
-      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       stateWithSub, mealRepo, mealComponentRepo,
     );
     expect(r4b.response.type).toBe(ResponseType.WEEKLY_PLAN);
@@ -187,7 +187,7 @@ describe('E2E: main menu → change plan → entire plan → accept', () => {
 
     // 4a. Select meal format → PAYMENT_PROMPT (paywall)
     const r4a = await processIntent(
-      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       r4.updatedState, mealRepo, mealComponentRepo,
     );
     expect(r4a.response.type).toBe(ResponseType.PAYMENT_PROMPT);
@@ -202,7 +202,7 @@ describe('E2E: main menu → change plan → entire plan → accept', () => {
       },
     };
     const r4b = await processIntent(
-      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       stateWithSub, mealRepo, mealComponentRepo,
     );
     expect(r4b.response.type).toBe(ResponseType.WEEKLY_PLAN);
@@ -322,7 +322,7 @@ describe('E2E: main menu → change plan → change preferences → new plan', (
 
     // Select meal format
     const r4a = await processIntent(
-      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       r4.updatedState, mealRepo, mealComponentRepo,
     );
     expect(r4a.response.type).toBe(ResponseType.PAYMENT_PROMPT);
@@ -336,7 +336,7 @@ describe('E2E: main menu → change plan → change preferences → new plan', (
       },
     };
     const r4b = await processIntent(
-      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       stateWithSub, mealRepo, mealComponentRepo,
     );
     expect(r4b.response.type).toBe(ResponseType.WEEKLY_PLAN);
@@ -501,7 +501,7 @@ describe('E2E: adhoc menu routing', () => {
       },
     };
     const r4b = await processIntent(
-      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       stateWithSub2, mealRepo, mealComponentRepo,
     );
     expect(r4b.response.type).toBe(ResponseType.WEEKLY_PLAN);

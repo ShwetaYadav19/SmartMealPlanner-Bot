@@ -219,7 +219,7 @@ describe('Property 3: Onboarding flow completeness', () => {
     expect(r4.updatedState.mealStyle).toBe('health');
 
     const r5 = await processIntent(
-      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       r4.updatedState, mockMealRepo, mockMealComponentRepo,
     );
     expect(r5.updatedState.conversationState).toBe('awaiting_payment');
@@ -262,7 +262,7 @@ describe('Property 3: Onboarding flow completeness', () => {
       },
     };
     const r5 = await processIntent(
-      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'hearty' },
+      { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       stateWithSub2, mockMealRepo, mockMealComponentRepo,
     );
     expect(r5.updatedState.onboardingComplete).toBe(true);
