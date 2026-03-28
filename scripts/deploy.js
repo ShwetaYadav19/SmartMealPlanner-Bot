@@ -235,7 +235,14 @@ async function ensureDailyActivityTable() {
         AttributeDefinitions: [{ AttributeName: 'pk', AttributeType: 'S' }],
         BillingMode: 'PAY_PER_REQUEST',
       }));
-      log(`Table ${DAILY_ACTIVITY_TABLE} created.`);
+      log(`Table ${DAILY_ACTIVITY_TABLE} created. Waiting for ACTIVE status...`);
+      // Wait for table to become ACTIVE before enabling TTL
+      for (let i = 0; i < 30; i++) {
+        const desc = await dynamodb.send(new DescribeTableCommand({ TableName: DAILY_ACTIVITY_TABLE }));
+        if (desc.Table?.TableStatus === 'ACTIVE') break;
+        await sleep(2000);
+      }
+      log(`Table ${DAILY_ACTIVITY_TABLE} is ACTIVE.`);
     } else {
       throw err;
     }
