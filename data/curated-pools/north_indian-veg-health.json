@@ -1,0 +1,324 @@
+{
+  "breakfasts": [
+    {
+      "id": "ni-b-001",
+      "name": "Poha"
+    },
+    {
+      "id": "ni-b-003",
+      "name": "Upma"
+    },
+    {
+      "id": "ni-b-004",
+      "name": "Daliya Porridge"
+    },
+    {
+      "id": "ni-b-005",
+      "name": "Moong Dal Cheela"
+    },
+    {
+      "id": "ni-b-008",
+      "name": "Oats Porridge"
+    },
+    {
+      "id": "si-b-001",
+      "name": "Idli with Sambar"
+    },
+    {
+      "id": "ni-b-011",
+      "name": "Moong Dal Chilla with Mint Chutney"
+    },
+    {
+      "id": "ni-b-012",
+      "name": "Besan Chilla with Vegetables"
+    },
+    {
+      "id": "ni-b-014",
+      "name": "Sprouts Bowl"
+    },
+    {
+      "id": "ni-b-016",
+      "name": "Oats with Yogurt and Seeds"
+    },
+    {
+      "id": "ni-b-017",
+      "name": "Sattu Paratha with Curd"
+    }
+  ],
+  "lunch": {
+    "base": [
+      {
+        "id": "si-base-001",
+        "name": "Steamed Rice"
+      },
+      {
+        "id": "ni-base-002",
+        "name": "Roti"
+      },
+      {
+        "id": "ni-base-006",
+        "name": "Missi Roti"
+      },
+      {
+        "id": "ni-base-007",
+        "name": "Bajra Roti"
+      }
+    ],
+    "gravy": [
+      {
+        "id": "si-gravy-001",
+        "name": "Sambar"
+      },
+      {
+        "id": "ni-gravy-001",
+        "name": "Dal Tadka"
+      },
+      {
+        "id": "ni-gravy-002",
+        "name": "Rajma"
+      },
+      {
+        "id": "ni-gravy-003",
+        "name": "Chole"
+      },
+      {
+        "id": "ni-gravy-004",
+        "name": "Palak Paneer"
+      },
+      {
+        "id": "ni-gravy-007",
+        "name": "Masoor Dal"
+      },
+      {
+        "id": "ni-gravy-014",
+        "name": "Moong Dal"
+      },
+      {
+        "id": "ni-gravy-015",
+        "name": "Tofu Curry"
+      },
+      {
+        "id": "ni-gravy-017",
+        "name": "Soya Curry"
+      },
+      {
+        "id": "ni-gravy-018",
+        "name": "Soya Keema"
+      }
+    ],
+    "dry_veggie": [
+      {
+        "id": "ni-dry_veggie-004",
+        "name": "Lauki Sabzi"
+      },
+      {
+        "id": "ni-dry_veggie-005",
+        "name": "Tinda Masala"
+      },
+      {
+        "id": "ni-dry_veggie-006",
+        "name": "Gobhi Matar"
+      },
+      {
+        "id": "ni-dry_veggie-008",
+        "name": "Karela Fry"
+      },
+      {
+        "id": "ni-dry_veggie-015",
+        "name": "Palak Sabzi"
+      },
+      {
+        "id": "ni-dry_veggie-016",
+        "name": "Paneer Bhurji"
+      },
+      {
+        "id": "ni-dry_veggie-017",
+        "name": "Tofu Bhurji"
+      },
+      {
+        "id": "ni-dry_veggie-019",
+        "name": "Soya Tikki"
+      },
+      {
+        "id": "ni-dry_veggie-020",
+        "name": "Soya Keema"
+      },
+      {
+        "id": "ni-dry_veggie-021",
+        "name": "Baingan Bharta"
+      }
+    ],
+    "side": [
+      {
+        "id": "si-side-001",
+        "name": "Curd"
+      },
+      {
+        "id": "si-side-005",
+        "name": "Onion Raita"
+      },
+      {
+        "id": "si-side-007",
+        "name": "Cucumber Salad"
+      },
+      {
+        "id": "ni-side-001",
+        "name": "Raita"
+      },
+      {
+        "id": "ni-side-002",
+        "name": "Green Salad"
+      },
+      {
+        "id": "ni-side-006",
+        "name": "Curd"
+      },
+      {
+        "id": "ni-side-008",
+        "name": "Mint Chutney"
+      },
+      {
+        "id": "si-side-008",
+        "name": "Raita"
+      },
+      {
+        "id": "si-side-009",
+        "name": "Tomato Onion Salad"
+      }
+    ]
+  },
+  "dinner": {
+    "base": [
+      {
+        "id": "si-base-001",
+        "name": "Steamed Rice"
+      },
+      {
+        "id": "ni-base-002",
+        "name": "Roti"
+      },
+      {
+        "id": "ni-base-006",
+        "name": "Missi Roti"
+      },
+      {
+        "id": "ni-base-007",
+        "name": "Bajra Roti"
+      }
+    ],
+    "gravy": [
+      {
+        "id": "si-gravy-001",
+        "name": "Sambar"
+      },
+      {
+        "id": "ni-gravy-001",
+        "name": "Dal Tadka"
+      },
+      {
+        "id": "ni-gravy-002",
+        "name": "Rajma"
+      },
+      {
+        "id": "ni-gravy-003",
+        "name": "Chole"
+      },
+      {
+        "id": "ni-gravy-004",
+        "name": "Palak Paneer"
+      },
+      {
+        "id": "ni-gravy-007",
+        "name": "Masoor Dal"
+      },
+      {
+        "id": "ni-gravy-014",
+        "name": "Moong Dal"
+      },
+      {
+        "id": "ni-gravy-015",
+        "name": "Tofu Curry"
+      },
+      {
+        "id": "ni-gravy-017",
+        "name": "Soya Curry"
+      },
+      {
+        "id": "ni-gravy-018",
+        "name": "Soya Keema"
+      }
+    ],
+    "dry_veggie": [
+      {
+        "id": "ni-dry_veggie-004",
+        "name": "Lauki Sabzi"
+      },
+      {
+        "id": "ni-dry_veggie-005",
+        "name": "Tinda Masala"
+      },
+      {
+        "id": "ni-dry_veggie-006",
+        "name": "Gobhi Matar"
+      },
+      {
+        "id": "ni-dry_veggie-008",
+        "name": "Karela Fry"
+      },
+      {
+        "id": "ni-dry_veggie-015",
+        "name": "Palak Sabzi"
+      },
+      {
+        "id": "ni-dry_veggie-016",
+        "name": "Paneer Bhurji"
+      },
+      {
+        "id": "ni-dry_veggie-017",
+        "name": "Tofu Bhurji"
+      },
+      {
+        "id": "ni-dry_veggie-019",
+        "name": "Soya Tikki"
+      },
+      {
+        "id": "ni-dry_veggie-020",
+        "name": "Soya Keema"
+      },
+      {
+        "id": "ni-dry_veggie-021",
+        "name": "Baingan Bharta"
+      }
+    ],
+    "side": [
+      {
+        "id": "si-side-005",
+        "name": "Onion Raita"
+      },
+      {
+        "id": "si-side-007",
+        "name": "Cucumber Salad"
+      },
+      {
+        "id": "ni-side-001",
+        "name": "Raita"
+      },
+      {
+        "id": "ni-side-002",
+        "name": "Green Salad"
+      },
+      {
+        "id": "ni-side-008",
+        "name": "Mint Chutney"
+      },
+      {
+        "id": "si-side-008",
+        "name": "Raita"
+      },
+      {
+        "id": "si-side-009",
+        "name": "Tomato Onion Salad"
+      }
+    ]
+  }
+}

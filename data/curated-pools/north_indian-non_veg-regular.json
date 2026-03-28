@@ -1,0 +1,508 @@
+{
+  "breakfasts": [
+    {
+      "id": "ni-b-002",
+      "name": "Aloo Paratha"
+    },
+    {
+      "id": "ni-b-006",
+      "name": "Paneer Paratha"
+    },
+    {
+      "id": "ni-b-007",
+      "name": "Egg Bhurji with Toast"
+    },
+    {
+      "id": "ni-b-009",
+      "name": "Besan Cheela"
+    },
+    {
+      "id": "si-b-002",
+      "name": "Dosa with Coconut Chutney"
+    },
+    {
+      "id": "si-b-004",
+      "name": "Rava Dosa"
+    },
+    {
+      "id": "si-b-007",
+      "name": "Egg Dosa"
+    },
+    {
+      "id": "si-b-009",
+      "name": "Medu Vada with Sambar"
+    },
+    {
+      "id": "ni-b-015",
+      "name": "Paneer Stuffed Cheela"
+    },
+    {
+      "id": "ni-b-018",
+      "name": "Egg Bhurji with Roti"
+    },
+    {
+      "id": "ni-b-021",
+      "name": "Chicken Keema Paratha"
+    },
+    {
+      "id": "ni-b-022",
+      "name": "Egg Paratha"
+    }
+  ],
+  "lunch": {
+    "base": [
+      {
+        "id": "si-base-002",
+        "name": "Jeera Rice"
+      },
+      {
+        "id": "si-base-003",
+        "name": "Lemon Rice"
+      },
+      {
+        "id": "ni-base-003",
+        "name": "Jeera Rice"
+      },
+      {
+        "id": "ni-base-004",
+        "name": "Paratha"
+      },
+      {
+        "id": "ni-base-005",
+        "name": "Pulao"
+      },
+      {
+        "id": "ni-base-009",
+        "name": "Peas Pulao"
+      },
+      {
+        "id": "ni-base-010",
+        "name": "Schezwan Rice"
+      }
+    ],
+    "gravy": [
+      {
+        "id": "si-gravy-009",
+        "name": "Egg Curry"
+      },
+      {
+        "id": "ni-gravy-013",
+        "name": "Butter Chicken"
+      },
+      {
+        "id": "ni-gravy-024",
+        "name": "Chicken Curry (Regular)"
+      },
+      {
+        "id": "ni-gravy-025",
+        "name": "Mutton Rogan Josh"
+      },
+      {
+        "id": "ni-gravy-026",
+        "name": "Keema Matar Gravy"
+      },
+      {
+        "id": "ni-gravy-027",
+        "name": "Fish Masala"
+      },
+      {
+        "id": "ni-gravy-028",
+        "name": "Chicken Do Pyaza"
+      },
+      {
+        "id": "ni-gravy-029",
+        "name": "Mutton Korma"
+      },
+      {
+        "id": "ni-gravy-030",
+        "name": "Chicken Handi"
+      },
+      {
+        "id": "ni-gravy-031",
+        "name": "Anda Curry"
+      },
+      {
+        "id": "ni-gravy-005",
+        "name": "Kadhi"
+      },
+      {
+        "id": "ni-gravy-009",
+        "name": "Shahi Paneer"
+      },
+      {
+        "id": "ni-gravy-016",
+        "name": "Kadhai Paneer"
+      },
+      {
+        "id": "ni-gravy-032",
+        "name": "Paneer Butter Masala"
+      },
+      {
+        "id": "ni-gravy-033",
+        "name": "Aloo Matar"
+      },
+      {
+        "id": "ni-gravy-034",
+        "name": "Chana Masala"
+      },
+      {
+        "id": "ni-gravy-035",
+        "name": "Dum Aloo"
+      },
+      {
+        "id": "ni-gravy-036",
+        "name": "Matar Paneer"
+      },
+      {
+        "id": "ni-gravy-037",
+        "name": "Lauki Chana Dal"
+      },
+      {
+        "id": "ni-gravy-038",
+        "name": "Baingan Ka Salan"
+      },
+      {
+        "id": "ni-gravy-008",
+        "name": "Egg Curry"
+      }
+    ],
+    "dry_veggie": [
+      {
+        "id": "si-dry_veggie-006",
+        "name": "Chicken Pepper Fry"
+      },
+      {
+        "id": "ni-dry_veggie-014",
+        "name": "Tandoori Chicken"
+      },
+      {
+        "id": "ni-dry_veggie-031",
+        "name": "Tandoori Prawns"
+      },
+      {
+        "id": "ni-dry_veggie-032",
+        "name": "Egg Potato Fry (Ande Aloo)"
+      },
+      {
+        "id": "ni-dry_veggie-033",
+        "name": "Chicken Tikka (Regular)"
+      },
+      {
+        "id": "ni-dry_veggie-034",
+        "name": "Keema Dry"
+      },
+      {
+        "id": "ni-dry_veggie-035",
+        "name": "Egg Bhurji (Regular)"
+      },
+      {
+        "id": "ni-dry_veggie-036",
+        "name": "Fish Fry (Regular)"
+      },
+      {
+        "id": "ni-dry_veggie-037",
+        "name": "Mutton Fry"
+      },
+      {
+        "id": "ni-dry_veggie-038",
+        "name": "Chicken Seekh Kebab"
+      },
+      {
+        "id": "ni-dry_veggie-001",
+        "name": "Aloo Gobi"
+      },
+      {
+        "id": "ni-dry_veggie-002",
+        "name": "Bhindi Masala"
+      },
+      {
+        "id": "ni-dry_veggie-003",
+        "name": "Baingan Bharta"
+      },
+      {
+        "id": "ni-dry_veggie-007",
+        "name": "Shimla Mirch Aloo"
+      },
+      {
+        "id": "ni-dry_veggie-018",
+        "name": "Chilly Paneer"
+      },
+      {
+        "id": "ni-dry_veggie-039",
+        "name": "Jeera Aloo"
+      },
+      {
+        "id": "ni-dry_veggie-040",
+        "name": "Aloo Methi"
+      },
+      {
+        "id": "ni-dry_veggie-041",
+        "name": "Gobi Matar"
+      },
+      {
+        "id": "ni-dry_veggie-042",
+        "name": "Tawa Paneer"
+      },
+      {
+        "id": "ni-dry_veggie-043",
+        "name": "Karela Fry (Regular)"
+      },
+      {
+        "id": "si-dry_veggie-009",
+        "name": "Egg Podimas"
+      }
+    ],
+    "side": [
+      {
+        "id": "si-side-003",
+        "name": "Pickle"
+      },
+      {
+        "id": "si-side-004",
+        "name": "Papad"
+      },
+      {
+        "id": "ni-side-003",
+        "name": "Pickle"
+      },
+      {
+        "id": "ni-side-004",
+        "name": "Papad"
+      },
+      {
+        "id": "ni-side-005",
+        "name": "Boondi Raita"
+      },
+      {
+        "id": "ni-side-007",
+        "name": "Onion Rings"
+      }
+    ]
+  },
+  "dinner": {
+    "base": [
+      {
+        "id": "si-base-002",
+        "name": "Jeera Rice"
+      },
+      {
+        "id": "ni-base-003",
+        "name": "Jeera Rice"
+      },
+      {
+        "id": "ni-base-004",
+        "name": "Paratha"
+      },
+      {
+        "id": "ni-base-005",
+        "name": "Pulao"
+      },
+      {
+        "id": "ni-base-008",
+        "name": "Naan"
+      },
+      {
+        "id": "ni-base-010",
+        "name": "Schezwan Rice"
+      }
+    ],
+    "gravy": [
+      {
+        "id": "si-gravy-009",
+        "name": "Egg Curry"
+      },
+      {
+        "id": "ni-gravy-013",
+        "name": "Butter Chicken"
+      },
+      {
+        "id": "ni-gravy-024",
+        "name": "Chicken Curry (Regular)"
+      },
+      {
+        "id": "ni-gravy-025",
+        "name": "Mutton Rogan Josh"
+      },
+      {
+        "id": "ni-gravy-026",
+        "name": "Keema Matar Gravy"
+      },
+      {
+        "id": "ni-gravy-027",
+        "name": "Fish Masala"
+      },
+      {
+        "id": "ni-gravy-028",
+        "name": "Chicken Do Pyaza"
+      },
+      {
+        "id": "ni-gravy-029",
+        "name": "Mutton Korma"
+      },
+      {
+        "id": "ni-gravy-030",
+        "name": "Chicken Handi"
+      },
+      {
+        "id": "ni-gravy-031",
+        "name": "Anda Curry"
+      },
+      {
+        "id": "ni-gravy-005",
+        "name": "Kadhi"
+      },
+      {
+        "id": "ni-gravy-009",
+        "name": "Shahi Paneer"
+      },
+      {
+        "id": "ni-gravy-016",
+        "name": "Kadhai Paneer"
+      },
+      {
+        "id": "ni-gravy-032",
+        "name": "Paneer Butter Masala"
+      },
+      {
+        "id": "ni-gravy-033",
+        "name": "Aloo Matar"
+      },
+      {
+        "id": "ni-gravy-034",
+        "name": "Chana Masala"
+      },
+      {
+        "id": "ni-gravy-035",
+        "name": "Dum Aloo"
+      },
+      {
+        "id": "ni-gravy-036",
+        "name": "Matar Paneer"
+      },
+      {
+        "id": "ni-gravy-037",
+        "name": "Lauki Chana Dal"
+      },
+      {
+        "id": "ni-gravy-038",
+        "name": "Baingan Ka Salan"
+      },
+      {
+        "id": "ni-gravy-008",
+        "name": "Egg Curry"
+      }
+    ],
+    "dry_veggie": [
+      {
+        "id": "si-dry_veggie-006",
+        "name": "Chicken Pepper Fry"
+      },
+      {
+        "id": "ni-dry_veggie-014",
+        "name": "Tandoori Chicken"
+      },
+      {
+        "id": "ni-dry_veggie-031",
+        "name": "Tandoori Prawns"
+      },
+      {
+        "id": "ni-dry_veggie-032",
+        "name": "Egg Potato Fry (Ande Aloo)"
+      },
+      {
+        "id": "ni-dry_veggie-033",
+        "name": "Chicken Tikka (Regular)"
+      },
+      {
+        "id": "ni-dry_veggie-034",
+        "name": "Keema Dry"
+      },
+      {
+        "id": "ni-dry_veggie-035",
+        "name": "Egg Bhurji (Regular)"
+      },
+      {
+        "id": "ni-dry_veggie-036",
+        "name": "Fish Fry (Regular)"
+      },
+      {
+        "id": "ni-dry_veggie-037",
+        "name": "Mutton Fry"
+      },
+      {
+        "id": "ni-dry_veggie-038",
+        "name": "Chicken Seekh Kebab"
+      },
+      {
+        "id": "ni-dry_veggie-001",
+        "name": "Aloo Gobi"
+      },
+      {
+        "id": "ni-dry_veggie-002",
+        "name": "Bhindi Masala"
+      },
+      {
+        "id": "ni-dry_veggie-003",
+        "name": "Baingan Bharta"
+      },
+      {
+        "id": "ni-dry_veggie-007",
+        "name": "Shimla Mirch Aloo"
+      },
+      {
+        "id": "ni-dry_veggie-018",
+        "name": "Chilly Paneer"
+      },
+      {
+        "id": "ni-dry_veggie-039",
+        "name": "Jeera Aloo"
+      },
+      {
+        "id": "ni-dry_veggie-040",
+        "name": "Aloo Methi"
+      },
+      {
+        "id": "ni-dry_veggie-041",
+        "name": "Gobi Matar"
+      },
+      {
+        "id": "ni-dry_veggie-042",
+        "name": "Tawa Paneer"
+      },
+      {
+        "id": "ni-dry_veggie-043",
+        "name": "Karela Fry (Regular)"
+      },
+      {
+        "id": "si-dry_veggie-009",
+        "name": "Egg Podimas"
+      }
+    ],
+    "side": [
+      {
+        "id": "si-side-003",
+        "name": "Pickle"
+      },
+      {
+        "id": "si-side-004",
+        "name": "Papad"
+      },
+      {
+        "id": "ni-side-003",
+        "name": "Pickle"
+      },
+      {
+        "id": "ni-side-004",
+        "name": "Papad"
+      },
+      {
+        "id": "ni-side-005",
+        "name": "Boondi Raita"
+      },
+      {
+        "id": "ni-side-007",
+        "name": "Onion Rings"
+      }
+    ]
+  }
+}

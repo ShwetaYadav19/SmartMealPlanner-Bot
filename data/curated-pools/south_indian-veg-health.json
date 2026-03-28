@@ -1,0 +1,336 @@
+{
+  "breakfasts": [
+    {
+      "id": "si-b-001",
+      "name": "Idli with Sambar"
+    },
+    {
+      "id": "si-b-005",
+      "name": "Pesarattu"
+    },
+    {
+      "id": "si-b-008",
+      "name": "Ragi Dosa"
+    },
+    {
+      "id": "si-b-011",
+      "name": "Moong Sprouts Salad"
+    },
+    {
+      "id": "si-b-012",
+      "name": "Adai (Millet Lentil Crepe)"
+    },
+    {
+      "id": "si-b-015",
+      "name": "Masala Paniyaram"
+    },
+    {
+      "id": "si-b-016",
+      "name": "Lemon Sevai (Lemon Idiyappam)"
+    },
+    {
+      "id": "si-b-017",
+      "name": "Aval Upma (South Indian Poha)"
+    },
+    {
+      "id": "si-b-018",
+      "name": "Upma Kozhukattai"
+    },
+    {
+      "id": "si-b-020",
+      "name": "Oats Mor Kali (Buttermilk Porridge)"
+    }
+  ],
+  "lunch": {
+    "base": [
+      {
+        "id": "si-base-001",
+        "name": "Steamed Rice"
+      },
+      {
+        "id": "si-base-005",
+        "name": "Chapati"
+      },
+      {
+        "id": "si-base-007",
+        "name": "Ragi Mudde"
+      }
+    ],
+    "gravy": [
+      {
+        "id": "si-gravy-001",
+        "name": "Sambar"
+      },
+      {
+        "id": "si-gravy-002",
+        "name": "Rasam"
+      },
+      {
+        "id": "si-gravy-003",
+        "name": "Vegetable Kootu"
+      },
+      {
+        "id": "si-gravy-008",
+        "name": "Poricha Kuzhambu"
+      },
+      {
+        "id": "si-gravy-016",
+        "name": "Paruppu Kuzhambu"
+      },
+      {
+        "id": "si-gravy-017",
+        "name": "Vendakkai Kuzhambu"
+      },
+      {
+        "id": "si-gravy-018",
+        "name": "Murungakkai Sambar"
+      },
+      {
+        "id": "si-gravy-019",
+        "name": "Keerai Masiyal"
+      },
+      {
+        "id": "si-gravy-020",
+        "name": "Parangikai Kootu"
+      },
+      {
+        "id": "si-gravy-021",
+        "name": "Chow Chow Kootu"
+      }
+    ],
+    "dry_veggie": [
+      {
+        "id": "si-dry_veggie-001",
+        "name": "Beans Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-002",
+        "name": "Cabbage Thoran"
+      },
+      {
+        "id": "si-dry_veggie-003",
+        "name": "Carrot Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-005",
+        "name": "Beetroot Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-008",
+        "name": "Snake Gourd Stir Fry"
+      },
+      {
+        "id": "si-dry_veggie-020",
+        "name": "Mushroom Pepper Dry (Chettinad)"
+      },
+      {
+        "id": "si-dry_veggie-021",
+        "name": "Raw Banana Stir-Fry"
+      },
+      {
+        "id": "si-dry_veggie-022",
+        "name": "Beetroot Varai"
+      },
+      {
+        "id": "si-dry_veggie-023",
+        "name": "Avarakkai Poriyal (Flat Beans Stir-Fry)"
+      },
+      {
+        "id": "si-dry_veggie-024",
+        "name": "Seppankizhangu Varuval (Taro Root Fry)"
+      },
+      {
+        "id": "si-dry_veggie-025",
+        "name": "Kovakkai Vepudu (Ivy Gourd Fry)"
+      },
+      {
+        "id": "si-dry_veggie-026",
+        "name": "Banana Flower (Vazhaipoo) Thoran"
+      },
+      {
+        "id": "si-dry_veggie-027",
+        "name": "Cabbage and Green Peas Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-028",
+        "name": "Carrot and Beans Stir-Fry"
+      },
+      {
+        "id": "si-dry_veggie-029",
+        "name": "Red Radish Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-030",
+        "name": "Onion Palya"
+      }
+    ],
+    "side": [
+      {
+        "id": "si-side-001",
+        "name": "Curd"
+      },
+      {
+        "id": "si-side-005",
+        "name": "Onion Raita"
+      },
+      {
+        "id": "si-side-007",
+        "name": "Cucumber Salad"
+      },
+      {
+        "id": "ni-side-006",
+        "name": "Curd"
+      },
+      {
+        "id": "si-side-008",
+        "name": "Raita"
+      },
+      {
+        "id": "si-side-009",
+        "name": "Tomato Onion Salad"
+      }
+    ]
+  },
+  "dinner": {
+    "base": [
+      {
+        "id": "si-base-001",
+        "name": "Steamed Rice"
+      },
+      {
+        "id": "si-base-005",
+        "name": "Chapati"
+      },
+      {
+        "id": "si-base-007",
+        "name": "Ragi Mudde"
+      }
+    ],
+    "gravy": [
+      {
+        "id": "si-gravy-001",
+        "name": "Sambar"
+      },
+      {
+        "id": "si-gravy-002",
+        "name": "Rasam"
+      },
+      {
+        "id": "si-gravy-003",
+        "name": "Vegetable Kootu"
+      },
+      {
+        "id": "si-gravy-008",
+        "name": "Poricha Kuzhambu"
+      },
+      {
+        "id": "si-gravy-016",
+        "name": "Paruppu Kuzhambu"
+      },
+      {
+        "id": "si-gravy-017",
+        "name": "Vendakkai Kuzhambu"
+      },
+      {
+        "id": "si-gravy-018",
+        "name": "Murungakkai Sambar"
+      },
+      {
+        "id": "si-gravy-019",
+        "name": "Keerai Masiyal"
+      },
+      {
+        "id": "si-gravy-020",
+        "name": "Parangikai Kootu"
+      },
+      {
+        "id": "si-gravy-021",
+        "name": "Chow Chow Kootu"
+      }
+    ],
+    "dry_veggie": [
+      {
+        "id": "si-dry_veggie-001",
+        "name": "Beans Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-002",
+        "name": "Cabbage Thoran"
+      },
+      {
+        "id": "si-dry_veggie-003",
+        "name": "Carrot Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-005",
+        "name": "Beetroot Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-008",
+        "name": "Snake Gourd Stir Fry"
+      },
+      {
+        "id": "si-dry_veggie-020",
+        "name": "Mushroom Pepper Dry (Chettinad)"
+      },
+      {
+        "id": "si-dry_veggie-021",
+        "name": "Raw Banana Stir-Fry"
+      },
+      {
+        "id": "si-dry_veggie-022",
+        "name": "Beetroot Varai"
+      },
+      {
+        "id": "si-dry_veggie-023",
+        "name": "Avarakkai Poriyal (Flat Beans Stir-Fry)"
+      },
+      {
+        "id": "si-dry_veggie-024",
+        "name": "Seppankizhangu Varuval (Taro Root Fry)"
+      },
+      {
+        "id": "si-dry_veggie-025",
+        "name": "Kovakkai Vepudu (Ivy Gourd Fry)"
+      },
+      {
+        "id": "si-dry_veggie-026",
+        "name": "Banana Flower (Vazhaipoo) Thoran"
+      },
+      {
+        "id": "si-dry_veggie-027",
+        "name": "Cabbage and Green Peas Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-028",
+        "name": "Carrot and Beans Stir-Fry"
+      },
+      {
+        "id": "si-dry_veggie-029",
+        "name": "Red Radish Poriyal"
+      },
+      {
+        "id": "si-dry_veggie-030",
+        "name": "Onion Palya"
+      }
+    ],
+    "side": [
+      {
+        "id": "si-side-005",
+        "name": "Onion Raita"
+      },
+      {
+        "id": "si-side-007",
+        "name": "Cucumber Salad"
+      },
+      {
+        "id": "si-side-008",
+        "name": "Raita"
+      },
+      {
+        "id": "si-side-009",
+        "name": "Tomato Onion Salad"
+      }
+    ]
+  }
+}
