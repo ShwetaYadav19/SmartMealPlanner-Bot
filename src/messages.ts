@@ -6,7 +6,10 @@
 export const ONBOARDING_WELCOME = `Hey there! 👋 Welcome to SmartMealPlanner!\nLet's set up your preferences so I can plan delicious meals for you 🍽️`;
 export const ONBOARDING_CUISINE_PROMPT = `What cuisine do you prefer? 🍛`;
 export const ONBOARDING_DIET_PROMPT = `Great choice! Now, what's your diet preference? 🥗`;
-export const ONBOARDING_STYLE_PROMPT = `Almost done! What style of meals do you like? 🏠`;
+export const ONBOARDING_STYLE_PROMPT = `What style of meals do you prefer? 🏠
+
+🥗 *Health* — Roti, dal, sabzi, salads. Light on oil & spice.
+🍛 *Regular* — Aloo paratha, paneer butter masala, biryani. The good stuff.`;
 export const ONBOARDING_MEAL_FORMAT_PROMPT = `How much would you like on your plate? 🍽️
 
 🍚 *Light* — Dal/curry + rice/roti
