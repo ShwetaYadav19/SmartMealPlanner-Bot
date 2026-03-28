@@ -7,11 +7,12 @@ export const ONBOARDING_WELCOME = `Hey there! 👋 Welcome to SmartMealPlanner!\
 export const ONBOARDING_CUISINE_PROMPT = `What cuisine do you prefer? 🍛`;
 export const ONBOARDING_DIET_PROMPT = `Great choice! Now, what's your diet preference? 🥗`;
 export const ONBOARDING_STYLE_PROMPT = `Almost done! What style of meals do you like? 🏠`;
-export const ONBOARDING_MEAL_FORMAT_PROMPT = `Last one! How much would you like on your plate? 🍽️
+export const ONBOARDING_MEAL_FORMAT_PROMPT = `How much would you like on your plate? 🍽️
 
-🍚 *Quick Meal* — Rice/Roti + one curry. Light and fuss-free.
-🏠 *Home Meal* — Rice/Roti + curry + sabzi. The everyday home-cooked feel.
-🍛 *Full Thali* — Rice/Roti + curry + sabzi + side (raita/chutney). The full spread.`;
+🍚 *Light* — Dal/curry + rice/roti
+🏠 *Regular* — Lunch with sabzi, lighter dinner
+🍛 *Hearty* — Sabzi with every meal
+🍽️ *Full Spread* — Full thali with sides`;
 export const ONBOARDING_LUNCH_FORMAT_PROMPT = `What would you like for lunch? 🍽️`;
 export const ONBOARDING_DINNER_FORMAT_PROMPT = `And for dinner? 🌙`;
 export const ONBOARDING_COMPLETE = `You're all set! 🎉 Here's what you can do:`;

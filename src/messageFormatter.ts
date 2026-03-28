@@ -103,9 +103,6 @@ const MEAL_FORMAT_BUTTONS: ButtonOption[] = [
   { id: 'light', title: '🍚 Light' },
   { id: 'regular_format', title: '🏠 Regular' },
   { id: 'hearty', title: '🍛 Hearty' },
-];
-
-const MEAL_FORMAT_BUTTONS_2: ButtonOption[] = [
   { id: 'full_spread', title: '🍽️ Full Spread' },
 ];
 
@@ -296,15 +293,19 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
         buttons: suggestedButtons ?? STYLE_BUTTONS,
       };
 
-    case ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT:
+    case ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT: {
+      const formatListItems: ListItem[] = [
+        { id: 'light', item: '🍚 Light', description: 'Dal/curry + rice/roti' },
+        { id: 'regular_format', item: '🏠 Regular', description: 'Lunch with sabzi, lighter dinner' },
+        { id: 'hearty', item: '🍛 Hearty', description: 'Sabzi with every meal' },
+        { id: 'full_spread', item: '🍽️ Full Spread', description: 'Full thali with sides' },
+      ];
       return {
         text: ONBOARDING_MEAL_FORMAT_PROMPT,
-        buttons: suggestedButtons ?? MEAL_FORMAT_BUTTONS,
-        followUp: [{
-          text: '👆 Or pick:',
-          buttons: MEAL_FORMAT_BUTTONS_2,
-        }],
+        listItems: formatListItems,
+        listButtonLabel: 'Pick your style',
       };
+    }
 
     case ResponseType.ONBOARDING_LUNCH_FORMAT_PROMPT:
       return {
