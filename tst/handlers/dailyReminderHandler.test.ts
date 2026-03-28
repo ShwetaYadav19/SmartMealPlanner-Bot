@@ -112,7 +112,7 @@ describe('dailyReminderHandler', () => {
       expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
       const [to, , contentSid, contentVars] = mockSendTextMessage.mock.calls[0];
       expect(to).toBe('+919876543210');
-      expect(contentSid).toBe('HX708fce9ebb60de686f73731e071aa8cb');
+      expect(contentSid).toBe('HX0d01883256a89f9f413508b579a56436');
       expect(contentVars).toEqual({
         '1': 'Thursday Breakfast',
         '2': 'Thursday Lunch',
