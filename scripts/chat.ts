@@ -54,6 +54,8 @@ const BUTTON_IDS = new Set([
   'north_indian', 'south_indian', 'both',
   'veg', 'non_veg', 'veg_with_eggs',
   'health', 'regular',
+  'light', 'regular_format', 'hearty', 'full_spread',
+  'quick_meal', 'home_meal', 'full_thali',
   'weekly_plan', 'weekly_grocery',
   'tomorrow_plan', 'tomorrow_grocery',
   'send_to_cook', 'swap_lunch', 'save_cook',
