@@ -119,10 +119,8 @@ describe('dailyReminderHandler', () => {
         '3': 'Thursday Dinner',
       });
 
-      // Follow-up grocery prompt sent as in-session button message
-      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-      const [, groceryText] = mockSendButtonMessage.mock.calls[0];
-      expect(groceryText).toMatch(/grocery/i);
+      // No freeform follow-up — only the template is sent
+      expect(mockSendButtonMessage).not.toHaveBeenCalled();
     } finally {
       vi.useRealTimers();
     }
@@ -190,7 +188,7 @@ describe('dailyReminderHandler', () => {
     }
   });
 
-  it('sends template then grocery buttons for DAILY_REMINDER', async () => {
+  it('sends only template for DAILY_REMINDER (no freeform grocery prompt)', async () => {
     // Set to Wednesday so tomorrow (Thursday) = index 3, within plan
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
@@ -203,15 +201,8 @@ describe('dailyReminderHandler', () => {
       // Template sent via sendTextMessage
       expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
 
-      // Grocery prompt sent as in-session button message
-      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-      const [, , buttons] = mockSendButtonMessage.mock.calls[0];
-      expect(buttons).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ id: 'daily_grocery_yes' }),
-          expect.objectContaining({ id: 'daily_grocery_no' }),
-        ]),
-      );
+      // No freeform button messages — avoids 63016 outside 24hr window
+      expect(mockSendButtonMessage).not.toHaveBeenCalled();
     } finally {
       vi.useRealTimers();
     }

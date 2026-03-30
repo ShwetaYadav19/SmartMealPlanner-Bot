@@ -11,7 +11,6 @@ import { extractTomorrowPlan } from '../core/planGenerator';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
 import { getTemplateSid, DAILY_REMINDER_HEADER } from '../messages';
-import { delay } from '../utils';
 
 // Minimal EventBridge scheduled event type
 interface ScheduledEvent {
@@ -90,25 +89,6 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
           contentVariables,
         );
         console.log(`[dailyReminder] Template sent to ${user.phoneNumber} | msgSid=${msgSid ?? 'freeform-fallback'}`);
-
-        // Wait for template message to be delivered before sending follow-up.
-        if (msgSid) {
-          console.log(`[dailyReminder] Waiting for delivery confirmation | msgSid=${msgSid}`);
-          await messagingProvider.waitForSent(msgSid);
-        }
-        await delay(2000);
-
-        // Template opens the 24h session window, so follow up with
-        // the grocery prompt as an in-session quick-reply message
-        console.log(`[dailyReminder] Sending grocery prompt to ${user.phoneNumber}`);
-        await messagingProvider.sendButtonMessage(
-          user.phoneNumber,
-          'Would you like to see tomorrow\'s grocery list? 🛒',
-          [
-            { id: 'daily_grocery_yes', title: 'Yes 🛒' },
-            { id: 'daily_grocery_no', title: 'No ❌' },
-          ],
-        );
 
         sent++;
         try { await metricsPort.publishMetric('DailyReminderSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
