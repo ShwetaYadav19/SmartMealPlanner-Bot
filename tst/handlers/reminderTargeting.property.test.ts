@@ -126,7 +126,7 @@ describe('Property 13: Reminder targeting correctness', () => {
     );
   });
 
-  it('daily reminder sends EXPIRED_PLAN_PROMPT for users with expired plans', () => {
+  it('daily reminder sends DAILY_REMINDER for users with old plans (cycles the plan)', () => {
     fc.assert(
       fc.property(
         fc.array(
@@ -149,8 +149,9 @@ describe('Property 13: Reminder targeting correctness', () => {
             };
             const result = dailyReminderTarget(fullUser);
 
+            // Old plans now cycle instead of expiring
             expect(result).not.toBeNull();
-            expect(result!.type).toBe(ResponseType.EXPIRED_PLAN_PROMPT);
+            expect(result!.type).toBe(ResponseType.DAILY_REMINDER);
           }
         },
       ),

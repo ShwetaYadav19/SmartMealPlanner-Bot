@@ -147,21 +147,15 @@ describe('dailyReminderHandler', () => {
     );
   });
 
-  it('sends EXPIRED_PLAN_PROMPT for plan with expired start date', async () => {
-    // Plan from 3 weeks ago — won't cover tomorrow
+  it('sends DAILY_REMINDER for plan with old start date (cycles the plan)', async () => {
+    // Plan from long ago — now wraps around instead of expiring
     const user = makeOnboardedUser('+919876543210', true, '2024-01-01');
     mockScanOnboardedUsers.mockResolvedValue([user]);
 
     await dailyReminderHandler(scheduledEvent);
 
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-    const [, text, buttons] = mockSendButtonMessage.mock.calls[0];
-    expect(text).toContain('expired');
-    expect(buttons).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ title: 'Generate Weekly Plan' }),
-      ]),
-    );
+    // Should send daily template (not expired prompt) since plan cycles
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
   });
 
   it('handles empty user list gracefully', async () => {
