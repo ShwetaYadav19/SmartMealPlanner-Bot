@@ -127,6 +127,12 @@
     const ep = inputEndpoint.value.trim();
     const key = inputApiKey.value.trim();
     if (!ep || !key) return;
+    if (!ep.endsWith('/metrics')) {
+      inputEndpoint.setCustomValidity('URL should end with /metrics');
+      inputEndpoint.reportValidity();
+      return;
+    }
+    inputEndpoint.setCustomValidity('');
     setEndpoint(ep);
     setApiKey(key);
     hideSettings();
@@ -173,6 +179,17 @@
       const sep = endpoint.includes('?') ? '&' : '?';
       const url = `${endpoint}${sep}range=${currentRange}&apiKey=${encodeURIComponent(key)}`;
       const res = await fetch(url);
+      const contentType = res.headers.get('content-type') || '';
+
+      // If the response isn't JSON, we're probably hitting the wrong URL
+      if (!contentType.includes('application/json')) {
+        const preview = (await res.text()).slice(0, 100);
+        throw new Error(
+          `Expected JSON but got "${contentType}". Response starts with: ${preview}...\n` +
+          'Check that the API Endpoint URL ends with /metrics (e.g. https://abc123.execute-api.region.amazonaws.com/prod/metrics)'
+        );
+      }
+
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || `HTTP ${res.status}`);
