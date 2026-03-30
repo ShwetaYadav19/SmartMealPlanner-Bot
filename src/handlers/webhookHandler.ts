@@ -289,6 +289,7 @@ export async function webhookHandler(
       }
     }
     result.updatedState.lastButtonIds = allIds.length > 0 ? allIds : undefined;
+    result.updatedState.lastInteractionAt = new Date().toISOString();
 
     // 11. Determine if this response type gets an image instead of text
     const rtype = result.response.type;

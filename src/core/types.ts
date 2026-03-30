@@ -141,6 +141,7 @@ export interface UserState {
   excludedDishIds?: string[];
   candidateDishes?: CandidateDishes;
   lastButtonIds?: string[];
+  lastInteractionAt?: string;
   isPreferenceChange?: boolean;
   previewStep?: PreviewStep;
   fewMealsSelectedDay?: number;
