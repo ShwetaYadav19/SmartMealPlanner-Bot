@@ -72,6 +72,19 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         const templateSid = getTemplateSid('daily_reminder');
         console.log(`[dailyReminder] Sending daily template to ${user.phoneNumber} | templateSid=${templateSid ?? 'NONE'}`);
 
+        // Template body: {{1}} = breakfast, {{2}} = lunch, {{3}} = dinner
+        // Sanitize: strip newlines and truncate to avoid Twilio variable limits
+        const sanitize = (s: string, max = 60) => {
+          const clean = s.replace(/[\n\r]/g, ' ').trim();
+          return clean.length > max ? clean.slice(0, max - 1) + '…' : clean;
+        };
+        const contentVariables: Record<string, string> = {
+          '1': sanitize(dayPlan.breakfast.name),
+          '2': sanitize(dayPlan.lunch.name),
+          '3': sanitize(dayPlan.dinner.name),
+        };
+        console.log(`[dailyReminder] contentVariables:`, JSON.stringify(contentVariables));
+
         // Build a freeform fallback body in case the template send fails
         const fallbackBody = `${DAILY_REMINDER_HEADER(dayPlan.day)}\n🥣 Breakfast: ${dayPlan.breakfast.name}\n🍛 Lunch: ${dayPlan.lunch.name}\n🍽️ Dinner: ${dayPlan.dinner.name}\n\nReply SWAP if you'd like a different lunch.`;
 
@@ -79,6 +92,7 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
           user.phoneNumber,
           fallbackBody,
           templateSid,
+          contentVariables,
         );
         console.log(`[dailyReminder] Template sent to ${user.phoneNumber} | msgSid=${msgSid ?? 'freeform-fallback'}`);
 
