@@ -181,6 +181,7 @@ export class TwilioMessagingProvider implements MessagingProvider {
           to: toWhatsApp,
           contentSid: sid,
         });
+        this.deleteContentTemplate(sid);
         return;
       } catch (error: unknown) {
         const errMsg = error instanceof Error ? error.message : String(error);
@@ -228,6 +229,7 @@ export class TwilioMessagingProvider implements MessagingProvider {
         to: toWhatsApp,
         contentSid: sid,
       });
+      this.deleteContentTemplate(sid);
       return;
     } catch (error: unknown) {
       const errMsg = error instanceof Error ? error.message : String(error);
@@ -246,6 +248,17 @@ export class TwilioMessagingProvider implements MessagingProvider {
       from,
       to: toWhatsApp,
       body: fullBody,
+    });
+  }
+
+  /**
+   * Fire-and-forget deletion of a Content Template created for in-session use.
+   * Errors are swallowed — cleanup is best-effort and must never break message delivery.
+   */
+  private deleteContentTemplate(sid: string): void {
+    this.client.content.v1.contents(sid).remove().catch((err: unknown) => {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      console.warn(`Failed to delete content template sid="${sid}": ${errMsg}`);
     });
   }
 
