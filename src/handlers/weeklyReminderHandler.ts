@@ -29,8 +29,16 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
   );
   const metricsPort = new CloudWatchMetricsAdapter();
 
-  // Scan all users with onboardingComplete: true
-  const onboardedUsers = await userStateRepo.scanOnboardedUsers();
+  // Support single-user test: if detail.phoneNumber is provided, only process that user
+  const targetPhone = (_event.detail as Record<string, unknown>)?.phoneNumber as string | undefined;
+  let onboardedUsers;
+  if (targetPhone) {
+    console.log(`[weeklyReminder] Single-user mode: ${targetPhone}`);
+    const user = await userStateRepo.getUser(targetPhone);
+    onboardedUsers = user ? [user] : [];
+  } else {
+    onboardedUsers = await userStateRepo.scanOnboardedUsers();
+  }
   console.log(`[weeklyReminder] Found ${onboardedUsers.length} onboarded users`);
 
   let sent = 0;

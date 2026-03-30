@@ -31,8 +31,16 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
   );
   const metricsPort = new CloudWatchMetricsAdapter();
 
-  // Scan all users with onboardingComplete: true
-  const onboardedUsers = await userStateRepo.scanOnboardedUsers();
+  // Support single-user test: if detail.phoneNumber is provided, only process that user
+  const targetPhone = (_event.detail as Record<string, unknown>)?.phoneNumber as string | undefined;
+  let onboardedUsers;
+  if (targetPhone) {
+    console.log(`[dailyReminder] Single-user mode: ${targetPhone}`);
+    const user = await userStateRepo.getUser(targetPhone);
+    onboardedUsers = user ? [user] : [];
+  } else {
+    onboardedUsers = await userStateRepo.scanOnboardedUsers();
+  }
   console.log(`[dailyReminder] Found ${onboardedUsers.length} onboarded users`);
 
   let sent = 0;
@@ -88,13 +96,18 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         // Build a freeform fallback body in case the template send fails
         const fallbackBody = `${DAILY_REMINDER_HEADER(dayPlan.day)}\n🥣 Breakfast: ${dayPlan.breakfast.name}\n🍛 Lunch: ${dayPlan.lunch.name}\n🍽️ Dinner: ${dayPlan.dinner.name}\n\nReply SWAP if you'd like a different lunch.`;
 
-        const msgSid = await messagingProvider.sendTextMessage(
+        await messagingProvider.sendButtonMessage(
           user.phoneNumber,
           fallbackBody,
+          [
+            { id: 'daily_grocery_yes', title: 'Yes 🛒' },
+            { id: 'daily_grocery_no', title: 'No ❌' },
+          ],
           templateSid,
+          undefined,
           contentVariables,
         );
-        console.log(`[dailyReminder] Template sent to ${user.phoneNumber} | msgSid=${msgSid ?? 'freeform-fallback'}`);
+        console.log(`[dailyReminder] Template sent to ${user.phoneNumber}`);
 
         sent++;
         try { await metricsPort.publishMetric('DailyReminderSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
