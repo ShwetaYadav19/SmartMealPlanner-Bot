@@ -935,9 +935,10 @@ async function ensureDashboardBucket() {
       Policy: bucketPolicy,
     }));
 
-    // Upload index.html
+    // Upload index.html with stage placeholder replaced
     const htmlPath = path.join(__dirname, '..', 'src', 'dashboard', 'index.html');
-    const htmlContent = fs.readFileSync(htmlPath, 'utf-8');
+    const rawHtml = fs.readFileSync(htmlPath, 'utf-8');
+    const htmlContent = rawHtml.replace(/__STAGE__/g, stage);
     await s3Client.send(new PutObjectCommand({
       Bucket: DASHBOARD_BUCKET,
       Key: 'index.html',
