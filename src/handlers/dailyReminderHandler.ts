@@ -72,13 +72,6 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         const templateSid = getTemplateSid('daily_reminder');
         console.log(`[dailyReminder] Sending daily template to ${user.phoneNumber} | templateSid=${templateSid ?? 'NONE'}`);
 
-        // Template body: {{1}} = breakfast, {{2}} = lunch, {{3}} = dinner
-        const contentVariables: Record<string, string> = {
-          '1': dayPlan.breakfast.name,
-          '2': dayPlan.lunch.name,
-          '3': dayPlan.dinner.name,
-        };
-
         // Build a freeform fallback body in case the template send fails
         const fallbackBody = `${DAILY_REMINDER_HEADER(dayPlan.day)}\n🥣 Breakfast: ${dayPlan.breakfast.name}\n🍛 Lunch: ${dayPlan.lunch.name}\n🍽️ Dinner: ${dayPlan.dinner.name}\n\nReply SWAP if you'd like a different lunch.`;
 
@@ -86,7 +79,6 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
           user.phoneNumber,
           fallbackBody,
           templateSid,
-          contentVariables,
         );
         console.log(`[dailyReminder] Template sent to ${user.phoneNumber} | msgSid=${msgSid ?? 'freeform-fallback'}`);
 

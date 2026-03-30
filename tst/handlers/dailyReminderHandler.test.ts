@@ -108,16 +108,11 @@ describe('dailyReminderHandler', () => {
 
       await dailyReminderHandler(scheduledEvent);
 
-      // Template message sent via sendTextMessage with contentSid + contentVariables
+      // Template message sent via sendTextMessage with contentSid (no contentVariables)
       expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
-      const [to, , contentSid, contentVars] = mockSendTextMessage.mock.calls[0];
+      const [to, , contentSid] = mockSendTextMessage.mock.calls[0];
       expect(to).toBe('+919876543210');
       expect(contentSid).toBe('HX0d01883256a89f9f413508b579a56436');
-      expect(contentVars).toEqual({
-        '1': 'Thursday Breakfast',
-        '2': 'Thursday Lunch',
-        '3': 'Thursday Dinner',
-      });
 
       // No freeform follow-up — only the template is sent
       expect(mockSendButtonMessage).not.toHaveBeenCalled();
