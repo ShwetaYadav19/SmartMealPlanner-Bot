@@ -16,6 +16,18 @@ vi.mock('../../src/config', () => ({
   }),
 }));
 
+// Mock messages — provide a template SID so the handler doesn't skip users
+vi.mock('../../src/messages', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../src/messages')>();
+  return {
+    ...actual,
+    getTemplateSid: (purpose: string) => {
+      if (purpose === 'weekly_reminder') return 'HX_WEEKLY_TEST_SID';
+      return undefined;
+    },
+  };
+});
+
 // Mock DynamoDB adapter
 const mockScanOnboardedUsers = vi.fn();
 vi.mock('../../src/adapters/dynamodbUserStateRepository', () => ({
@@ -36,6 +48,11 @@ vi.mock('../../src/adapters/twilioMessagingProvider', () => ({
     sendButtonMessage: mockSendButtonMessage,
     sendListMessage: mockSendListMessage,
   })),
+}));
+
+// Mock imageSender
+vi.mock('../../src/core/imageSender', () => ({
+  sendWeeklyPlanImage: vi.fn().mockResolvedValue(undefined),
 }));
 
 function makeMeal(name: string): Meal {
@@ -98,12 +115,19 @@ describe('weeklyReminderHandler', () => {
 
     await weeklyReminderHandler(scheduledEvent);
 
-    // user1 (with plan): plan text (sendTextMessage) + follow-up buttons
-    // user2 (no plan): generate prompt with buttons
-    // Total sendButtonMessage calls: 1 follow-up for user1 + 1 for user2 = 2
-    expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
+    // Both users get a template message first (sendTextMessage with templateSid)
+    // user1 (with plan): template + plan text via sendTextMessage + follow-up via sendButtonMessage
+    // user2 (no plan): template only (button is in the template itself)
+    // Total sendTextMessage: 3 (template user1 + plan text user1 + template user2)
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(3);
+    // First call is template for user1
     expect(mockSendTextMessage.mock.calls[0][0]).toBe('+911111111111');
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(2);
+    expect(mockSendTextMessage.mock.calls[0][2]).toBe('HX_WEEKLY_TEST_SID');
+    // Second call is freeform plan text for user1
+    expect(mockSendTextMessage.mock.calls[1][0]).toBe('+911111111111');
+    // Third call is template for user2
+    expect(mockSendTextMessage.mock.calls[2][0]).toBe('+912222222222');
+    expect(mockSendTextMessage.mock.calls[2][2]).toBe('HX_WEEKLY_TEST_SID');
   });
 
   it('shows existing plan with grocery/change options for users with a plan', async () => {
@@ -112,13 +136,17 @@ describe('weeklyReminderHandler', () => {
 
     await weeklyReminderHandler(scheduledEvent);
 
-    // Primary message is plain text (plan is too long for button message body)
-    expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
-    const [, planText] = mockSendTextMessage.mock.calls[0];
+    // Call 1: template message to open session
+    // Call 2: freeform plan text
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(2);
+    // First call is the template
+    expect(mockSendTextMessage.mock.calls[0][2]).toBe('HX_WEEKLY_TEST_SID');
+    // Second call is the plan text (freeform, no templateSid)
+    const [, planText] = mockSendTextMessage.mock.calls[1];
     expect(planText).toContain('Monday');
     expect(planText).toContain('meal plan');
 
-    // Follow-up has grocery + change buttons
+    // Follow-up has approval buttons
     expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
     const [, , followUpButtons] = mockSendButtonMessage.mock.calls[0];
     expect(followUpButtons).toEqual(
@@ -135,15 +163,12 @@ describe('weeklyReminderHandler', () => {
 
     await weeklyReminderHandler(scheduledEvent);
 
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-    const [, text, buttons] = mockSendButtonMessage.mock.calls[0];
-    expect(text).toContain('🍽️');
-    expect(text).toContain('plan your meals');
-    expect(buttons).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ title: 'Generate Weekly Plan' }),
-      ]),
-    );
+    // Template message opens the session — it already contains the "Generate Weekly Plan" button
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
+    expect(mockSendTextMessage.mock.calls[0][0]).toBe('+912222222222');
+    expect(mockSendTextMessage.mock.calls[0][2]).toBe('HX_WEEKLY_TEST_SID');
+    // No additional button messages needed for no-plan users
+    expect(mockSendButtonMessage).not.toHaveBeenCalled();
   });
 
   it('handles empty user list gracefully', async () => {
@@ -160,31 +185,27 @@ describe('weeklyReminderHandler', () => {
     const user2 = makeOnboardedUser('+912222222222', false);
     mockScanOnboardedUsers.mockResolvedValue([user1, user2]);
 
-    mockSendButtonMessage
+    // First template send fails, second succeeds
+    mockSendTextMessage
       .mockRejectedValueOnce(new Error('Twilio error'))
       .mockResolvedValueOnce(undefined);
 
     await weeklyReminderHandler(scheduledEvent);
 
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(2);
-    expect(mockSendButtonMessage.mock.calls[1][0]).toBe('+912222222222');
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(2);
+    expect(mockSendTextMessage.mock.calls[1][0]).toBe('+912222222222');
   });
 
-  it('sends button message with "Generate Weekly Plan" option for no-plan user', async () => {
+  it('sends template message for no-plan user (button is in the template)', async () => {
     const user = makeOnboardedUser('+919876543210', false);
     mockScanOnboardedUsers.mockResolvedValue([user]);
 
     await weeklyReminderHandler(scheduledEvent);
 
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-    expect(mockSendTextMessage).not.toHaveBeenCalled();
-
-    const [, text, buttons] = mockSendButtonMessage.mock.calls[0];
-    expect(text).toContain('🍽️');
-    expect(buttons).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ title: 'Generate Weekly Plan' }),
-      ]),
-    );
+    // Only the template message is sent — the "Generate Weekly Plan" button lives in the template
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
+    expect(mockSendTextMessage.mock.calls[0][0]).toBe('+919876543210');
+    expect(mockSendTextMessage.mock.calls[0][2]).toBe('HX_WEEKLY_TEST_SID');
+    expect(mockSendButtonMessage).not.toHaveBeenCalled();
   });
 });
