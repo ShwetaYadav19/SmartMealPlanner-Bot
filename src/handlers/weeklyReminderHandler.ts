@@ -70,8 +70,18 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
         };
         const formatted = formatBotResponse(response);
 
-        // Send the plan text
-        if (formatted.buttons && formatted.buttons.length > 0) {
+        // Send the plan text combined with the first follow-up (approval CTA)
+        // to reduce the number of separate messages the user receives.
+        const firstFollowUp = formatted.followUp?.[0];
+        if (firstFollowUp?.buttons && firstFollowUp.buttons.length > 0) {
+          // Merge plan text + approval prompt into a single button message
+          const combinedText = `${formatted.text}\n\n${firstFollowUp.text}`;
+          await messagingProvider.sendButtonMessage(
+            user.phoneNumber,
+            combinedText,
+            firstFollowUp.buttons,
+          );
+        } else if (formatted.buttons && formatted.buttons.length > 0) {
           await messagingProvider.sendButtonMessage(
             user.phoneNumber,
             formatted.text,
@@ -82,10 +92,11 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
         }
         console.log(`[weeklyReminder] Plan text sent to ${user.phoneNumber}`);
 
-        // Send follow-up messages (e.g. approval CTA)
-        if (formatted.followUp) {
-          console.log(`[weeklyReminder] Sending ${formatted.followUp.length} follow-up message(s) to ${user.phoneNumber}`);
-          for (const followUpMsg of formatted.followUp) {
+        // Send any remaining follow-ups beyond the first (which was already merged)
+        if (formatted.followUp && formatted.followUp.length > 1) {
+          const remaining = formatted.followUp.slice(1);
+          console.log(`[weeklyReminder] Sending ${remaining.length} additional follow-up message(s) to ${user.phoneNumber}`);
+          for (const followUpMsg of remaining) {
             if (followUpMsg.buttons && followUpMsg.buttons.length > 0) {
               await messagingProvider.sendButtonMessage(
                 user.phoneNumber,
@@ -98,7 +109,7 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
           }
         }
 
-        // Send plan image and reset week start date
+        // Send plan image (no separate caption — template already greeted the user)
         try {
           console.log(`[weeklyReminder] Sending plan image to ${user.phoneNumber}`);
           await sendWeeklyPlanImage(messagingProvider, user.phoneNumber, user.weeklyPlan);
