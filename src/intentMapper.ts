@@ -167,6 +167,7 @@ export function mapWhatsAppToIntent(
       case 'happy_with_menu':
         return { intent: Intent.HAPPY_WITH_MENU };
       case 'weekly_plan':
+      case 'generate_weekly_plan':
         return { intent: Intent.GENERATE_PLAN };
       case 'weekly_grocery':
         return { intent: Intent.VIEW_WEEKLY_GROCERY };
@@ -228,7 +229,7 @@ export function mapWhatsAppToIntent(
   if (conversationState === 'main_menu') {
     // Adhoc menu trigger for onboarded users
     if (text === 'hi' || text === 'menu') return { intent: Intent.ADHOC_MENU };
-    if (text === '1' || text === 'weekly meal plan' || text === 'weekly plan' || text.endsWith('weekly meal plan')) return { intent: Intent.GENERATE_PLAN };
+    if (text === '1' || text === 'weekly meal plan' || text === 'weekly plan' || text === 'generate weekly plan' || text.endsWith('weekly meal plan')) return { intent: Intent.GENERATE_PLAN };
     if (text === '2' || text === 'weekly grocery list' || text === 'weekly grocery' || text.endsWith('weekly grocery list')) return { intent: Intent.VIEW_WEEKLY_GROCERY };
     if (text === '3' || text === "tomorrow's plan" || text === 'tomorrow plan' || text.endsWith("tomorrow's plan")) return { intent: Intent.VIEW_TOMORROW_PLAN };
     if (text === '4' || text === "tomorrow's grocery" || text === 'tomorrow grocery' || text.endsWith("tomorrow's grocery")) return { intent: Intent.VIEW_TOMORROW_GROCERY };
@@ -298,6 +299,11 @@ export function mapWhatsAppToIntent(
   // Global adhoc menu trigger — "hi" or "menu" from any state (for onboarded users)
   if (text === 'hi' || text === 'menu') {
     return { intent: Intent.ADHOC_MENU };
+  }
+
+  // Global "generate weekly plan" trigger — from any state (e.g. weekly reminder template button)
+  if (text === 'generate weekly plan') {
+    return { intent: Intent.GENERATE_PLAN };
   }
 
   // Free text in any other state is unrecognized
