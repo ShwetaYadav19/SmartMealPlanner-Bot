@@ -21,6 +21,7 @@ interface ScheduledEvent {
 }
 
 export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void> {
+  console.log('[dailyReminder] Handler invoked', JSON.stringify({ source: _event.source, detailType: _event['detail-type'] }));
   const config = loadConfig();
 
   const userStateRepo = new DynamoDBUserStateRepository(config.dynamodbTable);
@@ -33,6 +34,11 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
 
   // Scan all users with onboardingComplete: true
   const onboardedUsers = await userStateRepo.scanOnboardedUsers();
+  console.log(`[dailyReminder] Found ${onboardedUsers.length} onboarded users`);
+
+  let sent = 0;
+  let expired = 0;
+  let failed = 0;
 
   for (const user of onboardedUsers) {
     try {
@@ -43,16 +49,19 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         const tomorrowPlan = extractTomorrowPlan(user.weeklyPlan, user.weeklyPlanStartDate);
 
         if (tomorrowPlan) {
+          console.log(`[dailyReminder] ${user.phoneNumber} | hasPlan=true | tomorrowDay=${tomorrowPlan.day}`);
           response = {
             type: ResponseType.DAILY_REMINDER,
             data: { dayPlan: tomorrowPlan },
           };
         } else {
+          console.log(`[dailyReminder] ${user.phoneNumber} | hasPlan=true | planExpired (startDate=${user.weeklyPlanStartDate})`);
           response = {
             type: ResponseType.EXPIRED_PLAN_PROMPT,
           };
         }
       } else {
+        console.log(`[dailyReminder] ${user.phoneNumber} | hasPlan=false`);
         response = {
           type: ResponseType.EXPIRED_PLAN_PROMPT,
         };
@@ -62,6 +71,7 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
       if (response.type === ResponseType.DAILY_REMINDER && response.data?.dayPlan) {
         const dayPlan = response.data.dayPlan;
         const templateSid = getTemplateSid('daily_reminder');
+        console.log(`[dailyReminder] Sending daily template to ${user.phoneNumber} | templateSid=${templateSid ?? 'NONE'}`);
 
         // Template body: {{1}} = breakfast, {{2}} = lunch, {{3}} = dinner
         const contentVariables: Record<string, string> = {
@@ -79,19 +89,18 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
           templateSid,
           contentVariables,
         );
+        console.log(`[dailyReminder] Template sent to ${user.phoneNumber} | msgSid=${msgSid ?? 'freeform-fallback'}`);
 
         // Wait for template message to be delivered before sending follow-up.
-        // waitForSent only waits for 'sent' status, but WhatsApp can still
-        // deliver a lighter follow-up message before the template arrives on
-        // the user's device.  Add a buffer delay so the grocery prompt never
-        // overtakes the meal plan in the chat.
         if (msgSid) {
+          console.log(`[dailyReminder] Waiting for delivery confirmation | msgSid=${msgSid}`);
           await messagingProvider.waitForSent(msgSid);
         }
         await delay(2000);
 
         // Template opens the 24h session window, so follow up with
         // the grocery prompt as an in-session quick-reply message
+        console.log(`[dailyReminder] Sending grocery prompt to ${user.phoneNumber}`);
         await messagingProvider.sendButtonMessage(
           user.phoneNumber,
           'Would you like to see tomorrow\'s grocery list? 🛒',
@@ -101,10 +110,12 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
           ],
         );
 
+        sent++;
         try { await metricsPort.publishMetric('DailyReminderSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
       } else {
         // Expired plan — use template if available, otherwise freeform
         const expiredSid = getTemplateSid('expired_plan');
+        console.log(`[dailyReminder] Sending expired plan prompt to ${user.phoneNumber} | expiredTemplateSid=${expiredSid ?? 'NONE'}`);
         const formatted = formatBotResponse(response);
 
         if (formatted.buttons && formatted.buttons.length > 0) {
@@ -122,21 +133,26 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
           );
         }
 
+        expired++;
         try { await metricsPort.publishMetric('ExpiredPlanPromptSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
       }
 
       // Update conversation state so the next user reply enters the daily flow
       if (response.type === ResponseType.DAILY_REMINDER) {
+        console.log(`[dailyReminder] Updating conversationState to daily_grocery_prompt for ${user.phoneNumber}`);
         await userStateRepo.saveUser({
           ...user,
           conversationState: 'daily_grocery_prompt',
         });
       }
     } catch (error) {
-      console.error(`Failed to send daily reminder to ${user.phoneNumber}:`, error);
+      failed++;
+      console.error(`[dailyReminder] Failed for ${user.phoneNumber}:`, error);
       try { await metricsPort.publishMetric('DailyReminderFailure', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
     }
   }
+
+  console.log(`[dailyReminder] Complete | sent=${sent} expired=${expired} failed=${failed} total=${onboardedUsers.length}`);
 }
 
 export const handler = dailyReminderHandler;

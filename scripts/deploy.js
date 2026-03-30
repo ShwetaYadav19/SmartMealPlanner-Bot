@@ -44,6 +44,8 @@ const {
   CreateResourceCommand,
   PutMethodCommand,
   PutIntegrationCommand,
+  PutMethodResponseCommand,
+  PutIntegrationResponseCommand,
   CreateDeploymentCommand,
 } = require('@aws-sdk/client-api-gateway');
 const {
@@ -775,6 +777,41 @@ async function ensureApiGateway() {
     requestTemplates: { 'application/json': '{"statusCode": 200}' },
   }));
 
+  // Method response for OPTIONS (required for MOCK integration to return proper CORS headers)
+  try {
+    await apigw.send(new PutMethodResponseCommand({
+      restApiId: apiId,
+      resourceId: metricsResource.id,
+      httpMethod: 'OPTIONS',
+      statusCode: '200',
+      responseParameters: {
+        'method.response.header.Access-Control-Allow-Headers': false,
+        'method.response.header.Access-Control-Allow-Methods': false,
+        'method.response.header.Access-Control-Allow-Origin': false,
+      },
+    }));
+  } catch (err) {
+    if (err.name !== 'ConflictException') throw err;
+  }
+
+  // Integration response for OPTIONS — maps MOCK output to CORS headers
+  try {
+    await apigw.send(new PutIntegrationResponseCommand({
+      restApiId: apiId,
+      resourceId: metricsResource.id,
+      httpMethod: 'OPTIONS',
+      statusCode: '200',
+      responseParameters: {
+        'method.response.header.Access-Control-Allow-Headers': "'Content-Type,x-api-key'",
+        'method.response.header.Access-Control-Allow-Methods': "'GET,OPTIONS'",
+        'method.response.header.Access-Control-Allow-Origin': "'*'",
+      },
+      responseTemplates: { 'application/json': '' },
+    }));
+  } catch (err) {
+    if (err.name !== 'ConflictException') throw err;
+  }
+
   // Deploy to stage
   await apigw.send(new CreateDeploymentCommand({
     restApiId: apiId,
@@ -825,12 +862,12 @@ async function configureEventBridgeRules() {
 
   log(`Daily rule ${DAILY_RULE} configured.`);
 
-  // Weekly reminder: Sunday 8 PM IST = cron(30 14 ? * SUN *)
+  // Weekly reminder: Sunday 6 PM IST = 12:30 PM UTC = cron(30 12 ? * SUN *)
   await eb.send(new PutRuleCommand({
     Name: WEEKLY_RULE,
-    ScheduleExpression: 'cron(30 14 ? * SUN *)',
+    ScheduleExpression: 'cron(30 12 ? * SUN *)',
     State: ruleState,
-    Description: `Weekly Sunday 8 PM IST reminder for MealPlanner (${stage})`,
+    Description: `Weekly Sunday 6 PM IST reminder for MealPlanner (${stage})`,
   }));
 
   const weeklyLambdaArn = `arn:aws:lambda:${REGION}:${AWS_ACCOUNT_ID}:function:${WEEKLY_FN}`;
