@@ -56,8 +56,6 @@
 <div id="settingsModal" class="modal-overlay hidden">
   <div class="modal">
     <h2>Dashboard Settings</h2>
-    <label for="inputEndpoint">API Endpoint URL</label>
-    <input id="inputEndpoint" type="url" placeholder="https://abc123.execute-api.region.amazonaws.com/prod/metrics">
     <label for="inputApiKey">API Key</label>
     <input id="inputApiKey" type="password" placeholder="Enter your API key">
     <button id="saveSettingsBtn">Save &amp; Load</button>
@@ -104,16 +102,14 @@
 
   // ── Stage detection from placeholder (replaced at deploy time) ──
   const STAGE = '__STAGE__';
+  const METRICS_ENDPOINT = '__METRICS_ENDPOINT__';
 
   // ── LocalStorage helpers (scoped by stage to avoid cross-env bleed) ──
-  const getEndpoint = () => localStorage.getItem(`metrics_endpoint_${STAGE}`) || '';
   const getApiKey  = () => localStorage.getItem(`metrics_api_key_${STAGE}`) || '';
-  const setEndpoint = (v) => localStorage.setItem(`metrics_endpoint_${STAGE}`, v);
   const setApiKey  = (v) => localStorage.setItem(`metrics_api_key_${STAGE}`, v);
 
   // ── DOM refs ──
   const settingsModal = document.getElementById('settingsModal');
-  const inputEndpoint = document.getElementById('inputEndpoint');
   const inputApiKey   = document.getElementById('inputApiKey');
   const saveBtn       = document.getElementById('saveSettingsBtn');
   const openBtn       = document.getElementById('openSettings');
@@ -123,7 +119,6 @@
 
   // ── Settings modal ──
   function showSettings() {
-    inputEndpoint.value = getEndpoint();
     inputApiKey.value = getApiKey();
     settingsModal.classList.remove('hidden');
   }
@@ -131,23 +126,15 @@
 
   openBtn.addEventListener('click', showSettings);
   saveBtn.addEventListener('click', () => {
-    const ep = inputEndpoint.value.trim();
     const key = inputApiKey.value.trim();
-    if (!ep || !key) return;
-    if (!ep.endsWith('/metrics')) {
-      inputEndpoint.setCustomValidity('URL should end with /metrics');
-      inputEndpoint.reportValidity();
-      return;
-    }
-    inputEndpoint.setCustomValidity('');
-    setEndpoint(ep);
+    if (!key) return;
     setApiKey(key);
     hideSettings();
     fetchAndRender();
   });
 
   // Prompt on first visit
-  if (!getEndpoint() || !getApiKey()) showSettings();
+  if (!getApiKey()) showSettings();
 
   // ── Range buttons ──
   document.querySelectorAll('.range-btn').forEach(btn => {
@@ -174,9 +161,9 @@
 
   // ── Fetch data ──
   async function fetchAndRender() {
-    const endpoint = getEndpoint();
+    const endpoint = METRICS_ENDPOINT;
     const key = getApiKey();
-    if (!endpoint || !key) { showSettings(); return; }
+    if (!key) { showSettings(); return; }
 
     spinner.classList.remove('hidden');
     errorBanner.style.display = 'none';
@@ -264,7 +251,7 @@
   }
 
   // ── Initial load ──
-  if (getEndpoint() && getApiKey()) fetchAndRender();
+  if (getApiKey()) fetchAndRender();
 })();
 </script>
 </body>
