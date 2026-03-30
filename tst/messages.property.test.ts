@@ -13,8 +13,8 @@ const ALL_PURPOSES: TemplatePurpose[] = [
 
 const DEFAULT_SIDS: Record<TemplatePurpose, string> = {
   daily_reminder: 'HX0d01883256a89f9f413508b579a56436',
-  weekly_reminder: '',
-  expired_plan: '',
+  weekly_reminder: 'HX0e28059febf5045abc44d451dc428f3f',
+  expired_plan: 'HX0e28059febf5045abc44d451dc428f3f',
 };
 
 const ENV_VAR_NAMES: Record<TemplatePurpose, string> = {
