@@ -108,14 +108,11 @@ describe('dailyReminderHandler', () => {
 
       await dailyReminderHandler(scheduledEvent);
 
-      // Template message sent via sendTextMessage with contentSid (no contentVariables)
-      expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
-      const [to, , contentSid] = mockSendTextMessage.mock.calls[0];
+      // Template message sent via sendButtonMessage with contentSid
+      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
+      const [to, , , contentSid] = mockSendButtonMessage.mock.calls[0];
       expect(to).toBe('+919876543210');
-      expect(contentSid).toBe('HX0d01883256a89f9f413508b579a56436');
-
-      // No freeform follow-up — only the template is sent
-      expect(mockSendButtonMessage).not.toHaveBeenCalled();
+      expect(contentSid).toBe('HX157ce81f5b19c10b737565f56b87e558');
     } finally {
       vi.useRealTimers();
     }
@@ -148,7 +145,7 @@ describe('dailyReminderHandler', () => {
     await dailyReminderHandler(scheduledEvent);
 
     // Should send daily template (not expired prompt) since plan cycles
-    expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
+    expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
   });
 
   it('handles empty user list gracefully', async () => {
@@ -169,21 +166,21 @@ describe('dailyReminderHandler', () => {
       mockScanOnboardedUsers.mockResolvedValue([user1, user2]);
 
       // First template send fails, second succeeds
-      mockSendTextMessage
+      mockSendButtonMessage
         .mockRejectedValueOnce(new Error('Twilio error'))
         .mockResolvedValueOnce(undefined);
 
       await dailyReminderHandler(scheduledEvent);
 
-      // Should have attempted both users (template send)
-      expect(mockSendTextMessage).toHaveBeenCalledTimes(2);
-      expect(mockSendTextMessage.mock.calls[1][0]).toBe('+912222222222');
+      // Should have attempted both users (template send via sendButtonMessage)
+      expect(mockSendButtonMessage).toHaveBeenCalledTimes(2);
+      expect(mockSendButtonMessage.mock.calls[1][0]).toBe('+912222222222');
     } finally {
       vi.useRealTimers();
     }
   });
 
-  it('sends only template for DAILY_REMINDER (no freeform grocery prompt)', async () => {
+  it('sends daily reminder via button template with contentSid', async () => {
     // Set to Wednesday so tomorrow (Thursday) = index 3, within plan
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
@@ -193,11 +190,19 @@ describe('dailyReminderHandler', () => {
 
       await dailyReminderHandler(scheduledEvent);
 
-      // Template sent via sendTextMessage
-      expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
-
-      // No freeform button messages — avoids 63016 outside 24hr window
-      expect(mockSendButtonMessage).not.toHaveBeenCalled();
+      // Template sent via sendButtonMessage with contentSid
+      expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
+      expect(mockSendButtonMessage).toHaveBeenCalledWith(
+        '+919876543210',
+        expect.any(String),
+        expect.arrayContaining([
+          expect.objectContaining({ id: 'daily_grocery_yes' }),
+          expect.objectContaining({ id: 'daily_grocery_no' }),
+        ]),
+        expect.any(String), // templateSid
+        undefined,
+        expect.objectContaining({ '1': expect.any(String) }), // contentVariables
+      );
     } finally {
       vi.useRealTimers();
     }

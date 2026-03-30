@@ -207,7 +207,7 @@ export type TemplatePurpose =
   | 'expired_plan';
 
 const DEFAULT_TEMPLATE_SIDS: Record<TemplatePurpose, string> = {
-  daily_reminder: 'HX0d01883256a89f9f413508b579a56436',
+  daily_reminder: 'HX157ce81f5b19c10b737565f56b87e558',
   weekly_reminder: 'HX0e28059febf5045abc44d451dc428f3f',
   expired_plan: 'HX0e28059febf5045abc44d451dc428f3f',
 };
