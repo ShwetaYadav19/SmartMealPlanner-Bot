@@ -36,6 +36,7 @@ jobs:
           RAZORPAY_KEY_ID: ${{ secrets.RAZORPAY_KEY_ID_PROD }}
           RAZORPAY_KEY_SECRET: ${{ secrets.RAZORPAY_KEY_SECRET_PROD }}
           RAZORPAY_PLAN_ID: ${{ secrets.RAZORPAY_PLAN_ID_PROD }}
+          METRICS_API_KEY: ${{ secrets.METRICS_API_KEY }}
         run: |
           npm run build
           node scripts/deploy.js
