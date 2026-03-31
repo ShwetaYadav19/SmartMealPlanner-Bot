@@ -251,14 +251,16 @@ export function mapWhatsAppToIntent(
 
   // Happy grocery prompt — yes/no via text
   if (conversationState === 'happy_grocery_prompt') {
-    if (text === '1' || text === 'yes') return { intent: Intent.HAPPY_GROCERY_YES };
-    if (text === '2' || text === 'no') return { intent: Intent.HAPPY_GROCERY_NO };
+    const clean = text.replace(/[^\p{L}\p{N}\s]/gu, '').trim();
+    if (clean === '1' || clean === 'yes') return { intent: Intent.HAPPY_GROCERY_YES };
+    if (clean === '2' || clean === 'no') return { intent: Intent.HAPPY_GROCERY_NO };
   }
 
   // Happy daily prompt — yes/no via text
   if (conversationState === 'happy_daily_prompt') {
-    if (text === '1' || text === 'yes') return { intent: Intent.HAPPY_DAILY_YES };
-    if (text === '2' || text === 'no') return { intent: Intent.HAPPY_DAILY_NO };
+    const clean = text.replace(/[^\p{L}\p{N}\s]/gu, '').trim();
+    if (clean === '1' || clean === 'yes') return { intent: Intent.HAPPY_DAILY_YES };
+    if (clean === '2' || clean === 'no') return { intent: Intent.HAPPY_DAILY_NO };
   }
 
   // Regenerate plan menu — keep/change via text
@@ -276,14 +278,16 @@ export function mapWhatsAppToIntent(
 
   // Daily grocery prompt — yes/no via text
   if (conversationState === 'daily_grocery_prompt') {
-    if (text === '1' || text === 'yes') return { intent: Intent.DAILY_GROCERY_YES };
-    if (text === '2' || text === 'no') return { intent: Intent.DAILY_GROCERY_NO };
+    const clean = text.replace(/[^\p{L}\p{N}\s]/gu, '').trim();
+    if (clean === '1' || clean === 'yes') return { intent: Intent.DAILY_GROCERY_YES };
+    if (clean === '2' || clean === 'no') return { intent: Intent.DAILY_GROCERY_NO };
   }
 
   // Daily cook prompt — yes/no via text
   if (conversationState === 'daily_cook_prompt') {
-    if (text === '1' || text === 'yes') return { intent: Intent.DAILY_COOK_YES };
-    if (text === '2' || text === 'no') return { intent: Intent.DAILY_COOK_NO };
+    const clean = text.replace(/[^\p{L}\p{N}\s]/gu, '').trim();
+    if (clean === '1' || clean === 'yes') return { intent: Intent.DAILY_COOK_YES };
+    if (clean === '2' || clean === 'no') return { intent: Intent.DAILY_COOK_NO };
   }
 
   // Free-text navigation in dish_preview state (fallback when quick-reply buttons fail)
