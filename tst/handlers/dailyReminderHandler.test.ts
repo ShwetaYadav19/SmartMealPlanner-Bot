@@ -112,7 +112,7 @@ describe('dailyReminderHandler', () => {
       expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
       const [to, , , contentSid] = mockSendButtonMessage.mock.calls[0];
       expect(to).toBe('+919876543210');
-      expect(contentSid).toBe('HX157ce81f5b19c10b737565f56b87e558');
+      expect(contentSid).toBe('HXfc0e84e28be1633901918daab21aa507');
     } finally {
       vi.useRealTimers();
     }
