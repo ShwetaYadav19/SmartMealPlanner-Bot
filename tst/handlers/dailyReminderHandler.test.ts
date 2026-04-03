@@ -202,6 +202,7 @@ describe('dailyReminderHandler', () => {
         expect.any(String), // templateSid
         undefined,
         expect.objectContaining({ '1': expect.any(String) }), // contentVariables
+        expect.any(String), // fallbackContentSid
       );
     } finally {
       vi.useRealTimers();

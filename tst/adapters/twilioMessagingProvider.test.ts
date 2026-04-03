@@ -115,17 +115,34 @@ describe('TwilioMessagingProvider', () => {
       expect(call.body).toContain('2. Swap Lunch');
     });
 
-    it('falls back to numbered text when pre-approved template send fails', async () => {
+    it('throws when pre-approved template send fails without fallback', async () => {
       mockCreate.mockRejectedValueOnce(new Error('Template send failed'));
       const provider = new TwilioMessagingProvider('AC_test', 'auth_test', '+17655483740');
 
-      await provider.sendButtonMessage('+919876543210', 'Menu:', buttons, 'HX_BAD_SID');
+      await expect(
+        provider.sendButtonMessage('+919876543210', 'Menu:', buttons, 'HX_BAD_SID'),
+      ).rejects.toThrow('Template send failed');
 
-      // First call fails (template), second call succeeds (text fallback)
+      // Only one call — no freeform fallback
+      expect(mockCreate).toHaveBeenCalledTimes(1);
+    });
+
+    it('uses fallback template when pre-approved template send fails', async () => {
+      mockCreate
+        .mockRejectedValueOnce(new Error('Template send failed'))
+        .mockResolvedValueOnce({ sid: 'SM456' });
+      const provider = new TwilioMessagingProvider('AC_test', 'auth_test', '+17655483740');
+
+      await provider.sendButtonMessage(
+        '+919876543210', 'Menu:', buttons, 'HX_BAD_SID', undefined, undefined, 'HX_FALLBACK_SID',
+      );
+
       expect(mockCreate).toHaveBeenCalledTimes(2);
-      const fallbackCall = mockCreate.mock.calls[1][0];
-      expect(fallbackCall.body).toContain('Menu:');
-      expect(fallbackCall.body).toContain('1. Weekly Meal Plan');
+      expect(mockCreate.mock.calls[1][0]).toEqual({
+        from: 'whatsapp:+17655483740',
+        to: 'whatsapp:+919876543210',
+        contentSid: 'HX_FALLBACK_SID',
+      });
     });
 
     it('truncates button titles to 20 chars for quick-reply', async () => {
