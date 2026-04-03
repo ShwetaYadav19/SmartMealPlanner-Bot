@@ -11,7 +11,6 @@ import { extractTomorrowPlan } from '../core/planGenerator';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
 import { getTemplateSid, DAILY_REMINDER_HEADER } from '../messages';
-import { delay } from '../utils';
 
 // Minimal EventBridge scheduled event type
 interface ScheduledEvent {
@@ -32,8 +31,16 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
   );
   const metricsPort = new CloudWatchMetricsAdapter();
 
-  // Scan all users with onboardingComplete: true
-  const onboardedUsers = await userStateRepo.scanOnboardedUsers();
+  // Support single-user test: if detail.phoneNumber is provided, only process that user
+  const targetPhone = (_event.detail as Record<string, unknown>)?.phoneNumber as string | undefined;
+  let onboardedUsers;
+  if (targetPhone) {
+    console.log(`[dailyReminder] Single-user mode: ${targetPhone}`);
+    const user = await userStateRepo.getUser(targetPhone);
+    onboardedUsers = user ? [user] : [];
+  } else {
+    onboardedUsers = await userStateRepo.scanOnboardedUsers();
+  }
   console.log(`[dailyReminder] Found ${onboardedUsers.length} onboarded users`);
 
   let sent = 0;
@@ -74,41 +81,38 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         console.log(`[dailyReminder] Sending daily template to ${user.phoneNumber} | templateSid=${templateSid ?? 'NONE'}`);
 
         // Template body: {{1}} = breakfast, {{2}} = lunch, {{3}} = dinner
-        const contentVariables: Record<string, string> = {
-          '1': dayPlan.breakfast.name,
-          '2': dayPlan.lunch.name,
-          '3': dayPlan.dinner.name,
+        // Sanitize: strip newlines and truncate to avoid Twilio variable limits
+        const sanitize = (s: string, max = 60) => {
+          // Strip newlines, control chars, and problematic unicode that can break Twilio JSON parsing
+          const clean = s.replace(/[\n\r\t]/g, ' ').replace(/[\\"""]/g, "'").replace(/[\u0000-\u001F\u007F-\u009F]/g, '').trim();
+          return clean.length > max ? clean.slice(0, max - 1) + '…' : clean;
         };
+        const contentVariables: Record<string, string> = {
+          '1': sanitize(dayPlan.breakfast.name),
+          '2': sanitize(dayPlan.lunch.name),
+          '3': sanitize(dayPlan.dinner.name),
+        };
+        console.log(`[dailyReminder] contentVariables:`, JSON.stringify(contentVariables));
 
         // Build a freeform fallback body in case the template send fails
         const fallbackBody = `${DAILY_REMINDER_HEADER(dayPlan.day)}\n🥣 Breakfast: ${dayPlan.breakfast.name}\n🍛 Lunch: ${dayPlan.lunch.name}\n🍽️ Dinner: ${dayPlan.dinner.name}\n\nReply SWAP if you'd like a different lunch.`;
 
-        const msgSid = await messagingProvider.sendTextMessage(
-          user.phoneNumber,
-          fallbackBody,
-          templateSid,
-          contentVariables,
-        );
-        console.log(`[dailyReminder] Template sent to ${user.phoneNumber} | msgSid=${msgSid ?? 'freeform-fallback'}`);
+        // Use expired_plan template as fallback — it has no variables and just nudges the user to reply
+        const fallbackSid = getTemplateSid('expired_plan');
 
-        // Wait for template message to be delivered before sending follow-up.
-        if (msgSid) {
-          console.log(`[dailyReminder] Waiting for delivery confirmation | msgSid=${msgSid}`);
-          await messagingProvider.waitForSent(msgSid);
-        }
-        await delay(2000);
-
-        // Template opens the 24h session window, so follow up with
-        // the grocery prompt as an in-session quick-reply message
-        console.log(`[dailyReminder] Sending grocery prompt to ${user.phoneNumber}`);
         await messagingProvider.sendButtonMessage(
           user.phoneNumber,
-          'Would you like to see tomorrow\'s grocery list? 🛒',
+          fallbackBody,
           [
             { id: 'daily_grocery_yes', title: 'Yes 🛒' },
             { id: 'daily_grocery_no', title: 'No ❌' },
           ],
+          templateSid,
+          undefined,
+          contentVariables,
+          fallbackSid,
         );
+        console.log(`[dailyReminder] Template sent to ${user.phoneNumber}`);
 
         sent++;
         try { await metricsPort.publishMetric('DailyReminderSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }

@@ -2010,6 +2010,22 @@ export async function processIntent(
     };
   }
 
+  // Global generate plan — weekly reminder button can arrive from any state
+  if (intent.intent === Intent.GENERATE_PLAN && userState.onboardingComplete && userState.conversationState !== 'main_menu') {
+    // Reset to main_menu and delegate to handleMainMenu so the plan logic runs
+    const resetState: UserState = {
+      ...userState,
+      conversationState: 'main_menu',
+      candidateDishes: undefined,
+      previewStep: undefined,
+      fewMealsSelectedDay: undefined,
+      fewMealsSelectedSlot: undefined,
+      fewMealsAlternatives: undefined,
+      previousWeeklyPlan: undefined,
+    };
+    return handleMainMenu(intent, resetState, mealRepository, mealComponentRepository, mealSelector);
+  }
+
   // Route by conversation state
   switch (userState.conversationState) {
     case 'awaiting_cuisine':

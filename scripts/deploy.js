@@ -893,7 +893,7 @@ async function configureEventBridgeRules() {
 }
 
 // --- Step 7: S3 dashboard bucket ---
-async function ensureDashboardBucket() {
+async function ensureDashboardBucket(metricsEndpoint) {
   log(`Ensuring S3 dashboard bucket: ${DASHBOARD_BUCKET}`);
   try {
     try {
@@ -935,9 +935,12 @@ async function ensureDashboardBucket() {
       Policy: bucketPolicy,
     }));
 
-    // Upload index.html
+    // Upload index.html with stage placeholder replaced
     const htmlPath = path.join(__dirname, '..', 'src', 'dashboard', 'index.html');
-    const htmlContent = fs.readFileSync(htmlPath, 'utf-8');
+    const rawHtml = fs.readFileSync(htmlPath, 'utf-8');
+    const htmlContent = rawHtml
+      .replace(/__STAGE__/g, stage)
+      .replace(/__METRICS_ENDPOINT__/g, metricsEndpoint || '');
     await s3Client.send(new PutObjectCommand({
       Bucket: DASHBOARD_BUCKET,
       Key: 'index.html',
@@ -1129,7 +1132,7 @@ async function main() {
     await configureEventBridgeRules();
 
     // Step 7: S3 dashboard bucket
-    const dashboardUrl = await ensureDashboardBucket();
+    const dashboardUrl = await ensureDashboardBucket(metricsEndpoint);
 
     // Step 8: CloudWatch Dashboard
     await ensureCloudWatchDashboard();

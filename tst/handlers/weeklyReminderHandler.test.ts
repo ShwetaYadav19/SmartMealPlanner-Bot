@@ -108,53 +108,33 @@ describe('weeklyReminderHandler', () => {
     vi.clearAllMocks();
   });
 
-  it('sends WEEKLY_REMINDER to all onboarded users', async () => {
+  it('sends template-only to all onboarded users', async () => {
     const user1 = makeOnboardedUser('+911111111111', true);
     const user2 = makeOnboardedUser('+912222222222', false);
     mockScanOnboardedUsers.mockResolvedValue([user1, user2]);
 
     await weeklyReminderHandler(scheduledEvent);
 
-    // Both users get a template message first (sendTextMessage with templateSid)
-    // user1 (with plan): template + plan text via sendTextMessage + follow-up via sendButtonMessage
-    // user2 (no plan): template only (button is in the template itself)
-    // Total sendTextMessage: 3 (template user1 + plan text user1 + template user2)
-    expect(mockSendTextMessage).toHaveBeenCalledTimes(3);
-    // First call is template for user1
+    // Both users get only the template message — no plan details sent
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(2);
     expect(mockSendTextMessage.mock.calls[0][0]).toBe('+911111111111');
     expect(mockSendTextMessage.mock.calls[0][2]).toBe('HX_WEEKLY_TEST_SID');
-    // Second call is freeform plan text for user1
-    expect(mockSendTextMessage.mock.calls[1][0]).toBe('+911111111111');
-    // Third call is template for user2
-    expect(mockSendTextMessage.mock.calls[2][0]).toBe('+912222222222');
-    expect(mockSendTextMessage.mock.calls[2][2]).toBe('HX_WEEKLY_TEST_SID');
+    expect(mockSendTextMessage.mock.calls[1][0]).toBe('+912222222222');
+    expect(mockSendTextMessage.mock.calls[1][2]).toBe('HX_WEEKLY_TEST_SID');
+    // No freeform plan or button messages
+    expect(mockSendButtonMessage).not.toHaveBeenCalled();
   });
 
-  it('shows existing plan with grocery/change options for users with a plan', async () => {
+  it('sends only template for users with a plan (no plan details)', async () => {
     const userWithPlan = makeOnboardedUser('+911111111111', true);
     mockScanOnboardedUsers.mockResolvedValue([userWithPlan]);
 
     await weeklyReminderHandler(scheduledEvent);
 
-    // Call 1: template message to open session
-    // Call 2: freeform plan text
-    expect(mockSendTextMessage).toHaveBeenCalledTimes(2);
-    // First call is the template
+    // Only the template — plan is not sent until user explicitly requests it
+    expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
     expect(mockSendTextMessage.mock.calls[0][2]).toBe('HX_WEEKLY_TEST_SID');
-    // Second call is the plan text (freeform, no templateSid)
-    const [, planText] = mockSendTextMessage.mock.calls[1];
-    expect(planText).toContain('Monday');
-    expect(planText).toContain('meal plan');
-
-    // Follow-up has approval buttons
-    expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-    const [, , followUpButtons] = mockSendButtonMessage.mock.calls[0];
-    expect(followUpButtons).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ id: 'happy_with_menu', title: 'Happy with the menu' }),
-        expect.objectContaining({ id: 'change_plan', title: 'Want to change' }),
-      ]),
-    );
+    expect(mockSendButtonMessage).not.toHaveBeenCalled();
   });
 
   it('shows generate prompt for users without a plan', async () => {

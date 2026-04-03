@@ -96,20 +96,17 @@ describe('Property 8: Tomorrow\'s plan extraction correctness', () => {
   /**
    * **Validates: Requirements 6.1**
    *
-   * When tomorrow falls before the plan start date (dayIndex < 0) or
-   * after the plan end (dayIndex > 6), extractTomorrowPlan returns null.
+   * When tomorrow falls before the plan start date (dayIndex < 0),
+   * extractTomorrowPlan returns null. After the plan end, it wraps around.
    */
-  it('returns null when tomorrow is outside the plan range', () => {
+  it('returns null when tomorrow is before the plan start date', () => {
     fc.assert(
       fc.property(
         fc.integer({ min: 2020, max: 2030 }),
         fc.integer({ min: 0, max: 11 }),
         fc.integer({ min: 1, max: 28 }),
-        // Offset that puts tomorrow outside 0–6 range
-        fc.oneof(
-          fc.integer({ min: -365, max: -1 }),  // before plan
-          fc.integer({ min: 7, max: 365 }),     // after plan
-        ),
+        // Offset that puts tomorrow before the plan start
+        fc.integer({ min: -365, max: -1 }),
         (year, month, day, offset) => {
           const plan = buildWeeklyPlan();
 
@@ -124,6 +121,36 @@ describe('Property 8: Tomorrow\'s plan extraction correctness', () => {
           const result = extractTomorrowPlan(plan, startDateStr);
 
           expect(result).toBeNull();
+        },
+      ),
+      { numRuns: 100 },
+    );
+  });
+
+  /**
+   * When tomorrow falls after the plan end (dayIndex > 6),
+   * extractTomorrowPlan wraps around using modulo and returns a valid day.
+   */
+  it('wraps around when tomorrow is after the plan end date', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 2020, max: 2030 }),
+        fc.integer({ min: 0, max: 11 }),
+        fc.integer({ min: 1, max: 28 }),
+        fc.integer({ min: 7, max: 365 }),
+        (year, month, day, offset) => {
+          const plan = buildWeeklyPlan();
+
+          const startDate = new Date(year, month, day);
+          const startDateStr = toISODateString(startDate);
+
+          const todayDate = new Date(year, month, day + offset - 1);
+          vi.setSystemTime(todayDate);
+
+          const result = extractTomorrowPlan(plan, startDateStr);
+
+          expect(result).not.toBeNull();
+          expect(result!.day).toBeDefined();
         },
       ),
       { numRuns: 100 },

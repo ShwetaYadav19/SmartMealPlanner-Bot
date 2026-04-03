@@ -4,16 +4,14 @@ import type { MessagingProvider, ButtonOption, ListItem } from '../core/ports';
 /**
  * TwilioMessagingProvider — sends WhatsApp messages via Twilio.
  *
+ * For out-of-session messages (reminders), callers pass a pre-approved
+ * contentSid. If the primary template fails, a simpler fallback template
+ * (no variables) is tried before giving up.
+ *
  * For in-session messages with ≤3 buttons, creates on-the-fly
- * twilio/quick-reply Content Templates via the Content API
- * (no WhatsApp approval needed within the 24-hour session window).
- *
- * For out-of-session messages (reminders), callers can pass a pre-approved
- * contentSid directly to bypass on-the-fly creation.
- *
- * Falls back to numbered text buttons when:
- * - More than 3 buttons (WhatsApp in-session limit)
- * - Content API call fails for any reason
+ * twilio/quick-reply Content Templates via the Content API.
+ * Templates are awaited-deleted after send with a retry, and orphan SIDs
+ * are logged as errors so they can be tracked and cleaned up.
  */
 export class TwilioMessagingProvider implements MessagingProvider {
   private readonly client: ReturnType<typeof Twilio>;
@@ -28,8 +26,16 @@ export class TwilioMessagingProvider implements MessagingProvider {
     this.senderNumber = senderNumber;
   }
 
-  async sendTextMessage(to: string, body: string, contentSid?: string, contentVariables?: Record<string, string>): Promise<string | void> {
-    // For out-of-session messages, use a pre-approved template if provided
+  async sendTextMessage(
+    to: string,
+    body: string,
+    contentSid?: string,
+    contentVariables?: Record<string, string>,
+    fallbackContentSid?: string,
+  ): Promise<string | void> {
+    // For out-of-session messages, use a pre-approved template if provided.
+    // If the primary template fails (bad variables, etc.), try a simpler fallback template.
+    // Do NOT fall back to freeform — outside the 24h window it will always fail with 63016.
     if (contentSid) {
       try {
         const params: Record<string, unknown> = {
@@ -45,9 +51,19 @@ export class TwilioMessagingProvider implements MessagingProvider {
       } catch (error: unknown) {
         const errMsg = error instanceof Error ? error.message : String(error);
         console.warn(
-          `Template send failed contentSid="${contentSid}" to="whatsapp:${to}": ${errMsg}. Falling back to freeform.`,
+          `Template send failed contentSid="${contentSid}" to="whatsapp:${to}": ${errMsg}.` +
+          (fallbackContentSid ? ' Trying fallback template.' : ' No fallback template configured.'),
         );
+        if (!fallbackContentSid) throw error;
       }
+
+      // Fallback: simpler template with no variables
+      const msg = await this.client.messages.create({
+        from: `whatsapp:${this.senderNumber}`,
+        to: `whatsapp:${to}`,
+        contentSid: fallbackContentSid,
+      } as any);
+      return msg.sid;
     }
 
     const MAX_LEN = 1500; // Twilio WhatsApp enforces 1600-char limit per message
@@ -146,11 +162,14 @@ export class TwilioMessagingProvider implements MessagingProvider {
     contentSid?: string,
     listItemCount?: number,
     contentVariables?: Record<string, string>,
+    fallbackContentSid?: string,
   ): Promise<void> {
     const from = `whatsapp:${this.senderNumber}`;
     const toWhatsApp = `whatsapp:${to}`;
 
-    // If a pre-approved contentSid is provided (e.g. for out-of-session reminders), use it directly
+    // If a pre-approved contentSid is provided (e.g. for out-of-session reminders), use it directly.
+    // If it fails (bad variables, etc.), try a simpler fallback template.
+    // Do NOT fall back to freeform — outside the 24h window it will always fail with 63016.
     if (contentSid) {
       try {
         const params: Record<string, unknown> = {
@@ -166,21 +185,35 @@ export class TwilioMessagingProvider implements MessagingProvider {
       } catch (error: unknown) {
         const errMsg = error instanceof Error ? error.message : String(error);
         console.warn(
-          `Pre-approved template failed contentSid="${contentSid}" to="${toWhatsApp}": ${errMsg}. Falling back to text.`,
+          `Pre-approved template failed contentSid="${contentSid}" to="${toWhatsApp}": ${errMsg}.` +
+          (fallbackContentSid ? ' Trying fallback template.' : ' No fallback template configured.'),
         );
+        if (!fallbackContentSid) throw error;
       }
+
+      // Fallback: simpler template with no variables
+      await this.client.messages.create({
+        from,
+        to: toWhatsApp,
+        contentSid: fallbackContentSid,
+      } as any);
+      return;
     }
 
-    // Try interactive quick-reply for ≤3 buttons (WhatsApp in-session limit)
-    // Skip template for long messages — WhatsApp template body limit is 1024 chars
-    if (!contentSid && buttons.length >= 1 && buttons.length <= 3 && body.length <= 900) {
+    // In-session: try interactive quick-reply for ≤3 buttons
+    // Skip for long messages — WhatsApp template body limit is 1024 chars
+    if (buttons.length >= 1 && buttons.length <= 3 && body.length <= 900) {
       try {
         const sid = await this.createQuickReplyTemplate(body, buttons);
-        await this.client.messages.create({
-          from,
-          to: toWhatsApp,
-          contentSid: sid,
-        });
+        try {
+          await this.client.messages.create({
+            from,
+            to: toWhatsApp,
+            contentSid: sid,
+          });
+        } finally {
+          await this.deleteContentTemplate(sid);
+        }
         return;
       } catch (error: unknown) {
         const errMsg = error instanceof Error ? error.message : String(error);
@@ -223,11 +256,15 @@ export class TwilioMessagingProvider implements MessagingProvider {
 
     try {
       const sid = await this.createListPickerTemplate(body, buttonLabel, cappedItems);
-      await this.client.messages.create({
-        from,
-        to: toWhatsApp,
-        contentSid: sid,
-      });
+      try {
+        await this.client.messages.create({
+          from,
+          to: toWhatsApp,
+          contentSid: sid,
+        });
+      } finally {
+        await this.deleteContentTemplate(sid);
+      }
       return;
     } catch (error: unknown) {
       const errMsg = error instanceof Error ? error.message : String(error);
@@ -250,6 +287,28 @@ export class TwilioMessagingProvider implements MessagingProvider {
   }
 
   /**
+   * Deletes a Content Template created for in-session use.
+   * Awaits the delete, retries once on failure, and logs the orphan SID
+   * as an error if cleanup still fails so it can be tracked.
+   */
+  private async deleteContentTemplate(sid: string): Promise<void> {
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        await this.client.content.v1.contents(sid).remove();
+        return;
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        if (attempt < 2) {
+          console.warn(`[template-cleanup] Retry delete for sid="${sid}": ${errMsg}`);
+          await new Promise((r) => setTimeout(r, 500));
+        } else {
+          console.error(`[template-cleanup] ORPHANED template sid="${sid}" — manual cleanup required: ${errMsg}`);
+        }
+      }
+    }
+  }
+
+  /**
    * Creates a twilio/quick-reply Content Template on-the-fly.
    * These don't need WhatsApp approval for in-session messages.
    */
@@ -263,7 +322,6 @@ export class TwilioMessagingProvider implements MessagingProvider {
       id: b.id,
     }));
 
-    // Generate a unique friendly name to avoid collisions
     const friendlyName = `qr_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
     const template = await this.client.content.v1.contents.create({

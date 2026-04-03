@@ -107,14 +107,16 @@ describe('extractTomorrowPlan', () => {
     expect(result).toBeNull();
   });
 
-  it('returns null when tomorrow is after the plan end date', () => {
+  it('wraps around when tomorrow is after the plan end date (cycles the plan)', () => {
     vi.useFakeTimers();
-    vi.setSystemTime(new Date(2024, 0, 21)); // Jan 21, 2024 (Sunday)
+    vi.setSystemTime(new Date(2024, 0, 21)); // Jan 21, 2024 (Sunday) — tomorrow is Mon Jan 22, diffDays=7
 
     const plan = makeWeeklyPlan();
     const result = extractTomorrowPlan(plan, '2024-01-15');
 
-    expect(result).toBeNull();
+    // diffDays=7, 7%7=0 → wraps to Monday
+    expect(result).not.toBeNull();
+    expect(result!.day).toBe('Monday');
   });
 
   it('returns the correct day for each day index 0-6', () => {

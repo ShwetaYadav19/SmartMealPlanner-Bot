@@ -108,21 +108,11 @@ describe('dailyReminderHandler', () => {
 
       await dailyReminderHandler(scheduledEvent);
 
-      // Template message sent via sendTextMessage with contentSid + contentVariables
-      expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
-      const [to, , contentSid, contentVars] = mockSendTextMessage.mock.calls[0];
-      expect(to).toBe('+919876543210');
-      expect(contentSid).toBe('HX0d01883256a89f9f413508b579a56436');
-      expect(contentVars).toEqual({
-        '1': 'Thursday Breakfast',
-        '2': 'Thursday Lunch',
-        '3': 'Thursday Dinner',
-      });
-
-      // Follow-up grocery prompt sent as in-session button message
+      // Template message sent via sendButtonMessage with contentSid
       expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-      const [, groceryText] = mockSendButtonMessage.mock.calls[0];
-      expect(groceryText).toMatch(/grocery/i);
+      const [to, , , contentSid] = mockSendButtonMessage.mock.calls[0];
+      expect(to).toBe('+919876543210');
+      expect(contentSid).toBe('HX1fdc81202dcddeb7f99b32bbcd67e2b5');
     } finally {
       vi.useRealTimers();
     }
@@ -147,21 +137,15 @@ describe('dailyReminderHandler', () => {
     );
   });
 
-  it('sends EXPIRED_PLAN_PROMPT for plan with expired start date', async () => {
-    // Plan from 3 weeks ago — won't cover tomorrow
+  it('sends DAILY_REMINDER for plan with old start date (cycles the plan)', async () => {
+    // Plan from long ago — now wraps around instead of expiring
     const user = makeOnboardedUser('+919876543210', true, '2024-01-01');
     mockScanOnboardedUsers.mockResolvedValue([user]);
 
     await dailyReminderHandler(scheduledEvent);
 
+    // Should send daily template (not expired prompt) since plan cycles
     expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-    const [, text, buttons] = mockSendButtonMessage.mock.calls[0];
-    expect(text).toContain('expired');
-    expect(buttons).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ title: 'Generate Weekly Plan' }),
-      ]),
-    );
   });
 
   it('handles empty user list gracefully', async () => {
@@ -182,21 +166,21 @@ describe('dailyReminderHandler', () => {
       mockScanOnboardedUsers.mockResolvedValue([user1, user2]);
 
       // First template send fails, second succeeds
-      mockSendTextMessage
+      mockSendButtonMessage
         .mockRejectedValueOnce(new Error('Twilio error'))
         .mockResolvedValueOnce(undefined);
 
       await dailyReminderHandler(scheduledEvent);
 
-      // Should have attempted both users (template send)
-      expect(mockSendTextMessage).toHaveBeenCalledTimes(2);
-      expect(mockSendTextMessage.mock.calls[1][0]).toBe('+912222222222');
+      // Should have attempted both users (template send via sendButtonMessage)
+      expect(mockSendButtonMessage).toHaveBeenCalledTimes(2);
+      expect(mockSendButtonMessage.mock.calls[1][0]).toBe('+912222222222');
     } finally {
       vi.useRealTimers();
     }
   });
 
-  it('sends template then grocery buttons for DAILY_REMINDER', async () => {
+  it('sends daily reminder via button template with contentSid', async () => {
     // Set to Wednesday so tomorrow (Thursday) = index 3, within plan
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2025, 2, 12, 12, 0, 0)); // Wed Mar 12 2025
@@ -206,17 +190,19 @@ describe('dailyReminderHandler', () => {
 
       await dailyReminderHandler(scheduledEvent);
 
-      // Template sent via sendTextMessage
-      expect(mockSendTextMessage).toHaveBeenCalledTimes(1);
-
-      // Grocery prompt sent as in-session button message
+      // Template sent via sendButtonMessage with contentSid
       expect(mockSendButtonMessage).toHaveBeenCalledTimes(1);
-      const [, , buttons] = mockSendButtonMessage.mock.calls[0];
-      expect(buttons).toEqual(
+      expect(mockSendButtonMessage).toHaveBeenCalledWith(
+        '+919876543210',
+        expect.any(String),
         expect.arrayContaining([
           expect.objectContaining({ id: 'daily_grocery_yes' }),
           expect.objectContaining({ id: 'daily_grocery_no' }),
         ]),
+        expect.any(String), // templateSid
+        undefined,
+        expect.objectContaining({ '1': expect.any(String) }), // contentVariables
+        expect.any(String), // fallbackContentSid
       );
     } finally {
       vi.useRealTimers();

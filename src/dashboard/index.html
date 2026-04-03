@@ -3,14 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Meal Planner — Metrics Dashboard</title>
+<title>Smart Meal Planner — Metrics Dashboard (__STAGE__)</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1a1a2e; }
   header { background: #1a1a2e; color: #fff; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; }
-  header h1 { font-size: 1.25rem; font-weight: 600; }
+  header h1 { font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+  .stage-badge { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 4px; letter-spacing: 0.05em; }
+  .stage-badge.prod { background: #ef476f; }
+  .stage-badge.beta { background: #ffd166; color: #1a1a2e; }
+  .stage-badge.dev { background: #06d6a0; color: #1a1a2e; }
   .header-right { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
   .range-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: background 0.2s; }
   .range-btn:hover { background: rgba(255,255,255,0.2); }
@@ -52,8 +56,6 @@
 <div id="settingsModal" class="modal-overlay hidden">
   <div class="modal">
     <h2>Dashboard Settings</h2>
-    <label for="inputEndpoint">API Endpoint URL</label>
-    <input id="inputEndpoint" type="url" placeholder="https://abc123.execute-api.region.amazonaws.com/prod/metrics">
     <label for="inputApiKey">API Key</label>
     <input id="inputApiKey" type="password" placeholder="Enter your API key">
     <button id="saveSettingsBtn">Save &amp; Load</button>
@@ -64,7 +66,7 @@
 <div id="spinner" class="spinner-overlay hidden"><div class="spinner"></div></div>
 
 <header>
-  <h1>🍽️ Smart Meal Planner Metrics</h1>
+  <h1>🍽️ Smart Meal Planner Metrics <span class="stage-badge __STAGE__">__STAGE__</span></h1>
   <div class="header-right">
     <div>
       <button class="range-btn active" data-range="today">Today</button>
@@ -98,15 +100,16 @@
   let refreshInterval = null;
   let countdownSec = 300; // 5 minutes
 
-  // ── LocalStorage helpers ──
-  const getEndpoint = () => localStorage.getItem('metrics_endpoint') || '';
-  const getApiKey  = () => localStorage.getItem('metrics_api_key') || '';
-  const setEndpoint = (v) => localStorage.setItem('metrics_endpoint', v);
-  const setApiKey  = (v) => localStorage.setItem('metrics_api_key', v);
+  // ── Stage detection from placeholder (replaced at deploy time) ──
+  const STAGE = '__STAGE__';
+  const METRICS_ENDPOINT = '__METRICS_ENDPOINT__';
+
+  // ── LocalStorage helpers (scoped by stage to avoid cross-env bleed) ──
+  const getApiKey  = () => localStorage.getItem(`metrics_api_key_${STAGE}`) || '';
+  const setApiKey  = (v) => localStorage.setItem(`metrics_api_key_${STAGE}`, v);
 
   // ── DOM refs ──
   const settingsModal = document.getElementById('settingsModal');
-  const inputEndpoint = document.getElementById('inputEndpoint');
   const inputApiKey   = document.getElementById('inputApiKey');
   const saveBtn       = document.getElementById('saveSettingsBtn');
   const openBtn       = document.getElementById('openSettings');
@@ -116,7 +119,6 @@
 
   // ── Settings modal ──
   function showSettings() {
-    inputEndpoint.value = getEndpoint();
     inputApiKey.value = getApiKey();
     settingsModal.classList.remove('hidden');
   }
@@ -124,23 +126,15 @@
 
   openBtn.addEventListener('click', showSettings);
   saveBtn.addEventListener('click', () => {
-    const ep = inputEndpoint.value.trim();
     const key = inputApiKey.value.trim();
-    if (!ep || !key) return;
-    if (!ep.endsWith('/metrics')) {
-      inputEndpoint.setCustomValidity('URL should end with /metrics');
-      inputEndpoint.reportValidity();
-      return;
-    }
-    inputEndpoint.setCustomValidity('');
-    setEndpoint(ep);
+    if (!key) return;
     setApiKey(key);
     hideSettings();
     fetchAndRender();
   });
 
   // Prompt on first visit
-  if (!getEndpoint() || !getApiKey()) showSettings();
+  if (!getApiKey()) showSettings();
 
   // ── Range buttons ──
   document.querySelectorAll('.range-btn').forEach(btn => {
@@ -167,9 +161,9 @@
 
   // ── Fetch data ──
   async function fetchAndRender() {
-    const endpoint = getEndpoint();
+    const endpoint = METRICS_ENDPOINT;
     const key = getApiKey();
-    if (!endpoint || !key) { showSettings(); return; }
+    if (!key) { showSettings(); return; }
 
     spinner.classList.remove('hidden');
     errorBanner.style.display = 'none';
@@ -257,7 +251,7 @@
   }
 
   // ── Initial load ──
-  if (getEndpoint() && getApiKey()) fetchAndRender();
+  if (getApiKey()) fetchAndRender();
 })();
 </script>
 </body>

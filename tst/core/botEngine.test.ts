@@ -423,7 +423,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_PLAN', () => {
     expect(result.response.type).toBe(ResponseType.NO_PLAN_ERROR);
   });
 
-  it('returns EXPIRED_PLAN_PROMPT when plan is expired (old start date)', async () => {
+  it('returns DAILY_REMINDER when plan has old start date (cycles the plan)', async () => {
     const state = makeStateWithPlan({ weeklyPlanStartDate: '2020-01-06' });
     const result = await processIntent(
       { intent: Intent.VIEW_TOMORROW_PLAN },
@@ -432,7 +432,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_PLAN', () => {
       mockMealComponentRepo,
     );
 
-    expect(result.response.type).toBe(ResponseType.EXPIRED_PLAN_PROMPT);
+    expect(result.response.type).toBe(ResponseType.DAILY_REMINDER);
   });
 });
 
@@ -472,7 +472,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_GROCERY', () => {
     expect(result.response.type).toBe(ResponseType.NO_PLAN_ERROR);
   });
 
-  it('returns EXPIRED_PLAN_PROMPT when plan is expired', async () => {
+  it('returns TOMORROW_GROCERY_LIST when plan has old start date (cycles the plan)', async () => {
     const state = makeStateWithPlan({ weeklyPlanStartDate: '2020-01-06' });
     const result = await processIntent(
       { intent: Intent.VIEW_TOMORROW_GROCERY },
@@ -481,7 +481,7 @@ describe('BotEngine — main menu: VIEW_TOMORROW_GROCERY', () => {
       mockMealComponentRepo,
     );
 
-    expect(result.response.type).toBe(ResponseType.EXPIRED_PLAN_PROMPT);
+    expect(result.response.type).toBe(ResponseType.TOMORROW_GROCERY_LIST);
   });
 });
 
@@ -534,7 +534,7 @@ describe('BotEngine — main menu: SEND_MENU_TO_COOK', () => {
     expect(result.updatedState.conversationState).toBe('awaiting_cook_number');
   });
 
-  it('returns EXPIRED_PLAN_PROMPT when plan is expired', async () => {
+  it('returns COOK_MESSAGE_SENT when plan has old start date (cycles the plan)', async () => {
     const state = makeStateWithPlan({
       cookPhoneNumber: '+911234567890',
       weeklyPlanStartDate: '2020-01-06',
@@ -546,7 +546,7 @@ describe('BotEngine — main menu: SEND_MENU_TO_COOK', () => {
       mockMealComponentRepo,
     );
 
-    expect(result.response.type).toBe(ResponseType.EXPIRED_PLAN_PROMPT);
+    expect(result.response.type).toBe(ResponseType.COOK_MESSAGE_SENT);
   });
 });
 

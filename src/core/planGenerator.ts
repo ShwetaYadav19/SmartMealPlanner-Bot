@@ -1134,11 +1134,14 @@ export function extractTomorrowPlan(
   const diffMs = tomorrow.getTime() - startDate.getTime();
   const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 0 || diffDays > 6) {
+  if (diffDays < 0) {
     return null;
   }
 
-  return weeklyPlan[diffDays] ?? null;
+  // Wrap around the 7-day plan so it keeps cycling even if the user
+  // hasn't generated a new plan yet.
+  const dayIndex = diffDays % 7;
+  return weeklyPlan[dayIndex] ?? null;
 }
 
 
