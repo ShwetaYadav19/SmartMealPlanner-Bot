@@ -13,7 +13,7 @@ export interface ListItem {
 }
 
 export interface MessagingProvider {
-  sendTextMessage(to: string, body: string, contentSid?: string, contentVariables?: Record<string, string>): Promise<void>;
+  sendTextMessage(to: string, body: string, contentSid?: string, contentVariables?: Record<string, string>, fallbackContentSid?: string): Promise<string | void>;
   sendImageMessage(to: string, imageUrl: string, caption?: string): Promise<void>;
   sendButtonMessage(
     to: string,
@@ -22,6 +22,7 @@ export interface MessagingProvider {
     contentSid?: string,
     listItemCount?: number,
     contentVariables?: Record<string, string>,
+    fallbackContentSid?: string,
   ): Promise<void>;
   sendListMessage(
     to: string,

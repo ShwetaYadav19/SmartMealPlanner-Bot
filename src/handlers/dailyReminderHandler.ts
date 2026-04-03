@@ -83,7 +83,8 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         // Template body: {{1}} = breakfast, {{2}} = lunch, {{3}} = dinner
         // Sanitize: strip newlines and truncate to avoid Twilio variable limits
         const sanitize = (s: string, max = 60) => {
-          const clean = s.replace(/[\n\r]/g, ' ').trim();
+          // Strip newlines, control chars, and problematic unicode that can break Twilio JSON parsing
+          const clean = s.replace(/[\n\r\t]/g, ' ').replace(/[\\"""]/g, "'").replace(/[\u0000-\u001F\u007F-\u009F]/g, '').trim();
           return clean.length > max ? clean.slice(0, max - 1) + '…' : clean;
         };
         const contentVariables: Record<string, string> = {
@@ -96,6 +97,9 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         // Build a freeform fallback body in case the template send fails
         const fallbackBody = `${DAILY_REMINDER_HEADER(dayPlan.day)}\n🥣 Breakfast: ${dayPlan.breakfast.name}\n🍛 Lunch: ${dayPlan.lunch.name}\n🍽️ Dinner: ${dayPlan.dinner.name}\n\nReply SWAP if you'd like a different lunch.`;
 
+        // Use expired_plan template as fallback — it has no variables and just nudges the user to reply
+        const fallbackSid = getTemplateSid('expired_plan');
+
         await messagingProvider.sendButtonMessage(
           user.phoneNumber,
           fallbackBody,
@@ -106,6 +110,7 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
           templateSid,
           undefined,
           contentVariables,
+          fallbackSid,
         );
         console.log(`[dailyReminder] Template sent to ${user.phoneNumber}`);
 
