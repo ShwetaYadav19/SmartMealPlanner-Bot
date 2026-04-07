@@ -7,7 +7,8 @@ import {
 } from '@aws-sdk/client-cloudwatch';
 import { loadConfig } from '../config';
 
-const NAMESPACE = 'SmartMealPlanner';
+const STAGE = process.env.STAGE || 'dev';
+const NAMESPACE = `SmartMealPlanner/${STAGE}`;
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',

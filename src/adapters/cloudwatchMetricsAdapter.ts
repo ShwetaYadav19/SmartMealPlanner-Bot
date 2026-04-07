@@ -5,7 +5,8 @@ import {
 } from '@aws-sdk/client-cloudwatch';
 import type { MetricsPort, MetricDatum } from '../core/ports';
 
-const NAMESPACE = 'SmartMealPlanner';
+const STAGE = process.env.STAGE || 'dev';
+const NAMESPACE = `SmartMealPlanner/${STAGE}`;
 const BATCH_SIZE = 25;
 
 export class CloudWatchMetricsAdapter implements MetricsPort {

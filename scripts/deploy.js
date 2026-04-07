@@ -962,6 +962,8 @@ async function ensureDashboardBucket(metricsEndpoint) {
 async function ensureCloudWatchDashboard() {
   log(`Provisioning CloudWatch Dashboard: ${DASHBOARD_NAME}`);
 
+  const metricsNamespace = `SmartMealPlanner/${stage}`;
+
   const dashboardBody = {
     widgets: [
       {
@@ -970,10 +972,10 @@ async function ensureCloudWatchDashboard() {
         properties: {
           title: 'User Acquisition',
           metrics: [
-            ['SmartMealPlanner', 'NewUser', { stat: 'Sum', label: 'NewUser' }],
-            ['SmartMealPlanner', 'OnboardingComplete', { stat: 'Sum', label: 'OnboardingComplete' }],
-            ['SmartMealPlanner', 'OnboardingStep', { stat: 'Sum', label: 'OnboardingStep' }],
-            ['SmartMealPlanner', 'ReachedPayment', { stat: 'Sum', label: 'ReachedPayment' }],
+            [metricsNamespace, 'NewUser', { stat: 'Sum', label: 'NewUser' }],
+            [metricsNamespace, 'OnboardingComplete', { stat: 'Sum', label: 'OnboardingComplete' }],
+            [metricsNamespace, 'OnboardingStep', { stat: 'Sum', label: 'OnboardingStep' }],
+            [metricsNamespace, 'ReachedPayment', { stat: 'Sum', label: 'ReachedPayment' }],
           ],
           region: REGION,
           period: 86400,
@@ -987,8 +989,8 @@ async function ensureCloudWatchDashboard() {
         properties: {
           title: 'Engagement',
           metrics: [
-            ['SmartMealPlanner', 'MessageReceived', { stat: 'Sum', label: 'MessageReceived' }],
-            ['SmartMealPlanner', 'DailyActiveUser', { stat: 'Sum', label: 'DailyActiveUser' }],
+            [metricsNamespace, 'MessageReceived', { stat: 'Sum', label: 'MessageReceived' }],
+            [metricsNamespace, 'DailyActiveUser', { stat: 'Sum', label: 'DailyActiveUser' }],
           ],
           region: REGION,
           period: 86400,
@@ -1002,11 +1004,11 @@ async function ensureCloudWatchDashboard() {
         properties: {
           title: 'Feature Usage',
           metrics: [
-            ['SmartMealPlanner', 'PlanGenerated', { stat: 'Sum', label: 'PlanGenerated' }],
-            ['SmartMealPlanner', 'GroceryListViewed', { stat: 'Sum', label: 'GroceryListViewed' }],
-            ['SmartMealPlanner', 'CookMenuSent', { stat: 'Sum', label: 'CookMenuSent' }],
-            ['SmartMealPlanner', 'PlanModified', { stat: 'Sum', label: 'PlanModified' }],
-            ['SmartMealPlanner', 'MealSwapped', { stat: 'Sum', label: 'MealSwapped' }],
+            [metricsNamespace, 'PlanGenerated', { stat: 'Sum', label: 'PlanGenerated' }],
+            [metricsNamespace, 'GroceryListViewed', { stat: 'Sum', label: 'GroceryListViewed' }],
+            [metricsNamespace, 'CookMenuSent', { stat: 'Sum', label: 'CookMenuSent' }],
+            [metricsNamespace, 'PlanModified', { stat: 'Sum', label: 'PlanModified' }],
+            [metricsNamespace, 'MealSwapped', { stat: 'Sum', label: 'MealSwapped' }],
           ],
           region: REGION,
           period: 86400,
@@ -1020,12 +1022,12 @@ async function ensureCloudWatchDashboard() {
         properties: {
           title: 'Errors',
           metrics: [
-            ['SmartMealPlanner', 'WebhookError', { stat: 'Sum', label: 'WebhookError' }],
-            ['SmartMealPlanner', 'PaymentWebhookError', { stat: 'Sum', label: 'PaymentWebhookError' }],
-            ['SmartMealPlanner', 'DailyReminderFailure', { stat: 'Sum', label: 'DailyReminderFailure' }],
-            ['SmartMealPlanner', 'WeeklyReminderFailure', { stat: 'Sum', label: 'WeeklyReminderFailure' }],
-            ['SmartMealPlanner', 'InvalidPaymentSignature', { stat: 'Sum', label: 'InvalidPaymentSignature' }],
-            ['SmartMealPlanner', 'InvalidInput', { stat: 'Sum', label: 'InvalidInput' }],
+            [metricsNamespace, 'WebhookError', { stat: 'Sum', label: 'WebhookError' }],
+            [metricsNamespace, 'PaymentWebhookError', { stat: 'Sum', label: 'PaymentWebhookError' }],
+            [metricsNamespace, 'DailyReminderFailure', { stat: 'Sum', label: 'DailyReminderFailure' }],
+            [metricsNamespace, 'WeeklyReminderFailure', { stat: 'Sum', label: 'WeeklyReminderFailure' }],
+            [metricsNamespace, 'InvalidPaymentSignature', { stat: 'Sum', label: 'InvalidPaymentSignature' }],
+            [metricsNamespace, 'InvalidInput', { stat: 'Sum', label: 'InvalidInput' }],
           ],
           region: REGION,
           period: 86400,
@@ -1039,8 +1041,8 @@ async function ensureCloudWatchDashboard() {
         properties: {
           title: 'Payments',
           metrics: [
-            ['SmartMealPlanner', 'SubscriptionActivated', { stat: 'Sum', label: 'SubscriptionActivated' }],
-            ['SmartMealPlanner', 'PaymentCaptured', { stat: 'Sum', label: 'PaymentCaptured' }],
+            [metricsNamespace, 'SubscriptionActivated', { stat: 'Sum', label: 'SubscriptionActivated' }],
+            [metricsNamespace, 'PaymentCaptured', { stat: 'Sum', label: 'PaymentCaptured' }],
           ],
           region: REGION,
           period: 86400,
@@ -1054,9 +1056,9 @@ async function ensureCloudWatchDashboard() {
         properties: {
           title: 'Reminders',
           metrics: [
-            ['SmartMealPlanner', 'DailyReminderSent', { stat: 'Sum', label: 'DailyReminderSent' }],
-            ['SmartMealPlanner', 'WeeklyReminderSent', { stat: 'Sum', label: 'WeeklyReminderSent' }],
-            ['SmartMealPlanner', 'ExpiredPlanPromptSent', { stat: 'Sum', label: 'ExpiredPlanPromptSent' }],
+            [metricsNamespace, 'DailyReminderSent', { stat: 'Sum', label: 'DailyReminderSent' }],
+            [metricsNamespace, 'WeeklyReminderSent', { stat: 'Sum', label: 'WeeklyReminderSent' }],
+            [metricsNamespace, 'ExpiredPlanPromptSent', { stat: 'Sum', label: 'ExpiredPlanPromptSent' }],
           ],
           region: REGION,
           period: 86400,
@@ -1070,9 +1072,9 @@ async function ensureCloudWatchDashboard() {
         properties: {
           title: 'Webhook Latency (p50 / p90 / p99)',
           metrics: [
-            ['SmartMealPlanner', 'WebhookLatency', { stat: 'p50', label: 'p50' }],
-            ['SmartMealPlanner', 'WebhookLatency', { stat: 'p90', label: 'p90' }],
-            ['SmartMealPlanner', 'WebhookLatency', { stat: 'p99', label: 'p99' }],
+            [metricsNamespace, 'WebhookLatency', { stat: 'p50', label: 'p50' }],
+            [metricsNamespace, 'WebhookLatency', { stat: 'p90', label: 'p90' }],
+            [metricsNamespace, 'WebhookLatency', { stat: 'p99', label: 'p99' }],
           ],
           region: REGION,
           period: 300,
