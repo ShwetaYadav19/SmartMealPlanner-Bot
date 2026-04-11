@@ -16,11 +16,13 @@ export class RazorpayPaymentProvider implements PaymentProvider {
   private readonly keyId: string;
   private readonly keySecret: string;
   private readonly planId: string;
+  private readonly webhookSecret: string;
 
-  constructor(keyId: string, keySecret: string, planId: string) {
+  constructor(keyId: string, keySecret: string, planId: string, webhookSecret: string = '') {
     this.keyId = keyId;
     this.keySecret = keySecret;
     this.planId = planId;
+    this.webhookSecret = webhookSecret;
   }
 
   async createSubscription(phoneNumber: string): Promise<{ subscriptionId: string; paymentLink: string }> {
@@ -74,8 +76,9 @@ export class RazorpayPaymentProvider implements PaymentProvider {
 
   verifyWebhookSignature(body: string, signature: string): boolean {
     const crypto = require('crypto');
+    const secret = this.webhookSecret || this.keySecret;
     const expectedSignature = crypto
-      .createHmac('sha256', this.keySecret)
+      .createHmac('sha256', secret)
       .update(body)
       .digest('hex');
     return expectedSignature === signature;
