@@ -12,6 +12,7 @@ export interface Config {
   razorpayKeyId: string;
   razorpayKeySecret: string;
   razorpayPlanId: string;
+  razorpayWebhookSecret: string;
   imageBucket: string;
   metricsApiKey: string;
 }
@@ -59,6 +60,7 @@ export function loadConfig(): Config {
     razorpayKeyId: process.env.RAZORPAY_KEY_ID!,
     razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET!,
     razorpayPlanId: process.env.RAZORPAY_PLAN_ID!,
+    razorpayWebhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET || '',
     imageBucket: process.env.IMAGE_BUCKET || `smartmealplanner-images-${process.env.STAGE || 'dev'}`,
     metricsApiKey: process.env.METRICS_API_KEY || '',
   };

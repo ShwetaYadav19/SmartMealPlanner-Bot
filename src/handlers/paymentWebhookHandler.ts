@@ -82,6 +82,7 @@ export async function paymentWebhookHandler(
       config.razorpayKeyId,
       config.razorpayKeySecret,
       config.razorpayPlanId,
+      config.razorpayWebhookSecret,
     );
 
     // Verify webhook signature
