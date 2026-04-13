@@ -15,6 +15,7 @@ export interface ListItem {
 export interface MessagingProvider {
   sendTextMessage(to: string, body: string, contentSid?: string, contentVariables?: Record<string, string>, fallbackContentSid?: string): Promise<string | void>;
   sendImageMessage(to: string, imageUrl: string, caption?: string): Promise<void>;
+  sendVCardMessage(to: string, vcfUrl: string): Promise<void>;
   sendButtonMessage(
     to: string,
     body: string,

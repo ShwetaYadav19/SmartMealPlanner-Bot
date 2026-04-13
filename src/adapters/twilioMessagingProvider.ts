@@ -130,6 +130,15 @@ export class TwilioMessagingProvider implements MessagingProvider {
     await this.waitForSent(msg.sid);
   }
 
+  async sendVCardMessage(to: string, vcfUrl: string): Promise<void> {
+    const msg = await this.client.messages.create({
+      from: `whatsapp:${this.senderNumber}`,
+      to: `whatsapp:${to}`,
+      mediaUrl: [vcfUrl],
+    } as any);
+    await this.waitForSent(msg.sid);
+  }
+
   /**
    * Polls a message's status until it progresses past 'queued'/'accepted'.
    * Twilio statuses: queued → accepted → sending → sent → delivered / failed / undelivered

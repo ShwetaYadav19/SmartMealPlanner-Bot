@@ -19,6 +19,8 @@ import { Intent, ResponseType } from '../core/types';
 import type { ConversationState } from '../core/types';
 import type { MetricDatum, MetricsPort } from '../core/ports';
 import { sendWeeklyPlanImage, sendGroceryListImage } from '../core/imageSender';
+import { sendSaveContactVCard } from '../core/vCardSender';
+import { SAVE_CONTACT_PROMPT } from '../messages';
 
 /** Onboarding states used for OnboardingStep metric emission */
 const ONBOARDING_STATES: ReadonlySet<ConversationState> = new Set([
@@ -350,6 +352,20 @@ export async function webhookHandler(
         result.response.data.cookNumber,
         cookMessage,
       );
+    }
+
+    // 11c. Send save-contact vCard after first weekly plan generation
+    if (
+      result.response.type === ResponseType.WEEKLY_PLAN &&
+      (!userState || !userState.onboardingComplete) &&
+      result.updatedState.onboardingComplete
+    ) {
+      try {
+        await messagingProvider.sendTextMessage(phoneNumber, SAVE_CONTACT_PROMPT);
+        await sendSaveContactVCard(messagingProvider, phoneNumber, config.twilioSenderNumber);
+      } catch (vcardErr) {
+        console.error('[webhook] Failed to send save-contact vCard:', vcardErr);
+      }
     }
 
     // 12. Save updated state
