@@ -4,6 +4,7 @@
 
 // --- Onboarding ---
 export const ONBOARDING_WELCOME = `Hey there! 👋 Welcome to SmartMealPlanner!\nLet's set up your preferences so I can plan delicious meals for you 🍽️`;
+export const SAVE_CONTACT_PROMPT = `📱 To get your weekly reminders seamlessly, save this number as *LiveHealthySmartMealPlanner*.\n\nTap the contact card below to save it 👇`;
 export const ONBOARDING_CUISINE_PROMPT = `What cuisine do you prefer? 🍛`;
 export const ONBOARDING_DIET_PROMPT = `Great choice! Now, what's your diet preference? 🥗`;
 export const ONBOARDING_STYLE_PROMPT = `What style of meals do you prefer? 🏠

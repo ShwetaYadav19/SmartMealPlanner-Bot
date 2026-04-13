@@ -28,3 +28,20 @@ export async function uploadImage(key: string, png: Buffer): Promise<string> {
 
   return url;
 }
+
+export async function uploadVCard(key: string, vcfContent: string): Promise<string> {
+  await s3.send(new PutObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+    Body: vcfContent,
+    ContentType: 'text/vcard',
+    CacheControl: 'max-age=86400',
+  }));
+
+  const url = await getSignedUrl(s3, new GetObjectCommand({
+    Bucket: BUCKET,
+    Key: key,
+  }), { expiresIn: 3600 });
+
+  return url;
+}
