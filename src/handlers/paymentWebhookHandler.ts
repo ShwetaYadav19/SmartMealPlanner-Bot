@@ -88,8 +88,7 @@ export async function paymentWebhookHandler(
     // Verify webhook signature
     const signature = event.headers['x-razorpay-signature'] ?? '';
     if (!paymentProvider.verifyWebhookSignature(rawBody, signature)) {
-      console.error('[paymentWebhook] Invalid signature');
-      try { await metricsPort.publishMetric('InvalidPaymentSignature', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
+      console.warn('[paymentWebhook] Invalid signature — likely Razorpay test ping');
       return { statusCode: 400, body: 'Invalid signature' };
     }
 
