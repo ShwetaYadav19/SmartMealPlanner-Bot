@@ -11,6 +11,7 @@ import { extractTomorrowPlan } from '../core/planGenerator';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
 import { getTemplateSid, DAILY_REMINDER_HEADER } from '../messages';
+import { sendMealVoiceNote } from '../core/voiceNoteSender';
 
 // Minimal EventBridge scheduled event type
 interface ScheduledEvent {
@@ -113,6 +114,15 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
           fallbackSid,
         );
         console.log(`[dailyReminder] Template sent to ${user.phoneNumber}`);
+
+        // Send Hindi voice note after the text message (best-effort)
+        try {
+          await sendMealVoiceNote(messagingProvider, user.phoneNumber, dayPlan);
+          console.log(`[dailyReminder] Voice note sent to ${user.phoneNumber}`);
+        } catch (voiceErr) {
+          console.warn(`[dailyReminder] Voice note failed for ${user.phoneNumber}:`, voiceErr);
+          // Don't fail the entire reminder if voice note fails
+        }
 
         sent++;
         try { await metricsPort.publishMetric('DailyReminderSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }

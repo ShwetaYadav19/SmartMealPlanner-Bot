@@ -8,6 +8,11 @@ vi.mock('../../src/utils', () => ({
   delay: vi.fn().mockResolvedValue(undefined),
 }));
 
+// Mock voice note sender — Polly is not available in tests
+vi.mock('../../src/core/voiceNoteSender', () => ({
+  sendMealVoiceNote: vi.fn().mockResolvedValue(undefined),
+}));
+
 // Mock config
 vi.mock('../../src/config', () => ({
   loadConfig: () => ({

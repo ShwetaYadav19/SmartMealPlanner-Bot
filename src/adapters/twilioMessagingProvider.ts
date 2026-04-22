@@ -130,6 +130,17 @@ export class TwilioMessagingProvider implements MessagingProvider {
     await this.waitForSent(msg.sid);
   }
 
+  async sendAudioMessage(to: string, audioUrl: string): Promise<void> {
+    const msg = await this.client.messages.create({
+      from: `whatsapp:${this.senderNumber}`,
+      to: `whatsapp:${to}`,
+      mediaUrl: [audioUrl],
+    } as any);
+
+    // Wait for delivery so the next message arrives in order on WhatsApp
+    await this.waitForSent(msg.sid);
+  }
+
   async sendVCardMessage(to: string, vcfUrl: string): Promise<void> {
     const msg = await this.client.messages.create({
       from: `whatsapp:${this.senderNumber}`,
