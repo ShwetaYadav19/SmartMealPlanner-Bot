@@ -20,6 +20,7 @@ import type { ConversationState } from '../core/types';
 import type { MetricDatum, MetricsPort } from '../core/ports';
 import { sendWeeklyPlanImage, sendGroceryListImage } from '../core/imageSender';
 import { sendSaveContactVCard } from '../core/vCardSender';
+import { sendMealVoiceNote } from '../core/voiceNoteSender';
 import { SAVE_CONTACT_PROMPT } from '../messages';
 
 /** Onboarding states used for OnboardingStep metric emission */
@@ -352,6 +353,17 @@ export async function webhookHandler(
         result.response.data.cookNumber,
         cookMessage,
       );
+
+      // Send Hindi voice note to cook (best-effort)
+      try {
+        await sendMealVoiceNote(
+          messagingProvider,
+          result.response.data.cookNumber,
+          result.response.data.dayPlan,
+        );
+      } catch (voiceErr) {
+        console.warn('[webhook] Cook voice note failed:', voiceErr);
+      }
     }
 
     // 11c. Send save-contact vCard after first weekly plan generation

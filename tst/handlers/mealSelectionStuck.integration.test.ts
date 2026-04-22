@@ -64,6 +64,11 @@ vi.mock('../../src/adapters/twilioMessagingProvider', () => ({
   })),
 }));
 
+// Mock voice note sender — Polly is not available in tests
+vi.mock('../../src/core/voiceNoteSender', () => ({
+  sendMealVoiceNote: vi.fn().mockResolvedValue(undefined),
+}));
+
 // --- Helpers ---
 
 function makeEvent(body: string) {

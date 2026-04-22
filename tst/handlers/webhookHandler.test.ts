@@ -51,6 +51,11 @@ vi.mock('../../src/adapters/twilioMessagingProvider', () => ({
   })),
 }));
 
+// Mock voice note sender — Polly is not available in tests
+vi.mock('../../src/core/voiceNoteSender', () => ({
+  sendMealVoiceNote: vi.fn().mockResolvedValue(undefined),
+}));
+
 function makeEvent(body: string, isBase64Encoded = false) {
   return {
     body: isBase64Encoded ? Buffer.from(body).toString('base64') : body,
