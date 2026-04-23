@@ -460,6 +460,22 @@ async function ensureIAMRole() {
     PolicyDocument: cloudwatchPolicy,
   }));
 
+  // Inline policy for AWS Polly (Hindi voice note TTS)
+  const pollyPolicy = JSON.stringify({
+    Version: '2012-10-17',
+    Statement: [{
+      Effect: 'Allow',
+      Action: ['polly:SynthesizeSpeech'],
+      Resource: '*',
+    }],
+  });
+
+  await iamClient.send(new PutRolePolicyCommand({
+    RoleName: ROLE_NAME,
+    PolicyName: `MealPlannerPollyAccess-${stage}`,
+    PolicyDocument: pollyPolicy,
+  }));
+
   log(`IAM role configured: ${roleArn}`);
   return roleArn;
 }
