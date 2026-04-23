@@ -44,6 +44,7 @@ export const SWAP_NO_ALTERNATIVE = `Sorry, no alternative lunch is available rig
 // --- Reminders ---
 export const DAILY_REMINDER_HEADER = (dayName: string) =>
   `Hey! Here's your meal plan for tomorrow (${dayName}) 🍽️\n`;
+export const DAILY_TEASER_MESSAGE = `Hey! 👋 Your meal plan for tomorrow is ready 🍽️\nWould you like to see it?`;
 export const WEEKLY_REMINDER = `Hey! 🍽️ Time to plan your meals for the week ahead!`;
 export const WEEKLY_REMINDER_PLAN_HEADER = `Hey! Here's your meal plan for the coming week 🍽️\n`;
 export const EXPIRED_PLAN_PROMPT = `Your meal plan has expired. Let's generate a fresh one! 📋`;
@@ -204,17 +205,20 @@ export const DAILY_REMINDER_HINT = `\n\n💡 I'll ping you every day at 8 PM wit
 
 export type TemplatePurpose =
   | 'daily_reminder'
+  | 'daily_teaser'
   | 'weekly_reminder'
   | 'expired_plan';
 
 const DEFAULT_TEMPLATE_SIDS: Record<TemplatePurpose, string> = {
   daily_reminder: 'HX1fdc81202dcddeb7f99b32bbcd67e2b5',
+  daily_teaser: 'HXc01ccad0ed0ec647fe0d1e2919454f45',
   weekly_reminder: 'HX0e28059febf5045abc44d451dc428f3f',
   expired_plan: 'HX0e28059febf5045abc44d451dc428f3f',
 };
 
 const ENV_VAR_MAP: Record<TemplatePurpose, string> = {
   daily_reminder: 'TWILIO_TEMPLATE_SID_DAILY_REMINDER',
+  daily_teaser: 'TWILIO_TEMPLATE_SID_DAILY_TEASER',
   weekly_reminder: 'TWILIO_TEMPLATE_SID_WEEKLY_REMINDER',
   expired_plan: 'TWILIO_TEMPLATE_SID_EXPIRED_PLAN',
 };

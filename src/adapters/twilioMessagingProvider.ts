@@ -49,11 +49,23 @@ export class TwilioMessagingProvider implements MessagingProvider {
         const msg = await this.client.messages.create(params as any);
         return msg.sid;
       } catch (error: unknown) {
+        const errCode = (error as any)?.code ?? (error as any)?.status;
         const errMsg = error instanceof Error ? error.message : String(error);
         console.warn(
-          `Template send failed contentSid="${contentSid}" to="whatsapp:${to}": ${errMsg}.` +
+          `Template send failed contentSid="${contentSid}" to="whatsapp:${to}" errorCode=${errCode}: ${errMsg}.` +
           (fallbackContentSid ? ' Trying fallback template.' : ' No fallback template configured.'),
         );
+
+        // Log structured error for metrics/alerting
+        console.error(JSON.stringify({
+          event: 'TEMPLATE_SEND_FAILED',
+          to,
+          contentSid,
+          errorCode: errCode,
+          errorMessage: errMsg,
+          hasFallback: !!fallbackContentSid,
+        }));
+
         if (!fallbackContentSid) throw error;
       }
 
@@ -203,11 +215,22 @@ export class TwilioMessagingProvider implements MessagingProvider {
         await this.client.messages.create(params as any);
         return;
       } catch (error: unknown) {
+        const errCode = (error as any)?.code ?? (error as any)?.status;
         const errMsg = error instanceof Error ? error.message : String(error);
         console.warn(
-          `Pre-approved template failed contentSid="${contentSid}" to="${toWhatsApp}": ${errMsg}.` +
+          `Pre-approved template failed contentSid="${contentSid}" to="${toWhatsApp}" errorCode=${errCode}: ${errMsg}.` +
           (fallbackContentSid ? ' Trying fallback template.' : ' No fallback template configured.'),
         );
+
+        console.error(JSON.stringify({
+          event: 'BUTTON_TEMPLATE_SEND_FAILED',
+          to,
+          contentSid,
+          errorCode: errCode,
+          errorMessage: errMsg,
+          hasFallback: !!fallbackContentSid,
+        }));
+
         if (!fallbackContentSid) throw error;
       }
 

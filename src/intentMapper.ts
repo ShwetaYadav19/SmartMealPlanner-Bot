@@ -122,6 +122,10 @@ export function mapWhatsAppToIntent(
         return { intent: Intent.DAILY_GROCERY_YES };
       case 'daily_grocery_no':
         return { intent: Intent.DAILY_GROCERY_NO };
+      case 'daily_teaser_yes':
+        return { intent: Intent.DAILY_TEASER_YES };
+      case 'daily_teaser_no':
+        return { intent: Intent.DAILY_TEASER_NO };
       case 'check_payment':
         return { intent: Intent.CHECK_PAYMENT_STATUS };
       case 'daily_cook_yes':
@@ -274,6 +278,13 @@ export function mapWhatsAppToIntent(
     if (text === '1' || text === 'done' || text === 'paid' || text === 'check' || text === 'check payment' || text === 'i have paid') {
       return { intent: Intent.CHECK_PAYMENT_STATUS };
     }
+  }
+
+  // Daily teaser prompt — yes/no via text
+  if (conversationState === 'daily_teaser_prompt') {
+    const clean = text.replace(/[^\p{L}\p{N}\s]/gu, '').trim();
+    if (clean === '1' || clean === 'yes') return { intent: Intent.DAILY_TEASER_YES };
+    if (clean === '2' || clean === 'no') return { intent: Intent.DAILY_TEASER_NO };
   }
 
   // Daily grocery prompt — yes/no via text

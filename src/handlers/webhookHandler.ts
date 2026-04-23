@@ -342,7 +342,20 @@ export async function webhookHandler(
       }
     }
 
-    // 11b. If cook message was sent, also send to cook
+    // 11b. Send voice note for daily meal plan (best-effort, in-session after teaser tap)
+    if (
+      result.response.type === ResponseType.DAILY_REMINDER &&
+      result.response.data?.dayPlan
+    ) {
+      try {
+        await sendMealVoiceNote(messagingProvider, phoneNumber, result.response.data.dayPlan);
+        console.log(`[webhook] Daily voice note sent to ${phoneNumber}`);
+      } catch (voiceErr) {
+        console.warn(`[webhook] Daily voice note failed for ${phoneNumber}:`, voiceErr);
+      }
+    }
+
+    // 11c. If cook message was sent, also send to cook
     if (
       result.response.type === ResponseType.COOK_MESSAGE_SENT &&
       result.response.data?.dayPlan &&

@@ -71,8 +71,17 @@ export async function weeklyReminderHandler(_event: ScheduledEvent): Promise<voi
       try { await metricsPort.publishMetric('WeeklyReminderSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
     } catch (error) {
       failed++;
+      const errCode = (error as any)?.code ?? (error as any)?.status;
       console.error(`[weeklyReminder] Failed for ${user.phoneNumber}:`, error);
-      try { await metricsPort.publishMetric('WeeklyReminderFailure', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
+      console.error(JSON.stringify({
+        event: 'WEEKLY_REMINDER_FAILED',
+        phoneNumber: user.phoneNumber,
+        errorCode: errCode,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      }));
+      try {
+        await metricsPort.publishMetric('WeeklyReminderFailure', 1, 'Count', { ErrorCode: String(errCode ?? 'unknown') });
+      } catch (e) { console.error('[metrics]', e); }
     }
   }
 

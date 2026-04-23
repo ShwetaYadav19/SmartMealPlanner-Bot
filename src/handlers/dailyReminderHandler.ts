@@ -10,8 +10,7 @@ import { loadConfig } from '../config';
 import { extractTomorrowPlan } from '../core/planGenerator';
 import { ResponseType } from '../core/types';
 import type { BotResponse } from '../core/types';
-import { getTemplateSid, DAILY_REMINDER_HEADER } from '../messages';
-import { sendMealVoiceNote } from '../core/voiceNoteSender';
+import { getTemplateSid } from '../messages';
 
 // Minimal EventBridge scheduled event type
 interface ScheduledEvent {
@@ -75,54 +74,26 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         };
       }
 
-      // --- Out-of-session: send pre-approved template first ---
-      if (response.type === ResponseType.DAILY_REMINDER && response.data?.dayPlan) {
-        const dayPlan = response.data.dayPlan;
-        const templateSid = getTemplateSid('daily_reminder');
-        console.log(`[dailyReminder] Sending daily template to ${user.phoneNumber} | templateSid=${templateSid ?? 'NONE'}`);
-
-        // Template body: {{1}} = breakfast, {{2}} = lunch, {{3}} = dinner
-        // Sanitize: strip newlines and truncate to avoid Twilio variable limits
-        const sanitize = (s: string, max = 60) => {
-          // Strip newlines, control chars, and problematic unicode that can break Twilio JSON parsing
-          const clean = s.replace(/[\n\r\t]/g, ' ').replace(/[\\"""]/g, "'").replace(/[\u0000-\u001F\u007F-\u009F]/g, '').trim();
-          return clean.length > max ? clean.slice(0, max - 1) + '…' : clean;
-        };
-        const contentVariables: Record<string, string> = {
-          '1': sanitize(dayPlan.breakfast.name),
-          '2': sanitize(dayPlan.lunch.name),
-          '3': sanitize(dayPlan.dinner.name),
-        };
-        console.log(`[dailyReminder] contentVariables:`, JSON.stringify(contentVariables));
-
-        // Build a freeform fallback body in case the template send fails
-        const fallbackBody = `${DAILY_REMINDER_HEADER(dayPlan.day)}\n🥣 Breakfast: ${dayPlan.breakfast.name}\n🍛 Lunch: ${dayPlan.lunch.name}\n🍽️ Dinner: ${dayPlan.dinner.name}\n\nReply SWAP if you'd like a different lunch.`;
-
-        // Use expired_plan template as fallback — it has no variables and just nudges the user to reply
+      // --- Out-of-session: send teaser template (no variables) ---
+      // Instead of sending the full meal plan, send a lightweight teaser
+      // that prompts the user to tap "Yes" to view it. This:
+      // 1. Opens the 24h session window so the full plan can be sent freeform
+      // 2. Improves engagement metrics with Meta (protects quality rating)
+      // 3. Avoids template variable issues with long meal names
+      if (response.type === ResponseType.DAILY_REMINDER) {
+        const teaserSid = getTemplateSid('daily_teaser');
         const fallbackSid = getTemplateSid('expired_plan');
+        console.log(`[dailyReminder] Sending teaser to ${user.phoneNumber} | teaserSid=${teaserSid ?? 'NONE'}`);
 
-        await messagingProvider.sendButtonMessage(
+        // Send the teaser template — no variables needed
+        await messagingProvider.sendTextMessage(
           user.phoneNumber,
-          fallbackBody,
-          [
-            { id: 'daily_grocery_yes', title: 'Yes 🛒' },
-            { id: 'daily_grocery_no', title: 'No ❌' },
-          ],
-          templateSid,
+          'Hey! 👋 Your meal plan for tomorrow is ready 🍽️\nWould you like to see it?',
+          teaserSid,
           undefined,
-          contentVariables,
           fallbackSid,
         );
-        console.log(`[dailyReminder] Template sent to ${user.phoneNumber}`);
-
-        // Send Hindi voice note after the text message (best-effort)
-        try {
-          await sendMealVoiceNote(messagingProvider, user.phoneNumber, dayPlan);
-          console.log(`[dailyReminder] Voice note sent to ${user.phoneNumber}`);
-        } catch (voiceErr) {
-          console.warn(`[dailyReminder] Voice note failed for ${user.phoneNumber}:`, voiceErr);
-          // Don't fail the entire reminder if voice note fails
-        }
+        console.log(`[dailyReminder] Teaser sent to ${user.phoneNumber}`);
 
         sent++;
         try { await metricsPort.publishMetric('DailyReminderSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
@@ -151,18 +122,27 @@ export async function dailyReminderHandler(_event: ScheduledEvent): Promise<void
         try { await metricsPort.publishMetric('ExpiredPlanPromptSent', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
       }
 
-      // Update conversation state so the next user reply enters the daily flow
+      // Update conversation state so the next user reply enters the teaser flow
       if (response.type === ResponseType.DAILY_REMINDER) {
-        console.log(`[dailyReminder] Updating conversationState to daily_grocery_prompt for ${user.phoneNumber}`);
+        console.log(`[dailyReminder] Updating conversationState to daily_teaser_prompt for ${user.phoneNumber}`);
         await userStateRepo.saveUser({
           ...user,
-          conversationState: 'daily_grocery_prompt',
+          conversationState: 'daily_teaser_prompt',
         });
       }
     } catch (error) {
       failed++;
+      const errCode = (error as any)?.code ?? (error as any)?.status;
       console.error(`[dailyReminder] Failed for ${user.phoneNumber}:`, error);
-      try { await metricsPort.publishMetric('DailyReminderFailure', 1, 'Count'); } catch (e) { console.error('[metrics]', e); }
+      console.error(JSON.stringify({
+        event: 'DAILY_REMINDER_FAILED',
+        phoneNumber: user.phoneNumber,
+        errorCode: errCode,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      }));
+      try {
+        await metricsPort.publishMetric('DailyReminderFailure', 1, 'Count', { ErrorCode: String(errCode ?? 'unknown') });
+      } catch (e) { console.error('[metrics]', e); }
     }
   }
 

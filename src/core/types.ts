@@ -120,6 +120,7 @@ export type ConversationState =
   | 'few_meals_slot_select'
   | 'few_meals_alternatives'
   | 'entire_plan_confirm'
+  | 'daily_teaser_prompt'
   | 'daily_grocery_prompt'
   | 'daily_cook_prompt'
   | 'happy_grocery_prompt'
@@ -201,6 +202,8 @@ export enum Intent {
   ADHOC_MENU = 'ADHOC_MENU',
   DAILY_GROCERY_YES = 'DAILY_GROCERY_YES',
   DAILY_GROCERY_NO = 'DAILY_GROCERY_NO',
+  DAILY_TEASER_YES = 'DAILY_TEASER_YES',
+  DAILY_TEASER_NO = 'DAILY_TEASER_NO',
   DAILY_COOK_YES = 'DAILY_COOK_YES',
   DAILY_COOK_NO = 'DAILY_COOK_NO',
   HAPPY_GROCERY_YES = 'HAPPY_GROCERY_YES',
@@ -240,6 +243,7 @@ export enum ResponseType {
   SWAP_NO_ALTERNATIVE = 'SWAP_NO_ALTERNATIVE',
   EXPIRED_PLAN_PROMPT = 'EXPIRED_PLAN_PROMPT',
   DAILY_REMINDER = 'DAILY_REMINDER',
+  DAILY_TEASER = 'DAILY_TEASER',
   WEEKLY_REMINDER = 'WEEKLY_REMINDER',
   COOK_NUMBER_ONBOARDING_PROMPT = 'COOK_NUMBER_ONBOARDING_PROMPT',
   DISH_PREVIEW = 'DISH_PREVIEW',

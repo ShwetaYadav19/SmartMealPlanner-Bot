@@ -1873,6 +1873,53 @@ function handleHappyDailyPrompt(
 
 // --- Daily flow handlers ---
 
+/**
+ * Handles the daily teaser prompt — user tapped Yes/No on "Your meal plan is ready!"
+ * On Yes: show the full meal plan + grocery prompt (opens 24h session window)
+ * On No: acknowledge and end the daily flow
+ */
+function handleDailyTeaserPrompt(
+  intent: UserIntent,
+  state: UserState,
+): BotResult {
+  if (intent.intent === Intent.DAILY_TEASER_YES) {
+    // User wants to see the plan — send full meal details in-session
+    if (!state.weeklyPlan || !state.weeklyPlanStartDate) {
+      return {
+        response: { type: ResponseType.NO_PLAN_ERROR, suggestedActions: ADHOC_MENU_OPTIONS },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    const tomorrowPlan = extractTomorrowPlan(state.weeklyPlan, state.weeklyPlanStartDate);
+    if (!tomorrowPlan) {
+      return {
+        response: { type: ResponseType.EXPIRED_PLAN_PROMPT, suggestedActions: ADHOC_MENU_OPTIONS },
+        updatedState: { ...state, conversationState: 'main_menu' },
+      };
+    }
+    return {
+      response: {
+        type: ResponseType.DAILY_REMINDER,
+        data: { dayPlan: tomorrowPlan },
+      },
+      updatedState: { ...state, conversationState: 'daily_grocery_prompt' },
+    };
+  }
+
+  if (intent.intent === Intent.DAILY_TEASER_NO) {
+    return {
+      response: { type: ResponseType.DAILY_FLOW_DONE },
+      updatedState: { ...state, conversationState: 'main_menu' },
+    };
+  }
+
+  // Invalid input — re-prompt
+  return {
+    response: { type: ResponseType.INVALID_INPUT },
+    updatedState: state,
+  };
+}
+
 function handleDailyGroceryPrompt(
   intent: UserIntent,
   state: UserState,
@@ -2084,6 +2131,9 @@ export async function processIntent(
 
     case 'regenerate_plan_menu':
       return handleRegeneratePlanMenu(intent, userState, mealRepository, mealComponentRepository, mealSelector);
+
+    case 'daily_teaser_prompt':
+      return handleDailyTeaserPrompt(intent, userState);
 
     case 'daily_grocery_prompt':
       return handleDailyGroceryPrompt(intent, userState);

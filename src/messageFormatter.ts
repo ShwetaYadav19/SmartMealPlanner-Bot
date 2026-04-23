@@ -26,6 +26,7 @@ import {
   SWAP_CONFIRMATION,
   SWAP_NO_ALTERNATIVE,
   DAILY_REMINDER_HEADER,
+  DAILY_TEASER_MESSAGE,
   WEEKLY_REMINDER,
   WEEKLY_REMINDER_PLAN_HEADER,
   EXPIRED_PLAN_PROMPT,
@@ -423,6 +424,15 @@ export function formatBotResponse(response: BotResponse): FormattedMessage {
       return {
         text: EXPIRED_PLAN_PROMPT,
         buttons: GENERATE_PLAN_BUTTON,
+      };
+
+    case ResponseType.DAILY_TEASER:
+      return {
+        text: DAILY_TEASER_MESSAGE,
+        buttons: [
+          { id: 'daily_teaser_yes', title: 'Yes 🍽️' },
+          { id: 'daily_teaser_no', title: 'No ❌' },
+        ],
       };
 
     case ResponseType.DAILY_REMINDER: {
