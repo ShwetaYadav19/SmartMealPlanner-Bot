@@ -217,6 +217,8 @@ describe('BotEngine — onboarding flow', () => {
   });
 
   it('completes full onboarding flow end-to-end with payment step', async () => {
+    // Enable payment for this test
+    process.env.REQUIRE_PAYMENT = 'true';
     // Step 1: New user
     const r1 = await processIntent({ intent: Intent.UNKNOWN }, null, mockMealRepo, mockMealComponentRepo);
     expect(r1.response.type).toBe(ResponseType.ONBOARDING_CUISINE_PROMPT);
@@ -273,6 +275,9 @@ describe('BotEngine — onboarding flow', () => {
     );
     // Without a payment provider, it returns PAYMENT_PENDING
     expect(r6.response.type).toBe(ResponseType.PAYMENT_PENDING);
+
+    // Clean up
+    delete process.env.REQUIRE_PAYMENT;
   });
 });
 

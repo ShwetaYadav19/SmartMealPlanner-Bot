@@ -255,7 +255,8 @@ async function handleAwaitingMealFormat(
     }
 
     // Skip payment when SKIP_PAYMENT env var is set or stage is not prod
-    if (process.env.SKIP_PAYMENT === 'true' || (process.env.STAGE && process.env.STAGE !== 'prod')) {
+    // To enable paid subscriptions in prod, remove REQUIRE_PAYMENT check below
+    if (process.env.SKIP_PAYMENT === 'true' || process.env.REQUIRE_PAYMENT !== 'true') {
       updatedState.subscription = {
         status: 'active',
         currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),

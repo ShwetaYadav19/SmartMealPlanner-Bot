@@ -10,9 +10,6 @@ describe('loadConfig', () => {
     TWILIO_ACCOUNT_SID: 'AC_test_sid',
     TWILIO_AUTH_TOKEN: 'test_auth_token',
     TWILIO_SENDER_NUMBER: '+17655483740',
-    RAZORPAY_KEY_ID: 'rzp_test_key',
-    RAZORPAY_KEY_SECRET: 'rzp_test_secret',
-    RAZORPAY_PLAN_ID: 'plan_test_49',
   };
 
   beforeEach(() => {
@@ -81,5 +78,35 @@ describe('loadConfig', () => {
     Object.assign(process.env, validEnv);
     const config = loadConfig();
     expect(config.templateSidOverrides).toEqual({});
+  });
+
+  it('does not require Razorpay vars when REQUIRE_PAYMENT is not true', () => {
+    Object.assign(process.env, validEnv);
+    // No RAZORPAY_* vars set, no REQUIRE_PAYMENT — should not throw
+    expect(() => loadConfig()).not.toThrow();
+    const config = loadConfig();
+    expect(config.razorpayKeyId).toBe('');
+    expect(config.razorpayKeySecret).toBe('');
+    expect(config.razorpayPlanId).toBe('');
+  });
+
+  it('requires Razorpay vars when REQUIRE_PAYMENT is true', () => {
+    Object.assign(process.env, validEnv, { REQUIRE_PAYMENT: 'true' });
+    expect(() => loadConfig()).toThrow(
+      'Missing required environment variables: RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, RAZORPAY_PLAN_ID'
+    );
+  });
+
+  it('loads Razorpay vars when REQUIRE_PAYMENT is true and vars are set', () => {
+    Object.assign(process.env, validEnv, {
+      REQUIRE_PAYMENT: 'true',
+      RAZORPAY_KEY_ID: 'rzp_test_key',
+      RAZORPAY_KEY_SECRET: 'rzp_test_secret',
+      RAZORPAY_PLAN_ID: 'plan_test_49',
+    });
+    const config = loadConfig();
+    expect(config.razorpayKeyId).toBe('rzp_test_key');
+    expect(config.razorpayKeySecret).toBe('rzp_test_secret');
+    expect(config.razorpayPlanId).toBe('plan_test_49');
   });
 });

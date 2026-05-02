@@ -124,6 +124,7 @@ function getLambdaEnvVars() {
     RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID || '',
     RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET || '',
     RAZORPAY_PLAN_ID: process.env.RAZORPAY_PLAN_ID || '',
+    REQUIRE_PAYMENT: process.env.REQUIRE_PAYMENT || 'false',
     ...(stage === 'prod' ? { RAZORPAY_WEBHOOK_SECRET: process.env.RAZORPAY_WEBHOOK_SECRET || '' } : {}),
     IMAGE_BUCKET: IMAGE_BUCKET,
     DAILY_ACTIVITY_TABLE: DAILY_ACTIVITY_TABLE,

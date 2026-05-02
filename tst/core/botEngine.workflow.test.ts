@@ -46,12 +46,14 @@ describe('E2E: onboarding → change plan → few meals → done', () => {
     expect(r4.updatedState.mealStyle).toBe('regular');
 
     // 4a. User selects meal format (hearty) → gets PAYMENT_PROMPT
+    process.env.REQUIRE_PAYMENT = 'true';
     const r4a = await processIntent(
       { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       r4.updatedState, mealRepo, mealComponentRepo,
     );
     expect(r4a.response.type).toBe(ResponseType.PAYMENT_PROMPT);
     expect(r4a.updatedState.conversationState).toBe('awaiting_payment');
+    delete process.env.REQUIRE_PAYMENT;
 
     // 4b. Simulate payment success — give active subscription and select format
     const stateWithSub = {
@@ -186,12 +188,14 @@ describe('E2E: main menu → change plan → entire plan → accept', () => {
     expect(r4.updatedState.conversationState).toBe('awaiting_meal_format');
 
     // 4a. Select meal format → PAYMENT_PROMPT (paywall)
+    process.env.REQUIRE_PAYMENT = 'true';
     const r4a = await processIntent(
       { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       r4.updatedState, mealRepo, mealComponentRepo,
     );
     expect(r4a.response.type).toBe(ResponseType.PAYMENT_PROMPT);
     expect(r4a.updatedState.conversationState).toBe('awaiting_payment');
+    delete process.env.REQUIRE_PAYMENT;
 
     // 4b. Simulate active subscription and select format
     const stateWithSub = {
@@ -321,11 +325,13 @@ describe('E2E: main menu → change plan → change preferences → new plan', (
     expect(r4.response.type).toBe(ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT);
 
     // Select meal format
+    process.env.REQUIRE_PAYMENT = 'true';
     const r4a = await processIntent(
       { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       r4.updatedState, mealRepo, mealComponentRepo,
     );
     expect(r4a.response.type).toBe(ResponseType.PAYMENT_PROMPT);
+    delete process.env.REQUIRE_PAYMENT;
 
     // Simulate active subscription
     const stateWithSub = {

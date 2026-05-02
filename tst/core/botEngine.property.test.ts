@@ -218,6 +218,7 @@ describe('Property 3: Onboarding flow completeness', () => {
     expect(r4.response.type).toBe(ResponseType.ONBOARDING_MEAL_FORMAT_PROMPT);
     expect(r4.updatedState.mealStyle).toBe('health');
 
+    process.env.REQUIRE_PAYMENT = 'true';
     const r5 = await processIntent(
       { intent: Intent.SELECT_MEAL_FORMAT, payload: 'regular_format' },
       r4.updatedState, mockMealRepo, mockMealComponentRepo,
@@ -226,6 +227,7 @@ describe('Property 3: Onboarding flow completeness', () => {
     expect(r5.response.type).toBe(ResponseType.PAYMENT_PROMPT);
     expect(r5.updatedState.lunchFormat).toBe('home_meal');
     expect(r5.updatedState.dinnerFormat).toBe('quick_meal');
+    delete process.env.REQUIRE_PAYMENT;
   });
 
   it('skips payment and completes onboarding when subscription is active', async () => {
